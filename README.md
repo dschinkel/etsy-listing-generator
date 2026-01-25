@@ -10,6 +10,10 @@ Why this is a "Force Multiplier" for your workflow:
 
 **The "Seeding" Benefit**: Since you use a repo to seed new apps, having this AGENTS.md in your boilerplate ensures that every new project inherits these exact quality controls. You won't have to set up Junie's project settings every single time; it will "discover" these rules automatically.
 
+## How this was Bootstrapped
+- Junie (in Brave mode) or Codex will read AGENTS.md, see that it's a new project without the Tailwind config, and say: "I noticed the project isn't initialized. I'm running the sync script first."
+- `react-app-boilerplate` repo contains a shell script that utilizes uses rsync, which is the industry standard for "smart" merging
+- After we use the bootstrapped code in a new app, whenever we want to update the bootstrap (make react-app-boilerplate smarter or provide more), by having the `sync-boilerplate.sh` script in `react-app-boilerplate`'s AGENTS.md rule, you can just tell the agent: "Update the boilerplate in this project," and it will run the sync script, bringing in only the new improvements while leaving your app code untouched
 ### If using Junie
 - Junie (in Brave mode) reads the AGENTS.md first. Therefore it'll also bootstrap this project automatically if it hasn't already
   - Silent Execution: It will perform the copy and the merge as part of its "Plan" phase before it ever touches your SVG code.
