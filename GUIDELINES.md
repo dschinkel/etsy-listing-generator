@@ -173,7 +173,7 @@ G1.1 Only commit when tests are green and lint/compile warnings are resolved.
 G1.2 Keep commits small and frequent.
 G1.3 Separate structural changes from behavioral changes (Tidy First).
 G1.4 Commit messages must be domain/behavior oriented:
-G1.4.1 Behavioral: `feat: <feature-id>: Step <number>: <layer>: <step-title-prose>`. For hook-related logic, the layer should be `Frontend: Hook`. (Example: `feat: FR.1.2: Step 2: Frontend: Hook: Adds a new font`)
+G1.4.1 Behavioral: `feat: <feature-id>: Step <number>: <layer>: <step-title-prose>`. For hook-related logic, the layer should be `Frontend: Hook`. (Example: `feat: FR.1.2: Step 2: Frontend: Hook: Adds a new font`). For infra or setup tasks, use the task name. (Example: `feat: Task 0: Push repo`)
 G1.4.2 Refactor: `feat: <feature-id>: refactor: <behavior>`
 G1.4.3 Cleanup: `feat: <feature-id>: cleanup: <behavior>`
 G1.5 If no task exists in tasks.md, still commit with a meaningful message.
