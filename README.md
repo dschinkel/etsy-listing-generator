@@ -13,6 +13,8 @@ Why this is a "Force Multiplier" for your workflow:
 
 ## @ Mentions
 Whenever you want to tell Junie or a tool to look at a file use `@` so that it prioritizes it over other files. e.g. `please read @GUIDELINES.md`
+It tells the agent's Context Loader to fetch that file every single time a new task starts
+
 How to use them in JetBrains/Junie:
 Open the Junie chat.
 
