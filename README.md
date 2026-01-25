@@ -7,8 +7,20 @@ Why this is a "Force Multiplier" for your workflow:
 **Standardization**: Because AGENTS.md is an open standard, if you ever use a CLI tool (like Codex) to run a "Full-Auto" refactor, it will see this checklist and execute it as a final validation step.
 
 **Context Control**: By using the @ mentions, you're signaling to Junie's Brave mode exactly which files are high-priority. It reduces the chance of the AI ignoring your guidelines in favor of generic "AI-style" code.
+- In the context of AI coding agents like Junie, Codex, or Cursor, an @ mention is a special syntax used to explicitly "attach" a file, folder, or documentation to the conversation.
 
 **The "Seeding" Benefit**: Since you use a repo to seed new apps, having this AGENTS.md in your boilerplate ensures that every new project inherits these exact quality controls. You won't have to set up Junie's project settings every single time; it will "discover" these rules automatically.
+
+## @ Mentions
+Whenever you want to tell Junie or a tool to look at a file use `@` so that it prioritizes it over other files. e.g. `please read @GUIDELINES.md`
+How to use them in JetBrains/Junie:
+Open the Junie chat.
+
+Type `@`.
+
+Select your `PROJECT_SPEC.md`.
+
+Type your request.
 
 ## How this was Bootstrapped
 - First, read the README.md in `react-app-boilerplate`
