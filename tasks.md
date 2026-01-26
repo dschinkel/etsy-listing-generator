@@ -2,21 +2,21 @@
 Acceptance:
 - Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 
-## 1. Feature: FR.1 — Upload a product image [NOT STARTED]
+## 1. Feature: FR.1 — Upload a product image [COMPLETED]
 ### FR.1.2 — Ability to upload a PNG image as the product image to be used as context for generating listing images [COMPLETED]
 ### FR.1.2 — Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images [COMPLETED]
 
-## 2. Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
+## 2. Feature: FR.2 — Specify number of type of images to generate [NOT STARTED]
 ### FR.2.1 — Ability to specify how many images generated should be lifestyle shots [COMPLETED]
-### FR.2.2 — Ability to specify how many images generated should be hero shots [COMPLETED]
-### FR.2.3 — Ability to specify how many images generated should be close-ups [COMPLETED]
+### FR.2.2 — Ability to specify how many images generated should be hero shots [NOT STARTED]
+### FR.2.3 — Ability to specify how many images generated should be close-ups [NOT STARTED]
 
-## 3. Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
+## 3. Feature: FR.3 — Specify which image will be used as the Primary Etsy image [NOT STARTED]
 
-## 4. Feature: FR.2 — Upload a background for product image [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for lifestyle shots [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for hero shots [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for close-ups [COMPLETED]
+## 4. Feature: FR.2 — Upload a background for product image [NOT STARTED]
+### FR.2.2 — Ability to upload a background image to be used for lifestyle shots [NOT STARTED]
+### FR.2.2 — Ability to upload a background image to be used for hero shots [NOT STARTED]
+### FR.2.2 — Ability to upload a background image to be used for close-ups [NOT STARTED]
 
 ## 5. Feature: FR.1.6 — Show a final preview of the listing images [NOT STARTED]
 

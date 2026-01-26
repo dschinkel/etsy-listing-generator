@@ -9,10 +9,10 @@ Precedence (highest wins):
 4) General best practices
 
 Agent acknowledgement:
-At the start of any task workflow (the message where you present the PLAN), output exactly:
+At the start of any task workflow (the message where you present the PLAN), AND at the start of every response to a user prompt during a task, output exactly:
 ACK:GUIDELINES_READ
 
-Do NOT output ACK when answering questions or doing non-task discussion (i.e., when you are not starting a PLAN / task workflow).
+Do NOT output ACK when answering questions or doing non-task discussion (i.e., when you are not starting a PLAN / task workflow or actively working through an ongoing task).
 
 ---
 
@@ -177,20 +177,30 @@ G1.4.1 Behavioral: `feat: <feature-id>: Step <number>: <layer>: <step-title-pros
 G1.4.2 Refactor: `feat: <feature-id>: refactor: <behavior>`
 G1.4.3 Cleanup: `feat: <feature-id>: cleanup: <behavior>`
 G1.5 When adding a new feature from `PROJECT_SPEC.md`, you must break it down into the smallest possible actionable tasks in `tasks.md` using the exact sub-item numbering from the spec (e.g., `FR.1.1`, `FR.1.2`, `FR.1.2.1`). Each sub-item from the spec must have its own task in `tasks.md`.
-G1.6 You must only work on one sub-task at a time. You should never work on a top-level feature (e.g., `FR.1`) directly if it can be broken down into sub-tasks (e.g., `FR.1.1`). After completing a sub-task, you must stop and ask for permission to proceed to the next one, unless I have explicitly asked you to work autonomously.
+G1.6 You must only work on one sub-task at a time. You should never work on a top-level feature (e.g., `FR.1`) directly if it can be broken down into sub-tasks (e.g., `FR.1.1`). After completing a sub-task, you must stop and ask for permission to proceed to the next one, even if you are in "Brave" mode or any autonomous mode. This is a hard constraint to ensure incremental feedback and prevent scope creep.
+G1.6.1 Even if multiple sub-tasks seem trivial or related (e.g., adding three different shot counts), you MUST implement only one, verify it, and wait for explicit permission before starting the next.
 G1.7 If no task exists in tasks.md, still commit with a meaningful message.
 G1.8 When the user approves a commit prompt, you MUST immediately execute the corresponding git commit command via bash. Do not wait for the next turn.
 G1.9 Test descriptions (e.g., in `describe` or `it` blocks) must not contain feature numbers or task IDs. Use domain language only.
-G1.10 React components must be written to read like a "newspaper" (Clean Code). Avoid "spaghetti JSX" or large blocks of raw HTML/DOM tags.
-G1.10.1 Small chunks of JSX that represent a specific behavior or domain concept must be extracted into small components (can be in the same file if appropriate).
-G1.10.2 Use domain-oriented component names (e.g., `<UploadImage />`, `<UploadedImage />`) to ensure the parent JSX speaks in domain prose.
-G1.10.3 Avoid inline conditional rendering logic (e.g., `{condition && <JSX />}`) in the parent. Move the logic into the child component as a guard clause (returning `null` if the condition is not met).
-G1.11 You must strictly separate application logic from React views. Views must be humble and ignorant of implementation details.
-G1.11.1 All handler logic, state management, and side effects (e.g., `FileReader`, `fetch`, etc.) MUST live in custom hooks or business/repository layers.
-G1.11.2 React components must only orchestrate hooks and sub-components.
-G1.11.3 Failing to extract logic to a hook before requesting a commit is a violation of the "newspaper" principle and the architecture defined in `PROJECT_SPEC.md`. Always perform this extraction as part of the REFACTOR phase of TDD.
-G1.11.4 The main/parent component must be at the top of the file. Child components must be ordered below the parent, in the order in which they are called (top-to-bottom).
-G1.12 You MUST top and re-run the site using `yarn dev` after completing every task (after tests pass GREEN) and fix any issues that occur during startup or runtime. This is mandatory verification before proceeding to the next task.
+G1.10 When all sub-tasks for a parent feature are marked as `[COMPLETED]`, you must also mark the top-level parent feature as `[COMPLETED]` in `tasks.md`.
+G1.11 You MUST top and re-run the site using `yarn dev` after completing every task (after tests pass GREEN) and fix any issues that occur during startup or runtime. This is mandatory verification before proceeding to the next task.
+
+---
+
+## R1. React & UI (non-negotiable)
+
+R1.1 React components must be written to read like a "newspaper" (Clean Code). Avoid "spaghetti JSX" or large blocks of raw HTML/DOM tags.
+R1.1.1 Small chunks of JSX that represent a specific behavior or domain concept must be extracted into small components (can be in the same file if appropriate).
+R1.1.2 Use domain-oriented component names (e.g., `<UploadImage />`, `<UploadedImage />`) to ensure the parent JSX speaks in domain prose.
+R1.1.3 Avoid inline conditional rendering logic (e.g., `{condition && <JSX />}`) in the parent. Move the logic into the child component as a guard clause (returning `null` if the condition is not met).
+R1.1.4 The main/parent component must be at the top of the file. Child components must be ordered below the parent, in the order in which they are called (top-to-bottom).
+
+R1.2 You must strictly separate application logic from React views. Views must be humble and ignorant of implementation details.
+R1.2.1 All handler logic, state management, and side effects (e.g., `FileReader`, `fetch`, etc.) MUST live in custom hooks or business/repository layers.
+R1.2.2 React components must only orchestrate hooks and sub-components.
+R1.2.3 Failing to extract logic to a hook before requesting a commit is a violation of the "newspaper" principle and the architecture defined in `PROJECT_SPEC.md`. Always perform this extraction as part of the REFACTOR phase of TDD.
+
+R1.3 You MUST use shadcn/ui components for all UI elements as specified in the `PROJECT_SPEC.md`. Raw HTML/DOM tags (like `input`, `button`, `label`) should be replaced with their shadcn equivalents (e.g., `<Input />`, `<Button />`, `<Label />`).
 
 ---
 

@@ -13,6 +13,10 @@ All behavior mentioned below are to be incrementally implemented will be broken 
 
 ---
 
+## 0. Header, Title, Footer
+0.2 Add a title to the app. Title should be in the header
+0.1 Add a good looking modern header and footer to the app.
+
 ## 1. Scope and Outcomes
 1.1  Primary User Outcome
 A user can:

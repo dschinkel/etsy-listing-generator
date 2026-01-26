@@ -1,5 +1,10 @@
 import React from 'react';
 import { useProductUpload } from './hooks/useProductUpload';
+import { Button } from './components/ui/button';
+import { Input } from './components/ui/input';
+import { Label } from './components/ui/label';
+import { Checkbox } from './components/ui/checkbox';
+import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
 
 const App = () => {
   const { 
@@ -18,29 +23,31 @@ const App = () => {
     heroBackground,
     handleHeroBackgroundUpload,
     closeUpsBackground,
-    handleCloseUpsBackgroundUpload
+    handleCloseUpsBackgroundUpload,
   } = useProductUpload();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 text-slate-900">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 text-slate-900 p-8">
       <Title />
       <UploadImage onUpload={handleUpload} />
-      <ImageGenerationConfig 
-        lifestyleShotsCount={lifestyleShotsCount}
-        onLifestyleShotsChange={handleLifestyleShotsChange}
-        heroShotsCount={heroShotsCount}
-        onHeroShotsChange={handleHeroShotsChange}
-        closeUpsCount={closeUpsCount}
-        onCloseUpsChange={handleCloseUpsChange}
-      />
-      <BackgroundUploads 
-        onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
-        lifestyleBackground={lifestyleBackground}
-        onHeroBackgroundUpload={handleHeroBackgroundUpload}
-        heroBackground={heroBackground}
-        onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
-        closeUpsBackground={closeUpsBackground}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 w-full max-w-4xl">
+        <ShotsSelection 
+          lifestyleShotsCount={lifestyleShotsCount}
+          onLifestyleShotsChange={handleLifestyleShotsChange}
+          heroShotsCount={heroShotsCount}
+          onHeroShotsChange={handleHeroShotsChange}
+          closeUpsCount={closeUpsCount}
+          onCloseUpsChange={handleCloseUpsChange}
+        />
+        <BackgroundUploads 
+          onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
+          lifestyleBackground={lifestyleBackground}
+          onHeroBackgroundUpload={handleHeroBackgroundUpload}
+          heroBackground={heroBackground}
+          onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+          closeUpsBackground={closeUpsBackground}
+        />
+      </div>
       <UploadedImage 
         src={productImage} 
         isPrimary={isPrimaryImage}
@@ -56,26 +63,37 @@ const Title = () => {
 
 const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void }) => {
   return (
-    <div className="p-4 border-2 border-dashed border-slate-300 rounded-lg">
-      <input
-        type="file"
-        accept="image/png, image/jpeg"
-        onChange={onUpload}
-        data-testid="product-image-upload"
-      />
-    </div>
+    <Card className="w-full max-w-md border-dashed">
+      <CardContent className="pt-6">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <Label htmlFor="product-image-upload" className="cursor-pointer text-center">
+            <div className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary transition-colors">
+              Click to upload product image
+            </div>
+          </Label>
+          <Input
+            id="product-image-upload"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onUpload}
+            data-testid="product-image-upload"
+            className="hidden"
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
-const ImageGenerationConfig = ({ 
-  lifestyleShotsCount, 
+const ShotsSelection = ({
+  lifestyleShotsCount,
   onLifestyleShotsChange,
   heroShotsCount,
   onHeroShotsChange,
   closeUpsCount,
   onCloseUpsChange
-}: { 
-  lifestyleShotsCount: number, 
+}: {
+  lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   heroShotsCount: number,
   onHeroShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -83,47 +101,49 @@ const ImageGenerationConfig = ({
   onCloseUpsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   return (
-    <div className="mt-8 p-4 bg-white rounded-lg shadow border border-slate-200">
-      <h2 className="text-lg font-semibold mb-4">Image Generation Configuration</h2>
-      <div className="flex flex-col gap-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>Shots Selection</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
-          <label htmlFor="lifestyle-shots" className="text-sm font-medium">Lifestyle Shots</label>
-          <input
+          <Label htmlFor="lifestyle-shots">Lifestyle Shots</Label>
+          <Input
             id="lifestyle-shots"
             type="number"
             min="0"
             value={lifestyleShotsCount}
             onChange={onLifestyleShotsChange}
             data-testid="lifestyle-shots-count"
-            className="w-20 p-1 border rounded"
+            className="w-20"
           />
         </div>
         <div className="flex items-center justify-between gap-4">
-          <label htmlFor="hero-shots" className="text-sm font-medium">Hero Shots</label>
-          <input
+          <Label htmlFor="hero-shots">Hero Shots</Label>
+          <Input
             id="hero-shots"
             type="number"
             min="0"
             value={heroShotsCount}
             onChange={onHeroShotsChange}
             data-testid="hero-shots-count"
-            className="w-20 p-1 border rounded"
+            className="w-20"
           />
         </div>
         <div className="flex items-center justify-between gap-4">
-          <label htmlFor="close-ups" className="text-sm font-medium">Close-ups</label>
-          <input
+          <Label htmlFor="close-ups">Close-ups</Label>
+          <Input
             id="close-ups"
             type="number"
             min="0"
             value={closeUpsCount}
             onChange={onCloseUpsChange}
             data-testid="close-ups-count"
-            className="w-20 p-1 border rounded"
+            className="w-20"
           />
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -143,68 +163,67 @@ const BackgroundUploads = ({
   closeUpsBackground: string | null
 }) => {
   return (
-    <div className="mt-8 p-4 bg-white rounded-lg shadow border border-slate-200 w-full max-w-md">
-      <h2 className="text-lg font-semibold mb-4">Background Uploads</h2>
-      <div className="flex flex-col gap-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>Background Uploads</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <label htmlFor="lifestyle-background" className="text-sm font-medium">Lifestyle Background</label>
-          <input
+          <Label htmlFor="lifestyle-background">Lifestyle Background</Label>
+          <Input
             id="lifestyle-background"
             type="file"
             accept="image/png, image/jpeg"
             onChange={onLifestyleBackgroundUpload}
             data-testid="lifestyle-background-upload"
-            className="text-sm"
           />
           {lifestyleBackground && (
             <img 
               src={lifestyleBackground} 
               alt="Lifestyle Background" 
               data-testid="uploaded-lifestyle-background"
-              className="w-20 h-20 object-cover rounded shadow"
+              className="w-20 h-20 object-cover rounded shadow mt-2"
             />
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="hero-background" className="text-sm font-medium">Hero Background</label>
-          <input
+          <Label htmlFor="hero-background">Hero Background</Label>
+          <Input
             id="hero-background"
             type="file"
             accept="image/png, image/jpeg"
             onChange={onHeroBackgroundUpload}
             data-testid="hero-background-upload"
-            className="text-sm"
           />
           {heroBackground && (
             <img 
               src={heroBackground} 
               alt="Hero Background" 
               data-testid="uploaded-hero-background"
-              className="w-20 h-20 object-cover rounded shadow"
+              className="w-20 h-20 object-cover rounded shadow mt-2"
             />
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="close-ups-background" className="text-sm font-medium">Close-ups Background</label>
-          <input
+          <Label htmlFor="close-ups-background">Close-ups Background</Label>
+          <Input
             id="close-ups-background"
             type="file"
             accept="image/png, image/jpeg"
             onChange={onCloseUpsBackgroundUpload}
             data-testid="close-ups-background-upload"
-            className="text-sm"
           />
           {closeUpsBackground && (
             <img 
               src={closeUpsBackground} 
               alt="Close-ups Background" 
               data-testid="uploaded-close-ups-background"
-              className="w-20 h-20 object-cover rounded shadow"
+              className="w-20 h-20 object-cover rounded shadow mt-2"
             />
           )}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -220,24 +239,27 @@ const UploadedImage = ({
   if (!src) return null;
 
   return (
-    <div className="mt-8 flex flex-col items-center gap-4">
-      <img
-        src={src}
-        alt="Product"
-        data-testid="uploaded-product-image"
-        className="max-w-xs rounded shadow-lg"
-      />
-      <div className="flex items-center gap-2">
-        <input
-          id="primary-image"
-          type="checkbox"
-          checked={isPrimary}
-          onChange={onSelectPrimary}
-          data-testid="set-primary-image"
+    <Card className="mt-8">
+      <CardContent className="pt-6 flex flex-col items-center gap-4">
+        <img
+          src={src}
+          alt="Product"
+          data-testid="uploaded-product-image"
+          className="max-w-xs rounded shadow-lg"
         />
-        <label htmlFor="primary-image" className="text-sm font-medium">Set as Primary Etsy Image</label>
-      </div>
-    </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="primary-image"
+            checked={isPrimary}
+            onCheckedChange={onSelectPrimary}
+            data-testid="set-primary-image"
+          />
+          <Label htmlFor="primary-image" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Set as Primary Etsy Image
+          </Label>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

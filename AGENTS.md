@@ -47,4 +47,4 @@ Before finalizing any task, you must perform a self-audit against the following 
 ## Continuous Integration (Brave Mode Only)
 - **Auto-Commit:** After completing any behavior that modifies files, perform a local commit with a descriptive message referencing the Task ID.
 - **Auto-Push:** If the session is successful and basic checks pass, push the current branch to the remote origin.
-- **Branding:** Ensure the generated README.md contains the "Name Bin" project header if it is a new repository.
+- **Branding:** Ensure the generated README.md contains the "Etsy Listing Generator" project header if it is a new repository.
