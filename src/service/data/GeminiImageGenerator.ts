@@ -11,7 +11,7 @@ export class GeminiImageGenerator {
     this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   }
 
-  async generateImage(params: { type: string; prompt: string }): Promise<string> {
+  async generateImage(params: { type: string; prompt: string; productImage?: string }): Promise<string> {
     // Convert request to TOON format per TR.4.7
     const toonPrompt = `
 TOON 1.0
@@ -20,7 +20,24 @@ PROMPT: ${params.prompt}
 TYPE: IMAGE
 `;
 
-    const result = await this.model.generateContent(toonPrompt);
+    let prompt: any = toonPrompt;
+
+    if (params.productImage) {
+      const base64Data = params.productImage.split(',')[1];
+      const mimeType = params.productImage.split(';')[0].split(':')[1];
+      
+      prompt = [
+        toonPrompt,
+        {
+          inlineData: {
+            data: base64Data,
+            mimeType: mimeType
+          }
+        }
+      ];
+    }
+
+    const result = await this.model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
     

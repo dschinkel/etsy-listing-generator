@@ -19,4 +19,38 @@ describe('Gemini Image Generator', () => {
     
     expect(imageUrl).toContain('http');
   });
+
+  it('generates image using product image as context', async () => {
+    const generator = new GeminiImageGenerator();
+    let capturedPrompt: any = null;
+    (generator as any).model = {
+      generateContent: async (prompt: any) => {
+        capturedPrompt = prompt;
+        return {
+          response: {
+            text: () => 'https://generated-images.com/lifestyle_context.png'
+          }
+        };
+      }
+    };
+
+    const productImage = 'data:image/png;base64,encoded_data';
+    const params = { 
+      type: 'lifestyle', 
+      prompt: 'a lifestyle shot of a product',
+      productImage 
+    };
+    
+    await generator.generateImage(params);
+    
+    expect(capturedPrompt).toEqual(expect.arrayContaining([
+      expect.stringContaining('TOON 1.0'),
+      expect.objectContaining({
+        inlineData: {
+          data: 'encoded_data',
+          mimeType: 'image/png'
+        }
+      })
+    ]));
+  });
 });
