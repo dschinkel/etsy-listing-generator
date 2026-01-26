@@ -1,18 +1,21 @@
 import { GenerateListingImages } from './GenerateListingImages';
 
 describe('Generate Listing Images', () => {
-  it('generates listing images using nano banana', async () => {
+  it('generates requested number of lifestyle shots', async () => {
+    let capturedParams = null;
     const fakeListingRepository = {
-      generateImages: async (params: any) => ({
-        images: ['image1.png', 'image2.png']
-      })
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return { images: ['image1.png', 'image2.png', 'image3.png'] };
+      }
     };
     
     const command = new GenerateListingImages(fakeListingRepository);
-    const request = { lifestyleCount: 2 };
+    const request = { lifestyleCount: 3 };
     
     const response = await command.execute(request);
     
-    expect(response.images).toEqual(['image1.png', 'image2.png']);
+    expect(capturedParams).toEqual({ lifestyleCount: 3 });
+    expect(response.images).toEqual(['image1.png', 'image2.png', 'image3.png']);
   });
 });
