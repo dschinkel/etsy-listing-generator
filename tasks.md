@@ -22,10 +22,10 @@ Acceptance:
 ### FR.2.2 — Ability to upload a background image to be used for hero shots [COMPLETED]
 ### FR.2.2 — Ability to upload a background image to be used for close-ups [COMPLETED]
 
-## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
-### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.1 - lifestyle shots
-### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.2 - hero shots
-### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.3 - close-ups
+## Feature: FR.4 — Show a final preview of the listing images [IN PROGRESS]
+### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.1 - lifestyle shots [COMPLETED]
+### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.2 - hero shots [NOT STARTED]
+### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.3 - close-ups [NOT STARTED]
 
 Technical Requirements:
 Use nano banana as the model to generate the images
