@@ -29,3 +29,32 @@ describe('Product Upload', () => {
     });
   });
 });
+
+describe('Image Generation Configuration', () => {
+  it('allows specifying the number of lifestyle shots', async () => {
+    render(<App />);
+    
+    const input = screen.getByTestId('lifestyle-shots-count');
+    fireEvent.change(input, { target: { value: '3' } });
+    
+    expect(input).toHaveValue(3);
+  });
+
+  it('allows specifying the number of hero shots', async () => {
+    render(<App />);
+    
+    const input = screen.getByTestId('hero-shots-count');
+    fireEvent.change(input, { target: { value: '5' } });
+    
+    expect(input).toHaveValue(5);
+  });
+
+  it('allows specifying the number of close-ups', async () => {
+    render(<App />);
+    
+    const input = screen.getByTestId('close-ups-count');
+    fireEvent.change(input, { target: { value: '2' } });
+    
+    expect(input).toHaveValue(2);
+  });
+});

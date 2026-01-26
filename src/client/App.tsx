@@ -2,12 +2,29 @@ import React from 'react';
 import { useProductUpload } from './hooks/useProductUpload';
 
 const App = () => {
-  const { productImage, handleUpload } = useProductUpload();
+  const { 
+    productImage, 
+    handleUpload, 
+    lifestyleShotsCount, 
+    handleLifestyleShotsChange,
+    heroShotsCount,
+    handleHeroShotsChange,
+    closeUpsCount,
+    handleCloseUpsChange
+  } = useProductUpload();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 text-slate-900">
       <Title />
       <UploadImage onUpload={handleUpload} />
+      <ImageGenerationConfig 
+        lifestyleShotsCount={lifestyleShotsCount}
+        onLifestyleShotsChange={handleLifestyleShotsChange}
+        heroShotsCount={heroShotsCount}
+        onHeroShotsChange={handleHeroShotsChange}
+        closeUpsCount={closeUpsCount}
+        onCloseUpsChange={handleCloseUpsChange}
+      />
       <UploadedImage src={productImage} />
     </div>
   );
@@ -26,6 +43,66 @@ const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInp
         onChange={onUpload}
         data-testid="product-image-upload"
       />
+    </div>
+  );
+};
+
+const ImageGenerationConfig = ({ 
+  lifestyleShotsCount, 
+  onLifestyleShotsChange,
+  heroShotsCount,
+  onHeroShotsChange,
+  closeUpsCount,
+  onCloseUpsChange
+}: { 
+  lifestyleShotsCount: number, 
+  onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  heroShotsCount: number,
+  onHeroShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  closeUpsCount: number,
+  onCloseUpsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}) => {
+  return (
+    <div className="mt-8 p-4 bg-white rounded-lg shadow border border-slate-200">
+      <h2 className="text-lg font-semibold mb-4">Image Generation Configuration</h2>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between gap-4">
+          <label htmlFor="lifestyle-shots" className="text-sm font-medium">Lifestyle Shots</label>
+          <input
+            id="lifestyle-shots"
+            type="number"
+            min="0"
+            value={lifestyleShotsCount}
+            onChange={onLifestyleShotsChange}
+            data-testid="lifestyle-shots-count"
+            className="w-20 p-1 border rounded"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <label htmlFor="hero-shots" className="text-sm font-medium">Hero Shots</label>
+          <input
+            id="hero-shots"
+            type="number"
+            min="0"
+            value={heroShotsCount}
+            onChange={onHeroShotsChange}
+            data-testid="hero-shots-count"
+            className="w-20 p-1 border rounded"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <label htmlFor="close-ups" className="text-sm font-medium">Close-ups</label>
+          <input
+            id="close-ups"
+            type="number"
+            min="0"
+            value={closeUpsCount}
+            onChange={onCloseUpsChange}
+            data-testid="close-ups-count"
+            className="w-20 p-1 border rounded"
+          />
+        </div>
+      </div>
     </div>
   );
 };
