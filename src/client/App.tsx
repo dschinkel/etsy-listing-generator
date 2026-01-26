@@ -5,11 +5,16 @@ import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
 import { Checkbox } from './components/ui/checkbox';
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import ListingPreview from './components/ListingPreview';
+import { ThemeProvider } from './components/theme-provider';
 
 const App = () => {
   const { 
     productImage, 
     handleUpload, 
+    handleRemoveProductImage,
     lifestyleShotsCount, 
     handleLifestyleShotsChange,
     heroShotsCount,
@@ -27,43 +32,62 @@ const App = () => {
   } = useProductUpload();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 text-slate-900 p-8">
-      <Title />
-      <UploadImage onUpload={handleUpload} />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 w-full max-w-4xl">
-        <ShotsSelection 
-          lifestyleShotsCount={lifestyleShotsCount}
-          onLifestyleShotsChange={handleLifestyleShotsChange}
-          heroShotsCount={heroShotsCount}
-          onHeroShotsChange={handleHeroShotsChange}
-          closeUpsCount={closeUpsCount}
-          onCloseUpsChange={handleCloseUpsChange}
-        />
-        <BackgroundUploads 
-          onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
-          lifestyleBackground={lifestyleBackground}
-          onHeroBackgroundUpload={handleHeroBackgroundUpload}
-          heroBackground={heroBackground}
-          onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
-          closeUpsBackground={closeUpsBackground}
-        />
-      </div>
-      <UploadedImage 
-        src={productImage} 
-        isPrimary={isPrimaryImage}
-        onSelectPrimary={handlePrimarySelection}
-      />
-    </div>
-  );
-};
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="flex flex-col min-h-screen bg-background text-foreground">
+        <Header />
+        <main className="flex-1 p-8">
+          <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Left Pane */}
+              <div className="flex flex-col items-center gap-8">
+                <UploadImage onUpload={handleUpload} />
+                <UploadedImage 
+                  src={productImage} 
+                  isPrimary={isPrimaryImage}
+                  onSelectPrimary={handlePrimarySelection}
+                  onRemove={handleRemoveProductImage}
+                />
+              </div>
 
-const Title = () => {
-  return <h1 className="text-3xl font-bold mb-8">Etsy Listing Generator</h1>;
+              {/* Right Pane */}
+              <div className="flex flex-col gap-8">
+                <ShotsSelection 
+                  lifestyleShotsCount={lifestyleShotsCount}
+                  onLifestyleShotsChange={handleLifestyleShotsChange}
+                  heroShotsCount={heroShotsCount}
+                  onHeroShotsChange={handleHeroShotsChange}
+                  closeUpsCount={closeUpsCount}
+                  onCloseUpsChange={handleCloseUpsChange}
+                />
+                <BackgroundUploads 
+                  onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
+                  lifestyleBackground={lifestyleBackground}
+                  onHeroBackgroundUpload={handleHeroBackgroundUpload}
+                  heroBackground={heroBackground}
+                  onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+                  closeUpsBackground={closeUpsBackground}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-4">
+              <Button size="lg" className="w-full max-w-md">
+                Generate Listing Images
+              </Button>
+            </div>
+
+            <ListingPreview images={[]} />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    </ThemeProvider>
+  );
 };
 
 const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void }) => {
   return (
-    <Card className="w-full max-w-md border-dashed">
+    <Card className="w-full border-dashed">
       <CardContent className="pt-6">
         <div className="flex flex-col items-center justify-center gap-4">
           <Label htmlFor="product-image-upload" className="cursor-pointer text-center">
@@ -230,23 +254,36 @@ const BackgroundUploads = ({
 const UploadedImage = ({ 
   src, 
   isPrimary, 
-  onSelectPrimary 
+  onSelectPrimary,
+  onRemove
 }: { 
   src: string | null, 
   isPrimary: boolean, 
-  onSelectPrimary: () => void 
+  onSelectPrimary: () => void,
+  onRemove: () => void
 }) => {
   if (!src) return null;
 
   return (
-    <Card className="mt-8">
+    <Card className="w-full">
       <CardContent className="pt-6 flex flex-col items-center gap-4">
-        <img
-          src={src}
-          alt="Product"
-          data-testid="uploaded-product-image"
-          className="max-w-xs rounded shadow-lg"
-        />
+        <div className="relative group">
+          <img
+            src={src}
+            alt="Product"
+            data-testid="uploaded-product-image"
+            className="max-w-xs rounded shadow-lg"
+          />
+          <Button
+            variant="destructive"
+            size="sm"
+            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={onRemove}
+            data-testid="remove-product-image"
+          >
+            Remove
+          </Button>
+        </div>
         <div className="flex items-center space-x-2">
           <Checkbox
             id="primary-image"

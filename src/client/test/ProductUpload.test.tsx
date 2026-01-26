@@ -120,3 +120,22 @@ describe('Background Upload', () => {
     });
   });
 });
+
+describe('Image Removal', () => {
+  it('allows removing the uploaded product image', async () => {
+    render(<App />);
+    
+    const file = new File(['(binary data)'], 'product.png', { type: 'image/png' });
+    const input = screen.getByTestId('product-image-upload');
+    fireEvent.change(input, { target: { files: [file] } });
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('uploaded-product-image')).toBeInTheDocument();
+    });
+
+    const removeButton = screen.getByTestId('remove-product-image');
+    fireEvent.click(removeButton);
+    
+    expect(screen.queryByTestId('uploaded-product-image')).not.toBeInTheDocument();
+  });
+});

@@ -70,9 +70,15 @@ export const useProductUpload = () => {
     setIsPrimaryImage(!isPrimaryImage);
   };
 
+  const handleRemoveProductImage = () => {
+    setProductImage(null);
+    setIsPrimaryImage(false);
+  };
+
   return {
     productImage,
     handleUpload,
+    handleRemoveProductImage,
     lifestyleShotsCount,
     handleLifestyleShotsChange,
     heroShotsCount,

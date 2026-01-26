@@ -41,6 +41,15 @@ P0.11 When iterating on a feature, do not mark it as [FAILED] or create new "fix
 P0.11.1 When starting a task, you MUST move the task from [NOT STARTED] to [IN PROGRESS] in `tasks.md`.
 P0.12 NEVER call `submit` if there are uncommitted or unpushed changes related to the task. Every task completion must end with a push to the remote repository.
 P0.13 When asked to add a new feature, you must always add it at the higher level in `PROJECT_SPEC.md` first, then break that out into smaller tasks second in `tasks.md` using the `PROJECT_SPEC` feature number.
+P0.14 If asked for an out of bounds fix, relate it to the current task and append the information to `tasks.md` using the following format:
+```markdown
+## Task: Fix [COMPLETED]
+### <Description of the fix>
+The Fix:
+- [COMPLETED] <Subtask 1>
+- [COMPLETED] <Subtask 2>
+...
+```
 
 ---
 
