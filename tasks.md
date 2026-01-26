@@ -75,6 +75,14 @@ GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing image
 ### FR.11.1 — Technical Notes [NOT STARTED]
 
 ## Task: Fix [COMPLETED]
+### Resolve 404 error when clicking generate listing images button
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Created `src/service/index.ts` to start the backend Koa server.
+- [COMPLETED] Configured Vite proxy in `vite.config.ts` to forward `/listings` requests to the backend.
+- [COMPLETED] Updated `package.json` to run both frontend and backend concurrently in `dev` mode.
+
+## Task: Fix [COMPLETED]
 ### Reduce the time it takes to see the variation selected by avoiding redundant Adobe Typekit API calls.
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
