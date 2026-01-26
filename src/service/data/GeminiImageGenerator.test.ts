@@ -2,7 +2,7 @@ import { GeminiImageGenerator } from './GeminiImageGenerator';
 
 describe('Gemini Image Generator', () => {
   it('generates image using nano banana', async () => {
-    // Mock the model since we are in a CI/Test environment without keys
+    // Mock the model since we are in a CI/Test environment without keys/fetch properly setup for JSDOM
     const generator = new GeminiImageGenerator();
     (generator as any).model = {
       generateContent: async () => ({
