@@ -177,8 +177,9 @@ G1.4.1 Behavioral: `feat: <feature-id>: Step <number>: <layer>: <step-title-pros
 G1.4.2 Refactor: `feat: <feature-id>: refactor: <behavior>`
 G1.4.3 Cleanup: `feat: <feature-id>: cleanup: <behavior>`
 G1.5 When adding a new feature from `PROJECT_SPEC.md`, you must break it down into the smallest possible actionable tasks in `tasks.md` using the exact sub-item numbering from the spec (e.g., `FR.1.1`, `FR.1.2`, `FR.1.2.1`). Each sub-item from the spec must have its own task in `tasks.md`.
-G1.6 If no task exists in tasks.md, still commit with a meaningful message.
-G1.6 When the user approves a commit prompt, you MUST immediately execute the corresponding git commit command via bash. Do not wait for the next turn.
+G1.6 You must only work on one sub-task at a time. After completing a sub-task, you must stop and ask for permission to proceed to the next one, unless I have explicitly asked you to work autonomously.
+G1.7 If no task exists in tasks.md, still commit with a meaningful message.
+G1.8 When the user approves a commit prompt, you MUST immediately execute the corresponding git commit command via bash. Do not wait for the next turn.
 
 ---
 

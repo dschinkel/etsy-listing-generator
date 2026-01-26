@@ -12,9 +12,9 @@ Acceptance:
 ### FR.1.2.2 — Ability to generate the background
 
 ## 3. Feature: FR.1.3 - Image Generation Configuration [NOT STARTED]
-### FR.1.3.1 — Ability how many images should be lifestyle shots
-### FR.1.3.2 — Ability how many images should be hero shots
-### FR.1.3.3 — Ability how many images should be close-ups
+### FR.1.3.1 — Ability to specify how many images should be lifestyle shots
+### FR.1.3.2 — Ability to specify how many images should be hero shots
+### FR.1.3.3 — Ability to specify how many images should be close-ups
 
 ## 4. Feature: FR.1.10 - Listing Fields [NOT STARTED]
 ### FR.1.10.1 — About

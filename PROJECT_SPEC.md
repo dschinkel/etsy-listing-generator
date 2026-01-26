@@ -46,9 +46,9 @@ A user can:
     **FR.1.2.1 — Ability to upload an image for the background for any image**
     **FR.1.2.2 — Ability to generate the background**
 **FR.1.3 — Ability to specify number of type of images to generate**
-    **FR.1.3.1 — Ability how many images should be lifestyle shots**
-    **FR.1.3.2 — Ability how many images should be hero shots**
-    **FR.1.3.3 — Ability how many images should be close-ups**
+    **FR.1.3.1 — Ability to specify how many images should be lifestyle shots**
+    **FR.1.3.2 — Ability to specify how many images should be hero shots**
+    **FR.1.3.3 — Ability to specify how many images should be close-ups**
 **FR.1.4 — Ability to specify which image is the Primary**
 **FR.1.5 — Show a final preview of the listing**
 **FR.1.6 — Ability to fix certain images that I don't like that were generated**
