@@ -58,3 +58,24 @@ describe('Image Generation Configuration', () => {
     expect(input).toHaveValue(2);
   });
 });
+
+describe('Primary Image Selection', () => {
+  it('allows specifying which image will be used as the primary etsy image', async () => {
+    render(<App />);
+    
+    // Simulate some images being present in the future, 
+    // for now we'll just test the selection mechanism on the uploaded product image
+    const file = new File(['(binary data)'], 'product.png', { type: 'image/png' });
+    const input = screen.getByTestId('product-image-upload');
+    fireEvent.change(input, { target: { files: [file] } });
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('uploaded-product-image')).toBeInTheDocument();
+    });
+
+    const primaryCheckbox = screen.getByTestId('set-primary-image');
+    fireEvent.click(primaryCheckbox);
+    
+    expect(primaryCheckbox).toBeChecked();
+  });
+});

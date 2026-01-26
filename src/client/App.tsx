@@ -10,7 +10,9 @@ const App = () => {
     heroShotsCount,
     handleHeroShotsChange,
     closeUpsCount,
-    handleCloseUpsChange
+    handleCloseUpsChange,
+    isPrimaryImage,
+    handlePrimarySelection
   } = useProductUpload();
 
   return (
@@ -25,7 +27,11 @@ const App = () => {
         closeUpsCount={closeUpsCount}
         onCloseUpsChange={handleCloseUpsChange}
       />
-      <UploadedImage src={productImage} />
+      <UploadedImage 
+        src={productImage} 
+        isPrimary={isPrimaryImage}
+        onSelectPrimary={handlePrimarySelection}
+      />
     </div>
   );
 };
@@ -107,17 +113,35 @@ const ImageGenerationConfig = ({
   );
 };
 
-const UploadedImage = ({ src }: { src: string | null }) => {
+const UploadedImage = ({ 
+  src, 
+  isPrimary, 
+  onSelectPrimary 
+}: { 
+  src: string | null, 
+  isPrimary: boolean, 
+  onSelectPrimary: () => void 
+}) => {
   if (!src) return null;
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 flex flex-col items-center gap-4">
       <img
         src={src}
         alt="Product"
         data-testid="uploaded-product-image"
         className="max-w-xs rounded shadow-lg"
       />
+      <div className="flex items-center gap-2">
+        <input
+          id="primary-image"
+          type="checkbox"
+          checked={isPrimary}
+          onChange={onSelectPrimary}
+          data-testid="set-primary-image"
+        />
+        <label htmlFor="primary-image" className="text-sm font-medium">Set as Primary Etsy Image</label>
+      </div>
     </div>
   );
 };

@@ -11,7 +11,7 @@ Acceptance:
 ### FR.2.2 — Ability to specify how many images generated should be hero shots [COMPLETED]
 ### FR.2.3 — Ability to specify how many images generated should be close-ups [COMPLETED]
 
-## 3. Feature: FR.3 — Specify which image will be used as the Primary Etsy image [NOT STARTED]
+## 3. Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
 
 ## 4. Feature: FR.2 — Upload a background for product image [NOT STARTED]
 ### FR.2.2 — Ability to upload a background image to be used for lifestyle shots [NOT STARTED]

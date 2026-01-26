@@ -5,6 +5,7 @@ export const useProductUpload = () => {
   const [lifestyleShotsCount, setLifestyleShotsCount] = useState(0);
   const [heroShotsCount, setHeroShotsCount] = useState(0);
   const [closeUpsCount, setCloseUpsCount] = useState(0);
+  const [isPrimaryImage, setIsPrimaryImage] = useState(false);
 
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -29,6 +30,10 @@ export const useProductUpload = () => {
     setCloseUpsCount(parseInt(event.target.value, 10) || 0);
   };
 
+  const handlePrimarySelection = () => {
+    setIsPrimaryImage(!isPrimaryImage);
+  };
+
   return {
     productImage,
     handleUpload,
@@ -38,5 +43,7 @@ export const useProductUpload = () => {
     handleHeroShotsChange,
     closeUpsCount,
     handleCloseUpsChange,
+    isPrimaryImage,
+    handlePrimarySelection,
   };
 };
