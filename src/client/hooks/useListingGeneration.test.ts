@@ -15,4 +15,28 @@ describe('Listing Generation', () => {
     
     expect(result.current.images).toEqual(['lifestyle_1.png', 'lifestyle_2.png', 'lifestyle_3.png']);
   });
+  it('sends product image as context', async () => {
+    let capturedParams = null;
+    const fakeListingRepository = {
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return ['image.png'];
+      }
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    const base64Image = 'data:image/png;base64,encoded_data';
+    
+    await act(async () => {
+      await result.current.generateListing({ 
+        lifestyleCount: 1,
+        productImage: base64Image 
+      });
+    });
+    
+    expect(capturedParams).toEqual({ 
+      lifestyleCount: 1, 
+      productImage: base64Image 
+    });
+  });
 });
