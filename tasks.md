@@ -4,7 +4,7 @@ Acceptance:
 
 ## 1. Feature: FR.1 — Upload a product image [NOT STARTED]
 ### FR.1.2 — Ability to upload a PNG image as the product image to be used as context for generating listing images [COMPLETED]
-### FR.1.2 — Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images [NOT STARTED]
+### FR.1.2 — Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images [COMPLETED]
 
 ## 2. Feature: FR.2 — Specify number of type of images to generate [NOT STARTED]
 ### FR.2.1 — Ability to specify how many images generated should be lifestyle shots [NOT STARTED]

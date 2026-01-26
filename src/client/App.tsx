@@ -22,7 +22,7 @@ const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInp
     <div className="p-4 border-2 border-dashed border-slate-300 rounded-lg">
       <input
         type="file"
-        accept="image/png"
+        accept="image/png, image/jpeg"
         onChange={onUpload}
         data-testid="product-image-upload"
       />
