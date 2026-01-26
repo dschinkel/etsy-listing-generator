@@ -6,6 +6,9 @@ export const useProductUpload = () => {
   const [heroShotsCount, setHeroShotsCount] = useState(0);
   const [closeUpsCount, setCloseUpsCount] = useState(0);
   const [isPrimaryImage, setIsPrimaryImage] = useState(false);
+  const [lifestyleBackground, setLifestyleBackground] = useState<string | null>(null);
+  const [heroBackground, setHeroBackground] = useState<string | null>(null);
+  const [closeUpsBackground, setCloseUpsBackground] = useState<string | null>(null);
 
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -13,6 +16,39 @@ export const useProductUpload = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProductImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleLifestyleBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLifestyleBackground(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleHeroBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeroBackground(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCloseUpsBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCloseUpsBackground(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -45,5 +81,11 @@ export const useProductUpload = () => {
     handleCloseUpsChange,
     isPrimaryImage,
     handlePrimarySelection,
+    lifestyleBackground,
+    handleLifestyleBackgroundUpload,
+    heroBackground,
+    handleHeroBackgroundUpload,
+    closeUpsBackground,
+    handleCloseUpsBackgroundUpload,
   };
 };

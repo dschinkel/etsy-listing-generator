@@ -12,7 +12,13 @@ const App = () => {
     closeUpsCount,
     handleCloseUpsChange,
     isPrimaryImage,
-    handlePrimarySelection
+    handlePrimarySelection,
+    lifestyleBackground,
+    handleLifestyleBackgroundUpload,
+    heroBackground,
+    handleHeroBackgroundUpload,
+    closeUpsBackground,
+    handleCloseUpsBackgroundUpload
   } = useProductUpload();
 
   return (
@@ -26,6 +32,14 @@ const App = () => {
         onHeroShotsChange={handleHeroShotsChange}
         closeUpsCount={closeUpsCount}
         onCloseUpsChange={handleCloseUpsChange}
+      />
+      <BackgroundUploads 
+        onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
+        lifestyleBackground={lifestyleBackground}
+        onHeroBackgroundUpload={handleHeroBackgroundUpload}
+        heroBackground={heroBackground}
+        onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+        closeUpsBackground={closeUpsBackground}
       />
       <UploadedImage 
         src={productImage} 
@@ -107,6 +121,87 @@ const ImageGenerationConfig = ({
             data-testid="close-ups-count"
             className="w-20 p-1 border rounded"
           />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const BackgroundUploads = ({ 
+  onLifestyleBackgroundUpload, 
+  lifestyleBackground,
+  onHeroBackgroundUpload,
+  heroBackground,
+  onCloseUpsBackgroundUpload,
+  closeUpsBackground
+}: { 
+  onLifestyleBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  lifestyleBackground: string | null,
+  onHeroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  heroBackground: string | null,
+  onCloseUpsBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  closeUpsBackground: string | null
+}) => {
+  return (
+    <div className="mt-8 p-4 bg-white rounded-lg shadow border border-slate-200 w-full max-w-md">
+      <h2 className="text-lg font-semibold mb-4">Background Uploads</h2>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="lifestyle-background" className="text-sm font-medium">Lifestyle Background</label>
+          <input
+            id="lifestyle-background"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onLifestyleBackgroundUpload}
+            data-testid="lifestyle-background-upload"
+            className="text-sm"
+          />
+          {lifestyleBackground && (
+            <img 
+              src={lifestyleBackground} 
+              alt="Lifestyle Background" 
+              data-testid="uploaded-lifestyle-background"
+              className="w-20 h-20 object-cover rounded shadow"
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="hero-background" className="text-sm font-medium">Hero Background</label>
+          <input
+            id="hero-background"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onHeroBackgroundUpload}
+            data-testid="hero-background-upload"
+            className="text-sm"
+          />
+          {heroBackground && (
+            <img 
+              src={heroBackground} 
+              alt="Hero Background" 
+              data-testid="uploaded-hero-background"
+              className="w-20 h-20 object-cover rounded shadow"
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="close-ups-background" className="text-sm font-medium">Close-ups Background</label>
+          <input
+            id="close-ups-background"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onCloseUpsBackgroundUpload}
+            data-testid="close-ups-background-upload"
+            className="text-sm"
+          />
+          {closeUpsBackground && (
+            <img 
+              src={closeUpsBackground} 
+              alt="Close-ups Background" 
+              data-testid="uploaded-close-ups-background"
+              className="w-20 h-20 object-cover rounded shadow"
+            />
+          )}
         </div>
       </div>
     </div>

@@ -79,3 +79,44 @@ describe('Primary Image Selection', () => {
     expect(primaryCheckbox).toBeChecked();
   });
 });
+
+describe('Background Upload', () => {
+  it('allows uploading a background image for lifestyle shots', async () => {
+    render(<App />);
+    
+    const file = new File(['(binary data)'], 'background.png', { type: 'image/png' });
+    const input = screen.getByTestId('lifestyle-background-upload');
+    
+    fireEvent.change(input, { target: { files: [file] } });
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('uploaded-lifestyle-background')).toBeInTheDocument();
+    });
+  });
+
+  it('allows uploading a background image for hero shots', async () => {
+    render(<App />);
+    
+    const file = new File(['(binary data)'], 'hero-bg.png', { type: 'image/png' });
+    const input = screen.getByTestId('hero-background-upload');
+    
+    fireEvent.change(input, { target: { files: [file] } });
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('uploaded-hero-background')).toBeInTheDocument();
+    });
+  });
+
+  it('allows uploading a background image for close-ups', async () => {
+    render(<App />);
+    
+    const file = new File(['(binary data)'], 'closeup-bg.png', { type: 'image/png' });
+    const input = screen.getByTestId('close-ups-background-upload');
+    
+    fireEvent.change(input, { target: { files: [file] } });
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('uploaded-close-ups-background')).toBeInTheDocument();
+    });
+  });
+});

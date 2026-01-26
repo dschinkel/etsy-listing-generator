@@ -13,10 +13,10 @@ Acceptance:
 
 ## 3. Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
 
-## 4. Feature: FR.2 — Upload a background for product image [NOT STARTED]
-### FR.2.2 — Ability to upload a background image to be used for lifestyle shots [NOT STARTED]
-### FR.2.2 — Ability to upload a background image to be used for hero shots [NOT STARTED]
-### FR.2.2 — Ability to upload a background image to be used for close-ups [NOT STARTED]
+## 4. Feature: FR.2 — Upload a background for product image [COMPLETED]
+### FR.2.2 — Ability to upload a background image to be used for lifestyle shots [COMPLETED]
+### FR.2.2 — Ability to upload a background image to be used for hero shots [COMPLETED]
+### FR.2.2 — Ability to upload a background image to be used for close-ups [COMPLETED]
 
 ## 5. Feature: FR.1.6 — Show a final preview of the listing images [NOT STARTED]
 
