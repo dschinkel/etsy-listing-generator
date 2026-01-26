@@ -42,7 +42,7 @@ A user can:
 ### 3.1 Feature Requirements (FR.*)
 
 **FR.1 — Upload a product image**
-**FR.1.2 — Ability to generate the background or upload an image for the background for any image**
+    **FR.1.2 — Ability to generate the background or upload an image for the background for any image**
     **FR.1.2.1 — Ability to upload an image for the background for any image**
     **FR.1.2.2 — Ability to generate the background**
 **FR.1.3 — Ability to specify number of type of images to generate**
