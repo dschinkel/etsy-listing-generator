@@ -42,45 +42,59 @@ A user can:
 ### 3.1 Feature Requirements (FR.*)
 
 **FR.1 — Upload a product image**
-    **FR.1.2 — Ability to generate the background or upload an image for the background for any image**
-    **FR.1.2.1 — Ability to upload an image for the background for any image**
-    **FR.1.2.2 — Ability to generate the background**
-**FR.1.3 — Ability to specify number of type of images to generate**
-    **FR.1.3.1 — Ability to specify how many images should be lifestyle shots**
-    **FR.1.3.2 — Ability to specify how many images should be hero shots**
-    **FR.1.3.3 — Ability to specify how many images should be close-ups**
-**FR.1.4 — Ability to specify which image is the Primary**
-**FR.1.5 — Show a final preview of the listing**
-**FR.1.6 — Ability to fix certain images that I don't like that were generated**
-**FR.1.7 — Ability to reorder or arrange ordering of images**
-**FR.1.8 — Ability to remove images from the list**
-**FR.1.9 — Ability to focus on a certain image to regen a new one**
-**FR.1.10 — Fill out other listing fields**
-    **FR.1.10.1 — About**
-        **FR.1.10.1.1 — Title**
-        **FR.1.10.1.2 — Images**
-        **FR.1.10.1.3 — Description**
-        **FR.1.10.1,4 — Personalization (optiona)**
-    **FR.1.10.2 — Price & Inventory**
-        **FR.1.10.2.1 — Price**
-        **FR.1.10.2.2 — Quantity**
-        **FR.1.10.2.3 — SKU**
-    **FR.1.10.3 — Variations**
-    **FR.1.10.4 — Details**
-        **FR.1.10.4.1 — Category**
-        **FR.1.10.4.2 — Tags**
-    **FR.1.10.10 — Other fields**
-        **FR.1.10.10.1 — Who Made**
-        **FR.1.10.10.2 — When Made**
-        **FR.1.10.10.3 — Is Supply**
-        **FR.1.10.10.4 — Shipping Profile**
-        **FR.1.10.10.5 — Product Type**
-        **FR.1.10.10.6 — Readiness**
-        **FR.1.10.10.7 — Taxonomy Id**
-**FR.1.11 — Save Listing Draft**
-**FR.1.12 — Publish Listing**
-**FR.1.13 — Push the new listing to my etsy store**
-    - **FR.10.1 Technical Notes**
+    **FR.1.2 - Ability to upload a PNG image as the product image to be used as context for generating listing images**
+    **FR.1.2 - Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images**
+
+**FR.2 — Specify number of type of images to generate**
+    **FR.2.1 — Ability to specify how many images generated should be lifestyle shots**
+    **FR.2.2 — Ability to specify how many images generated should be hero shots**
+    **FR.2.3 — Ability to specify how many images generated should be close-ups**
+
+**FR.3 — Specify which image will be used as the Primary Etsy image**
+
+**FR.2 — Upload a background for product image**
+    **FR.2.2 — Ability to upload a background image to be used for lifestyle shots**
+    **FR.2.2 — Ability to upload a background image to be used for hero shots**
+    **FR.2.2 — Ability to upload a background image to be used for close-ups**
+
+**FR.1.6 — Show a final preview of the listing images**
+**FR.1.7 — Redesign certain images that I don't like that**
+    **FR.1.7.1 — Select an image to regen - create a new one**
+    **FR.1.7.2 — Clicking the refresh button creates a new image**
+
+**FR.1.8 — Reorder or arrange ordering of images**
+
+**FR.1.9 — Remove images from the list**
+
+**FR.1.11 — Fill out other listing fields**
+    **FR.1.11.1 — About**
+        **FR.1.11.1.1 — Title**
+        **FR.1.11.1.2 — Images**
+        **FR.1.11.1.3 — Description**
+        **FR.1.11.1,4 — Personalization (optiona)**
+    **FR.1.11.2 — Price & Inventory**
+        **FR.1.11.2.1 — Price**
+        **FR.1.11.2.2 — Quantity**
+        **FR.1.11.2.3 — SKU**
+    **FR.1.11.3 — Variations**
+    **FR.1.11.4 — Details**
+        **FR.1.11.4.1 — Category**
+        **FR.1.11.4.2 — Tags**
+    **FR.1.11.4 — Other fields**
+        **FR.1.11.4.1 — Who Made**
+        **FR.1.11.4.2 — When Made**
+        **FR.1.11.4.3 — Is Supply**
+        **FR.1.11.4.4 — Shipping Profile**
+        **FR.1.11.4.5 — Product Type**
+        **FR.1.11.4.6 — Readiness**
+        **FR.1.11.4.7 — Taxonomy Id**
+
+**FR.1.12 — Save Listing Draft**
+
+**FR.1.13 — Publish Listing**
+
+**FR.1.14 — Push the new listing to my etsy store**
+    - **FR.1.14.1 Technical Notes**
         - use Etsy Open API v3 to fully automate the creation of listings, including uploading images, setting titles, and writing descriptions
 
 ---

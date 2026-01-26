@@ -177,9 +177,20 @@ G1.4.1 Behavioral: `feat: <feature-id>: Step <number>: <layer>: <step-title-pros
 G1.4.2 Refactor: `feat: <feature-id>: refactor: <behavior>`
 G1.4.3 Cleanup: `feat: <feature-id>: cleanup: <behavior>`
 G1.5 When adding a new feature from `PROJECT_SPEC.md`, you must break it down into the smallest possible actionable tasks in `tasks.md` using the exact sub-item numbering from the spec (e.g., `FR.1.1`, `FR.1.2`, `FR.1.2.1`). Each sub-item from the spec must have its own task in `tasks.md`.
-G1.6 You must only work on one sub-task at a time. After completing a sub-task, you must stop and ask for permission to proceed to the next one, unless I have explicitly asked you to work autonomously.
+G1.6 You must only work on one sub-task at a time. You should never work on a top-level feature (e.g., `FR.1`) directly if it can be broken down into sub-tasks (e.g., `FR.1.1`). After completing a sub-task, you must stop and ask for permission to proceed to the next one, unless I have explicitly asked you to work autonomously.
 G1.7 If no task exists in tasks.md, still commit with a meaningful message.
 G1.8 When the user approves a commit prompt, you MUST immediately execute the corresponding git commit command via bash. Do not wait for the next turn.
+G1.9 Test descriptions (e.g., in `describe` or `it` blocks) must not contain feature numbers or task IDs. Use domain language only.
+G1.10 React components must be written to read like a "newspaper" (Clean Code). Avoid "spaghetti JSX" or large blocks of raw HTML/DOM tags.
+G1.10.1 Small chunks of JSX that represent a specific behavior or domain concept must be extracted into small components (can be in the same file if appropriate).
+G1.10.2 Use domain-oriented component names (e.g., `<UploadImage />`, `<UploadedImage />`) to ensure the parent JSX speaks in domain prose.
+G1.10.3 Avoid inline conditional rendering logic (e.g., `{condition && <JSX />}`) in the parent. Move the logic into the child component as a guard clause (returning `null` if the condition is not met).
+G1.11 You must strictly separate application logic from React views. Views must be humble and ignorant of implementation details.
+G1.11.1 All handler logic, state management, and side effects (e.g., `FileReader`, `fetch`, etc.) MUST live in custom hooks or business/repository layers.
+G1.11.2 React components must only orchestrate hooks and sub-components.
+G1.11.3 Failing to extract logic to a hook before requesting a commit is a violation of the "newspaper" principle and the architecture defined in `PROJECT_SPEC.md`. Always perform this extraction as part of the REFACTOR phase of TDD.
+G1.11.4 The main/parent component must be at the top of the file. Child components must be ordered below the parent, in the order in which they are called (top-to-bottom).
+G1.12 You MUST top and re-run the site using `yarn dev` after completing every task (after tests pass GREEN) and fix any issues that occur during startup or runtime. This is mandatory verification before proceeding to the next task.
 
 ---
 
