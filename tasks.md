@@ -36,6 +36,7 @@ Acceptance:
 Technical Requirements:
 - [COMPLETED] Use product image as context for Gemini when generating lifestyle images
 - [COMPLETED] Use nano banana as the model to generate the images with a reusable system prompt for different shot types
+- [COMPLETED] Properly send system prompt using Gemini's systemInstruction feature
 - GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
 
 ## Task: Fix [COMPLETED]

@@ -23,15 +23,17 @@ describe('Gemini Image Generator', () => {
   it('generates image using product image as context', async () => {
     const generator = new GeminiImageGenerator();
     let capturedPrompt: any = null;
-    (generator as any).model = {
-      generateContent: async (prompt: any) => {
-        capturedPrompt = prompt;
-        return {
-          response: {
-            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=lifestyle_context'
-          }
-        };
-      }
+    (generator as any).genAI = {
+      getGenerativeModel: () => ({
+        generateContent: async (prompt: any) => {
+          capturedPrompt = prompt;
+          return {
+            response: {
+              text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=lifestyle_context'
+            }
+          };
+        }
+      })
     };
 
     const productImage = 'data:image/png;base64,encoded_data';
@@ -57,15 +59,17 @@ describe('Gemini Image Generator', () => {
   it('generates hero image using nano banana', async () => {
     const generator = new GeminiImageGenerator();
     let capturedPrompt: any = null;
-    (generator as any).model = {
-      generateContent: async (prompt: any) => {
-        capturedPrompt = prompt;
-        return {
-          response: {
-            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=hero'
-          }
-        };
-      }
+    (generator as any).genAI = {
+      getGenerativeModel: () => ({
+        generateContent: async (prompt: any) => {
+          capturedPrompt = prompt;
+          return {
+            response: {
+              text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=hero'
+            }
+          };
+        }
+      })
     };
 
     const params = { type: 'hero', prompt: 'a hero shot of a product' };
@@ -79,15 +83,17 @@ describe('Gemini Image Generator', () => {
   it('generates close-up image using nano banana', async () => {
     const generator = new GeminiImageGenerator();
     let capturedPrompt: any = null;
-    (generator as any).model = {
-      generateContent: async (prompt: any) => {
-        capturedPrompt = prompt;
-        return {
-          response: {
-            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=closeup'
-          }
-        };
-      }
+    (generator as any).genAI = {
+      getGenerativeModel: () => ({
+        generateContent: async (prompt: any) => {
+          capturedPrompt = prompt;
+          return {
+            response: {
+              text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=closeup'
+            }
+          };
+        }
+      })
     };
 
     const params = { type: 'close-up', prompt: 'a close-up shot of a product' };
@@ -98,27 +104,33 @@ describe('Gemini Image Generator', () => {
     expect(capturedPrompt).toContain('TITLE: Generate close-up image');
   });
 
-  it('generates image based on product shot types', async () => {
+  it('uses system instruction for prompt details', async () => {
     const generator = new GeminiImageGenerator();
+    let capturedConfig: any = null;
     let capturedPrompt: any = null;
-    (generator as any).model = {
-      generateContent: async (prompt: any) => {
-        capturedPrompt = typeof prompt === 'string' ? prompt : prompt[0];
+    (generator as any).genAI = {
+      getGenerativeModel: (config: any) => {
+        capturedConfig = config;
         return {
-          response: {
-            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=image'
+          generateContent: async (prompt: any) => {
+            capturedPrompt = Array.isArray(prompt) ? prompt[0] : prompt;
+            return {
+              response: {
+                text: () => 'https://placehold.jp/800x800.png'
+              }
+            };
           }
         };
       }
     };
 
-    await generator.generateImage({ type: 'lifestyle', prompt: 'test' });
-    expect(capturedPrompt).toContain('You are Nano Banana, an image-generation model used to create consistent e-commerce product images.');
-    expect(capturedPrompt).toContain('Every image must use the following shot type: lifestyle.');
-    expect(capturedPrompt).toContain('Generate exactly 1 images.');
+    await generator.generateImage({ type: 'lifestyle', prompt: 'a test prompt', count: 3 });
 
-    const result = await generator.generateImage({ type: 'hero', prompt: 'test' });
-    expect(capturedPrompt).toContain('Every image must use the following shot type: hero.');
-    expect(result).toContain('placehold.jp');
+    expect(capturedConfig.systemInstruction.parts[0].text).toContain('You are Nano Banana');
+    expect(capturedConfig.systemInstruction.parts[0].text).toContain('Generate exactly 3 images.');
+    expect(capturedConfig.systemInstruction.parts[0].text).toContain('Every image must use the following shot type: lifestyle.');
+    expect(capturedPrompt).toContain('TOON 1.0');
+    expect(capturedPrompt).toContain('PROMPT: a test prompt');
+    expect(capturedPrompt).not.toContain('You are Nano Banana'); // Should be moved to system instruction
   });
 });

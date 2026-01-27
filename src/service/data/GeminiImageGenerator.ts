@@ -72,7 +72,20 @@ export class GeminiImageGenerator {
   }
 
   async generateImage(params: { type: string; prompt: string; productImage?: string; background?: string; count?: number }): Promise<string> {
-    const toonPrompt = this.buildToonPrompt(params.type, params.prompt, params.count || 1);
+    const count = params.count || 1;
+    const systemInstruction = SYSTEM_PROMPT_TEMPLATE
+      .replace(/{{COUNT}}/g, count.toString())
+      .replace(/{{SHOT_TYPE}}/g, params.type);
+
+    const model = this.genAI.getGenerativeModel({ 
+      model: "gemini-2.0-flash",
+      systemInstruction: {
+        role: "system",
+        parts: [{ text: systemInstruction }]
+      }
+    });
+
+    const toonPrompt = this.buildToonPrompt(params.type, params.prompt);
 
     const parts: any[] = [toonPrompt];
 
@@ -86,11 +99,11 @@ export class GeminiImageGenerator {
 
     try {
       if (parts.length === 1) {
-        const result = await this.model.generateContent(parts[0]);
+        const result = await model.generateContent(parts[0]);
         const response = await result.response;
         await response.text();
       } else {
-        const result = await this.model.generateContent(parts);
+        const result = await model.generateContent(parts);
         const response = await result.response;
         await response.text();
       }
@@ -102,15 +115,11 @@ export class GeminiImageGenerator {
     return `https://placehold.jp/24/cccccc/333333/800x800.png?text=${encodeURIComponent(params.type)}&t=${Date.now()}`;
   }
 
-  private buildToonPrompt(type: string, userPrompt: string, count: number): string {
-    const systemPrompt = SYSTEM_PROMPT_TEMPLATE
-      .replace(/{{COUNT}}/g, count.toString())
-      .replace(/{{SHOT_TYPE}}/g, type);
-
+  private buildToonPrompt(type: string, userPrompt: string): string {
     return `
 TOON 1.0
 TITLE: Generate ${type} image
-PROMPT: ${systemPrompt} ${userPrompt}
+PROMPT: ${userPrompt}
 TYPE: IMAGE
 `;
   }
