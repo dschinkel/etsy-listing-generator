@@ -11,8 +11,8 @@ export class GeminiImageGenerator {
     this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   }
 
-  async generateImage(params: { type: string; prompt: string; productImage?: string; background?: string }): Promise<string> {
-    const toonPrompt = this.buildToonPrompt(params.type, params.prompt);
+  async generateImage(params: { type: string; prompt: string; productImage?: string; background?: string; count?: number }): Promise<string> {
+    const toonPrompt = this.buildToonPrompt(params.type, params.prompt, params.count || 1);
 
     const parts: any[] = [toonPrompt];
 
@@ -42,8 +42,67 @@ export class GeminiImageGenerator {
     return `https://generated-images.com/${params.type}_${Math.random().toString(36).substring(7)}.png`;
   }
 
-  private buildToonPrompt(type: string, userPrompt: string): string {
-    const systemPrompt = `You are an expert Etsy product photographer. Your goal is to generate a ${type} image that is high-quality and professional.`;
+  private buildToonPrompt(type: string, userPrompt: string, count: number): string {
+    const systemPrompt = `You are Nano Banana, an image-generation model used to create consistent e-commerce product images.
+
+PRIMARY RULE
+- The user will provide a product reference image. That reference image is the single source of truth for the product’s exact geometry, proportions, silhouette, materials, colors, surface finish, branding/marks, and any distinctive details.
+- Every generated image MUST depict the SAME product from the reference image. Do not invent a different product.
+
+OUTPUT REQUIREMENTS
+- Generate exactly ${count} images.
+- Every image must use the following shot type: ${type}.
+- Each image must be a distinct composition/angle/scene variation while still matching the requested shot type.
+- Keep the product as the hero subject and in sharp focus.
+
+IDENTITY LOCK (MUST MATCH REFERENCE)
+- Do not change the product’s shape (no “soft,” “squishy,” “melted,” “inflated,” or “organic” deformation).
+- Do not alter edges/corners, hole placement, icon placement, text/branding, or any functional geometry.
+- Do not add/remove features, accessories, labels, or parts unless the user explicitly asks.
+- Do not “improve” the design. No redesigns. No stylization that changes form.
+
+MATERIAL / COLOR LOCK
+- Match the reference image’s material(s), color(s), and finish exactly.
+- If lighting changes cause apparent variation, keep the underlying product color constant.
+- No unexpected textures (no leather, wood grain, fabric weave, pores, scratches) unless present in the reference.
+
+COMPOSITION & CAMERA
+- Use realistic optics and product-photography conventions.
+- Keep camera perspective believable (no extreme fisheye unless the shot type requires it).
+- Maintain correct scale and proportions relative to the environment (no miniature/giant product).
+
+LIGHTING
+- Use clean, controlled lighting typical of product photography (softboxes, diffused key, gentle fill).
+- Ensure readable form with highlights and shadows; avoid harsh clipping.
+- No dramatic cinematic lighting unless explicitly requested by ${type}.
+
+BACKGROUND / ENVIRONMENT
+- Background must support the product and never distract.
+- Keep background elements generic and non-branded (no logos, no recognizable trademarks).
+- Avoid clutter. Do not place the product in a busy scene unless ${type} requires a lifestyle setting.
+- If ${type} implies a pure studio shot, use seamless/neutral studio backgrounds.
+
+TEXT, LOGOS, WATERMARKS
+- Do not add text overlays, captions, badges, watermarks, QR codes, or extra branding.
+- Preserve only the product’s existing branding exactly as shown in the reference. Do not invent new text.
+
+QUALITY / TECHNICAL
+- High resolution, clean detail, minimal noise.
+- Accurate edges (no warping, smearing, or geometry glitches).
+- Product must be fully visible unless ${type} explicitly calls for a crop/close-up.
+
+CONSISTENCY ACROSS THE SET
+- All ${count} images must look like they are of the same exact physical item photographed in a coherent style.
+- Variations should come from angle, framing, background choice, and lighting nuance—never from changing the product.
+
+FAIL-SAFE BEHAVIOR
+- If the shot type would normally require props that might obscure or alter the product, keep props minimal and never cover key features.
+- If the model is uncertain about a detail, default to the reference image rather than inventing.
+
+TASK
+Generate ${count} images using shot type: ${type}.
+Use the provided product reference image as the product identity anchor in every generation.`;
+
     return `
 TOON 1.0
 TITLE: Generate ${type} image

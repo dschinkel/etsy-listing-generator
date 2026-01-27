@@ -113,13 +113,11 @@ describe('Gemini Image Generator', () => {
     };
 
     await generator.generateImage({ type: 'lifestyle', prompt: 'test' });
-    expect(capturedPrompt).toContain('You are an expert Etsy product photographer.');
-    expect(capturedPrompt).toContain('Your goal is to generate a lifestyle image');
+    expect(capturedPrompt).toContain('You are Nano Banana, an image-generation model used to create consistent e-commerce product images.');
+    expect(capturedPrompt).toContain('Every image must use the following shot type: lifestyle.');
+    expect(capturedPrompt).toContain('Generate exactly 1 images.');
 
     await generator.generateImage({ type: 'hero', prompt: 'test' });
-    expect(capturedPrompt).toContain('Your goal is to generate a hero image');
-
-    await generator.generateImage({ type: 'close-up', prompt: 'test' });
-    expect(capturedPrompt).toContain('Your goal is to generate a close-up image');
+    expect(capturedPrompt).toContain('Every image must use the following shot type: hero.');
   });
 });

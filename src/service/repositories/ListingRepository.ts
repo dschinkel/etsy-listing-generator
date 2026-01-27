@@ -34,7 +34,8 @@ export class ListingRepository {
         type: 'lifestyle',
         prompt: 'a lifestyle shot of the product in a realistic setting',
         productImage,
-        background
+        background,
+        count
       }));
     }
   }
@@ -45,7 +46,8 @@ export class ListingRepository {
         type: 'hero',
         prompt: 'a hero shot of the product, prominently displayed',
         productImage,
-        background
+        background,
+        count
       }));
     }
   }
@@ -56,7 +58,8 @@ export class ListingRepository {
         type: 'close-up',
         prompt: 'a close-up shot of the product, showing fine details',
         productImage,
-        background
+        background,
+        count
       }));
     }
   }
@@ -67,7 +70,8 @@ export class ListingRepository {
         type: 'flat-lay',
         prompt: 'a top-down flat lay shot of the product on a textured surface',
         productImage,
-        background
+        background,
+        count
       }));
     }
   }
@@ -78,7 +82,8 @@ export class ListingRepository {
         type: 'macro',
         prompt: 'a macro close-up shot of the product, focusing on texture',
         productImage,
-        background
+        background,
+        count
       }));
     }
   }
@@ -89,7 +94,8 @@ export class ListingRepository {
         type: 'contextual',
         prompt: 'a contextual shot of the product in a real-world setting to show scale',
         productImage,
-        background
+        background,
+        count
       }));
     }
   }

@@ -39,13 +39,15 @@ describe('Listing Repository', () => {
       type: 'lifestyle',
       prompt: 'a lifestyle shot of the product in a realistic setting',
       productImage,
-      background: undefined
+      background: undefined,
+      count: 2
     });
     expect(capturedParams[1]).toEqual({
       type: 'lifestyle',
       prompt: 'a lifestyle shot of the product in a realistic setting',
       productImage,
-      background: undefined
+      background: undefined,
+      count: 2
     });
   });
 
