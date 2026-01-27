@@ -14,8 +14,8 @@ export const useListingGeneration = (listingRepository: any) => {
     heroBackground?: string | null,
     closeUpsBackground?: string | null
   }) => {
-    const generatedImages = await listingRepository.generateImages(params);
-    setImages(generatedImages);
+    const response = await listingRepository.generateImages(params);
+    setImages(response.images);
   };
 
   const removeImage = (index: number) => {

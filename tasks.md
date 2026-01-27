@@ -39,7 +39,8 @@ The Fix:
 - [COMPLETED] Improved backend error handling in `src/service/app.ts` to ensure JSON responses.
 - [COMPLETED] Updated `src/client/repositories/ListingRepository.ts` to validate response status before parsing JSON.
 - [COMPLETED] Added explicit error re-throwing in `src/service/data/GeminiImageGenerator.ts`.
-- [COMPLETED] Verified fix with full test suite (30 passing tests).
+- [COMPLETED] Resolved `TypeError: images.map is not a function` in `ListingPreview.tsx` by correctly extracting images array from response in `useListingGeneration.ts`.
+- [COMPLETED] Verified fix with full test suite (31 passing tests).
 
 ## Task: Fix [COMPLETED]
 ### Resolve 403 Forbidden error in integration tests by correctly loading environment variables
