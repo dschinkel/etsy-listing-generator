@@ -33,7 +33,6 @@ Technical Requirements:
 Add an .env that allows me to specify my Gemini API key as 
 GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
 
-
 ## Task: Fix [COMPLETED]
 ### Resolve 500 error and SyntaxError when clicking generate listing images button
 The Fix:
@@ -101,6 +100,7 @@ The Fix:
 - [COMPLETED] Created `src/service/index.ts` to start the backend Koa server.
 - [COMPLETED] Configured Vite proxy in `vite.config.ts` to forward `/listings` requests to the backend.
 - [COMPLETED] Updated `package.json` to run both frontend and backend concurrently in `dev` mode.
+- [COMPLETED] Ensured environment variables are loaded at the earliest possible stage in `src/service/index.ts`.
 
 ## Task: Fix [COMPLETED]
 ### Reduce the time it takes to see the variation selected by avoiding redundant Adobe Typekit API calls.
