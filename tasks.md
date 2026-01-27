@@ -22,10 +22,10 @@ Acceptance:
 ### FR.2.2 — Ability to upload a background image to be used for hero shots [COMPLETED]
 ### FR.2.2 — Ability to upload a background image to be used for close-ups [COMPLETED]
 
-## Feature: FR.4 — Show a final preview of the listing images [IN PROGRESS]
+## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
 ### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.1 - lifestyle shots [COMPLETED]
-### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.2 - hero shots [NOT STARTED]
-### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.3 - close-ups [NOT STARTED]
+### FR.4.2 - Show thumbnail previews of images generated based on user input from FR.2.2 - hero shots [COMPLETED]
+### FR.4.3 - Show thumbnail previews of images generated based on user input from FR.2.3 - close-ups [COMPLETED]
 
 Technical Requirements:
 - [COMPLETED] Use product image as context for Gemini when generating lifestyle images
@@ -40,9 +40,13 @@ GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing image
 
 ## Feature: FR.6 — Reorder or arrange ordering of images [NOT STARTED]
 
-## Feature: FR.7 — Remove images [IN PROGRESS]
+## Feature: FR.7 — Remove images [COMPLETED]
 ### FR.7.1 — Ability to Remove uploaded image [COMPLETED]
-### FR.7.2 — Ability to remove a listing image from the list of images [NOT STARTED]
+### FR.7.2 — Ability to remove a listing image from the list of images [COMPLETED]
+
+## Feature: FR.8 — Copy and download generated images [COMPLETED]
+### FR.8.1 — Copy generated images to clipboard [COMPLETED]
+### FR.8.2 — Download all generated images as a ZIP file [COMPLETED]
 
 ## Feature: FR.8 — Fill out other listing fields [NOT STARTED]
 ### FR.1.8.1 — About [NOT STARTED]
