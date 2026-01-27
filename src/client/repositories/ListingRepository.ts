@@ -15,8 +15,14 @@ export class ListingRepository {
     });
     
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Server Error (${response.status}): ${errorText}`);
+      let errorDetail = '';
+      try {
+        const errorJson = await response.json();
+        errorDetail = errorJson.error || errorJson.message || JSON.stringify(errorJson);
+      } catch (e) {
+        errorDetail = await response.text();
+      }
+      throw new Error(`Server Error (${response.status}): ${errorDetail}`);
     }
 
     return await response.json();

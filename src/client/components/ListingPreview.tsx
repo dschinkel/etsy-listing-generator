@@ -1,17 +1,32 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { Button } from './ui/button';
+import { X, Copy, Download } from 'lucide-react';
 
 interface ListingPreviewProps {
   images: string[];
+  onRemove: (index: number) => void;
+  onCopy: (src: string) => void;
+  onDownloadAll: () => void;
 }
 
-const ListingPreview = ({ images }: ListingPreviewProps) => {
+const ListingPreview = ({ images, onRemove, onCopy, onDownloadAll }: ListingPreviewProps) => {
   if (images.length === 0) return null;
 
   return (
     <Card className="w-full mt-8">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle>Listing Preview</CardTitle>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={onDownloadAll}
+          className="flex items-center gap-2"
+          data-testid="download-all-images"
+        >
+          <Download className="w-4 h-4" />
+          Download All (.zip)
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" data-testid="listing-preview">
@@ -23,6 +38,28 @@ const ListingPreview = ({ images }: ListingPreviewProps) => {
                 className="w-full h-full object-cover rounded shadow-md group-hover:scale-105 transition-transform"
                 data-testid={`listing-image-${index}`}
               />
+              <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="w-8 h-8"
+                  onClick={() => onCopy(src)}
+                  data-testid={`copy-listing-image-${index}`}
+                  title="Copy to clipboard"
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="w-8 h-8"
+                  onClick={() => onRemove(index)}
+                  data-testid={`remove-listing-image-${index}`}
+                  title="Remove image"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           ))}
         </div>

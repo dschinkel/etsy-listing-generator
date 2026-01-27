@@ -62,3 +62,6 @@ GUIDELINES.md tells the agent to break down the high level project features foun
 It break it down into the smallest possible actionable tasks using the exact sub-item numbering from the spec (e.g., `FR.1.1`, `FR.1.2`, `FR.1.2.1`). E
 ach sub-item from the spec must have its own task in `tasks.md`.
 Once you have the sub tasks you can start to add specific acceptance criteria to each task.  This allows us to work in smaller pieces of behavior.
+
+## Running the app
+`yarn dev` starts both the service and the client. We're using the concurrently package to run both concurrently.
