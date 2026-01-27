@@ -23,7 +23,7 @@ export class ListingRepository {
     for (let i = 0; i < count; i++) {
       images.push(await this.dataLayer.generateImage({ 
         type: 'lifestyle',
-        prompt: 'a lifestyle shot of a product',
+        prompt: 'a lifestyle shot of the product in a realistic setting',
         productImage,
         background
       }));
@@ -34,7 +34,7 @@ export class ListingRepository {
     for (let i = 0; i < count; i++) {
       images.push(await this.dataLayer.generateImage({ 
         type: 'hero',
-        prompt: 'a hero shot of a product',
+        prompt: 'a hero shot of the product, prominently displayed',
         productImage,
         background
       }));
@@ -45,7 +45,7 @@ export class ListingRepository {
     for (let i = 0; i < count; i++) {
       images.push(await this.dataLayer.generateImage({ 
         type: 'close-up',
-        prompt: 'a close-up shot of a product',
+        prompt: 'a close-up shot of the product, showing fine details',
         productImage,
         background
       }));
