@@ -33,7 +33,13 @@ const App = () => {
     handleCloseUpsBackgroundUpload,
   } = useProductUpload();
 
-  const { images, generateListing } = useListingGeneration(new ListingRepository());
+  const { 
+    images, 
+    generateListing, 
+    removeImage, 
+    copyImageToClipboard,
+    downloadAllImagesAsZip
+  } = useListingGeneration(new ListingRepository());
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -80,14 +86,24 @@ const App = () => {
                 className="w-full max-w-md"
                 onClick={() => generateListing({ 
                   lifestyleCount: lifestyleShotsCount,
-                  productImage: productImage
+                  heroCount: heroShotsCount,
+                  closeUpsCount: closeUpsCount,
+                  productImage: productImage,
+                  lifestyleBackground: lifestyleBackground,
+                  heroBackground: heroBackground,
+                  closeUpsBackground: closeUpsBackground
                 })}
               >
                 Generate Listing Images
               </Button>
             </div>
 
-            <ListingPreview images={images} />
+            <ListingPreview 
+              images={images} 
+              onRemove={removeImage} 
+              onCopy={copyImageToClipboard} 
+              onDownloadAll={downloadAllImagesAsZip}
+            />
           </div>
         </main>
         <Footer />

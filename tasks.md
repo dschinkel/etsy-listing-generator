@@ -34,6 +34,14 @@ Add an .env that allows me to specify my Gemini API key as
 GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
 
 
+## Task: Fix [IN PROGRESS]
+### Resolve 500 error when clicking generate listing images button
+The Fix:
+- [IN PROGRESS] Create integration test `src/service/test/ListingsIntegration.test.ts` hitting real Gemini API
+- [NOT STARTED] Identify cause of 500 error
+- [NOT STARTED] Fix the issue in the backend
+- [NOT STARTED] Verify with the integration test
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
