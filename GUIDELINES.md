@@ -163,7 +163,37 @@ Q1.2 File size limits:
 Q1.2.1 Non-React files must not exceed 150 lines.
 Q1.2.2 React component files must not exceed 200 lines.
 Q1.3 Do not keep appending new behavior into one file. Refactor by extracting well-named domain functions/components during REFACTOR. If you are ever not sure what to name it, ask the user.
-Q1.4 Functions should read like well-written prose and communicate domain intent. Prefer guard clauses and small composed functions over nested conditionals.
+Q1.4 Functions should read like well-written prose and communicate domain intent. Prefer guard clauses and small composed functions over nested conditionals. Conditionals or Loops must be extracted to small, well-named composed functions whose name explains what it does in well-written prose (no technical terms). 
+
+Example (Bad):
+```typescript
+const lifestyleCount = params.lifestyleCount || 0;
+for (let i = 0; i < lifestyleCount; i++) {
+  const imageUrl = await this.dataLayer.generateImage({ 
+    type: 'lifestyle',
+    prompt: 'a lifestyle shot of a product',
+    productImage: params.productImage
+  });
+  images.push(imageUrl);
+}
+```
+
+Example (Good):
+```typescript
+await this.lifestyleCount(params.lifestyleCount, params.productImage, images);
+
+// extracted function below parent
+private async lifestyleCount(count: number = 0, productImage: string, images: string[]) {
+  for (let i = 0; i < count; i++) {
+    images.push(await this.dataLayer.generateImage({ 
+      type: 'lifestyle',
+      prompt: 'a lifestyle shot of a product',
+      productImage
+    }));
+  }
+}
+```
+In this example, the constant's variable name explains exactly what that for loop does, so refactoring should infer that. The extracted functions in this case would be `lifestyleCount`, `heroCount`, and `closeUpsCount`. This type of refactoring must happen during the REFACTOR stage of every TDD workflow if such code was written during the GREEN step.
 Q1.5 Minimize state and side effects; keep pure logic in `domain/` for backend and for client under `src\client\domain.
 Q1.6 Function placement: Always put functions being called from the parent, below the parent. The primary/parent component or function in a file must be at the top.
 
