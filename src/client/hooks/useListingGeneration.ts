@@ -9,10 +9,16 @@ export const useListingGeneration = (listingRepository: any) => {
     lifestyleCount?: number, 
     heroCount?: number,
     closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number,
     productImage?: string | null,
     lifestyleBackground?: string | null,
     heroBackground?: string | null,
-    closeUpsBackground?: string | null
+    closeUpsBackground?: string | null,
+    flatLayBackground?: string | null,
+    macroBackground?: string | null,
+    contextualBackground?: string | null
   }) => {
     const response = await listingRepository.generateImages(params);
     setImages(response.images);

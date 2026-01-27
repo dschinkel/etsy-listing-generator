@@ -112,10 +112,16 @@ const App = () => {
                   lifestyleCount: lifestyleShotsCount,
                   heroCount: heroShotsCount,
                   closeUpsCount: closeUpsCount,
+                  flatLayCount: flatLayShotsCount,
+                  macroCount: macroShotsCount,
+                  contextualCount: contextualShotsCount,
                   productImage: productImage,
                   lifestyleBackground: lifestyleBackground,
                   heroBackground: heroBackground,
-                  closeUpsBackground: closeUpsBackground
+                  closeUpsBackground: closeUpsBackground,
+                  flatLayBackground: flatLayBackground,
+                  macroBackground: macroBackground,
+                  contextualBackground: contextualBackground
                 })}
               >
                 Generate Listing Images
