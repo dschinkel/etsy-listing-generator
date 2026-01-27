@@ -5,10 +5,16 @@ export class GenerateListingImages {
     lifestyleCount?: number, 
     heroCount?: number,
     closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number,
     productImage?: string,
     lifestyleBackground?: string,
     heroBackground?: string,
-    closeUpsBackground?: string
+    closeUpsBackground?: string,
+    flatLayBackground?: string,
+    macroBackground?: string,
+    contextualBackground?: string
   }) {
     return await this.listingRepository.generateImages(request);
   }
