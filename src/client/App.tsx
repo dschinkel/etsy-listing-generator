@@ -1,5 +1,7 @@
 import React from 'react';
 import { useProductUpload } from './hooks/useProductUpload';
+import { useListingGeneration } from './hooks/useListingGeneration';
+import { ListingRepository } from './repositories/ListingRepository';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
@@ -30,6 +32,8 @@ const App = () => {
     closeUpsBackground,
     handleCloseUpsBackgroundUpload,
   } = useProductUpload();
+
+  const { images, generateListing } = useListingGeneration(new ListingRepository());
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -71,12 +75,19 @@ const App = () => {
             </div>
 
             <div className="flex flex-col items-center gap-4">
-              <Button size="lg" className="w-full max-w-md">
+              <Button 
+                size="lg" 
+                className="w-full max-w-md"
+                onClick={() => generateListing({ 
+                  lifestyleCount: lifestyleShotsCount,
+                  productImage: productImage
+                })}
+              >
                 Generate Listing Images
               </Button>
             </div>
 
-            <ListingPreview images={[]} />
+            <ListingPreview images={images} />
           </div>
         </main>
         <Footer />

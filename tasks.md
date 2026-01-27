@@ -28,7 +28,8 @@ Acceptance:
 ### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.3 - close-ups [NOT STARTED]
 
 Technical Requirements:
-Use nano banana as the model to generate the images
+- [COMPLETED] Use product image as context for Gemini when generating lifestyle images
+- Use nano banana as the model to generate the images
 Add an .env that allows me to specify my Gemini API key as 
 GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
 
