@@ -21,6 +21,7 @@ Before performing any feature work or refactoring, ensure the project environmen
 - **Standing Order:** If the project root lacks standard scaffolding (e.g., missing `src/` or `tailwind.config.js`):
   - **Action:** Execute `../react-app-boilerplate/init.sh`.
   - **Goal:** Establish baseline scaffolding, run `yarn install`, and create a private GitHub repository.
+  - **Requirement:** Ensure `concurrently` is installed and the `dev` script in `package.json` is configured to run both the frontend and backend services simultaneously (e.g., `"dev": "concurrently \"vite\" \"tsx src/service/index.ts\""`).
   - **Constraint:** Use a "Safe Merge" strategy (via rsync -au) to preserve existing newer files in the destination.
   - **Verification:** Confirm `node_modules/` exists and a new remote origin is linked via the GitHub CLI (`gh`).
 
