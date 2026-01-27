@@ -187,4 +187,20 @@ describe('Listing Generation', () => {
     expect(result.current.systemPrompt).toBe('preview prompt');
     expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledWith({ lifestyleCount: 1 });
   });
+
+  it('updates system prompt from error object if present', async () => {
+    const errorWithPrompt: any = new Error('Something went wrong');
+    errorWithPrompt.systemPrompt = 'error prompt';
+    const fakeListingRepository = {
+      generateImages: jest.fn().mockRejectedValue(errorWithPrompt)
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.systemPrompt).toBe('error prompt');
+  });
 });

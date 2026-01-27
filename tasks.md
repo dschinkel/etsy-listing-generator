@@ -85,6 +85,16 @@ The Fix:
 - [COMPLETED] Updated `README.md` to document the new 15s API reliability standard.
 - [COMPLETED] Verified `AbortError` triggers correctly at 15s for Gemini calls.
 
+## Task: Fix [COMPLETED]
+### Ensure system prompt is always returned and displayed
+The Fix:
+- [COMPLETED] Updated `ListingRepository` (server) to pre-populate `systemPrompt` from preview logic.
+- [COMPLETED] Updated `ListingController` (server) to include `systemPrompt` in error responses.
+- [COMPLETED] Updated `ListingRepository` (client) to extract `systemPrompt` from error responses and attach it to thrown errors.
+- [COMPLETED] Updated `useListingGeneration` hook (client) to set `systemPrompt` even when an error occurs.
+- [COMPLETED] Added backend logging to `ListingRepository` to track requested shot counts.
+- [COMPLETED] Added integration and unit tests to verify prompt persistence during zero-shot and error scenarios.
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]

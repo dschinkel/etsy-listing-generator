@@ -15,8 +15,19 @@ export const createListingRepository = (dataLayer: any) => {
     contextualBackground?: string,
     model?: string
   }) => {
+    console.log('Generating images with params:', {
+      lifestyle: params.lifestyleCount,
+      hero: params.heroCount,
+      closeUps: params.closeUpsCount,
+      flatLay: params.flatLayCount,
+      macro: params.macroCount,
+      contextual: params.contextualCount,
+      model: params.model,
+      hasProductImage: !!params.productImage
+    });
     const images: string[] = [];
-    let systemPrompt = '';
+    const preview = getPromptPreview(params);
+    let systemPrompt = preview.systemPrompt;
     
     const collectPrompt = (result: { systemInstruction: string }) => {
       if (result.systemInstruction) {

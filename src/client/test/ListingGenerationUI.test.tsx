@@ -76,4 +76,24 @@ describe('Listing Generation UI', () => {
     const button = screen.getByText('Generating Listing Images...');
     expect(button).toBeDisabled();
   });
+
+  it('displays system prompt even when generation fails', async () => {
+    const errorMsg = 'Generation failed';
+    const mockPrompt = 'Role: Mock prompt';
+    (useListingGeneration as jest.Mock).mockReturnValue({
+      images: [],
+      systemPrompt: mockPrompt,
+      error: errorMsg,
+      isGenerating: false,
+      generateListing: jest.fn(),
+      removeImage: jest.fn(),
+      copyImageToClipboard: jest.fn(),
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
+    });
+
+    render(<App />);
+
+    expect(screen.getByText(mockPrompt)).toBeInTheDocument();
+  });
 });

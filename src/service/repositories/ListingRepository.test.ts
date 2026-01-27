@@ -34,7 +34,7 @@ describe('Listing Repository', () => {
     const result = await repository.generateImages(params);
     
     expect(result.images.length).toBe(0);
-    expect(result.systemPrompt).toBe('');
+    expect(result.systemPrompt).toContain('Role: You are an image-generation assistant');
   });
 
   it('provides a prompt preview based on parameters', async () => {

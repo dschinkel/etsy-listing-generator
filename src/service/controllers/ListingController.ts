@@ -17,8 +17,14 @@ export const createListingController = () => {
       ctx.status = 200;
     } catch (error: any) {
       console.error('Error in generate:', error);
+      const request = ctx.request.body;
+      const preview = repository.getPromptPreview(request);
+      
       ctx.status = error.status || 500;
-      ctx.body = { error: error.message || 'Internal Server Error' };
+      ctx.body = { 
+        error: error.message || 'Internal Server Error',
+        systemPrompt: preview.systemPrompt
+      };
     }
   };
 

@@ -25,13 +25,17 @@ export const createListingRepository = () => {
     
     if (!response.ok) {
       let errorDetail = '';
+      let systemPrompt = '';
       try {
         const errorJson = await response.json();
         errorDetail = errorJson.error || errorJson.message || JSON.stringify(errorJson);
+        systemPrompt = errorJson.systemPrompt || '';
       } catch (e) {
         errorDetail = await response.text();
       }
-      throw new Error(`Server Error (${response.status}): ${errorDetail}`);
+      const error: any = new Error(`Server Error (${response.status}): ${errorDetail}`);
+      error.systemPrompt = systemPrompt;
+      throw error;
     }
 
     return await response.json();

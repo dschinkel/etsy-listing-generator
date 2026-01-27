@@ -34,6 +34,9 @@ export const useListingGeneration = (listingRepository: any) => {
       setImages(response.images);
       setSystemPrompt(response.systemPrompt || '');
     } catch (err: any) {
+      if (err.systemPrompt) {
+        setSystemPrompt(err.systemPrompt);
+      }
       if (err.message.includes('503') || err.message.toLowerCase().includes('overloaded')) {
         setError('Gemini 3 Pro Image Preview is overloaded. Retrying with Imagen 4...');
         try {
@@ -45,6 +48,9 @@ export const useListingGeneration = (listingRepository: any) => {
           setSystemPrompt(fallbackResponse.systemPrompt || '');
           setError(null);
         } catch (fallbackErr: any) {
+          if (fallbackErr.systemPrompt) {
+            setSystemPrompt(fallbackErr.systemPrompt);
+          }
           setError('Imagen 4 also failed. Please try again later.');
           console.error('Fallback failed:', fallbackErr);
         }
