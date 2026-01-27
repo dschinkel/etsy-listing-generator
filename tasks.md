@@ -74,6 +74,17 @@ The Fix:
 - [COMPLETED] Added a health check endpoint and a catch-all 404 route with detailed logging.
 - [COMPLETED] Verified fix with real-server tests and integration tests.
 
+## Task: Fix [COMPLETED]
+### Ensure all individual production API calls timeout at 15 seconds
+The Fix:
+- [COMPLETED] Implemented 15s timeout for Gemini API calls in `src/service/data/GeminiImageGenerator.ts` using `RequestOptions`.
+- [COMPLETED] Created `fetchWithTimeout` utility in `src/client/lib/utils.ts` to enforce a 15s timeout on `fetch` calls.
+- [COMPLETED] Updated `ListingRepository.ts` (client) to use `fetchWithTimeout` for image generation and prompt previews.
+- [COMPLETED] Updated `useListingGeneration.ts` to use `fetchWithTimeout` for clipboard and ZIP operations.
+- [COMPLETED] Reduced image counts in integration tests to 1 image to ensure they fit within the 15s Jest and API timeout limits.
+- [COMPLETED] Updated `README.md` to document the new 15s API reliability standard.
+- [COMPLETED] Verified `AbortError` triggers correctly at 15s for Gemini calls.
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]

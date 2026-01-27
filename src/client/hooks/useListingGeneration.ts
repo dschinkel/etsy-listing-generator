@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { fetchWithTimeout } from '../lib/utils';
 
 export const useListingGeneration = (listingRepository: any) => {
   const [images, setImages] = useState<string[]>([]);
@@ -62,7 +63,7 @@ export const useListingGeneration = (listingRepository: any) => {
 
   const copyImageToClipboard = async (imageSrc: string) => {
     try {
-      const response = await fetch(imageSrc);
+      const response = await fetchWithTimeout(imageSrc);
       const blob = await response.blob();
       await navigator.clipboard.write([
         new ClipboardItem({
@@ -78,7 +79,7 @@ export const useListingGeneration = (listingRepository: any) => {
     const zip = new JSZip();
     
     const downloadPromises = images.map(async (src, index) => {
-      const response = await fetch(src);
+      const response = await fetchWithTimeout(src);
       const blob = await response.blob();
       const extension = blob.type.split('/')[1] || 'png';
       zip.file(`listing-image-${index + 1}.${extension}`, blob);

@@ -1,3 +1,5 @@
+import { fetchWithTimeout } from '../lib/utils';
+
 export const createListingRepository = () => {
   const generateImages = async (params: { 
     lifestyleCount?: number, 
@@ -15,7 +17,7 @@ export const createListingRepository = () => {
     contextualBackground?: string | null,
     model?: string
   }) => {
-    const response = await fetch('/listings/generate', {
+    const response = await fetchWithTimeout('/listings/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
@@ -43,7 +45,7 @@ export const createListingRepository = () => {
     macroCount?: number,
     contextualCount?: number
   }) => {
-    const response = await fetch('/listings/system-prompt', {
+    const response = await fetchWithTimeout('/listings/system-prompt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),

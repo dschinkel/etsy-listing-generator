@@ -13,7 +13,7 @@ An AI-powered tool for Etsy sellers to generate consistent product listing image
 ### Robust Response Processing
 - **Deep Image Extraction**: Implemented `findImageDeep`, a recursive search algorithm that scans the entire Gemini response for image data (inline base64 or URLs), making the system resilient to varying model output formats.
 - **Recursion Protection**: Response parsing includes circular reference detection (using `Set`) and a strict recursion depth limit (10 levels) to prevent memory leaks or hangs.
-- **API Reliability**: All Gemini API calls are wrapped with a 50-second timeout to ensure the application fails gracefully rather than hanging during peak load.
+- **API Reliability**: All production API calls (Gemini and internal backend calls) are wrapped with a 15-second timeout to ensure the application fails gracefully rather than hanging.
 
 ### UI & Error Handling
 - **Real-time Feedback**: The UI provides immediate status updates (e.g., "Gemini is overloaded, retrying with Imagen...") to keep the user informed during fallbacks.

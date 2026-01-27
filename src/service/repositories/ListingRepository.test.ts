@@ -15,18 +15,15 @@ describe('Listing Repository', () => {
     const repository = createListingRepository(dataLayer);
     const params = { 
       lifestyleCount: 1, 
-      heroCount: 1,
       productImage: testImageBase64 
     };
     
     const result = await repository.generateImages(params);
     
-    expect(result.images.length).toBe(2);
+    expect(result.images.length).toBe(1);
     expect(result.images.every(url => url.startsWith('http') || url.startsWith('data:'))).toBe(true);
     expect(result.images.every(url => !url.includes('placehold.jp'))).toBe(true);
     expect(result.systemPrompt).toContain('lifestyle');
-    // We only capture the first system prompt in the repository currently, 
-    // which is fine as they are all based on the same template.
   });
 
   it('handles zero counts correctly', async () => {

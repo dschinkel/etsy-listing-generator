@@ -70,7 +70,7 @@ export const createGeminiImageGenerator = () => {
     }
 
     try {
-      const result = await model.generateContent(parts);
+      const result = await model.generateContent(parts, { timeout: 15000 });
       const response = await result.response;
       
       const imageUrl = extractImageFromResponse(response);
