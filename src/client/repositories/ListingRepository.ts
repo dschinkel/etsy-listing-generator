@@ -1,13 +1,20 @@
-export class ListingRepository {
-  async generateImages(params: { 
+export const createListingRepository = () => {
+  const generateImages = async (params: { 
     lifestyleCount?: number, 
     heroCount?: number, 
     closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number,
     productImage?: string | null,
     lifestyleBackground?: string | null,
     heroBackground?: string | null,
-    closeUpsBackground?: string | null
-  }) {
+    closeUpsBackground?: string | null,
+    flatLayBackground?: string | null,
+    macroBackground?: string | null,
+    contextualBackground?: string | null,
+    model?: string
+  }) => {
     const response = await fetch('/listings/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -26,5 +33,7 @@ export class ListingRepository {
     }
 
     return await response.json();
-  }
-}
+  };
+
+  return { generateImages };
+};

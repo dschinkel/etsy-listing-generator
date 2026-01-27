@@ -36,7 +36,10 @@ P0.6 After completing each step in the PLAN, summarize the step you just complet
 P0.7 If the user stops you midstream with a question or change request, log the interruption and the resolution in `tdd.log` (only applies when the user chose a TDD workflow in P0.0).
 P0.8 If the user reverts an implemented plan, remove the corresponding plan and its workflow entries from `tdd.log` (only applies when the user chose a TDD workflow in P0.0).
 P0.9 For React work, when presenting a PLAN, explicitly ask whether Step 1 (Component layer) should be a non-TDD scaffold or if it should be TDD'd (which would require explicit instruction to write UI tests).
-P0.10 At the very end of a task (after all steps and cleanup), you MUST mark the task as [COMPLETED] in `tasks.md`, run all tests one last time, and then perform a final cleanup commit and push before calling `submit`.
+P0.10 At the very end of a task (after all steps and cleanup), you MUST mark the task as [COMPLETED] in `tasks.md`, run all tests one last time, run the linter and fix any errors, start the app and verify no runtime errors, and then perform a final cleanup commit and push before calling `submit`.
+
+G1.11 At the end of every task, you MUST run the linter (e.g., `npx tsc --noEmit` or `npm run lint`) and fix any reported errors. You MUST also run the application (e.g., `yarn dev` or `npm run dev`) and verify that there are no runtime errors in the logs or in the browser. This is mandatory for every task.
+G1.12 At the end of every task, you MUST run all tests (e.g., `npm run test`) and fix any reported errors. This is mandatory for every task.
 P0.11 When iterating on a feature, do not mark it as [FAILED] or create new "fix" tasks if it doesn't meet acceptance criteria immediately. Instead, keep the current task [IN PROGRESS] and iterate until it is [COMPLETED].
 P0.11.1 When starting a task, you MUST move the task from [NOT STARTED] to [IN PROGRESS] in `tasks.md`.
 P0.12 NEVER call `submit` if there are uncommitted or unpushed changes related to the task. Every task completion must end with a push to the remote repository.
@@ -165,7 +168,7 @@ Q1.2 File size limits:
 Q1.2.1 Non-React files must not exceed 150 lines.
 Q1.2.2 React component files must not exceed 200 lines.
 Q1.3 Do not keep appending new behavior into one file. Refactor by extracting well-named domain functions/components during REFACTOR. If you are ever not sure what to name it, ask the user.
-Q1.4 Functions should read like well-written prose and communicate domain intent. Prefer guard clauses and small composed functions over nested conditionals. Conditionals or Loops must be extracted to small, well-named composed functions whose name explains what it does in well-written prose (no technical terms). 
+Q1.4 Functions should read like well-written prose and communicate domain intent. Prefer guard clauses and small composed functions over nested conditionals. Deeply nested conditionals or loops (more than 2 levels) are strictly forbidden. Conditionals or Loops must be extracted to small, well-named composed functions whose name explains what it does in well-written prose (no technical terms). Use functional patterns (like `find`, `map`, `filter`) to keep logic flat and readable.
 
 Example (Bad):
 ```typescript
@@ -182,12 +185,12 @@ for (let i = 0; i < lifestyleCount; i++) {
 
 Example (Good):
 ```typescript
-await this.lifestyleImages(params.lifestyleCount, params.productImage, images);
+await lifestyleImages(params.lifestyleCount, params.productImage, images);
 
 // extracted function below parent
-private async lifestyleImages(count: number = 0, productImage: string, images: string[]) {
+async function lifestyleImages(count: number = 0, productImage: string, images: string[]) {
   for (let i = 0; i < count; i++) {
-    images.push(await this.dataLayer.generateImage({ 
+    images.push(await dataLayer.generateImage({ 
       type: 'lifestyle',
       prompt: 'a lifestyle shot of a product',
       productImage
@@ -197,6 +200,8 @@ private async lifestyleImages(count: number = 0, productImage: string, images: s
 ```
 Q1.5 Minimize state and side effects; keep pure logic in `domain/` for backend and for client under `src\client\domain.
 Q1.6 Function placement: Always put functions being called from the parent, below the parent. The primary/parent component or function in a file must be at the top.
+Q1.8 Strictly FORBID the use of JavaScript/TypeScript classes. All code must follow the functional module pattern. Use plain functions and objects. Data should be passed as arguments, and dependencies should be handled through function parameters or factory functions. This ensures better testability, simpler composition, and adheres to Clean Code principles in a functional style.
+Q1.9 Duplicated code (more than 1 occurrence of similar logic) MUST be DRY'd up by extracting to a reusable function or component. This applies to both production and test code.
 
 ---
 

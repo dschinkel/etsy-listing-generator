@@ -4,6 +4,9 @@ import { saveAs } from 'file-saver';
 
 export const useListingGeneration = (listingRepository: any) => {
   const [images, setImages] = useState<string[]>([]);
+  const [systemPrompt, setSystemPrompt] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const generateListing = async (params: { 
     lifestyleCount?: number, 
@@ -20,8 +23,37 @@ export const useListingGeneration = (listingRepository: any) => {
     macroBackground?: string | null,
     contextualBackground?: string | null
   }) => {
-    const response = await listingRepository.generateImages(params);
-    setImages(response.images);
+    setIsGenerating(true);
+    setError(null);
+    try {
+      const response = await listingRepository.generateImages({
+        ...params,
+        model: 'gemini-3-pro-image-preview'
+      });
+      setImages(response.images);
+      setSystemPrompt(response.systemPrompt || '');
+    } catch (err: any) {
+      if (err.message.includes('503') || err.message.toLowerCase().includes('overloaded')) {
+        setError('Gemini 3 Pro Image Preview is overloaded. Retrying with Imagen 4...');
+        try {
+          const fallbackResponse = await listingRepository.generateImages({
+            ...params,
+            model: 'imagen-4.0-generate-001'
+          });
+          setImages(fallbackResponse.images);
+          setSystemPrompt(fallbackResponse.systemPrompt || '');
+          setError(null);
+        } catch (fallbackErr: any) {
+          setError('Imagen 4 also failed. Please try again later.');
+          console.error('Fallback failed:', fallbackErr);
+        }
+      } else {
+        setError(`Generation failed: ${err.message}`);
+        console.error('Generation failed:', err);
+      }
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const removeImage = (index: number) => {
@@ -59,6 +91,7 @@ export const useListingGeneration = (listingRepository: any) => {
 
   return {
     images,
+    systemPrompt,
     generateListing,
     removeImage,
     copyImageToClipboard,

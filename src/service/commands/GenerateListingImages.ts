@@ -1,7 +1,5 @@
-export class GenerateListingImages {
-  constructor(private listingRepository: any) {}
-
-  async execute(request: { 
+export const createGenerateListingImages = (listingRepository: any) => {
+  const execute = async (request: { 
     lifestyleCount?: number, 
     heroCount?: number,
     closeUpsCount?: number,
@@ -14,8 +12,11 @@ export class GenerateListingImages {
     closeUpsBackground?: string,
     flatLayBackground?: string,
     macroBackground?: string,
-    contextualBackground?: string
-  }) {
-    return await this.listingRepository.generateImages(request);
-  }
-}
+    contextualBackground?: string,
+    model?: string
+  }) => {
+    return await listingRepository.generateImages(request);
+  };
+
+  return { execute };
+};

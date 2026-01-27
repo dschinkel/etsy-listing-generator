@@ -1,67 +1,41 @@
-# React App Boilerplate
+# Etsy Listing Generator
 
-## How to use this
-1. make sure your init.sh (or `init.sh`) is marked as executable in your boilerplate repo (chmod +x init.sh). This ensures the AI agent doesn't get hung up on a "Permission Denied" error when it tries to run the bootstrap.
-2. Start a new folder for your new project: `mkdir my-new-tool && cd my-new-tool`
-3. Open Junie/Codex: Say, "Start working on the Etsy SEO parser."
-4. The Agent Acts: * The agent reads AGENTS.md and sees the "Standing Order."
-5. It notices the folder is empty and runs `../react-app-boilerplate/init.sh`.
+An AI-powered tool for Etsy sellers to generate consistent product listing images and details.
 
-Result: Your boilerplate is synced, yarn is finished, and a private GitHub repo is already created and pushed before the agent even writes the first line of your SEO parser.
+## Recent Technical Improvements (Solution Summary)
 
-## Benefits to using this repo
-**Atomic Logic**: It links your manual tasks.md workflow to the agent's automated behavior.
+### Resilient Image Generation
+- **Model Selection**: Uses `gemini-3-pro-image-preview` as the primary engine for high-fidelity product imagery.
+- **Automatic Fallback**: If the primary model is overloaded (HTTP 503), the system automatically retries with `imagen-4.0-generate-001`.
+- **Request Optimization**: Generates images one at a time with `count: 1` to ensure model focus and reliability.
+- **Identity Lock**: System prompts are strictly aligned with an "IDENTITY LOCK" rule to preserve product geometry, materials, and colors.
 
-**Tool-Agnostic**: Whether you use Junie, Codex, or a future CLI tool, they will all follow the same "Bootstrap -> Code -> Sync" loop.
+### Robust Response Processing
+- **Deep Image Extraction**: Implemented `findImageDeep`, a recursive search algorithm that scans the entire Gemini response for image data (inline base64 or URLs), making the system resilient to varying model output formats.
+- **Recursion Protection**: Response parsing includes circular reference detection (using `Set`) and a strict recursion depth limit (10 levels) to prevent memory leaks or hangs.
+- **API Reliability**: All Gemini API calls are wrapped with a 50-second timeout to ensure the application fails gracefully rather than hanging during peak load.
 
-**Zero-Friction**: You can now open a brand new folder, ask the agent to build a specific component, and the agent will handle the boilerplate, the dependencies, and the GitHub repo creation as its very first set of actions.
+### UI & Error Handling
+- **Real-time Feedback**: The UI provides immediate status updates (e.g., "Gemini is overloaded, retrying with Imagen...") to keep the user informed during fallbacks.
+- **Enhanced Error Logging**: Backend errors are logged with full stack traces and status codes to simplify troubleshooting.
+- **Request Guarding**: The generation button is disabled during active requests to prevent redundant API calls.
 
-## AGENTS.md
-`AGENTS.md` is checked by the agent at the start of every session
-Why this is a "Force Multiplier" for your workflow:
-
-**Standardization**: Because AGENTS.md is an open standard, if you ever use a CLI tool (like Codex) to run a "Full-Auto" refactor, it will see this checklist and execute it as a final validation step.
-
-**Context Control**: By using the @ mentions, you're signaling to Junie's Brave mode exactly which files are high-priority. It reduces the chance of the AI ignoring your guidelines in favor of generic "AI-style" code.
-- In the context of AI coding agents like Junie, Codex, or Cursor, an @ mention is a special syntax used to explicitly "attach" a file, folder, or documentation to the conversation.
-
-**The "Seeding" Benefit**: Since you use a repo to seed new apps, having this AGENTS.md in your boilerplate ensures that every new project inherits these exact quality controls. You won't have to set up Junie's project settings every single time; it will "discover" these rules automatically.
-
-## @ Mentions
-Whenever you want to tell Junie or a tool to look at a file use `@` so that it prioritizes it over other files. e.g. `please read @GUIDELINES.md`
-It tells the agent's Context Loader to fetch that file every single time a new task starts
-
-How to use them in JetBrains/Junie:
-Open the Junie chat.
-
-Type `@`.
-
-Select your `PROJECT_SPEC.md`.
-
-Type your request.
-
-### If using Junie
-- Junie (in Brave mode) reads the AGENTS.md first. Therefore it'll also bootstrap this project automatically if it hasn't already
-    - Silent Execution: It will perform the copy and the merge as part of its "Plan" phase before it ever touches your SVG code.
-    - also If you accidentally delete a vital config file while working, the agent will notice the "Bootstrap Check" is no longer met and restore the missing piece from the boilerplate repo automatically.
-- Context Loading: When you start a new session, Junie reads AGENTS.md. It sees the @ mentions and immediately pulls those three files into its "active memory."
-- Conflict Resolution: If Junie suggests a "clever" solution that violates your GUIDELINES.md, you can simply say, "Check the guidelines again," and it will correct itself because you've explicitly defined that file as the manual.
-- Task Discipline: By making tasks.md a "Mandatory Log," Junie will stop trying to do 5 things at once and stay focused on the specific task you’ve assigned in your iterative loop.
-
-### How your app is bootstrapped automatically
-- Junie (in Brave mode) or Codex will read AGENTS.md, see that it's a new project without the Tailwind config, and say: "I noticed the project isn't initialized. I'm running the sync script first."
-- `react-app-boilerplate` repo contains a shell script that utilizes uses rsync, which is the industry standard for "smart" merging
-- After we use the bootstrapped code in a new app, whenever we want to update the bootstrap (make react-app-boilerplate smarter or provide more), by having the `init.sh` script in `react-app-boilerplate`'s AGENTS.md rule, you can just tell the agent: "Update the boilerplate in this project," and it will run the sync script, bringing in only the new improvements while leaving your app code untouched
-- By keeping the AGENTS.md updated, you ensure that Junie (in Brave mode) or Codex knows it has the green light to run this script whenever it detects the project is uninitialized
-
-### init.sh
-The `rsync -au` flag ensures that if you’ve already started customizing the code in your new app, the script won't revert your changes back to the generic boilerplate version.
+### Testing Infrastructure
+- **Global Timeout**: Jest is configured with a 15-second global timeout for integration tests.
+- **Domain-Driven Tests**: Test suites use domain-specific language (e.g., "fake" instead of "mock") and avoid simulated behaviors in favor of real API interactions where appropriate.
 
 ## Features
-GUIDELINES.md tells the agent to break down the high level project features found in PROJECT_SPEC.md into actionable tasks in tasks.md.
-It break it down into the smallest possible actionable tasks using the exact sub-item numbering from the spec (e.g., `FR.1.1`, `FR.1.2`, `FR.1.2.1`). E
-ach sub-item from the spec must have its own task in `tasks.md`.
-Once you have the sub tasks you can start to add specific acceptance criteria to each task.  This allows us to work in smaller pieces of behavior.
+- **Shot Types**: Supports Hero, Lifestyle, Close-up, Flat lay, Macro, and Contextual shots.
+- **System Prompt Pane**: Resizable UI element to inspect the AI's internal instructions.
+- **Listing Management**: View, copy to clipboard, or download all generated images as a ZIP file.
 
-## Running the app
-`yarn dev` starts both the service and the client. We're using the concurrently package to run both concurrently.
+## Technical Architecture
+- **Frontend**: React + TypeScript (Humble View pattern).
+- **Backend**: Koa.js + TypeScript (Onion Architecture: Controller → Command → Repository → Data Layer).
+- **Coding Style**: Strictly functional modules using factory functions.
+- **Prompts**: All AI requests use the [TOON format](https://github.com/toon-format/toon).
+
+## Development
+- **Prerequisites**: `GEMINI_API_KEY` in `.env`.
+- **Run**: `yarn dev` (Starts both client and server).
+- **Test**: `yarn test`.

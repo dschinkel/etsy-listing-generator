@@ -36,7 +36,8 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toEqual({ 
       lifestyleCount: 1, 
-      productImage: base64Image 
+      productImage: base64Image,
+      model: 'gemini-3-pro-image-preview'
     });
   });
 
@@ -56,7 +57,8 @@ describe('Listing Generation', () => {
     });
     
     expect(capturedParams).toEqual({ 
-      heroCount: 2
+      heroCount: 2,
+      model: 'gemini-3-pro-image-preview'
     });
     expect(result.current.images).toEqual(['hero_1.png', 'hero_2.png']);
   });
@@ -77,7 +79,8 @@ describe('Listing Generation', () => {
     });
     
     expect(capturedParams).toEqual({ 
-      closeUpsCount: 1
+      closeUpsCount: 1,
+      model: 'gemini-3-pro-image-preview'
     });
     expect(result.current.images).toEqual(['closeup_1.png']);
   });

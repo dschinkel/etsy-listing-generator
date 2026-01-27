@@ -1,7 +1,7 @@
 import React from 'react';
 import { useProductUpload } from './hooks/useProductUpload';
 import { useListingGeneration } from './hooks/useListingGeneration';
-import { ListingRepository } from './repositories/ListingRepository';
+import { createListingRepository } from './repositories/ListingRepository';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
@@ -47,21 +47,26 @@ const App = () => {
 
   const { 
     images, 
+    systemPrompt,
+    error,
+    isGenerating,
     generateListing, 
     removeImage, 
     copyImageToClipboard,
     downloadAllImagesAsZip
-  } = useListingGeneration(new ListingRepository());
+  } = useListingGeneration(createListingRepository());
+
+  const [promptWidth, setPromptWidth] = React.useState(400);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
         <main className="flex-1 p-8">
-          <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto">
+            <div className="flex gap-8 items-start">
               {/* Left Pane */}
-              <div className="flex flex-col items-center gap-8">
+              <div className="flex flex-col items-center gap-8 w-1/3">
                 <UploadImage onUpload={handleUpload} />
                 <UploadedImage 
                   src={productImage} 
@@ -71,8 +76,8 @@ const App = () => {
                 />
               </div>
 
-              {/* Right Pane */}
-              <div className="flex flex-col gap-8">
+              {/* Middle Pane */}
+              <div className="flex flex-col gap-8 flex-1">
                 <ShotsSelection 
                   lifestyleShotsCount={lifestyleShotsCount}
                   onLifestyleShotsChange={handleLifestyleShotsChange}
@@ -102,12 +107,29 @@ const App = () => {
                   contextualBackground={contextualBackground}
                 />
               </div>
+
+              {/* Right Pane (System Prompt) */}
+              <SystemPromptPane 
+                prompt={systemPrompt} 
+                width={promptWidth} 
+                onWidthChange={setPromptWidth} 
+              />
             </div>
+            
+            {error && (
+              <div 
+                className="w-full max-w-2xl mx-auto p-4 bg-destructive/15 border border-destructive/30 text-destructive rounded-md text-sm text-center"
+                data-testid="generation-error"
+              >
+                {error}
+              </div>
+            )}
 
             <div className="flex flex-col items-center gap-4">
               <Button 
                 size="lg" 
                 className="w-full max-w-md"
+                disabled={isGenerating}
                 onClick={() => generateListing({ 
                   lifestyleCount: lifestyleShotsCount,
                   heroCount: heroShotsCount,
@@ -124,7 +146,7 @@ const App = () => {
                   contextualBackground: contextualBackground
                 })}
               >
-                Generate Listing Images
+                {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
               </Button>
             </div>
 
@@ -299,14 +321,26 @@ const BackgroundUploads = ({
   onHeroBackgroundUpload,
   heroBackground,
   onCloseUpsBackgroundUpload,
-  closeUpsBackground
+  closeUpsBackground,
+  onFlatLayBackgroundUpload,
+  flatLayBackground,
+  onMacroBackgroundUpload,
+  macroBackground,
+  onContextualBackgroundUpload,
+  contextualBackground
 }: { 
   onLifestyleBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   lifestyleBackground: string | null,
   onHeroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   heroBackground: string | null,
   onCloseUpsBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  closeUpsBackground: string | null
+  closeUpsBackground: string | null,
+  onFlatLayBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  flatLayBackground: string | null,
+  onMacroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  macroBackground: string | null,
+  onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  contextualBackground: string | null
 }) => {
   return (
     <Card>
@@ -368,6 +402,60 @@ const BackgroundUploads = ({
             />
           )}
         </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="flat-lay-background">Flat Lay Background</Label>
+          <Input
+            id="flat-lay-background"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onFlatLayBackgroundUpload}
+            data-testid="flat-lay-background-upload"
+          />
+          {flatLayBackground && (
+            <img 
+              src={flatLayBackground} 
+              alt="Flat Lay Background" 
+              data-testid="uploaded-flat-lay-background"
+              className="w-20 h-20 object-cover rounded shadow mt-2"
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="macro-background">Macro Background</Label>
+          <Input
+            id="macro-background"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onMacroBackgroundUpload}
+            data-testid="macro-background-upload"
+          />
+          {macroBackground && (
+            <img 
+              src={macroBackground} 
+              alt="Macro Background" 
+              data-testid="uploaded-macro-background"
+              className="w-20 h-20 object-cover rounded shadow mt-2"
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="contextual-background">Contextual Background</Label>
+          <Input
+            id="contextual-background"
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={onContextualBackgroundUpload}
+            data-testid="contextual-background-upload"
+          />
+          {contextualBackground && (
+            <img 
+              src={contextualBackground} 
+              alt="Contextual Background" 
+              data-testid="uploaded-contextual-background"
+              className="w-20 h-20 object-cover rounded shadow mt-2"
+            />
+          )}
+        </div>
       </CardContent>
     </Card>
   );
@@ -419,6 +507,57 @@ const UploadedImage = ({
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+const SystemPromptPane = ({ 
+  prompt, 
+  width, 
+  onWidthChange 
+}: { 
+  prompt: string, 
+  width: number, 
+  onWidthChange: (w: number) => void 
+}) => {
+  const isResizing = React.useRef(false);
+
+  const startResizing = React.useCallback((e: React.MouseEvent) => {
+    isResizing.current = true;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', stopResizing);
+  }, []);
+
+  const stopResizing = React.useCallback(() => {
+    isResizing.current = false;
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', stopResizing);
+  }, []);
+
+  const handleMouseMove = React.useCallback((e: MouseEvent) => {
+    if (!isResizing.current) return;
+    const newWidth = window.innerWidth - e.clientX - 32; // 32 is padding
+    if (newWidth > 200 && newWidth < 800) {
+      onWidthChange(newWidth);
+    }
+  }, [onWidthChange]);
+
+  return (
+    <div className="relative flex h-full min-h-[500px]" style={{ width: `${width}px` }}>
+      <div
+        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-primary/50 transition-colors z-10"
+        onMouseDown={startResizing}
+      />
+      <Card className="w-full h-full ml-4 overflow-hidden flex flex-col">
+        <CardHeader>
+          <CardTitle>System Prompt</CardTitle>
+        </CardHeader>
+        <CardContent className="flex-1 overflow-auto">
+          <pre className="text-xs whitespace-pre-wrap font-mono bg-muted p-4 rounded-lg">
+            {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
+          </pre>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

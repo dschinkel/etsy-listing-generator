@@ -1,16 +1,22 @@
 import * as request from 'supertest';
 import app from '../../app';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const supertest = (request as any).default || request;
 
-describe('Gemini Image Generator', () => {
-  it('generates images using real gemini', async () => {
+describe('Gemini Image Generator Integration', () => {
+  const testImagePath = path.join(process.cwd(), 'test', 'product-reference.png');
+  const testImageBase64 = `data:image/png;base64,${fs.readFileSync(testImagePath).toString('base64')}`;
+
+  it('generates images using gemini', async () => {
+    const count = 1;
     const requestBody = {
-      lifestyleCount: 1,
+      lifestyleCount: count,
       heroCount: 0,
       closeUpsCount: 0,
-      productImage: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-      lifestyleBackground: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+      productImage: testImageBase64,
+      lifestyleBackground: testImageBase64
     };
 
     const response = await supertest(app.callback())
@@ -21,6 +27,11 @@ describe('Gemini Image Generator', () => {
     expect(response.body.images).toBeDefined();
     expect(Array.isArray(response.body.images)).toBe(true);
     expect(response.body.images.length).toBeGreaterThan(0);
-    expect(response.body.images[0]).toContain('http');
-  }, 30000); // Increase timeout for real API call
+    expect(response.body.images[0]).toMatch(/^(http|data:)/);
+    expect(response.body.images[0]).not.toContain('placehold.jp');
+    
+    expect(response.body.systemPrompt).toBeDefined();
+    expect(response.body.systemPrompt).toContain('Etsy seller');
+    expect(response.body.systemPrompt).toContain('lifestyle');
+  });
 });

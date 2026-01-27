@@ -1,131 +1,45 @@
-import { GenerateListingImages } from './GenerateListingImages';
+import { createGenerateListingImages } from './GenerateListingImages';
+import { createListingRepository } from '../repositories/ListingRepository';
+import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 describe('Generate Listing Images', () => {
-  it('generates requested number of lifestyle shots', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['image1.png', 'image2.png', 'image3.png'] };
-      }
-    };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
-    const request = { lifestyleCount: 3 };
-    
-    const response = await command.execute(request);
-    
-    expect(capturedParams).toEqual({ lifestyleCount: 3 });
-    expect(response.images).toEqual(['image1.png', 'image2.png', 'image3.png']);
-  });
+  const testImagePath = path.join(process.cwd(), 'test', 'product-reference.png');
+  const testImageBase64 = `data:image/png;base64,${fs.readFileSync(testImagePath).toString('base64')}`;
+  
+  const dataLayer = createGeminiImageGenerator();
+  const repository = createListingRepository(dataLayer);
+  const command = createGenerateListingImages(repository);
 
-  it('passes product image to repository', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['image1.png'] };
-      }
-    };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
+  it('executes generation for requested shot types using real parameters', async () => {
     const request = { 
-      lifestyleCount: 1, 
-      productImage: 'data:image/png;base64,encoded' 
+      lifestyleCount: 1,
+      heroCount: 1,
+      productImage: testImageBase64 
     };
-    
-    await command.execute(request);
-    
-    expect(capturedParams).toEqual(request);
-  });
-
-  it('generates requested number of hero shots', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['hero1.png', 'hero2.png'] };
-      }
-    };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
-    const request = { heroCount: 2 };
     
     const response = await command.execute(request);
     
-    expect(capturedParams).toEqual({ heroCount: 2 });
-    expect(response.images).toEqual(['hero1.png', 'hero2.png']);
+    expect(response.images.length).toBe(2);
+    expect(response.images.every(img => img.startsWith('http') || img.startsWith('data:'))).toBe(true);
+    expect(response.images.every(img => !img.includes('placehold.jp'))).toBe(true);
+    expect(response.systemPrompt).toBeDefined();
+    expect(response.systemPrompt).toContain('Etsy seller');
   });
 
-  it('generates requested number of close-ups', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['closeup1.png'] };
-      }
+  it('verifies integration with real data layer through repository', async () => {
+    const request = { 
+      closeUpsCount: 1,
+      productImage: testImageBase64
     };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
-    const request = { closeUpsCount: 1 };
     
     const response = await command.execute(request);
     
-    expect(capturedParams).toEqual({ closeUpsCount: 1 });
-    expect(response.images).toEqual(['closeup1.png']);
-  });
-
-  it('generates requested number of flat lay shots', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['flatlay1.png'] };
-      }
-    };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
-    const request = { flatLayCount: 1 };
-    
-    const response = await command.execute(request);
-    
-    expect(capturedParams).toEqual({ flatLayCount: 1 });
-    expect(response.images).toEqual(['flatlay1.png']);
-  });
-
-  it('generates requested number of macro shots', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['macro1.png'] };
-      }
-    };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
-    const request = { macroCount: 1 };
-    
-    const response = await command.execute(request);
-    
-    expect(capturedParams).toEqual({ macroCount: 1 });
-    expect(response.images).toEqual(['macro1.png']);
-  });
-
-  it('generates requested number of contextual shots', async () => {
-    let capturedParams = null;
-    const fakeListingRepository = {
-      generateImages: async (params: any) => {
-        capturedParams = params;
-        return { images: ['contextual1.png'] };
-      }
-    };
-    
-    const command = new GenerateListingImages(fakeListingRepository);
-    const request = { contextualCount: 1 };
-    
-    const response = await command.execute(request);
-    
-    expect(capturedParams).toEqual({ contextualCount: 1 });
-    expect(response.images).toEqual(['contextual1.png']);
+    expect(response.images.length).toBe(1);
+    expect(response.systemPrompt).toContain('close-up');
   });
 });

@@ -1,20 +1,18 @@
-import { GenerateListingImages } from '../commands/GenerateListingImages';
-import { ListingRepository } from '../repositories/ListingRepository';
-import { GeminiImageGenerator } from '../data/GeminiImageGenerator';
+import { createGenerateListingImages } from '../commands/GenerateListingImages';
+import { createListingRepository } from '../repositories/ListingRepository';
+import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
 
-export class ListingController {
-  private generateListingImages: GenerateListingImages;
+export const createListingController = () => {
+  const dataLayer = createGeminiImageGenerator();
+  const repository = createListingRepository(dataLayer);
+  const generateListingImages = createGenerateListingImages(repository);
 
-  constructor() {
-    const dataLayer = new GeminiImageGenerator();
-    const repository = new ListingRepository(dataLayer);
-    this.generateListingImages = new GenerateListingImages(repository);
-  }
-
-  async generate(ctx: any) {
+  const generate = async (ctx: any) => {
     const request = ctx.request.body;
-    const result = await this.generateListingImages.execute(request);
+    const result = await generateListingImages.execute(request);
     ctx.body = result;
     ctx.status = 200;
-  }
-}
+  };
+
+  return { generate };
+};

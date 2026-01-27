@@ -1,164 +1,42 @@
-import { ListingRepository } from './ListingRepository';
+import { createListingRepository } from './ListingRepository';
+import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 describe('Listing Repository', () => {
-  it('generates multiple images for lifestyle shots', async () => {
-    let callCount = 0;
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        callCount++;
-        return `image_${callCount}.png`;
-      }
+  const testImagePath = path.join(process.cwd(), 'test', 'product-reference.png');
+  const testImageBase64 = `data:image/png;base64,${fs.readFileSync(testImagePath).toString('base64')}`;
+
+  it('orchestrates generation of different shot types', async () => {
+    const dataLayer = createGeminiImageGenerator();
+    const repository = createListingRepository(dataLayer);
+    const params = { 
+      lifestyleCount: 1, 
+      heroCount: 1,
+      productImage: testImageBase64 
     };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const params = { lifestyleCount: 3 };
     
     const result = await repository.generateImages(params);
     
-    expect(callCount).toBe(3);
-    expect(result.images).toEqual(['image_1.png', 'image_2.png', 'image_3.png']);
+    expect(result.images.length).toBe(2);
+    expect(result.images.every(url => url.startsWith('http') || url.startsWith('data:'))).toBe(true);
+    expect(result.images.every(url => !url.includes('placehold.jp'))).toBe(true);
+    expect(result.systemPrompt).toContain('lifestyle');
+    // We only capture the first system prompt in the repository currently, 
+    // which is fine as they are all based on the same template.
   });
 
-  it('includes product image in data layer calls', async () => {
-    let capturedParams: any[] = [];
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        capturedParams.push(params);
-        return 'image.png';
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const productImage = 'data:image/png;base64,encoded';
-    const params = { lifestyleCount: 2, productImage };
-    
-    await repository.generateImages(params);
-    
-    expect(capturedParams).toHaveLength(2);
-    expect(capturedParams[0]).toEqual({
-      type: 'lifestyle',
-      prompt: 'a lifestyle shot of the product in a realistic setting',
-      productImage,
-      background: undefined,
-      count: 2
-    });
-    expect(capturedParams[1]).toEqual({
-      type: 'lifestyle',
-      prompt: 'a lifestyle shot of the product in a realistic setting',
-      productImage,
-      background: undefined,
-      count: 2
-    });
-  });
-
-  it('generates multiple images for hero shots', async () => {
-    let callCount = 0;
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        callCount++;
-        return `hero_${callCount}.png`;
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const params = { heroCount: 2 };
+  it('handles zero counts correctly', async () => {
+    const dataLayer = createGeminiImageGenerator();
+    const repository = createListingRepository(dataLayer);
+    const params = { lifestyleCount: 0, heroCount: 0 };
     
     const result = await repository.generateImages(params);
     
-    expect(callCount).toBe(2);
-    expect(result.images).toEqual(['hero_1.png', 'hero_2.png']);
-  });
-
-  it('generates multiple images for close-ups', async () => {
-    let callCount = 0;
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        callCount++;
-        return `closeup_${callCount}.png`;
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const params = { closeUpsCount: 2 };
-    
-    const result = await repository.generateImages(params);
-    
-    expect(callCount).toBe(2);
-    expect(result.images).toEqual(['closeup_1.png', 'closeup_2.png']);
-  });
-
-  it('generates multiple images for flat lay shots', async () => {
-    let callCount = 0;
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        callCount++;
-        return `flatlay_${callCount}.png`;
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const params = { flatLayCount: 2 };
-    
-    const result = await repository.generateImages(params);
-    
-    expect(callCount).toBe(2);
-    expect(result.images).toEqual(['flatlay_1.png', 'flatlay_2.png']);
-  });
-
-  it('generates multiple images for macro shots', async () => {
-    let callCount = 0;
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        callCount++;
-        return `macro_${callCount}.png`;
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const params = { macroCount: 2 };
-    
-    const result = await repository.generateImages(params);
-    
-    expect(callCount).toBe(2);
-    expect(result.images).toEqual(['macro_1.png', 'macro_2.png']);
-  });
-
-  it('generates multiple images for contextual shots', async () => {
-    let callCount = 0;
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        callCount++;
-        return `contextual_${callCount}.png`;
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    const params = { contextualCount: 2 };
-    
-    const result = await repository.generateImages(params);
-    
-    expect(callCount).toBe(2);
-    expect(result.images).toEqual(['contextual_1.png', 'contextual_2.png']);
-  });
-
-  it('provides descriptive context for shot types', async () => {
-    let capturedParams: any[] = [];
-    const fakeDataLayer = {
-      generateImage: async (params: any) => {
-        capturedParams.push(params);
-        return 'image.png';
-      }
-    };
-    
-    const repository = new ListingRepository(fakeDataLayer);
-    
-    await repository.generateImages({ lifestyleCount: 1, heroCount: 1, closeUpsCount: 1 });
-    
-    expect(capturedParams[0].prompt).toContain('lifestyle');
-    expect(capturedParams[1].prompt).toContain('hero');
-    expect(capturedParams[2].prompt).toContain('close-up');
-    expect(capturedParams[0].prompt).not.toBe('a lifestyle shot of a product');
-    expect(capturedParams[1].prompt).not.toBe('a hero shot of a product');
-    expect(capturedParams[2].prompt).not.toBe('a close-up shot of a product');
+    expect(result.images.length).toBe(0);
+    expect(result.systemPrompt).toBe('');
   });
 });

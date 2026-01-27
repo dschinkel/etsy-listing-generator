@@ -2,14 +2,14 @@ import Koa from 'koa';
 import Router from '@koa/router';
 import * as bodyParser from 'koa-bodyparser';
 import * as dotenv from 'dotenv';
-import { ListingController } from './controllers/ListingController';
+import { createListingController } from './controllers/ListingController';
 
 dotenv.config();
 
 const app = new Koa();
 const router = new Router();
 
-const listingController = new ListingController();
+const listingController = createListingController();
 
 app.use(async (ctx, next) => {
   try {
@@ -23,7 +23,7 @@ app.use(async (ctx, next) => {
 });
 
 // @ts-ignore
-app.use(bodyParser.default ? bodyParser.default({ jsonLimit: '10mb' }) : bodyParser({ jsonLimit: '10mb' }));
+app.use(bodyParser.default ? bodyParser.default({ jsonLimit: '50mb' }) : bodyParser({ jsonLimit: '50mb' }));
 
 router.post('/listings/generate', async (ctx) => {
   await listingController.generate(ctx);

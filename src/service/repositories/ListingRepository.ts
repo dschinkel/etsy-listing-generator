@@ -1,7 +1,5 @@
-export class ListingRepository {
-  constructor(private dataLayer: any) {}
-
-  async generateImages(params: { 
+export const createListingRepository = (dataLayer: any) => {
+  const generateImages = async (params: { 
     lifestyleCount?: number, 
     heroCount?: number,
     closeUpsCount?: number,
@@ -14,107 +12,61 @@ export class ListingRepository {
     closeUpsBackground?: string,
     flatLayBackground?: string,
     macroBackground?: string,
-    contextualBackground?: string
-  }) {
+    contextualBackground?: string,
+    model?: string
+  }) => {
     const images: string[] = [];
+    let systemPrompt = '';
     
-    await this.lifestyleImages(params.lifestyleCount, params.productImage, params.lifestyleBackground, images);
-    await this.heroImages(params.heroCount, params.productImage, params.heroBackground, images);
-    await this.closeUpsImages(params.closeUpsCount, params.productImage, params.closeUpsBackground, images);
-    await this.flatLayImages(params.flatLayCount, params.productImage, params.flatLayBackground, images);
-    await this.macroImages(params.macroCount, params.productImage, params.macroBackground, images);
-    await this.contextualImages(params.contextualCount, params.productImage, params.contextualBackground, images);
+    const collectPrompt = (result: { systemInstruction: string }) => {
+      if (result.systemInstruction) {
+        if (!systemPrompt) {
+          systemPrompt = result.systemInstruction;
+        } else if (!systemPrompt.includes(result.systemInstruction)) {
+          systemPrompt += '\n\n' + result.systemInstruction;
+        }
+      }
+    };
 
-    return { images };
-  }
+    await generateShotTypeImages('lifestyle', params.lifestyleCount, params.productImage, params.lifestyleBackground, images, collectPrompt, params.model);
+    await generateShotTypeImages('hero', params.heroCount, params.productImage, params.heroBackground, images, collectPrompt, params.model);
+    await generateShotTypeImages('close-up', params.closeUpsCount, params.productImage, params.closeUpsBackground, images, collectPrompt, params.model);
+    await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImage, params.flatLayBackground, images, collectPrompt, params.model);
+    await generateShotTypeImages('macro', params.macroCount, params.productImage, params.macroBackground, images, collectPrompt, params.model);
+    await generateShotTypeImages('contextual', params.contextualCount, params.productImage, params.contextualBackground, images, collectPrompt, params.model);
 
-  private async lifestyleImages(count: number = 0, productImage?: string, background?: string, images: string[] = []) {
+    return { images, systemPrompt };
+  };
+
+  const generateShotTypeImages = async (
+    type: string, 
+    count: number = 0, 
+    productImage?: string, 
+    background?: string, 
+    images: string[] = [], 
+    onResult?: (res: any) => void,
+    model?: string
+  ) => {
     for (let i = 0; i < count; i++) {
-      const imageUrl = await this.dataLayer.generateImage({ 
-        type: 'lifestyle',
-        prompt: 'a lifestyle shot of the product in a realistic setting',
+      const result = await dataLayer.generateImage({ 
+        type,
         productImage,
         background,
-        count
+        count: 1,
+        model
       });
-      this.ensureValidUrl(imageUrl);
+      const imageUrl = result.imageUrl;
+      onResult?.(result);
+      ensureValidUrl(imageUrl);
       images.push(imageUrl);
     }
-  }
+  };
 
-  private async heroImages(count: number = 0, productImage?: string, background?: string, images: string[] = []) {
-    for (let i = 0; i < count; i++) {
-      const imageUrl = await this.dataLayer.generateImage({ 
-        type: 'hero',
-        prompt: 'a hero shot of the product, prominently displayed',
-        productImage,
-        background,
-        count
-      });
-      this.ensureValidUrl(imageUrl);
-      images.push(imageUrl);
-    }
-  }
-
-  private async closeUpsImages(count: number = 0, productImage?: string, background?: string, images: string[] = []) {
-    for (let i = 0; i < count; i++) {
-      const imageUrl = await this.dataLayer.generateImage({ 
-        type: 'close-up',
-        prompt: 'a close-up shot of the product, showing fine details',
-        productImage,
-        background,
-        count
-      });
-      this.ensureValidUrl(imageUrl);
-      images.push(imageUrl);
-    }
-  }
-
-  private async flatLayImages(count: number = 0, productImage?: string, background?: string, images: string[] = []) {
-    for (let i = 0; i < count; i++) {
-      const imageUrl = await this.dataLayer.generateImage({ 
-        type: 'flat-lay',
-        prompt: 'a top-down flat lay shot of the product on a textured surface',
-        productImage,
-        background,
-        count
-      });
-      this.ensureValidUrl(imageUrl);
-      images.push(imageUrl);
-    }
-  }
-
-  private async macroImages(count: number = 0, productImage?: string, background?: string, images: string[] = []) {
-    for (let i = 0; i < count; i++) {
-      const imageUrl = await this.dataLayer.generateImage({ 
-        type: 'macro',
-        prompt: 'a macro close-up shot of the product, focusing on texture',
-        productImage,
-        background,
-        count
-      });
-      this.ensureValidUrl(imageUrl);
-      images.push(imageUrl);
-    }
-  }
-
-  private async contextualImages(count: number = 0, productImage?: string, background?: string, images: string[] = []) {
-    for (let i = 0; i < count; i++) {
-      const imageUrl = await this.dataLayer.generateImage({ 
-        type: 'contextual',
-        prompt: 'a contextual shot of the product in a real-world setting to show scale',
-        productImage,
-        background,
-        count
-      });
-      this.ensureValidUrl(imageUrl);
-      images.push(imageUrl);
-    }
-  }
-
-  private ensureValidUrl(url: string) {
+  const ensureValidUrl = (url: string) => {
     if (url.includes('generated-images.com')) {
       throw new Error(`Invalid image URL detected from data layer: ${url}`);
     }
-  }
-}
+  };
+
+  return { generateImages };
+};
