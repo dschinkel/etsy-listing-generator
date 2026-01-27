@@ -58,7 +58,8 @@ The Fix:
 ### Resolve broken image in the UI from the response
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Updated `GeminiImageGenerator.ts` to return valid image URLs from `loremflickr.com` based on shot type keywords.
+- [COMPLETED] Updated `GeminiImageGenerator.ts` to use `picsum.photos` for more reliable placeholder URLs.
+- [COMPLETED] Enhanced `ListingPreview.tsx` with an `onError` handler and fallback image (`placehold.co`) for better resilience.
 - [COMPLETED] Updated tests to verify the new image URL format.
 - [COMPLETED] All tests pass (41 passing tests).
 

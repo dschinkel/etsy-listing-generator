@@ -37,6 +37,10 @@ const ListingPreview = ({ images, onRemove, onCopy, onDownloadAll }: ListingPrev
                 alt={`Listing ${index + 1}`}
                 className="w-full h-full object-cover rounded shadow-md group-hover:scale-105 transition-transform"
                 data-testid={`listing-image-${index}`}
+                onError={(e) => {
+                  console.error(`Failed to load image at ${src}`);
+                  (e.target as HTMLImageElement).src = 'https://placehold.co/800x800?text=Image+Load+Failed';
+                }}
               />
               <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Button
