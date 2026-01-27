@@ -36,8 +36,9 @@ TYPE: IMAGE
 
     try {
       await this.model.generateContent(parts.length === 1 ? parts[0] : parts);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Gemini API Error:', error);
+      throw new Error(`Gemini API Error: ${error.message || error}`);
     }
 
     return `https://generated-images.com/${params.type}_${Math.random().toString(36).substring(7)}.png`;

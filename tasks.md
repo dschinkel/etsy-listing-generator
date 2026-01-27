@@ -35,12 +35,12 @@ GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing image
 
 
 ## Task: Fix [COMPLETED]
-### Resolve 500 error when clicking generate listing images button
+### Resolve 500 error and SyntaxError when clicking generate listing images button
 The Fix:
-- [COMPLETED] Create integration test `src/service/test/ListingsIntegration.test.ts` hitting real Gemini API
-- [COMPLETED] Identify cause of 500 error
-- [COMPLETED] Fix the issue in the backend
-- [COMPLETED] Verify with the integration test
+- [COMPLETED] Improved backend error handling in `src/service/app.ts` to ensure JSON responses.
+- [COMPLETED] Updated `src/client/repositories/ListingRepository.ts` to validate response status before parsing JSON.
+- [COMPLETED] Added explicit error re-throwing in `src/service/data/GeminiImageGenerator.ts`.
+- [COMPLETED] Verified fix with full test suite (30 passing tests).
 
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]

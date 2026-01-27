@@ -53,4 +53,48 @@ describe('Gemini Image Generator', () => {
       })
     ]));
   });
+
+  it('generates hero image using nano banana', async () => {
+    const generator = new GeminiImageGenerator();
+    let capturedPrompt: any = null;
+    (generator as any).model = {
+      generateContent: async (prompt: any) => {
+        capturedPrompt = prompt;
+        return {
+          response: {
+            text: () => 'https://generated-images.com/hero_123.png'
+          }
+        };
+      }
+    };
+
+    const params = { type: 'hero', prompt: 'a hero shot of a product' };
+    
+    const imageUrl = await generator.generateImage(params);
+    
+    expect(imageUrl).toContain('https://generated-images.com/hero_');
+    expect(capturedPrompt).toContain('TITLE: Generate hero image');
+  });
+
+  it('generates close-up image using nano banana', async () => {
+    const generator = new GeminiImageGenerator();
+    let capturedPrompt: any = null;
+    (generator as any).model = {
+      generateContent: async (prompt: any) => {
+        capturedPrompt = prompt;
+        return {
+          response: {
+            text: () => 'https://generated-images.com/closeup_123.png'
+          }
+        };
+      }
+    };
+
+    const params = { type: 'close-up', prompt: 'a close-up shot of a product' };
+    
+    const imageUrl = await generator.generateImage(params);
+    
+    expect(imageUrl).toContain('https://generated-images.com/close-up_');
+    expect(capturedPrompt).toContain('TITLE: Generate close-up image');
+  });
 });

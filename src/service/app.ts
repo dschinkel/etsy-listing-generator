@@ -12,9 +12,10 @@ router.post('/listings/generate', async (ctx) => {
   try {
     await listingController.generate(ctx);
   } catch (error: any) {
-    console.error('Error in /listings/generate:', error);
+    console.error('CRITICAL ERROR in /listings/generate:', error);
     ctx.status = 500;
-    ctx.body = { error: error.message };
+    ctx.body = JSON.stringify({ error: error.message || 'Unknown server error' });
+    ctx.type = 'application/json';
   }
 });
 
