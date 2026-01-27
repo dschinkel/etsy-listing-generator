@@ -98,7 +98,7 @@ describe('Gemini Image Generator', () => {
     expect(capturedPrompt).toContain('TITLE: Generate close-up image');
   });
 
-  it('uses dynamic system prompt for different shot types', async () => {
+  it('generates image based on product shot types', async () => {
     const generator = new GeminiImageGenerator();
     let capturedPrompt: any = null;
     (generator as any).model = {
