@@ -64,6 +64,16 @@ The Fix:
 - [COMPLETED] Updated tests to verify the new image URL format.
 - [COMPLETED] All tests pass (41 passing tests).
 
+## Task: Fix [COMPLETED]
+### Resolve 404 or empty response for /listings/system-prompt
+The Fix:
+- [COMPLETED] Added request logging middleware to `src/service/app.ts` for better server diagnostics.
+- [COMPLETED] Standardized `koa-bodyparser` initialization for better ESM/CJS interop.
+- [COMPLETED] Refactored router to use prefix `/listings` and improved route matching.
+- [COMPLETED] Updated Vite proxy to use `127.0.0.1` for more reliable local resolution.
+- [COMPLETED] Added a health check endpoint and a catch-all 404 route with detailed logging.
+- [COMPLETED] Verified fix with real-server tests and integration tests.
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
@@ -163,3 +173,17 @@ The Fix:
 - [COMPLETED] Documented UI enhancements (System Prompt pane, status feedback).
 - [COMPLETED] Documented technical architecture (Onion architecture, functional modules).
 - [COMPLETED] Documented testing infrastructure (15s timeout).
+
+## Task: Refactor [COMPLETED]
+### Use concise domain prose for test names
+The Fix:
+- [COMPLETED] Renamed technical test names to concise domain prose (e.g., "gets system prompt") in `PromptPreview.test.ts`.
+
+## Task: Fix [COMPLETED]
+### Ensure error messages are visible and correctly positioned
+The Fix:
+- [COMPLETED] Fixed a bug in `useListingGeneration.ts` where `error` and `isGenerating` states were not returned by the hook.
+- [COMPLETED] Moved the error message display in `App.tsx` from above to below the "Generate Listing Image" button.
+- [COMPLETED] Added unit tests for `useListingGeneration` hook to verify error state handling (primary failure and fallback).
+- [COMPLETED] Added UI integration test `ListingGenerationUI.test.tsx` to verify error message visibility and positioning.
+- [COMPLETED] Verified fix with all client-side tests passing.

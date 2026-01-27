@@ -35,5 +35,26 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
-  return { generateImages };
+  const getSystemPromptPreview = async (params: {
+    lifestyleCount?: number,
+    heroCount?: number,
+    closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number
+  }) => {
+    const response = await fetch('/listings/system-prompt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+
+    if (!response.ok) {
+      return { systemPrompt: '' };
+    }
+
+    return await response.json();
+  };
+
+  return { generateImages, getSystemPromptPreview };
 };

@@ -39,4 +39,24 @@ describe('Listing Repository', () => {
     expect(result.images.length).toBe(0);
     expect(result.systemPrompt).toBe('');
   });
+
+  it('provides a prompt preview based on parameters', async () => {
+    const dataLayer = createGeminiImageGenerator();
+    const repository = createListingRepository(dataLayer);
+    
+    const result = await repository.getPromptPreview({ lifestyleCount: 1 });
+    
+    expect(result.systemPrompt).toContain('lifestyle');
+    expect(result.systemPrompt).toContain('1');
+  });
+
+  it('provides a default prompt preview when no counts are specified', async () => {
+    const dataLayer = createGeminiImageGenerator();
+    const repository = createListingRepository(dataLayer);
+    
+    const result = await repository.getPromptPreview({});
+    
+    expect(result.systemPrompt).toContain('hero');
+    expect(result.systemPrompt).toContain('1');
+  });
 });

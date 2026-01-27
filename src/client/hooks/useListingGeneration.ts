@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
@@ -92,9 +92,19 @@ export const useListingGeneration = (listingRepository: any) => {
   return {
     images,
     systemPrompt,
+    error,
+    isGenerating,
     generateListing,
     removeImage,
     copyImageToClipboard,
-    downloadAllImagesAsZip
+    downloadAllImagesAsZip,
+    fetchSystemPromptPreview: useCallback(async (params: any) => {
+      try {
+        const response = await listingRepository.getSystemPromptPreview(params);
+        setSystemPrompt(response.systemPrompt || '');
+      } catch (err) {
+        console.error('Failed to fetch prompt preview:', err);
+      }
+    }, [listingRepository])
   };
 };

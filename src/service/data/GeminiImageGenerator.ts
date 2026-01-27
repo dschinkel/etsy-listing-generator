@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 
-const SYSTEM_PROMPT_TEMPLATE = `Role: You are an image-generation assistant helping me (an Etsy seller) create consistent listing photos.
+export const SYSTEM_PROMPT_TEMPLATE = `Role: You are an image-generation assistant helping me (an Etsy seller) create consistent listing photos.
 
 PRIMARY RULE:
 The user provides a product reference image. That image is the single source of truth for the product’s geometry, proportions, materials, colors, and details.
@@ -28,11 +28,16 @@ export const createGeminiImageGenerator = () => {
   const apiKey = process.env.GEMINI_API_KEY || "";
   const genAI = new GoogleGenerativeAI(apiKey);
 
-  const generateImage = async (params: { type: string; productImage?: string; background?: string; count?: number; model?: string }): Promise<{ imageUrl: string; systemInstruction: string }> => {
+  const getSystemPrompt = (params: { type: string; count?: number }) => {
     const count = params.count || 1;
-    const systemInstruction = SYSTEM_PROMPT_TEMPLATE
+    return SYSTEM_PROMPT_TEMPLATE
       .replace(/{{COUNT}}/g, count.toString())
       .replace(/{{SHOT_TYPE}}/g, params.type);
+  };
+
+  const generateImage = async (params: { type: string; productImage?: string; background?: string; count?: number; model?: string }): Promise<{ imageUrl: string; systemInstruction: string }> => {
+    const count = params.count || 1;
+    const systemInstruction = getSystemPrompt({ type: params.type, count });
 
     const modelName = params.model || "gemini-3-pro-image-preview";
     const model = genAI.getGenerativeModel({ 
@@ -86,7 +91,7 @@ export const createGeminiImageGenerator = () => {
     return { imageUrl: getPlaceholderUrl(params.type), systemInstruction };
   };
 
-  return { generateImage };
+  return { generateImage, getSystemPrompt };
 };
 
 const getPlaceholderUrl = (type: string): string => {

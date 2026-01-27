@@ -45,6 +45,7 @@ const App = () => {
     handleContextualBackgroundUpload,
   } = useProductUpload();
 
+  const repository = React.useMemo(() => createListingRepository(), []);
   const { 
     images, 
     systemPrompt,
@@ -53,10 +54,30 @@ const App = () => {
     generateListing, 
     removeImage, 
     copyImageToClipboard,
-    downloadAllImagesAsZip
-  } = useListingGeneration(createListingRepository());
+    downloadAllImagesAsZip,
+    fetchSystemPromptPreview
+  } = useListingGeneration(repository);
 
   const [promptWidth, setPromptWidth] = React.useState(400);
+
+  React.useEffect(() => {
+    fetchSystemPromptPreview({
+      lifestyleCount: lifestyleShotsCount,
+      heroCount: heroShotsCount,
+      closeUpsCount: closeUpsCount,
+      flatLayCount: flatLayShotsCount,
+      macroCount: macroShotsCount,
+      contextualCount: contextualShotsCount
+    });
+  }, [
+    lifestyleShotsCount,
+    heroShotsCount,
+    closeUpsCount,
+    flatLayShotsCount,
+    macroShotsCount,
+    contextualShotsCount,
+    fetchSystemPromptPreview
+  ]);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -116,15 +137,6 @@ const App = () => {
               />
             </div>
             
-            {error && (
-              <div 
-                className="w-full max-w-2xl mx-auto p-4 bg-destructive/15 border border-destructive/30 text-destructive rounded-md text-sm text-center"
-                data-testid="generation-error"
-              >
-                {error}
-              </div>
-            )}
-
             <div className="flex flex-col items-center gap-4">
               <Button 
                 size="lg" 
@@ -148,6 +160,15 @@ const App = () => {
               >
                 {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
               </Button>
+
+              {error && (
+                <div 
+                  className="w-full max-w-2xl mx-auto p-4 bg-destructive/15 border border-destructive/30 text-destructive rounded-md text-sm text-center"
+                  data-testid="generation-error"
+                >
+                  {error}
+                </div>
+              )}
             </div>
 
             <ListingPreview 

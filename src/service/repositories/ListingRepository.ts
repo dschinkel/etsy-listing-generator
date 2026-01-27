@@ -68,5 +68,40 @@ export const createListingRepository = (dataLayer: any) => {
     }
   };
 
-  return { generateImages };
+  const getPromptPreview = (params: { 
+    lifestyleCount?: number, 
+    heroCount?: number,
+    closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number
+  } = {}) => {
+    let systemPrompt = '';
+    const safeParams = params || {};
+    const collect = (type: string, count: number) => {
+      if (count > 0) {
+        const prompt = dataLayer.getSystemPrompt({ type, count });
+        if (!systemPrompt) {
+          systemPrompt = prompt;
+        } else if (!systemPrompt.includes(prompt)) {
+          systemPrompt += '\n\n' + prompt;
+        }
+      }
+    };
+
+    collect('lifestyle', safeParams.lifestyleCount || 0);
+    collect('hero', safeParams.heroCount || 0);
+    collect('close-up', safeParams.closeUpsCount || 0);
+    collect('flat-lay', safeParams.flatLayCount || 0);
+    collect('macro', safeParams.macroCount || 0);
+    collect('contextual', safeParams.contextualCount || 0);
+
+    if (!systemPrompt) {
+      systemPrompt = dataLayer.getSystemPrompt({ type: 'hero', count: 1 });
+    }
+
+    return { systemPrompt };
+  };
+
+  return { generateImages, getPromptPreview };
 };

@@ -121,4 +121,70 @@ describe('Listing Generation', () => {
     const { result } = renderHook(() => useListingGeneration({}));
     expect(result.current.downloadAllImagesAsZip).toBeDefined();
   });
+
+  it('sets error when both primary and fallback models fail', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn()
+        .mockRejectedValueOnce(new Error('503 Service Unavailable')) // Primary fails
+        .mockRejectedValueOnce(new Error('Fallback Failed')) // Fallback fails
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.error).toBe('Imagen 4 also failed. Please try again later.');
+    expect(result.current.isGenerating).toBe(false);
+  });
+
+  it('sets status message and then error if primary fails with 503 and fallback fails', async () => {
+    let errorStates: (string | null)[] = [];
+    const fakeListingRepository = {
+      generateImages: jest.fn()
+        .mockImplementationOnce(() => new Promise((_, reject) => setTimeout(() => reject(new Error('503')), 10)))
+        .mockImplementationOnce(() => new Promise((_, reject) => setTimeout(() => reject(new Error('Fallback')), 10)))
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    // We can't easily capture intermediate states with renderHook/act without some tricks
+    // But we can check the final state and maybe use a custom hook to track state changes if needed.
+    
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.error).toBe('Imagen 4 also failed. Please try again later.');
+  });
+
+  it('sets error when non-503 error occurs', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn().mockRejectedValue(new Error('Something went wrong'))
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.error).toBe('Generation failed: Something went wrong');
+  });
+
+  it('fetches system prompt preview', async () => {
+    const fakeListingRepository = {
+      getSystemPromptPreview: jest.fn().mockResolvedValue({ systemPrompt: 'preview prompt' })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.fetchSystemPromptPreview({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.systemPrompt).toBe('preview prompt');
+    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledWith({ lifestyleCount: 1 });
+  });
 });
