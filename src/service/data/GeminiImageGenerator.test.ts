@@ -97,4 +97,29 @@ describe('Gemini Image Generator', () => {
     expect(imageUrl).toContain('https://generated-images.com/close-up_');
     expect(capturedPrompt).toContain('TITLE: Generate close-up image');
   });
+
+  it('uses dynamic system prompt for different shot types', async () => {
+    const generator = new GeminiImageGenerator();
+    let capturedPrompt: any = null;
+    (generator as any).model = {
+      generateContent: async (prompt: any) => {
+        capturedPrompt = typeof prompt === 'string' ? prompt : prompt[0];
+        return {
+          response: {
+            text: () => 'https://generated-images.com/image.png'
+          }
+        };
+      }
+    };
+
+    await generator.generateImage({ type: 'lifestyle', prompt: 'test' });
+    expect(capturedPrompt).toContain('You are an expert Etsy product photographer.');
+    expect(capturedPrompt).toContain('Your goal is to generate a lifestyle image');
+
+    await generator.generateImage({ type: 'hero', prompt: 'test' });
+    expect(capturedPrompt).toContain('Your goal is to generate a hero image');
+
+    await generator.generateImage({ type: 'close-up', prompt: 'test' });
+    expect(capturedPrompt).toContain('Your goal is to generate a close-up image');
+  });
 });

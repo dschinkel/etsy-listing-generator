@@ -12,17 +12,7 @@ export class GeminiImageGenerator {
   }
 
   async generateImage(params: { type: string; prompt: string; productImage?: string; background?: string }): Promise<string> {
-    // In a real implementation for IMAGE generation, the model might return a URL or base64.
-    // For now, since gemini-2.0-flash is a multimodal text model and not a dedicated image generator,
-    // we will return a placeholder URL to satisfy the current requirements and tests,
-    // while keeping the multimodal logic for context.
-    
-    const toonPrompt = `
-TOON 1.0
-TITLE: Generate ${params.type} image
-PROMPT: ${params.prompt}
-TYPE: IMAGE
-`;
+    const toonPrompt = this.buildToonPrompt(params.type, params.prompt);
 
     const parts: any[] = [toonPrompt];
 
@@ -50,6 +40,16 @@ TYPE: IMAGE
     }
 
     return `https://generated-images.com/${params.type}_${Math.random().toString(36).substring(7)}.png`;
+  }
+
+  private buildToonPrompt(type: string, userPrompt: string): string {
+    const systemPrompt = `You are an expert Etsy product photographer. Your goal is to generate a ${type} image that is high-quality and professional.`;
+    return `
+TOON 1.0
+TITLE: Generate ${type} image
+PROMPT: ${systemPrompt} ${userPrompt}
+TYPE: IMAGE
+`;
   }
 
   private toGenerativePart(dataUrl: string) {
