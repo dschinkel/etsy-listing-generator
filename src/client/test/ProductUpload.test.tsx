@@ -51,6 +51,27 @@ describe('Image Generation Configuration', () => {
     
     expect(input).toHaveValue(2);
   });
+
+  it('allows specifying the number of flat lay shots', async () => {
+    const input = screen.getByTestId('flat-lay-shots-count');
+    fireEvent.change(input, { target: { value: '4' } });
+    
+    expect(input).toHaveValue(4);
+  });
+
+  it('allows specifying the number of macro shots', async () => {
+    const input = screen.getByTestId('macro-shots-count');
+    fireEvent.change(input, { target: { value: '1' } });
+    
+    expect(input).toHaveValue(1);
+  });
+
+  it('allows specifying the number of contextual shots', async () => {
+    const input = screen.getByTestId('contextual-shots-count');
+    fireEvent.change(input, { target: { value: '3' } });
+    
+    expect(input).toHaveValue(3);
+  });
 });
 
 describe('Primary Image Selection', () => {

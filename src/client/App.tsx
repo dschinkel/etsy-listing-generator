@@ -23,6 +23,12 @@ const App = () => {
     handleHeroShotsChange,
     closeUpsCount,
     handleCloseUpsChange,
+    flatLayShotsCount,
+    handleFlatLayShotsChange,
+    macroShotsCount,
+    handleMacroShotsChange,
+    contextualShotsCount,
+    handleContextualShotsChange,
     isPrimaryImage,
     handlePrimarySelection,
     lifestyleBackground,
@@ -31,6 +37,12 @@ const App = () => {
     handleHeroBackgroundUpload,
     closeUpsBackground,
     handleCloseUpsBackgroundUpload,
+    flatLayBackground,
+    handleFlatLayBackgroundUpload,
+    macroBackground,
+    handleMacroBackgroundUpload,
+    contextualBackground,
+    handleContextualBackgroundUpload,
   } = useProductUpload();
 
   const { 
@@ -68,6 +80,12 @@ const App = () => {
                   onHeroShotsChange={handleHeroShotsChange}
                   closeUpsCount={closeUpsCount}
                   onCloseUpsChange={handleCloseUpsChange}
+                  flatLayShotsCount={flatLayShotsCount}
+                  onFlatLayShotsChange={handleFlatLayShotsChange}
+                  macroShotsCount={macroShotsCount}
+                  onMacroShotsChange={handleMacroShotsChange}
+                  contextualShotsCount={contextualShotsCount}
+                  onContextualShotsChange={handleContextualShotsChange}
                 />
                 <BackgroundUploads 
                   onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
@@ -76,6 +94,12 @@ const App = () => {
                   heroBackground={heroBackground}
                   onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
                   closeUpsBackground={closeUpsBackground}
+                  onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
+                  flatLayBackground={flatLayBackground}
+                  onMacroBackgroundUpload={handleMacroBackgroundUpload}
+                  macroBackground={macroBackground}
+                  onContextualBackgroundUpload={handleContextualBackgroundUpload}
+                  contextualBackground={contextualBackground}
                 />
               </div>
             </div>
@@ -142,14 +166,26 @@ const ShotsSelection = ({
   heroShotsCount,
   onHeroShotsChange,
   closeUpsCount,
-  onCloseUpsChange
+  onCloseUpsChange,
+  flatLayShotsCount,
+  onFlatLayShotsChange,
+  macroShotsCount,
+  onMacroShotsChange,
+  contextualShotsCount,
+  onContextualShotsChange
 }: {
   lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   heroShotsCount: number,
   onHeroShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   closeUpsCount: number,
-  onCloseUpsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onCloseUpsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  flatLayShotsCount: number,
+  onFlatLayShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  macroShotsCount: number,
+  onMacroShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  contextualShotsCount: number,
+  onContextualShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   return (
     <Card>
@@ -158,19 +194,10 @@ const ShotsSelection = ({
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
-          <Label htmlFor="lifestyle-shots">Lifestyle Shots</Label>
-          <Input
-            id="lifestyle-shots"
-            type="number"
-            min="0"
-            value={lifestyleShotsCount}
-            onChange={onLifestyleShotsChange}
-            data-testid="lifestyle-shots-count"
-            className="w-20"
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <Label htmlFor="hero-shots">Hero Shots</Label>
+          <div className="flex flex-col">
+            <Label htmlFor="hero-shots">Hero Shot</Label>
+            <span className="text-xs text-muted-foreground">Eye-level, centered, slightly blurred background (Product focus).</span>
+          </div>
           <Input
             id="hero-shots"
             type="number"
@@ -182,7 +209,69 @@ const ShotsSelection = ({
           />
         </div>
         <div className="flex items-center justify-between gap-4">
-          <Label htmlFor="close-ups">Close-ups</Label>
+          <div className="flex flex-col">
+            <Label htmlFor="flat-lay-shots">Flat Lay</Label>
+            <span className="text-xs text-muted-foreground">Top-down view on a textured surface with ingredients scattered around.</span>
+          </div>
+          <Input
+            id="flat-lay-shots"
+            type="number"
+            min="0"
+            value={flatLayShotsCount}
+            onChange={onFlatLayShotsChange}
+            data-testid="flat-lay-shots-count"
+            className="w-20"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <Label htmlFor="lifestyle-shots">Lifestyle</Label>
+            <span className="text-xs text-muted-foreground">The product being held by a hand or sitting in a lunchbox/gym bag.</span>
+          </div>
+          <Input
+            id="lifestyle-shots"
+            type="number"
+            min="0"
+            value={lifestyleShotsCount}
+            onChange={onLifestyleShotsChange}
+            data-testid="lifestyle-shots-count"
+            className="w-20"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <Label htmlFor="macro-shots">Macro/Detail</Label>
+            <span className="text-xs text-muted-foreground">Close-up on the pouch opening showing the texture of the banana chips.</span>
+          </div>
+          <Input
+            id="macro-shots"
+            type="number"
+            min="0"
+            value={macroShotsCount}
+            onChange={onMacroShotsChange}
+            data-testid="macro-shots-count"
+            className="w-20"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <Label htmlFor="contextual-shots">Contextual</Label>
+            <span className="text-xs text-muted-foreground">The product on a pantry shelf or a kitchen counter to show scale.</span>
+          </div>
+          <Input
+            id="contextual-shots"
+            type="number"
+            min="0"
+            value={contextualShotsCount}
+            onChange={onContextualShotsChange}
+            data-testid="contextual-shots-count"
+            className="w-20"
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <Label htmlFor="close-ups">Close-ups</Label>
+          </div>
           <Input
             id="close-ups"
             type="number"

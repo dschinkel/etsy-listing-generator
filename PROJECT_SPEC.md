@@ -53,6 +53,9 @@ A user can:
     **FR.2.1 — Ability to specify how many images generated should be lifestyle shots**
     **FR.2.2 — Ability to specify how many images generated should be hero shots**
     **FR.2.3 — Ability to specify how many images generated should be close-ups**
+    **FR.2.4 — Ability to specify how many images generated should be flat lay shots**
+    **FR.2.5 — Ability to specify how many images generated should be macro/detail shots**
+    **FR.2.6 — Ability to specify how many images generated should be contextual shots**
 
 **FR.3 — Specify which image will be used as the Primary Etsy image**
 
@@ -60,6 +63,9 @@ A user can:
     **FR.2.2 — Ability to upload a background image to be used for lifestyle shots**
     **FR.2.2 — Ability to upload a background image to be used for hero shots**
     **FR.2.2 — Ability to upload a background image to be used for close-ups**
+    **FR.2.2 — Ability to upload a background image to be used for flat lay shots**
+    **FR.2.2 — Ability to upload a background image to be used for macro/detail shots**
+    **FR.2.2 — Ability to upload a background image to be used for contextual shots**
 
 **FR.4 — Show a final preview of the listing images**
 **FR.5 — Redesign certain images that I don't like that**
