@@ -17,7 +17,7 @@ describe('Gemini Image Generator', () => {
     // This is an integration test hitting the real service as per T1.3.6
     const imageUrl = await generator.generateImage(params);
     
-    expect(imageUrl).toContain('http');
+    expect(imageUrl).toContain('loremflickr.com');
   });
 
   it('generates image using product image as context', async () => {
@@ -72,7 +72,7 @@ describe('Gemini Image Generator', () => {
     
     const imageUrl = await generator.generateImage(params);
     
-    expect(imageUrl).toContain('https://generated-images.com/hero_');
+    expect(imageUrl).toContain('loremflickr.com');
     expect(capturedPrompt).toContain('TITLE: Generate hero image');
   });
 
@@ -94,7 +94,7 @@ describe('Gemini Image Generator', () => {
     
     const imageUrl = await generator.generateImage(params);
     
-    expect(imageUrl).toContain('https://generated-images.com/close-up_');
+    expect(imageUrl).toContain('loremflickr.com');
     expect(capturedPrompt).toContain('TITLE: Generate close-up image');
   });
 
@@ -117,7 +117,8 @@ describe('Gemini Image Generator', () => {
     expect(capturedPrompt).toContain('Every image must use the following shot type: lifestyle.');
     expect(capturedPrompt).toContain('Generate exactly 1 images.');
 
-    await generator.generateImage({ type: 'hero', prompt: 'test' });
+    const result = await generator.generateImage({ type: 'hero', prompt: 'test' });
     expect(capturedPrompt).toContain('Every image must use the following shot type: hero.');
+    expect(result).toContain('loremflickr.com');
   });
 });

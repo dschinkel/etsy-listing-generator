@@ -99,7 +99,20 @@ export class GeminiImageGenerator {
       throw new Error(`Gemini API Error: ${error.message || error}`);
     }
 
-    return `https://generated-images.com/${params.type}_${Math.random().toString(36).substring(7)}.png`;
+    const keywords = this.getKeywordsForType(params.type);
+    return `https://loremflickr.com/800/800/${keywords}?lock=${Math.floor(Math.random() * 1000)}`;
+  }
+
+  private getKeywordsForType(type: string): string {
+    const keywordMap: Record<string, string> = {
+      'lifestyle': 'lifestyle,product',
+      'hero': 'product,studio',
+      'close-up': 'texture,detail',
+      'flat-lay': 'flatlay,product',
+      'macro': 'macro,detail',
+      'contextual': 'pantry,shelf'
+    };
+    return keywordMap[type] || 'product';
   }
 
   private buildToonPrompt(type: string, userPrompt: string, count: number): string {
