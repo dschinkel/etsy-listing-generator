@@ -85,6 +85,60 @@ describe('Listing Repository', () => {
     expect(result.images).toEqual(['closeup_1.png', 'closeup_2.png']);
   });
 
+  it('generates multiple images for flat lay shots', async () => {
+    let callCount = 0;
+    const fakeDataLayer = {
+      generateImage: async (params: any) => {
+        callCount++;
+        return `flatlay_${callCount}.png`;
+      }
+    };
+    
+    const repository = new ListingRepository(fakeDataLayer);
+    const params = { flatLayCount: 2 };
+    
+    const result = await repository.generateImages(params);
+    
+    expect(callCount).toBe(2);
+    expect(result.images).toEqual(['flatlay_1.png', 'flatlay_2.png']);
+  });
+
+  it('generates multiple images for macro shots', async () => {
+    let callCount = 0;
+    const fakeDataLayer = {
+      generateImage: async (params: any) => {
+        callCount++;
+        return `macro_${callCount}.png`;
+      }
+    };
+    
+    const repository = new ListingRepository(fakeDataLayer);
+    const params = { macroCount: 2 };
+    
+    const result = await repository.generateImages(params);
+    
+    expect(callCount).toBe(2);
+    expect(result.images).toEqual(['macro_1.png', 'macro_2.png']);
+  });
+
+  it('generates multiple images for contextual shots', async () => {
+    let callCount = 0;
+    const fakeDataLayer = {
+      generateImage: async (params: any) => {
+        callCount++;
+        return `contextual_${callCount}.png`;
+      }
+    };
+    
+    const repository = new ListingRepository(fakeDataLayer);
+    const params = { contextualCount: 2 };
+    
+    const result = await repository.generateImages(params);
+    
+    expect(callCount).toBe(2);
+    expect(result.images).toEqual(['contextual_1.png', 'contextual_2.png']);
+  });
+
   it('provides descriptive context for shot types', async () => {
     let capturedParams: any[] = [];
     const fakeDataLayer = {
