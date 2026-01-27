@@ -42,6 +42,13 @@ The Fix:
 - [COMPLETED] Added explicit error re-throwing in `src/service/data/GeminiImageGenerator.ts`.
 - [COMPLETED] Verified fix with full test suite (30 passing tests).
 
+## Task: Fix [COMPLETED]
+### Resolve 403 Forbidden error in integration tests by correctly loading environment variables
+The Fix:
+- [COMPLETED] Installed `dotenv` to manage environment variables.
+- [COMPLETED] Initialized `dotenv.config()` in `src/service/app.ts` to ensure `GEMINI_API_KEY` is loaded from `.env`.
+- [COMPLETED] Verified that all tests, including the real Gemini integration test, pass successfully.
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
