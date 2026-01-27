@@ -7,7 +7,7 @@ describe('Gemini Image Generator', () => {
     (generator as any).model = {
       generateContent: async () => ({
         response: {
-          text: () => 'https://generated-images.com/lifestyle_123.png'
+          text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=lifestyle'
         }
       })
     };
@@ -28,7 +28,7 @@ describe('Gemini Image Generator', () => {
         capturedPrompt = prompt;
         return {
           response: {
-            text: () => 'https://generated-images.com/lifestyle_context.png'
+            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=lifestyle_context'
           }
         };
       }
@@ -62,7 +62,7 @@ describe('Gemini Image Generator', () => {
         capturedPrompt = prompt;
         return {
           response: {
-            text: () => 'https://generated-images.com/hero_123.png'
+            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=hero'
           }
         };
       }
@@ -84,7 +84,7 @@ describe('Gemini Image Generator', () => {
         capturedPrompt = prompt;
         return {
           response: {
-            text: () => 'https://generated-images.com/closeup_123.png'
+            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=closeup'
           }
         };
       }
@@ -106,7 +106,7 @@ describe('Gemini Image Generator', () => {
         capturedPrompt = typeof prompt === 'string' ? prompt : prompt[0];
         return {
           response: {
-            text: () => 'https://generated-images.com/image.png'
+            text: () => 'https://placehold.jp/24/cccccc/333333/800x800.png?text=image'
           }
         };
       }
