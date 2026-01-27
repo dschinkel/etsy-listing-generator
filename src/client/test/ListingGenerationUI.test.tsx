@@ -19,7 +19,8 @@ describe('Listing Generation UI', () => {
       generateListing: jest.fn(),
       removeImage: jest.fn(),
       copyImageToClipboard: jest.fn(),
-      downloadAllImagesAsZip: jest.fn()
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
     });
   });
 
@@ -33,7 +34,8 @@ describe('Listing Generation UI', () => {
       generateListing: jest.fn(),
       removeImage: jest.fn(),
       copyImageToClipboard: jest.fn(),
-      downloadAllImagesAsZip: jest.fn()
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
     });
 
     render(<App />);
@@ -61,7 +63,8 @@ describe('Listing Generation UI', () => {
       generateListing: jest.fn(),
       removeImage: jest.fn(),
       copyImageToClipboard: jest.fn(),
-      downloadAllImagesAsZip: jest.fn()
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
     });
 
     render(<App />);
