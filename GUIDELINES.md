@@ -76,6 +76,7 @@ T1.11 When tests fail, fix implementation first, not the test, unless the test c
 T1.12 Always follow an outside-in TDD approach. Start implementation at the highest permitted layer (e.g., UI components or Hooks for frontend, Controllers or API routes for backend) and work your way down to the lower-level collaborators (repositories, commands, domain logic). When a dependency is needed but has not been implemented yet, provide a simple custom stub (a "fake") for that dependency to satisfy the current test and allow the current step to go GREEN.
 T1.13 The backend / service code should also be implemented outside-in. This means starting from the entry point (Controller/App route) and working down through the use cases to the data layer, ensuring each layer is defined by a test before its implementation and dependencies are built.
 T1.14 Strict Outside-In Ordering: When presenting a PLAN or executing tasks, you MUST always start from the highest level of the delivery mechanism (UI for frontend, Controller for backend) and work your way down. You must never start from the domain or data layer and work up. The PLAN must explicitly list steps in this top-down order.
+T1.15 You MUST NOT use `@jest-environment` comments to set the test environment in individual test files. Instead, ensure the global `jest.config.js` is configured with `projects` to automatically apply the correct environment (e.g., `jsdom` for `src/client` and `node` for `src/service`) based on the file path.
 
 ---
 
