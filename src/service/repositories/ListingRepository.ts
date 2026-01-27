@@ -9,14 +9,14 @@ export class ListingRepository {
   }) {
     const images: string[] = [];
     
-    await this.lifestyleCount(params.lifestyleCount, params.productImage, images);
-    await this.heroCount(params.heroCount, params.productImage, images);
-    await this.closeUpsCount(params.closeUpsCount, params.productImage, images);
+    await this.lifestyleImages(params.lifestyleCount, params.productImage, images);
+    await this.heroImages(params.heroCount, params.productImage, images);
+    await this.closeUpsImages(params.closeUpsCount, params.productImage, images);
 
     return { images };
   }
 
-  private async lifestyleCount(count: number = 0, productImage?: string, images: string[] = []) {
+  private async lifestyleImages(count: number = 0, productImage?: string, images: string[] = []) {
     for (let i = 0; i < count; i++) {
       images.push(await this.dataLayer.generateImage({ 
         type: 'lifestyle',
@@ -26,7 +26,7 @@ export class ListingRepository {
     }
   }
 
-  private async heroCount(count: number = 0, productImage?: string, images: string[] = []) {
+  private async heroImages(count: number = 0, productImage?: string, images: string[] = []) {
     for (let i = 0; i < count; i++) {
       images.push(await this.dataLayer.generateImage({ 
         type: 'hero',
@@ -36,7 +36,7 @@ export class ListingRepository {
     }
   }
 
-  private async closeUpsCount(count: number = 0, productImage?: string, images: string[] = []) {
+  private async closeUpsImages(count: number = 0, productImage?: string, images: string[] = []) {
     for (let i = 0; i < count; i++) {
       images.push(await this.dataLayer.generateImage({ 
         type: 'close-up',

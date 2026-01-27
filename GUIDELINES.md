@@ -180,10 +180,10 @@ for (let i = 0; i < lifestyleCount; i++) {
 
 Example (Good):
 ```typescript
-await this.lifestyleCount(params.lifestyleCount, params.productImage, images);
+await this.lifestyleImages(params.lifestyleCount, params.productImage, images);
 
 // extracted function below parent
-private async lifestyleCount(count: number = 0, productImage: string, images: string[]) {
+private async lifestyleImages(count: number = 0, productImage: string, images: string[]) {
   for (let i = 0; i < count; i++) {
     images.push(await this.dataLayer.generateImage({ 
       type: 'lifestyle',
@@ -193,7 +193,7 @@ private async lifestyleCount(count: number = 0, productImage: string, images: st
   }
 }
 ```
-In this example, the constant's variable name explains exactly what that for loop does, so refactoring should infer that. The extracted functions in this case would be `lifestyleCount`, `heroCount`, and `closeUpsCount`. This type of refactoring must happen during the REFACTOR stage of every TDD workflow if such code was written during the GREEN step.
+In this example, the constant's variable name explains exactly what that for loop does, so refactoring should infer that. The extracted functions in this case would be `lifestyleImages`, `heroImages`, and `closeUpsImages`. This type of refactoring must happen during the REFACTOR stage of every TDD workflow if such code was written during the GREEN step.
 Q1.5 Minimize state and side effects; keep pure logic in `domain/` for backend and for client under `src\client\domain.
 Q1.6 Function placement: Always put functions being called from the parent, below the parent. The primary/parent component or function in a file must be at the top.
 
