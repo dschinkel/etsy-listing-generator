@@ -17,7 +17,7 @@ describe('Gemini Image Generator', () => {
     // This is an integration test hitting the real service as per T1.3.6
     const imageUrl = await generator.generateImage(params);
     
-    expect(imageUrl).toContain('picsum.photos');
+    expect(imageUrl).toContain('placehold.jp');
   });
 
   it('generates image using product image as context', async () => {
@@ -72,7 +72,7 @@ describe('Gemini Image Generator', () => {
     
     const imageUrl = await generator.generateImage(params);
     
-    expect(imageUrl).toContain('picsum.photos');
+    expect(imageUrl).toContain('placehold.jp');
     expect(capturedPrompt).toContain('TITLE: Generate hero image');
   });
 
@@ -94,7 +94,7 @@ describe('Gemini Image Generator', () => {
     
     const imageUrl = await generator.generateImage(params);
     
-    expect(imageUrl).toContain('picsum.photos');
+    expect(imageUrl).toContain('placehold.jp');
     expect(capturedPrompt).toContain('TITLE: Generate close-up image');
   });
 
@@ -119,6 +119,6 @@ describe('Gemini Image Generator', () => {
 
     const result = await generator.generateImage({ type: 'hero', prompt: 'test' });
     expect(capturedPrompt).toContain('Every image must use the following shot type: hero.');
-    expect(result).toContain('picsum.photos');
+    expect(result).toContain('placehold.jp');
   });
 });

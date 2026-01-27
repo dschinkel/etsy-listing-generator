@@ -99,7 +99,7 @@ export class GeminiImageGenerator {
       throw new Error(`Gemini API Error: ${error.message || error}`);
     }
 
-    return `https://picsum.photos/seed/${Math.floor(Math.random() * 1000000)}/800/800`;
+    return `https://placehold.jp/24/cccccc/333333/800x800.png?text=${encodeURIComponent(params.type)}&t=${Date.now()}`;
   }
 
   private buildToonPrompt(type: string, userPrompt: string, count: number): string {
