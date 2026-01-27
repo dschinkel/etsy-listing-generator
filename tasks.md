@@ -29,9 +29,8 @@ Acceptance:
 
 Technical Requirements:
 - [COMPLETED] Use product image as context for Gemini when generating lifestyle images
-- Use nano banana as the model to generate the images
-Add an .env that allows me to specify my Gemini API key as 
-GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
+- [COMPLETED] Use nano banana as the model to generate the images with a reusable system prompt for different shot types
+- GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
 
 ## Task: Fix [COMPLETED]
 ### Resolve 500 error and SyntaxError when clicking generate listing images button
