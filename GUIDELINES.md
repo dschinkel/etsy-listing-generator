@@ -63,7 +63,7 @@ T1.3.2 For non-React work, write tests at the behavioral/business layer level (h
 T1.3.3 You MUST NEVER write tests at the Controller layer. Controllers are delivery-mechanism adapters and must remain pass-through only. Business behavior must be defined and tested at the Command (Use Case) or Domain layer.
 T1.3.4 Disallowed by default (unless explicitly instructed or for service data layer): browser/UI integration tests, real network calls, end-to-end tests, full-stack HTTP tests.
 T1.3.5 Allowed by default: in-process “integration” tests that do not require a browser and do not make real network calls (for example, repository tests using in-memory or file-backed fakes).
-T1.3.6 Service Data Layer Integration: Tests located in `src/service/<domain>/data/` MUST be integration tests that hit real external services, databases, or file systems. They must not use fakes or mocks for the primary IO target of that module.
+T1.3.6 Service Data Layer Integration: Tests located in `src/service/test/integration/` MUST be integration tests that hit real external services, databases, or file systems. They must not use fakes or mocks for the primary IO target of that module. Integration test files must not use the word "integration" in their name; instead, they should be named after the behavior or component they test (e.g., `GeminiImageGenerator.test.ts`).
 T1.4 In GREEN, write only the minimum production code required to pass the single failing test; no extra functionality.
 T1.5 After GREEN, you MUST explicitly ask for permission to commit using: `feat: <task-id>: <behavior>`. After the commit, ask whether to push or continue.
 T1.5.1 After tests run GREEN, you MUST restart the website and services using `yarn dev` in the background and verify no errors are outputted. Fix any errors that occur during startup or runtime.
@@ -193,7 +193,6 @@ private async lifestyleImages(count: number = 0, productImage: string, images: s
   }
 }
 ```
-In this example, the constant's variable name explains exactly what that for loop does, so refactoring should infer that. The extracted functions in this case would be `lifestyleImages`, `heroImages`, and `closeUpsImages`. This type of refactoring must happen during the REFACTOR stage of every TDD workflow if such code was written during the GREEN step.
 Q1.5 Minimize state and side effects; keep pure logic in `domain/` for backend and for client under `src\client\domain.
 Q1.6 Function placement: Always put functions being called from the parent, below the parent. The primary/parent component or function in a file must be at the top.
 
