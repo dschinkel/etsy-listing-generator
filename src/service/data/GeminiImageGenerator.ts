@@ -35,9 +35,17 @@ TYPE: IMAGE
     }
 
     try {
-      await this.model.generateContent(parts.length === 1 ? parts[0] : parts);
+      if (parts.length === 1) {
+        const result = await this.model.generateContent(parts[0]);
+        const response = await result.response;
+        await response.text();
+      } else {
+        const result = await this.model.generateContent(parts);
+        const response = await result.response;
+        await response.text();
+      }
     } catch (error: any) {
-      console.error('Gemini API Error:', error);
+      console.error('Gemini API Error details:', JSON.stringify(error, null, 2));
       throw new Error(`Gemini API Error: ${error.message || error}`);
     }
 
