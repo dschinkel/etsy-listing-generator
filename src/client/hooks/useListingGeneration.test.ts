@@ -135,7 +135,7 @@ describe('Listing Generation', () => {
       await result.current.generateListing({ lifestyleCount: 1 });
     });
 
-    expect(result.current.error).toBe('Imagen 4 also failed. Please try again later.');
+    expect(result.current.error).toBe('Imagen 4 failed. Please try again later.');
     expect(result.current.isGenerating).toBe(false);
   });
 
@@ -156,7 +156,7 @@ describe('Listing Generation', () => {
       await result.current.generateListing({ lifestyleCount: 1 });
     });
 
-    expect(result.current.error).toBe('Imagen 4 also failed. Please try again later.');
+    expect(result.current.error).toBe('Imagen 4 failed. Please try again later.');
   });
 
   it('sets error when non-503 error occurs', async () => {

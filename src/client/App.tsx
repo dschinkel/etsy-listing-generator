@@ -49,6 +49,7 @@ const App = () => {
   const { 
     images, 
     systemPrompt,
+    modelUsed,
     error,
     isGenerating,
     generateListing, 
@@ -58,7 +59,9 @@ const App = () => {
     fetchSystemPromptPreview
   } = useListingGeneration(repository);
 
-  const [promptWidth, setPromptWidth] = React.useState(400);
+  const [promptWidth, setPromptWidth] = React.useState(500);
+
+  const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount;
 
   React.useEffect(() => {
     fetchSystemPromptPreview({
@@ -84,10 +87,10 @@ const App = () => {
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
         <main className="flex-1 p-8">
-          <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto">
+          <div className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto">
             <div className="flex gap-8 items-start">
               {/* Left Pane */}
-              <div className="flex flex-col items-center gap-8 w-1/3">
+              <div className="flex flex-col items-center gap-8 w-1/4">
                 <UploadImage onUpload={handleUpload} />
                 <UploadedImage 
                   src={productImage} 
@@ -98,35 +101,39 @@ const App = () => {
               </div>
 
               {/* Middle Pane */}
-              <div className="flex flex-col gap-8 flex-1">
-                <ShotsSelection 
-                  lifestyleShotsCount={lifestyleShotsCount}
-                  onLifestyleShotsChange={handleLifestyleShotsChange}
-                  heroShotsCount={heroShotsCount}
-                  onHeroShotsChange={handleHeroShotsChange}
-                  closeUpsCount={closeUpsCount}
-                  onCloseUpsChange={handleCloseUpsChange}
-                  flatLayShotsCount={flatLayShotsCount}
-                  onFlatLayShotsChange={handleFlatLayShotsChange}
-                  macroShotsCount={macroShotsCount}
-                  onMacroShotsChange={handleMacroShotsChange}
-                  contextualShotsCount={contextualShotsCount}
-                  onContextualShotsChange={handleContextualShotsChange}
-                />
-                <BackgroundUploads 
-                  onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
-                  lifestyleBackground={lifestyleBackground}
-                  onHeroBackgroundUpload={handleHeroBackgroundUpload}
-                  heroBackground={heroBackground}
-                  onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
-                  closeUpsBackground={closeUpsBackground}
-                  onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
-                  flatLayBackground={flatLayBackground}
-                  onMacroBackgroundUpload={handleMacroBackgroundUpload}
-                  macroBackground={macroBackground}
-                  onContextualBackgroundUpload={handleContextualBackgroundUpload}
-                  contextualBackground={contextualBackground}
-                />
+              <div className="flex gap-8 flex-1 items-start">
+                <div className="flex-[2]">
+                  <ShotsSelection 
+                    lifestyleShotsCount={lifestyleShotsCount}
+                    onLifestyleShotsChange={handleLifestyleShotsChange}
+                    heroShotsCount={heroShotsCount}
+                    onHeroShotsChange={handleHeroShotsChange}
+                    closeUpsCount={closeUpsCount}
+                    onCloseUpsChange={handleCloseUpsChange}
+                    flatLayShotsCount={flatLayShotsCount}
+                    onFlatLayShotsChange={handleFlatLayShotsChange}
+                    macroShotsCount={macroShotsCount}
+                    onMacroShotsChange={handleMacroShotsChange}
+                    contextualShotsCount={contextualShotsCount}
+                    onContextualShotsChange={handleContextualShotsChange}
+                  />
+                </div>
+                <div className="flex-[1.5]">
+                  <BackgroundUploads 
+                    onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
+                    lifestyleBackground={lifestyleBackground}
+                    onHeroBackgroundUpload={handleHeroBackgroundUpload}
+                    heroBackground={heroBackground}
+                    onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+                    closeUpsBackground={closeUpsBackground}
+                    onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
+                    flatLayBackground={flatLayBackground}
+                    onMacroBackgroundUpload={handleMacroBackgroundUpload}
+                    macroBackground={macroBackground}
+                    onContextualBackgroundUpload={handleContextualBackgroundUpload}
+                    contextualBackground={contextualBackground}
+                  />
+                </div>
               </div>
 
               {/* Right Pane (System Prompt) */}
@@ -138,10 +145,15 @@ const App = () => {
             </div>
             
             <div className="flex flex-col items-center gap-4">
+              {totalShots < 1 && (
+                <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
+                  Specify a Shots Selection
+                </div>
+              )}
               <Button 
                 size="lg" 
-                className="w-full max-w-md"
-                disabled={isGenerating}
+                className="w-full max-w-xs"
+                disabled={isGenerating || totalShots < 1}
                 onClick={() => generateListing({ 
                   lifestyleCount: lifestyleShotsCount,
                   heroCount: heroShotsCount,
@@ -161,9 +173,18 @@ const App = () => {
                 {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
               </Button>
 
+              {isGenerating && modelUsed && (
+                <div className="text-sm text-orange-500 flex items-center gap-2" data-testid="model-status">
+                  <span>Calling model:</span>
+                  <span className="px-2 py-0.5 border border-orange-500 rounded-md text-xs font-medium animate-pulse">
+                    {modelUsed}
+                  </span>
+                </div>
+              )}
+
               {error && (
                 <div 
-                  className="w-full max-w-2xl mx-auto p-4 bg-destructive/15 border border-destructive/30 text-destructive rounded-md text-sm text-center"
+                  className="w-full max-w-2xl mx-auto p-4 bg-red-500/10 border border-red-500/50 text-red-500 rounded-md text-sm text-center font-medium"
                   data-testid="generation-error"
                 >
                   {error}
@@ -377,6 +398,7 @@ const BackgroundUploads = ({
             accept="image/png, image/jpeg"
             onChange={onLifestyleBackgroundUpload}
             data-testid="lifestyle-background-upload"
+            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
           />
           {lifestyleBackground && (
             <img 
@@ -395,6 +417,7 @@ const BackgroundUploads = ({
             accept="image/png, image/jpeg"
             onChange={onHeroBackgroundUpload}
             data-testid="hero-background-upload"
+            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
           />
           {heroBackground && (
             <img 
@@ -413,6 +436,7 @@ const BackgroundUploads = ({
             accept="image/png, image/jpeg"
             onChange={onCloseUpsBackgroundUpload}
             data-testid="close-ups-background-upload"
+            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
           />
           {closeUpsBackground && (
             <img 
@@ -431,6 +455,7 @@ const BackgroundUploads = ({
             accept="image/png, image/jpeg"
             onChange={onFlatLayBackgroundUpload}
             data-testid="flat-lay-background-upload"
+            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
           />
           {flatLayBackground && (
             <img 
@@ -449,6 +474,7 @@ const BackgroundUploads = ({
             accept="image/png, image/jpeg"
             onChange={onMacroBackgroundUpload}
             data-testid="macro-background-upload"
+            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
           />
           {macroBackground && (
             <img 
@@ -467,6 +493,7 @@ const BackgroundUploads = ({
             accept="image/png, image/jpeg"
             onChange={onContextualBackgroundUpload}
             data-testid="contextual-background-upload"
+            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
           />
           {contextualBackground && (
             <img 

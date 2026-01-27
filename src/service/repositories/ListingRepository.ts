@@ -46,7 +46,7 @@ export const createListingRepository = (dataLayer: any) => {
     await generateShotTypeImages('macro', params.macroCount, params.productImage, params.macroBackground, images, collectPrompt, params.model);
     await generateShotTypeImages('contextual', params.contextualCount, params.productImage, params.contextualBackground, images, collectPrompt, params.model);
 
-    return { images, systemPrompt };
+    return { images, systemPrompt, model: params.model };
   };
 
   const generateShotTypeImages = async (
