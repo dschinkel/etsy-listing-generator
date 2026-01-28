@@ -60,12 +60,8 @@ A user can:
 **FR.3 — Specify which image will be used as the Primary Etsy image**
 
 **FR.3 — Upload a background for product image**
-    **FR.2.2 — Ability to upload a background image to be used for lifestyle shots**
-    **FR.2.2 — Ability to upload a background image to be used for hero shots**
-    **FR.2.2 — Ability to upload a background image to be used for close-ups**
-    **FR.2.2 — Ability to upload a background image to be used for flat lay shots**
-    **FR.2.2 — Ability to upload a background image to be used for macro/detail shots**
-    **FR.2.2 — Ability to upload a background image to be used for contextual shots**
+    - Ability to upload a background image for each specific shot type.
+    - Upload buttons are located in the "Shots Selection" list, to the right of the "+" (custom context) button with 10px padding.
 
 **FR.4 — Show a final preview of the listing images**
     **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**

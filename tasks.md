@@ -21,12 +21,11 @@ Acceptance:
 ## Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
 
 ## Feature: FR.3 — Upload a background for product image [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for lifestyle shots [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for hero shots [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for close-ups [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for flat lay shots [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for macro/detail shots [COMPLETED]
-### FR.2.2 — Ability to upload a background image to be used for contextual shots [COMPLETED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Background upload buttons moved to Shots Selection list.
+- [COMPLETED] Buttons placed to the right of the plus button with 10px padding.
+- [COMPLETED] Background Uploads section removed.
 
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
 ### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.1 - lifestyle shots [COMPLETED]

@@ -96,23 +96,23 @@ describe('Primary Image Selection', () => {
 describe('Background Upload', () => {
   it('allows uploading a background image for lifestyle shots', async () => {
     const file = new File(['(binary data)'], 'background.png', { type: 'image/png' });
-    const input = screen.getByTestId('lifestyle-background-upload');
+    const input = screen.getByTestId('lifestyle-shots-background-upload');
     
     fireEvent.change(input, { target: { files: [file] } });
     
     await waitFor(() => {
-      expect(screen.getByTestId('uploaded-lifestyle-background')).toBeInTheDocument();
+      expect(screen.getByTestId('uploaded-lifestyle-shots-background')).toBeInTheDocument();
     });
   });
 
   it('allows uploading a background image for hero shots', async () => {
     const file = new File(['(binary data)'], 'hero-bg.png', { type: 'image/png' });
-    const input = screen.getByTestId('hero-background-upload');
+    const input = screen.getByTestId('hero-shots-background-upload');
     
     fireEvent.change(input, { target: { files: [file] } });
     
     await waitFor(() => {
-      expect(screen.getByTestId('uploaded-hero-background')).toBeInTheDocument();
+      expect(screen.getByTestId('uploaded-hero-shots-background')).toBeInTheDocument();
     });
   });
 

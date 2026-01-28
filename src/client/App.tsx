@@ -8,7 +8,7 @@ import { Textarea } from './components/ui/textarea';
 import { Label } from './components/ui/label';
 import { Checkbox } from './components/ui/checkbox';
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
-import { Plus } from 'lucide-react';
+import { Plus, Image as ImageIcon } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
@@ -154,22 +154,18 @@ const App = () => {
                     onMacroCustomContextChange={handleMacroCustomContextChange}
                     contextualCustomContext={contextualCustomContext}
                     onContextualCustomContextChange={handleContextualCustomContextChange}
-                  />
-                </div>
-                <div className="flex-[1.5]">
-                  <BackgroundUploads 
-                    onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
                     lifestyleBackground={lifestyleBackground}
-                    onHeroBackgroundUpload={handleHeroBackgroundUpload}
+                    onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
                     heroBackground={heroBackground}
-                    onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+                    onHeroBackgroundUpload={handleHeroBackgroundUpload}
                     closeUpsBackground={closeUpsBackground}
-                    onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
+                    onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
                     flatLayBackground={flatLayBackground}
-                    onMacroBackgroundUpload={handleMacroBackgroundUpload}
+                    onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
                     macroBackground={macroBackground}
-                    onContextualBackgroundUpload={handleContextualBackgroundUpload}
+                    onMacroBackgroundUpload={handleMacroBackgroundUpload}
                     contextualBackground={contextualBackground}
+                    onContextualBackgroundUpload={handleContextualBackgroundUpload}
                   />
                 </div>
               </div>
@@ -281,7 +277,9 @@ const ShotTypeItem = ({
   count, 
   onChange, 
   customContext, 
-  onCustomContextChange 
+  onCustomContextChange,
+  background,
+  onBackgroundUpload
 }: { 
   id: string, 
   label: string, 
@@ -289,9 +287,12 @@ const ShotTypeItem = ({
   count: number, 
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   customContext: string,
-  onCustomContextChange: (value: string) => void
+  onCustomContextChange: (value: string) => void,
+  background: string | null,
+  onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   const [showCustom, setShowCustom] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <div className="flex flex-col gap-2 border-b border-slate-800 pb-4 last:border-0">
@@ -299,15 +300,46 @@ const ShotTypeItem = ({
         <div className="flex flex-col flex-1">
           <Label htmlFor={id}>{label}</Label>
           <span className="text-xs text-muted-foreground">{description}</span>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-6 w-6 mt-1" 
-            onClick={() => setShowCustom(!showCustom)}
-            title="Add custom context"
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-2 mt-1">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6" 
+              onClick={() => setShowCustom(!showCustom)}
+              title="Add custom context"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+            <div className="pl-[10px] flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={() => fileInputRef.current?.click()}
+                title="Upload background"
+              >
+                <ImageIcon className="h-4 w-4" />
+              </Button>
+              <Input
+                type="file"
+                accept="image/png, image/jpeg"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={onBackgroundUpload}
+                data-testid={`${id}-background-upload`}
+              />
+              {background && (
+                <div className="relative group">
+                  <img 
+                    src={background} 
+                    alt="Background" 
+                    className="w-8 h-8 object-cover rounded border border-slate-700"
+                    data-testid={`uploaded-${id}-background`}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         <Input
           id={id}
@@ -359,7 +391,19 @@ const ShotsSelection = ({
   macroCustomContext,
   onMacroCustomContextChange,
   contextualCustomContext,
-  onContextualCustomContextChange
+  onContextualCustomContextChange,
+  lifestyleBackground,
+  onLifestyleBackgroundUpload,
+  heroBackground,
+  onHeroBackgroundUpload,
+  closeUpsBackground,
+  onCloseUpsBackgroundUpload,
+  flatLayBackground,
+  onFlatLayBackgroundUpload,
+  macroBackground,
+  onMacroBackgroundUpload,
+  contextualBackground,
+  onContextualBackgroundUpload
 }: {
   lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -384,7 +428,19 @@ const ShotsSelection = ({
   macroCustomContext: string,
   onMacroCustomContextChange: (value: string) => void,
   contextualCustomContext: string,
-  onContextualCustomContextChange: (value: string) => void
+  onContextualCustomContextChange: (value: string) => void,
+  lifestyleBackground: string | null,
+  onLifestyleBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  heroBackground: string | null,
+  onHeroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  closeUpsBackground: string | null,
+  onCloseUpsBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  flatLayBackground: string | null,
+  onFlatLayBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  macroBackground: string | null,
+  onMacroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  contextualBackground: string | null,
+  onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   return (
     <Card>
@@ -400,6 +456,8 @@ const ShotsSelection = ({
           onChange={onHeroShotsChange}
           customContext={heroCustomContext}
           onCustomContextChange={onHeroCustomContextChange}
+          background={heroBackground}
+          onBackgroundUpload={onHeroBackgroundUpload}
         />
         <ShotTypeItem 
           id="flat-lay-shots"
@@ -409,6 +467,8 @@ const ShotsSelection = ({
           onChange={onFlatLayShotsChange}
           customContext={flatLayCustomContext}
           onCustomContextChange={onFlatLayCustomContextChange}
+          background={flatLayBackground}
+          onBackgroundUpload={onFlatLayBackgroundUpload}
         />
         <ShotTypeItem 
           id="lifestyle-shots"
@@ -418,6 +478,8 @@ const ShotsSelection = ({
           onChange={onLifestyleShotsChange}
           customContext={lifestyleCustomContext}
           onCustomContextChange={onLifestyleCustomContextChange}
+          background={lifestyleBackground}
+          onBackgroundUpload={onLifestyleBackgroundUpload}
         />
         <ShotTypeItem 
           id="macro-shots"
@@ -427,6 +489,8 @@ const ShotsSelection = ({
           onChange={onMacroShotsChange}
           customContext={macroCustomContext}
           onCustomContextChange={onMacroCustomContextChange}
+          background={macroBackground}
+          onBackgroundUpload={onMacroBackgroundUpload}
         />
         <ShotTypeItem 
           id="contextual-shots"
@@ -436,6 +500,8 @@ const ShotsSelection = ({
           onChange={onContextualShotsChange}
           customContext={contextualCustomContext}
           onCustomContextChange={onContextualCustomContextChange}
+          background={contextualBackground}
+          onBackgroundUpload={onContextualBackgroundUpload}
         />
         <ShotTypeItem 
           id="close-ups"
@@ -445,159 +511,9 @@ const ShotsSelection = ({
           onChange={onCloseUpsChange}
           customContext={closeUpsCustomContext}
           onCustomContextChange={onCloseUpsCustomContextChange}
+          background={closeUpsBackground}
+          onBackgroundUpload={onCloseUpsBackgroundUpload}
         />
-      </CardContent>
-    </Card>
-  );
-};
-
-const BackgroundUploads = ({ 
-  onLifestyleBackgroundUpload, 
-  lifestyleBackground,
-  onHeroBackgroundUpload,
-  heroBackground,
-  onCloseUpsBackgroundUpload,
-  closeUpsBackground,
-  onFlatLayBackgroundUpload,
-  flatLayBackground,
-  onMacroBackgroundUpload,
-  macroBackground,
-  onContextualBackgroundUpload,
-  contextualBackground
-}: { 
-  onLifestyleBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  lifestyleBackground: string | null,
-  onHeroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  heroBackground: string | null,
-  onCloseUpsBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  closeUpsBackground: string | null,
-  onFlatLayBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  flatLayBackground: string | null,
-  onMacroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  macroBackground: string | null,
-  onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  contextualBackground: string | null
-}) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Background Uploads</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="lifestyle-background">Lifestyle Background</Label>
-          <Input
-            id="lifestyle-background"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onLifestyleBackgroundUpload}
-            data-testid="lifestyle-background-upload"
-            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
-          />
-          {lifestyleBackground && (
-            <img 
-              src={lifestyleBackground} 
-              alt="Lifestyle Background" 
-              data-testid="uploaded-lifestyle-background"
-              className="w-20 h-20 object-cover rounded shadow mt-2"
-            />
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="hero-background">Hero Background</Label>
-          <Input
-            id="hero-background"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onHeroBackgroundUpload}
-            data-testid="hero-background-upload"
-            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
-          />
-          {heroBackground && (
-            <img 
-              src={heroBackground} 
-              alt="Hero Background" 
-              data-testid="uploaded-hero-background"
-              className="w-20 h-20 object-cover rounded shadow mt-2"
-            />
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="close-ups-background">Close-ups Background</Label>
-          <Input
-            id="close-ups-background"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onCloseUpsBackgroundUpload}
-            data-testid="close-ups-background-upload"
-            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
-          />
-          {closeUpsBackground && (
-            <img 
-              src={closeUpsBackground} 
-              alt="Close-ups Background" 
-              data-testid="uploaded-close-ups-background"
-              className="w-20 h-20 object-cover rounded shadow mt-2"
-            />
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="flat-lay-background">Flat Lay Background</Label>
-          <Input
-            id="flat-lay-background"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onFlatLayBackgroundUpload}
-            data-testid="flat-lay-background-upload"
-            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
-          />
-          {flatLayBackground && (
-            <img 
-              src={flatLayBackground} 
-              alt="Flat Lay Background" 
-              data-testid="uploaded-flat-lay-background"
-              className="w-20 h-20 object-cover rounded shadow mt-2"
-            />
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="macro-background">Macro Background</Label>
-          <Input
-            id="macro-background"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onMacroBackgroundUpload}
-            data-testid="macro-background-upload"
-            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
-          />
-          {macroBackground && (
-            <img 
-              src={macroBackground} 
-              alt="Macro Background" 
-              data-testid="uploaded-macro-background"
-              className="w-20 h-20 object-cover rounded shadow mt-2"
-            />
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="contextual-background">Contextual Background</Label>
-          <Input
-            id="contextual-background"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onContextualBackgroundUpload}
-            data-testid="contextual-background-upload"
-            className="text-transparent file:text-foreground file:mr-0 file:px-0 file:h-full file:w-full w-[120px] px-0"
-          />
-          {contextualBackground && (
-            <img 
-              src={contextualBackground} 
-              alt="Contextual Background" 
-              data-testid="uploaded-contextual-background"
-              className="w-20 h-20 object-cover rounded shadow mt-2"
-            />
-          )}
-        </div>
       </CardContent>
     </Card>
   );
