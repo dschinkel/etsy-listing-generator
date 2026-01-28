@@ -6,14 +6,21 @@ Acceptance:
 ### 0.1 Add a good looking modern header and footer to the app [COMPLETED]
 ### 0.2 Add a title to the app. Title should be in the header [COMPLETED]
 
-## Feature: FR.1 — Upload a product image [IN PROGRESS]
+## Feature: FR.1 — Upload a product image [COMPLETED]
 ### FR.1.2 — Ability to upload a PNG image as the product image to be used as context for generating listing images [COMPLETED]
 ### FR.1.2 — Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images [COMPLETED]
-### FR.1.3 — Ensure that generation is disabled if no product image is loaded [IN PROGRESS] *
+### FR.1.3 — Ensure that generation is disabled if no product image is loaded [COMPLETED]
+The Fix:
+- [x] Moved generation readiness logic to `useProductUpload` hook.
+- [x] Added `totalShots` and `isReadyToGenerate` to hook output.
+- [x] Verified logic with headless TDD tests.
+- [x] Updated `App.tsx` to disable "Generate Listing Images" button based on readiness.
+- [x] Added helpful UI messages prompting for upload or shot selection.
+- [x] Updated UI tests to handle new state requirements.
 Acceptance:
-- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- "Generate Listing Images" button is disabled if `productImage` is null.
-- A message or visual cue informs the user to upload a product image if they try to generate without one (already partially handled by disabled button).
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] "Generate Listing Images" button is disabled if `productImage` is null.
+- [x] A message or visual cue informs the user to upload a product image if they try to generate without one (already partially handled by disabled button).
 
 ## Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
 ### FR.2.1 — Ability to specify how many images generated should be lifestyle shots [COMPLETED]
