@@ -366,7 +366,16 @@ const ShotTypeItem = ({
                   className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5"
                   onChange={(e) => {
                     const template = templates.find(t => t.name === e.target.value);
-                    if (template) onCustomContextChange(template.text);
+                    if (template) {
+                      const trimmedCurrent = customContext.trim();
+                      const templateText = template.text;
+                      
+                      if (!trimmedCurrent) {
+                        onCustomContextChange(templateText);
+                      } else if (!trimmedCurrent.includes(templateText)) {
+                        onCustomContextChange(`${trimmedCurrent}\n${templateText}`);
+                      }
+                    }
                   }}
                   value=""
                 >

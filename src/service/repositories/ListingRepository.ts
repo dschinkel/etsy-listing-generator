@@ -137,8 +137,16 @@ export const createListingRepository = (dataLayer: any) => {
       if (result.systemInstruction) {
         if (!systemPrompt) {
           systemPrompt = result.systemInstruction;
-        } else if (!systemPrompt.includes(result.systemInstruction)) {
-          systemPrompt += '\n\n' + result.systemInstruction;
+        } else {
+          // Check if we already have this instruction, ignoring the count difference
+          // This prevents duplication when getPromptPreview uses total count 
+          // but individual generations use count 1.
+          const instructionBase = result.systemInstruction.replace(/Generate \d+ images?/, 'Generate {{COUNT}}');
+          const systemPromptBase = systemPrompt.replace(/Generate \d+ images?/g, 'Generate {{COUNT}}');
+          
+          if (!systemPromptBase.includes(instructionBase)) {
+            systemPrompt += '\n\n' + result.systemInstruction;
+          }
         }
       }
     };

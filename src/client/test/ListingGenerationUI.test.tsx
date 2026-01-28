@@ -333,4 +333,31 @@ describe('Listing Generation UI', () => {
     
     expect(screen.getByText('Custom Context')).toBeInTheDocument();
   });
+
+  it('populates and appends templates to custom context', () => {
+    const onHeroCustomContextChange = jest.fn();
+    (useProductUpload as jest.Mock).mockReturnValue({
+      heroShotsCount: 1,
+      heroCustomContext: 'Existing',
+      handleHeroCustomContextChange: onHeroCustomContextChange,
+      templates: [{ name: 'Kitchen', text: 'In a kitchen' }],
+      // Need other fields to avoid crash
+      lifestyleShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+    });
+
+    render(<App />);
+    
+    // Open custom context section
+    const addButtons = screen.getAllByTitle('Add custom context');
+    fireEvent.click(addButtons[0]); // Hero shot is first
+
+    const select = screen.getByRole('combobox');
+    fireEvent.change(select, { target: { value: 'Kitchen' } });
+
+    expect(onHeroCustomContextChange).toHaveBeenCalledWith('Existing\nIn a kitchen');
+  });
 });

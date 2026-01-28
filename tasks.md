@@ -353,3 +353,11 @@ The Fix:
 - [x] Create a reproduction test in `ListingGenerationUI.test.tsx`.
 - [x] Fix the missing `templates` and `onSaveTemplate` in `ShotTypeItem` destructuring in `App.tsx`.
 - [x] Verify the fix with tests.
+
+## Task: Fix [COMPLETED]
+### Ensure template selection populates custom context without duplication
+The Fix:
+- [x] Fixed backend duplication in `ListingRepository` by matching prompt instructions while ignoring count differences.
+- [x] Updated `App.tsx` to append template text to custom context and avoid duplicate strings.
+- [x] Verified fix with new test cases in `ListingGenerationUI.test.tsx` and manual verification.
+- [x] All 70 tests passing.
