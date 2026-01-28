@@ -101,6 +101,16 @@ The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Update `downloadAllImagesAsZip` to validate response status and content type.
 - [COMPLETED] Handle failed image fetches by using a fallback or skipping.
+## Task: Fix [COMPLETED]
+### Resolve broken image caused by double data-URL prefixing
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Implemented `toDataUrl` to robustly handle base64 data that may already contain a protocol prefix.
+- [COMPLETED] Refactored `extractImageFromResponse` and `findImageDeep` to use `toDataUrl`, preventing double-prefixing.
+- [COMPLETED] Added regression test case for pre-prefixed data.
+- [COMPLETED] Verified fix with full test suite (57 tests).
+- [COMPLETED] Verified no linting or runtime errors.
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
@@ -243,3 +253,11 @@ The Fix:
 - [COMPLETED] Broadened `isRetryableError` in `ListingRepository` to include 5xx, 429, and common error strings.
 - [COMPLETED] Updated `useListingGeneration.test.ts` to verify client-side retry orchestration.
 - [COMPLETED] Verified fix with full test suite (55 tests).
+
+## Task: Fix [COMPLETED]
+### Resolve broken image caused by metadata extraction
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Updated `extractImageFromResponse` and `findImageDeep` in `GeminiImageGenerator.ts` to strictly require `image/` mime type for `inlineData`.
+- [COMPLETED] Added regression test in `GeminiImageGeneratorExtraction.test.ts`.
+- [COMPLETED] Verified fix with full test suite (56 tests).

@@ -108,6 +108,12 @@ export const getPlaceholderUrl = (type: string): string => {
 
 const cleanBase64 = (data: string) => data.replace(/\s/g, '');
 
+const toDataUrl = (data: string, mimeType: string) => {
+  const cleaned = cleanBase64(data);
+  if (cleaned.startsWith('data:')) return cleaned;
+  return `data:${mimeType};base64,${cleaned}`;
+};
+
 const isImageUrl = (url: string) => /https?:\/\/[^\s)]+\.(png|jpg|jpeg|webp|gif)/i.test(url);
 
 export const extractImageFromResponse = (response: any): string | null => {
@@ -117,8 +123,8 @@ export const extractImageFromResponse = (response: any): string | null => {
   for (const candidate of candidates) {
     const parts = candidate.content?.parts || [];
     for (const part of parts) {
-      if (part.inlineData?.data && part.inlineData?.mimeType) {
-        return `data:${part.inlineData.mimeType};base64,${cleanBase64(part.inlineData.data)}`;
+      if (part.inlineData?.data && part.inlineData?.mimeType && part.inlineData.mimeType.startsWith('image/')) {
+        return toDataUrl(part.inlineData.data, part.inlineData.mimeType);
       }
     }
   }
@@ -151,8 +157,9 @@ const findImageDeep = (obj: any, seen = new Set(), depth = 0): string | null => 
     }
   } else {
     // Check for inlineData-like structure
-    if (obj.mimeType && obj.data && typeof obj.data === 'string' && obj.data.length > 100) {
-      return `data:${obj.mimeType};base64,${cleanBase64(obj.data)}`;
+    if (obj.mimeType && typeof obj.mimeType === 'string' && obj.mimeType.startsWith('image/') && 
+        obj.data && typeof obj.data === 'string' && obj.data.length > 100) {
+      return toDataUrl(obj.data, obj.mimeType);
     }
     // Check for URL-like strings
     for (const key in obj) {
