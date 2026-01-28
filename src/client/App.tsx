@@ -8,7 +8,15 @@ import { Textarea } from './components/ui/textarea';
 import { Label } from './components/ui/label';
 import { Checkbox } from './components/ui/checkbox';
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
-import { Plus, Image as ImageIcon, Save } from 'lucide-react';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogClose
+} from './components/ui/dialog';
+import { Plus, Image as ImageIcon, Save, Trash } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
@@ -60,6 +68,7 @@ const App = () => {
     handleContextualCustomContextChange,
     templates,
     saveContextTemplate,
+    removeContextTemplate,
   } = useProductUpload(repository);
 
   const { 
@@ -162,6 +171,7 @@ const App = () => {
                     onContextualCustomContextChange={handleContextualCustomContextChange}
                     templates={templates}
                     onSaveTemplate={saveContextTemplate}
+                    onRemoveTemplate={removeContextTemplate}
                     lifestyleBackground={lifestyleBackground}
                     onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
                     heroBackground={heroBackground}
@@ -281,6 +291,7 @@ const ShotTypeItem = ({
   onCustomContextChange,
   templates,
   onSaveTemplate,
+  onRemoveTemplate,
   background,
   onBackgroundUpload
 }: { 
@@ -293,11 +304,32 @@ const ShotTypeItem = ({
   onCustomContextChange: (value: string) => void,
   templates: { name: string, text: string }[],
   onSaveTemplate: (name: string, text: string) => void,
+  onRemoveTemplate: (name: string) => void,
   background: string | null,
   onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   const [showCustom, setShowCustom] = React.useState(false);
+  const [selectedTemplate, setSelectedTemplate] = React.useState<string>("");
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = React.useState(false);
+  const [isRemoveDialogOpen, setIsRemoveDialogOpen] = React.useState(false);
+  const [newTemplateName, setNewTemplateName] = React.useState("");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleSaveTemplate = () => {
+    if (newTemplateName.trim()) {
+      onSaveTemplate(newTemplateName, customContext);
+      setNewTemplateName("");
+      setIsSaveDialogOpen(false);
+    }
+  };
+
+  const handleRemoveTemplate = () => {
+    if (selectedTemplate) {
+      onRemoveTemplate(selectedTemplate);
+      setSelectedTemplate("");
+      setIsRemoveDialogOpen(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2 border-b border-slate-800 pb-4 last:border-0">
@@ -362,28 +394,45 @@ const ShotTypeItem = ({
             <div className="flex items-center gap-2 flex-1">
               <Label htmlFor={`${id}-custom`} className="text-xs">Custom Context</Label>
               {templates.length > 0 && (
-                <select 
-                  className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5"
-                  onChange={(e) => {
-                    const template = templates.find(t => t.name === e.target.value);
-                    if (template) {
-                      const trimmedCurrent = customContext.trim();
-                      const templateText = template.text;
-                      
-                      if (!trimmedCurrent) {
-                        onCustomContextChange(templateText);
-                      } else if (!trimmedCurrent.includes(templateText)) {
-                        onCustomContextChange(`${trimmedCurrent}\n${templateText}`);
+                <div className="flex items-center gap-1">
+                  <select 
+                    className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring"
+                    onChange={(e) => {
+                      const templateName = e.target.value;
+                      setSelectedTemplate(templateName);
+                      const template = templates.find(t => t.name === templateName);
+                      if (template) {
+                        const trimmedCurrent = customContext.trim();
+                        const templateText = template.text;
+                        
+                        if (!trimmedCurrent) {
+                          onCustomContextChange(templateText);
+                        } else if (!trimmedCurrent.includes(templateText)) {
+                          onCustomContextChange(`${trimmedCurrent}\n${templateText}`);
+                        }
                       }
-                    }
-                  }}
-                  value=""
-                >
-                  <option value="" disabled>Select a template...</option>
-                  {templates.map(t => (
-                    <option key={t.name} value={t.name}>{t.name}</option>
-                  ))}
-                </select>
+                    }}
+                    value={selectedTemplate}
+                    data-testid={`${id}-template-select`}
+                  >
+                    <option value="" disabled>Select a template...</option>
+                    {templates.map(t => (
+                      <option key={t.name} value={t.name}>{t.name}</option>
+                    ))}
+                  </select>
+                  {selectedTemplate && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 text-red-400 hover:text-red-500 hover:bg-red-500/10"
+                      title="Remove template"
+                      onClick={() => setIsRemoveDialogOpen(true)}
+                      data-testid={`${id}-remove-template`}
+                    >
+                      <Trash className="h-3 w-3" />
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
             <Button
@@ -392,10 +441,7 @@ const ShotTypeItem = ({
               className="h-6 w-6"
               title="Save as template"
               disabled={!customContext.trim()}
-              onClick={() => {
-                const name = window.prompt('Enter a name for this template:');
-                if (name) onSaveTemplate(name, customContext);
-              }}
+              onClick={() => setIsSaveDialogOpen(true)}
             >
               <Save className="h-3 w-3" />
             </Button>
@@ -409,6 +455,45 @@ const ShotTypeItem = ({
           />
         </div>
       )}
+
+      {/* Save Template Dialog */}
+      <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save as Template</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 flex flex-col gap-2">
+            <Label htmlFor={`${id}-new-template-name`}>Template Name</Label>
+            <Input 
+              id={`${id}-new-template-name`}
+              value={newTemplateName} 
+              onChange={(e) => setNewTemplateName(e.target.value)} 
+              placeholder="e.g. Modern Kitchen"
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsSaveDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveTemplate} disabled={!newTemplateName.trim()}>Save Template</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Remove Template Dialog */}
+      <Dialog open={isRemoveDialogOpen} onOpenChange={setIsRemoveDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Remove Template</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            Are you sure you want to remove the template "{selectedTemplate}"?
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsRemoveDialogOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleRemoveTemplate}>Remove Template</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -440,6 +525,7 @@ const ShotsSelection = ({
   onContextualCustomContextChange,
   templates,
   onSaveTemplate,
+  onRemoveTemplate,
   lifestyleBackground,
   onLifestyleBackgroundUpload,
   heroBackground,
@@ -479,6 +565,7 @@ const ShotsSelection = ({
   onContextualCustomContextChange: (value: string) => void,
   templates: { name: string, text: string }[],
   onSaveTemplate: (name: string, text: string) => void,
+  onRemoveTemplate: (name: string) => void,
   lifestyleBackground: string | null,
   onLifestyleBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   heroBackground: string | null,
@@ -508,6 +595,7 @@ const ShotsSelection = ({
           onCustomContextChange={onHeroCustomContextChange}
           templates={templates}
           onSaveTemplate={onSaveTemplate}
+          onRemoveTemplate={onRemoveTemplate}
           background={heroBackground}
           onBackgroundUpload={onHeroBackgroundUpload}
         />
@@ -521,6 +609,7 @@ const ShotsSelection = ({
           onCustomContextChange={onFlatLayCustomContextChange}
           templates={templates}
           onSaveTemplate={onSaveTemplate}
+          onRemoveTemplate={onRemoveTemplate}
           background={flatLayBackground}
           onBackgroundUpload={onFlatLayBackgroundUpload}
         />
@@ -534,6 +623,7 @@ const ShotsSelection = ({
           onCustomContextChange={onLifestyleCustomContextChange}
           templates={templates}
           onSaveTemplate={onSaveTemplate}
+          onRemoveTemplate={onRemoveTemplate}
           background={lifestyleBackground}
           onBackgroundUpload={onLifestyleBackgroundUpload}
         />
@@ -547,6 +637,7 @@ const ShotsSelection = ({
           onCustomContextChange={onMacroCustomContextChange}
           templates={templates}
           onSaveTemplate={onSaveTemplate}
+          onRemoveTemplate={onRemoveTemplate}
           background={macroBackground}
           onBackgroundUpload={onMacroBackgroundUpload}
         />
@@ -560,6 +651,7 @@ const ShotsSelection = ({
           onCustomContextChange={onContextualCustomContextChange}
           templates={templates}
           onSaveTemplate={onSaveTemplate}
+          onRemoveTemplate={onRemoveTemplate}
           background={contextualBackground}
           onBackgroundUpload={onContextualBackgroundUpload}
         />
@@ -573,6 +665,7 @@ const ShotsSelection = ({
           onCustomContextChange={onCloseUpsCustomContextChange}
           templates={templates}
           onSaveTemplate={onSaveTemplate}
+          onRemoveTemplate={onRemoveTemplate}
           background={closeUpsBackground}
           onBackgroundUpload={onCloseUpsBackgroundUpload}
         />

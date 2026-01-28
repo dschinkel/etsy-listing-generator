@@ -1,22 +1,6 @@
 [
   {
-    "name": "Kitchen",
-    "text": "In a modern kitchen"
-  },
-  {
-    "name": "Kitchen",
-    "text": "In a modern kitchen"
-  },
-  {
-    "name": "Kitchen",
-    "text": "In a modern kitchen"
-  },
-  {
-    "name": "Kitchen",
-    "text": "In a modern kitchen"
-  },
-  {
-    "name": "Kitchen",
-    "text": "In a modern kitchen"
+    "name": "test",
+    "text": "Edit the provided image by updating the personalized text elements only.\n\nReplace any existing name or text with a randomly chosen name.\nReplace any existing number with a randomly chosen number where applicable.\n\nPreserve the original typography, letterforms, sizing, spacing, outlines, and any dimensional or embossed appearance.\nDo not change the product shape, icons, graphics, colors, materials, lighting, shadows, camera angle, or background.\n\nOnly the personalized text content should change. All other aspects must remain identical."
   }
 ]

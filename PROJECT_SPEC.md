@@ -124,6 +124,7 @@ A user can:
     - Selecting a template populates the custom context text area.
     - Ability to manually edit the custom context even after selecting a template.
     - Prompt for a name when saving a new template.
+    - Ability to remove a saved custom context template.
 
 ---
 

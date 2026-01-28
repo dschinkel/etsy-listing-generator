@@ -38,9 +38,26 @@ export const useProductUpload = (repository?: any) => {
 
   const saveContextTemplate = async (name: string, text: string) => {
     if (repository) {
-      const response = await repository.saveTemplate({ name, text });
-      if (response.template) {
-        setTemplates(prev => [...prev, response.template]);
+      try {
+        const response = await repository.saveTemplate({ name, text });
+        if (response.template) {
+          setTemplates(prev => [...prev, response.template]);
+        }
+      } catch (err: any) {
+        console.error('Failed to save template:', err);
+        alert(`Failed to save template: ${err.message}`);
+      }
+    }
+  };
+
+  const removeContextTemplate = async (name: string) => {
+    if (repository) {
+      try {
+        await repository.removeTemplate(name);
+        setTemplates(prev => prev.filter(t => t.name !== name));
+      } catch (err: any) {
+        console.error('Failed to remove template:', err);
+        alert(`Failed to remove template: ${err.message}`);
       }
     }
   };
@@ -206,5 +223,6 @@ export const useProductUpload = (repository?: any) => {
     handleContextualCustomContextChange,
     templates,
     saveContextTemplate,
+    removeContextTemplate,
   };
 };

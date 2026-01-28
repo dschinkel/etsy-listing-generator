@@ -345,6 +345,15 @@ The Fix:
 - [COMPLETED] FR.15.3: Update `useProductUpload` hook to fetch and manage templates.
 - [COMPLETED] FR.15.4: Update `ShotTypeItem` UI with template selection and save functionality.
 - [COMPLETED] FR.15.5: Final verification and cleanup.
+- [COMPLETED] FR.15.6: Ability to remove a saved custom context template.
+    - Acceptance:
+        - Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+    - RED: Test that DELETE /listings/templates/:name removes a template in ListingController.test.ts.
+    - GREEN: Implement remove method in ContextTemplateRepository, RemoveContextTemplate command, and DELETE route in ListingController.
+    - RED: Test removeTemplate in client ListingRepository.test.ts and useProductUpload.test.ts.
+    - GREEN: Implement removeTemplate in client ListingRepository and useProductUpload hook.
+    - UI: Update ShotTypeItem to use shadcn Select and add a remove button.
+    - Verification and Cleanup.
 
 ## Task: Fix [COMPLETED]
 ### Resolve ReferenceError: templates is not defined in App.tsx

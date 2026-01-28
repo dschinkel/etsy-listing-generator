@@ -71,7 +71,8 @@ describe('Listing Generation UI', () => {
       contextualCustomContext: '',
       handleContextualCustomContextChange: jest.fn(),
       templates: [],
-      saveContextTemplate: jest.fn()
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn()
     });
   });
 
@@ -356,8 +357,79 @@ describe('Listing Generation UI', () => {
     fireEvent.click(addButtons[0]); // Hero shot is first
 
     const select = screen.getByRole('combobox');
+    expect(select).toBeInTheDocument();
+    expect(screen.getByText('Kitchen')).toBeInTheDocument();
+
     fireEvent.change(select, { target: { value: 'Kitchen' } });
 
     expect(onHeroCustomContextChange).toHaveBeenCalledWith('Existing\nIn a kitchen');
+  });
+
+  it( 'calls removeContextTemplate when remove button is clicked and confirmed', async () => {
+    const onRemoveTemplate = jest.fn();
+    (useProductUpload as jest.Mock).mockReturnValue({
+      heroShotsCount: 1,
+      heroCustomContext: '',
+      handleHeroCustomContextChange: jest.fn(),
+      templates: [{ name: 'Kitchen', text: 'In a kitchen' }],
+      removeContextTemplate: onRemoveTemplate,
+      lifestyleShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+    });
+
+    render(<App />);
+    
+    const addButtons = screen.getAllByTitle('Add custom context');
+    fireEvent.click(addButtons[0]);
+
+    const select = screen.getByTestId('hero-shots-template-select');
+    fireEvent.change(select, { target: { value: 'Kitchen' } });
+
+    const removeButton = screen.getByTestId('hero-shots-remove-template');
+    fireEvent.click(removeButton);
+
+    expect(screen.getByText(/Are you sure you want to remove/)).toBeInTheDocument();
+    
+    const confirmButton = screen.getByRole('button', { name: 'Remove Template' });
+    fireEvent.click(confirmButton);
+
+    expect(onRemoveTemplate).toHaveBeenCalledWith('Kitchen');
+  });
+
+  it('calls saveContextTemplate when save button is clicked and confirmed', async () => {
+    const onSaveTemplate = jest.fn();
+    (useProductUpload as jest.Mock).mockReturnValue({
+      heroShotsCount: 1,
+      heroCustomContext: 'My context',
+      handleHeroCustomContextChange: jest.fn(),
+      templates: [],
+      saveContextTemplate: onSaveTemplate,
+      lifestyleShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+    });
+
+    render(<App />);
+    
+    const addButtons = screen.getAllByTitle('Add custom context');
+    fireEvent.click(addButtons[0]);
+
+    const saveButton = screen.getByTitle('Save as template');
+    fireEvent.click(saveButton);
+
+    expect(screen.getByText('Save as Template')).toBeInTheDocument();
+    
+    const nameInput = screen.getByLabelText('Template Name');
+    fireEvent.change(nameInput, { target: { value: 'New Template' } });
+    
+    const confirmSaveButton = screen.getByRole('button', { name: 'Save Template' });
+    fireEvent.click(confirmSaveButton);
+
+    expect(onSaveTemplate).toHaveBeenCalledWith('New Template', 'My context');
   });
 });

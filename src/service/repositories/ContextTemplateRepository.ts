@@ -32,5 +32,11 @@ export const createContextTemplateRepository = (dbPath: string) => {
     fs.writeFileSync(dbPath, JSON.stringify(templates, null, 2));
   };
 
-  return { getAll, save };
+  const remove = async (name: string): Promise<void> => {
+    const templates = await getAll();
+    const filtered = templates.filter(t => t.name !== name);
+    fs.writeFileSync(dbPath, JSON.stringify(filtered, null, 2));
+  };
+
+  return { getAll, save, remove };
 };

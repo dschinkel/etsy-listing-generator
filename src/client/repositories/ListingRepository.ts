@@ -115,5 +115,19 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
-  return { generateImages, getSystemPromptPreview, getTemplates, saveTemplate };
+  const removeTemplate = async (name: string) => {
+    const response = await fetchWithTimeout(`/listings/templates/${encodeURIComponent(name)}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to remove template: ${text}`);
+    }
+
+    return await response.json();
+  };
+
+  return { generateImages, getSystemPromptPreview, getTemplates, saveTemplate, removeTemplate };
 };

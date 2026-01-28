@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"tsx src/service/index.ts\"",
+    "dev": "concurrently \"vite\" \"tsx --watch src/service/index.ts\"",
     "dev:client": "vite",
-    "dev:server": "tsx src/service/index.ts",
+    "dev:server": "tsx --watch src/service/index.ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "jest"

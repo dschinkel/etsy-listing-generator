@@ -42,4 +42,26 @@ describe('useProductUpload', () => {
     expect(mockRepository.saveTemplate).toHaveBeenCalledWith(newTemplate);
     expect(result.current.templates).toContainEqual(newTemplate);
   });
+
+  it('removes a template', async () => {
+    const templates = [{ name: 'ToRemove', text: 'Text' }];
+    mockRepository.getTemplates.mockResolvedValueOnce({ templates });
+    const mockRemoveTemplate = jest.fn().mockResolvedValue({ success: true });
+    const repositoryWithRemove = { ...mockRepository, removeTemplate: mockRemoveTemplate };
+
+    const { result } = renderHook(() => useProductUpload(repositoryWithRemove));
+
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    expect(result.current.templates).toEqual(templates);
+
+    await act(async () => {
+      await result.current.removeContextTemplate('ToRemove');
+    });
+
+    expect(mockRemoveTemplate).toHaveBeenCalledWith('ToRemove');
+    expect(result.current.templates).toEqual([]);
+  });
 });

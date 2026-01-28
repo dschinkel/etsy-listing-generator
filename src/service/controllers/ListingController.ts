@@ -2,6 +2,7 @@ import { createGenerateListingImages } from '../commands/GenerateListingImages';
 import { createGetSystemPromptPreview } from '../commands/GetSystemPromptPreview';
 import { createGetContextTemplates } from '../commands/GetContextTemplates';
 import { createSaveContextTemplate } from '../commands/SaveContextTemplate';
+import { createRemoveContextTemplate } from '../commands/RemoveContextTemplate';
 import { createListingRepository } from '../repositories/ListingRepository';
 import { createContextTemplateRepository } from '../repositories/ContextTemplateRepository';
 import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
@@ -11,13 +12,14 @@ export const createListingController = () => {
   const dataLayer = createGeminiImageGenerator();
   const repository = createListingRepository(dataLayer);
   
-  const templateDbPath = path.join(process.cwd(), 'src', 'db', 'context-templates.json');
+  const templateDbPath = process.env.TEMPLATE_DB_PATH || path.join(process.cwd(), 'src', 'db', 'context-templates.json');
   const templateRepository = createContextTemplateRepository(templateDbPath);
 
   const generateListingImages = createGenerateListingImages(repository);
   const getSystemPromptPreview = createGetSystemPromptPreview(repository);
   const getContextTemplates = createGetContextTemplates(templateRepository);
   const saveContextTemplate = createSaveContextTemplate(templateRepository);
+  const removeContextTemplate = createRemoveContextTemplate(templateRepository);
 
   const generate = async (ctx: any) => {
     try {
@@ -78,5 +80,18 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, getPromptPreview, getTemplates, saveTemplate };
+  const removeTemplate = async (ctx: any) => {
+    try {
+      const { name } = ctx.params;
+      await removeContextTemplate.execute(name);
+      ctx.status = 200;
+      ctx.body = { success: true };
+    } catch (error: any) {
+      console.error('Error in removeTemplate:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  return { generate, getPromptPreview, getTemplates, saveTemplate, removeTemplate };
 };

@@ -1,9 +1,22 @@
 import * as request from 'supertest';
-import app from '../app';
+import * as path from 'path';
+import * as fs from 'fs';
+
+const testDbPath = path.join(process.cwd(), 'src', 'db', 'context-templates.test.json');
+process.env.TEMPLATE_DB_PATH = testDbPath;
+
+// Using require to ensure env var is set before app initializes controller
+const app = require('../app').default;
 
 const supertest = (request as any).default || request;
 
 describe('Listing Controller', () => {
+  afterAll(() => {
+    if (fs.existsSync(testDbPath)) {
+      fs.unlinkSync(testDbPath);
+    }
+  });
+
   it('lists templates', async () => {
     const response = await supertest(app.callback())
       .get('/listings/templates');
@@ -22,5 +35,22 @@ describe('Listing Controller', () => {
     expect(response.body.template).toBeDefined();
     expect(response.body.template.name).toBe('Kitchen');
     expect(response.body.template.text).toBe('In a modern kitchen');
+  });
+
+  it('removes a template', async () => {
+    const template = { name: 'ToRemove', text: 'Text' };
+    await supertest(app.callback())
+      .post('/listings/templates')
+      .send(template);
+
+    const response = await supertest(app.callback())
+      .delete('/listings/templates/ToRemove');
+
+    expect(response.status).toBe(200);
+    
+    const listResponse = await supertest(app.callback())
+      .get('/listings/templates');
+    const templates = listResponse.body.templates;
+    expect(templates.find((t: any) => t.name === 'ToRemove')).toBeUndefined();
   });
 });

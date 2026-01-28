@@ -57,6 +57,10 @@ router.post('/templates', async (ctx) => {
   await listingController.saveTemplate(ctx);
 });
 
+router.delete('/templates/:name', async (ctx) => {
+  await listingController.removeTemplate(ctx);
+});
+
 // Add a GET handler just in case, returning a helpful message or redirecting
 router.get('/system-prompt', async (ctx) => {
   ctx.status = 405;

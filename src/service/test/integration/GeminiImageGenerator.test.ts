@@ -34,5 +34,5 @@ describe('Gemini Image Generator Integration', () => {
     expect(response.body.systemPrompt).toBeDefined();
     expect(response.body.systemPrompt).toContain('Etsy seller');
     expect(response.body.systemPrompt).toContain('lifestyle');
-  });
+  }, 120000);
 });

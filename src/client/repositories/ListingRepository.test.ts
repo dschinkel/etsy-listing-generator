@@ -37,4 +37,18 @@ describe('Listing Repository (Client)', () => {
       body: JSON.stringify(template)
     }));
   });
+
+  it('removes a template via api', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ success: true }),
+    });
+
+    const repository = createListingRepository();
+    await repository.removeTemplate('ToRemove');
+
+    expect(global.fetch).toHaveBeenCalledWith('/listings/templates/ToRemove', expect.objectContaining({
+      method: 'DELETE'
+    }));
+  });
 });
