@@ -31,9 +31,15 @@ export const createGeminiImageGenerator = () => {
   const getSystemPrompt = (params: { type: string; count?: number; customContext?: string }) => {
     const count = params.count || 1;
     const countText = count === 1 ? '1 image' : `${count} images`;
+    let shotTypeWithDescription = params.type;
+    
+    if (params.type === 'themed-environment') {
+      shotTypeWithDescription = 'themed environment (The product is placed in a realistic, thematic setting)';
+    }
+
     let prompt = SYSTEM_PROMPT_TEMPLATE
       .replace(/{{COUNT_TEXT}}/g, countText)
-      .replace(/{{SHOT_TYPE}}/g, params.type);
+      .replace(/{{SHOT_TYPE}}/g, shotTypeWithDescription);
     
     if (params.customContext) {
       prompt += `\n\nCUSTOM CONTEXT FOR ${params.type.toUpperCase()} SHOT:\n${params.customContext}`;

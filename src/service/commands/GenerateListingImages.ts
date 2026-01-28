@@ -6,6 +6,7 @@ export const createGenerateListingImages = (listingRepository: any) => {
     flatLayCount?: number,
     macroCount?: number,
     contextualCount?: number,
+    themedEnvironmentCount?: number,
     productImage?: string,
     lifestyleBackground?: string,
     heroBackground?: string,
@@ -13,12 +14,14 @@ export const createGenerateListingImages = (listingRepository: any) => {
     flatLayBackground?: string,
     macroBackground?: string,
     contextualBackground?: string,
+    themedEnvironmentBackground?: string,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
     flatLayCustomContext?: string,
     macroCustomContext?: string,
     contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string,
     model?: string
   }) => {
     return await listingRepository.generateImages(request);

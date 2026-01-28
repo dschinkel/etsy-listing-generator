@@ -51,4 +51,31 @@ describe('Listing Repository (Client)', () => {
       method: 'DELETE'
     }));
   });
+
+  it('requests themed environment images', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ images: [] }),
+    });
+
+    const repository = createListingRepository();
+    const params = {
+      themedEnvironmentCount: 1,
+      themedEnvironmentBackground: 'data:image/png;base64,bg',
+      themedEnvironmentCustomContext: 'In a forest'
+    };
+
+    await repository.generateImages(params);
+
+    expect(global.fetch).toHaveBeenCalledWith('/listings/generate', expect.objectContaining({
+      method: 'POST',
+      body: expect.stringContaining('"themedEnvironmentCount":1')
+    }));
+    expect(global.fetch).toHaveBeenCalledWith('/listings/generate', expect.objectContaining({
+      body: expect.stringContaining('"themedEnvironmentBackground":"data:image/png;base64,bg"')
+    }));
+    expect(global.fetch).toHaveBeenCalledWith('/listings/generate', expect.objectContaining({
+      body: expect.stringContaining('"themedEnvironmentCustomContext":"In a forest"')
+    }));
+  });
 });

@@ -66,6 +66,12 @@ const App = () => {
     handleMacroCustomContextChange,
     contextualCustomContext,
     handleContextualCustomContextChange,
+    themedEnvironmentShotsCount,
+    handleThemedEnvironmentShotsChange,
+    themedEnvironmentBackground,
+    handleThemedEnvironmentBackgroundUpload,
+    themedEnvironmentCustomContext,
+    handleThemedEnvironmentCustomContextChange,
     templates,
     saveContextTemplate,
     removeContextTemplate,
@@ -86,7 +92,7 @@ const App = () => {
 
   const [promptWidth, setPromptWidth] = React.useState(500);
 
-  const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount;
+  const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
 
   React.useEffect(() => {
     fetchSystemPromptPreview({
@@ -96,12 +102,14 @@ const App = () => {
       flatLayCount: flatLayShotsCount,
       macroCount: macroShotsCount,
       contextualCount: contextualShotsCount,
+      themedEnvironmentCount: themedEnvironmentShotsCount,
       lifestyleCustomContext,
       heroCustomContext,
       closeUpsCustomContext,
       flatLayCustomContext,
       macroCustomContext,
-      contextualCustomContext
+      contextualCustomContext,
+      themedEnvironmentCustomContext
     });
   }, [
     lifestyleShotsCount,
@@ -110,12 +118,14 @@ const App = () => {
     flatLayShotsCount,
     macroShotsCount,
     contextualShotsCount,
+    themedEnvironmentShotsCount,
     lifestyleCustomContext,
     heroCustomContext,
     closeUpsCustomContext,
     flatLayCustomContext,
     macroCustomContext,
     contextualCustomContext,
+    themedEnvironmentCustomContext,
     fetchSystemPromptPreview
   ]);
 
@@ -157,6 +167,8 @@ const App = () => {
                     onMacroShotsChange={handleMacroShotsChange}
                     contextualShotsCount={contextualShotsCount}
                     onContextualShotsChange={handleContextualShotsChange}
+                    themedEnvironmentShotsCount={themedEnvironmentShotsCount}
+                    onThemedEnvironmentShotsChange={handleThemedEnvironmentShotsChange}
                     lifestyleCustomContext={lifestyleCustomContext}
                     onLifestyleCustomContextChange={handleLifestyleCustomContextChange}
                     heroCustomContext={heroCustomContext}
@@ -169,6 +181,8 @@ const App = () => {
                     onMacroCustomContextChange={handleMacroCustomContextChange}
                     contextualCustomContext={contextualCustomContext}
                     onContextualCustomContextChange={handleContextualCustomContextChange}
+                    themedEnvironmentCustomContext={themedEnvironmentCustomContext}
+                    onThemedEnvironmentCustomContextChange={handleThemedEnvironmentCustomContextChange}
                     templates={templates}
                     onSaveTemplate={saveContextTemplate}
                     onRemoveTemplate={removeContextTemplate}
@@ -184,6 +198,8 @@ const App = () => {
                     onMacroBackgroundUpload={handleMacroBackgroundUpload}
                     contextualBackground={contextualBackground}
                     onContextualBackgroundUpload={handleContextualBackgroundUpload}
+                    themedEnvironmentBackground={themedEnvironmentBackground}
+                    onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
                   />
                 </div>
               </div>
@@ -206,6 +222,7 @@ const App = () => {
                   flatLayCount: flatLayShotsCount,
                   macroCount: macroShotsCount,
                   contextualCount: contextualShotsCount,
+                  themedEnvironmentCount: themedEnvironmentShotsCount,
                   productImage: productImage,
                   lifestyleBackground: lifestyleBackground,
                   heroBackground: heroBackground,
@@ -213,12 +230,14 @@ const App = () => {
                   flatLayBackground: flatLayBackground,
                   macroBackground: macroBackground,
                   contextualBackground: contextualBackground,
+                  themedEnvironmentBackground: themedEnvironmentBackground,
                   lifestyleCustomContext,
                   heroCustomContext,
                   closeUpsCustomContext,
                   flatLayCustomContext,
                   macroCustomContext,
-                  contextualCustomContext
+                  contextualCustomContext,
+                  themedEnvironmentCustomContext
                 })}
               >
                 {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
@@ -511,6 +530,8 @@ const ShotsSelection = ({
   onMacroShotsChange,
   contextualShotsCount,
   onContextualShotsChange,
+  themedEnvironmentShotsCount,
+  onThemedEnvironmentShotsChange,
   lifestyleCustomContext,
   onLifestyleCustomContextChange,
   heroCustomContext,
@@ -523,6 +544,8 @@ const ShotsSelection = ({
   onMacroCustomContextChange,
   contextualCustomContext,
   onContextualCustomContextChange,
+  themedEnvironmentCustomContext,
+  onThemedEnvironmentCustomContextChange,
   templates,
   onSaveTemplate,
   onRemoveTemplate,
@@ -537,7 +560,9 @@ const ShotsSelection = ({
   macroBackground,
   onMacroBackgroundUpload,
   contextualBackground,
-  onContextualBackgroundUpload
+  onContextualBackgroundUpload,
+  themedEnvironmentBackground,
+  onThemedEnvironmentBackgroundUpload
 }: {
   lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -551,6 +576,8 @@ const ShotsSelection = ({
   onMacroShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   contextualShotsCount: number,
   onContextualShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  themedEnvironmentShotsCount: number,
+  onThemedEnvironmentShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   lifestyleCustomContext: string,
   onLifestyleCustomContextChange: (value: string) => void,
   heroCustomContext: string,
@@ -563,6 +590,8 @@ const ShotsSelection = ({
   onMacroCustomContextChange: (value: string) => void,
   contextualCustomContext: string,
   onContextualCustomContextChange: (value: string) => void,
+  themedEnvironmentCustomContext: string,
+  onThemedEnvironmentCustomContextChange: (value: string) => void,
   templates: { name: string, text: string }[],
   onSaveTemplate: (name: string, text: string) => void,
   onRemoveTemplate: (name: string) => void,
@@ -577,98 +606,127 @@ const ShotsSelection = ({
   macroBackground: string | null,
   onMacroBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   contextualBackground: string | null,
-  onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  themedEnvironmentBackground: string | null,
+  onThemedEnvironmentBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
+  const createShotType = (
+    id: string,
+    label: string,
+    description: string,
+    count: number,
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    customContext: string,
+    onCustomContextChange: (value: string) => void,
+    background: string | null,
+    onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  ) => ({
+    id,
+    label,
+    description,
+    count,
+    onChange,
+    customContext,
+    onCustomContextChange,
+    background,
+    onBackgroundUpload,
+  });
+
+  const shotTypes = [
+    createShotType(
+      "hero-shots",
+      "Hero Shot",
+      "Eye-level, centered, slightly blurred background (Product focus).",
+      heroShotsCount,
+      onHeroShotsChange,
+      heroCustomContext,
+      onHeroCustomContextChange,
+      heroBackground,
+      onHeroBackgroundUpload
+    ),
+    createShotType(
+      "flat-lay-shots",
+      "Flat Lay",
+      "Top-down view on a textured surface with ingredients scattered around.",
+      flatLayShotsCount,
+      onFlatLayShotsChange,
+      flatLayCustomContext,
+      onFlatLayCustomContextChange,
+      flatLayBackground,
+      onFlatLayBackgroundUpload
+    ),
+    createShotType(
+      "lifestyle-shots",
+      "Lifestyle",
+      "The product being held by a hand or sitting in a lunchbox/gym bag.",
+      lifestyleShotsCount,
+      onLifestyleShotsChange,
+      lifestyleCustomContext,
+      onLifestyleCustomContextChange,
+      lifestyleBackground,
+      onLifestyleBackgroundUpload
+    ),
+    createShotType(
+      "macro-shots",
+      "Macro/Detail",
+      "Close-up on the pouch opening showing the texture of the banana chips.",
+      macroShotsCount,
+      onMacroShotsChange,
+      macroCustomContext,
+      onMacroCustomContextChange,
+      macroBackground,
+      onMacroBackgroundUpload
+    ),
+    createShotType(
+      "contextual-shots",
+      "Contextual",
+      "The product on a pantry shelf or a kitchen counter to show scale.",
+      contextualShotsCount,
+      onContextualShotsChange,
+      contextualCustomContext,
+      onContextualCustomContextChange,
+      contextualBackground,
+      onContextualBackgroundUpload
+    ),
+    createShotType(
+      "themed-environment",
+      "Themed Environment",
+      "The product is placed in a realistic, thematic setting.",
+      themedEnvironmentShotsCount,
+      onThemedEnvironmentShotsChange,
+      themedEnvironmentCustomContext,
+      onThemedEnvironmentCustomContextChange,
+      themedEnvironmentBackground,
+      onThemedEnvironmentBackgroundUpload
+    ),
+    createShotType(
+      "close-ups",
+      "Close-ups",
+      "Detailed shots of specific parts of the product.",
+      closeUpsCount,
+      onCloseUpsChange,
+      closeUpsCustomContext,
+      onCloseUpsCustomContextChange,
+      closeUpsBackground,
+      onCloseUpsBackgroundUpload
+    ),
+  ];
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Shots Selection</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <ShotTypeItem 
-          id="hero-shots"
-          label="Hero Shot"
-          description="Eye-level, centered, slightly blurred background (Product focus)."
-          count={heroShotsCount}
-          onChange={onHeroShotsChange}
-          customContext={heroCustomContext}
-          onCustomContextChange={onHeroCustomContextChange}
-          templates={templates}
-          onSaveTemplate={onSaveTemplate}
-          onRemoveTemplate={onRemoveTemplate}
-          background={heroBackground}
-          onBackgroundUpload={onHeroBackgroundUpload}
-        />
-        <ShotTypeItem 
-          id="flat-lay-shots"
-          label="Flat Lay"
-          description="Top-down view on a textured surface with ingredients scattered around."
-          count={flatLayShotsCount}
-          onChange={onFlatLayShotsChange}
-          customContext={flatLayCustomContext}
-          onCustomContextChange={onFlatLayCustomContextChange}
-          templates={templates}
-          onSaveTemplate={onSaveTemplate}
-          onRemoveTemplate={onRemoveTemplate}
-          background={flatLayBackground}
-          onBackgroundUpload={onFlatLayBackgroundUpload}
-        />
-        <ShotTypeItem 
-          id="lifestyle-shots"
-          label="Lifestyle"
-          description="The product being held by a hand or sitting in a lunchbox/gym bag."
-          count={lifestyleShotsCount}
-          onChange={onLifestyleShotsChange}
-          customContext={lifestyleCustomContext}
-          onCustomContextChange={onLifestyleCustomContextChange}
-          templates={templates}
-          onSaveTemplate={onSaveTemplate}
-          onRemoveTemplate={onRemoveTemplate}
-          background={lifestyleBackground}
-          onBackgroundUpload={onLifestyleBackgroundUpload}
-        />
-        <ShotTypeItem 
-          id="macro-shots"
-          label="Macro/Detail"
-          description="Close-up on the pouch opening showing the texture of the banana chips."
-          count={macroShotsCount}
-          onChange={onMacroShotsChange}
-          customContext={macroCustomContext}
-          onCustomContextChange={onMacroCustomContextChange}
-          templates={templates}
-          onSaveTemplate={onSaveTemplate}
-          onRemoveTemplate={onRemoveTemplate}
-          background={macroBackground}
-          onBackgroundUpload={onMacroBackgroundUpload}
-        />
-        <ShotTypeItem 
-          id="contextual-shots"
-          label="Contextual"
-          description="The product on a pantry shelf or a kitchen counter to show scale."
-          count={contextualShotsCount}
-          onChange={onContextualShotsChange}
-          customContext={contextualCustomContext}
-          onCustomContextChange={onContextualCustomContextChange}
-          templates={templates}
-          onSaveTemplate={onSaveTemplate}
-          onRemoveTemplate={onRemoveTemplate}
-          background={contextualBackground}
-          onBackgroundUpload={onContextualBackgroundUpload}
-        />
-        <ShotTypeItem 
-          id="close-ups"
-          label="Close-ups"
-          description="Detailed shots of specific parts of the product."
-          count={closeUpsCount}
-          onChange={onCloseUpsChange}
-          customContext={closeUpsCustomContext}
-          onCustomContextChange={onCloseUpsCustomContextChange}
-          templates={templates}
-          onSaveTemplate={onSaveTemplate}
-          onRemoveTemplate={onRemoveTemplate}
-          background={closeUpsBackground}
-          onBackgroundUpload={onCloseUpsBackgroundUpload}
-        />
+        {shotTypes.map((shot) => (
+          <ShotTypeItem 
+            key={shot.id}
+            {...shot}
+            templates={templates}
+            onSaveTemplate={onSaveTemplate}
+            onRemoveTemplate={onRemoveTemplate}
+          />
+        ))}
       </CardContent>
     </Card>
   );

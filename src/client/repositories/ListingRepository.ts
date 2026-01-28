@@ -8,6 +8,7 @@ export const createListingRepository = () => {
     flatLayCount?: number,
     macroCount?: number,
     contextualCount?: number,
+    themedEnvironmentCount?: number,
     productImage?: string | null,
     lifestyleBackground?: string | null,
     heroBackground?: string | null,
@@ -15,12 +16,14 @@ export const createListingRepository = () => {
     flatLayBackground?: string | null,
     macroBackground?: string | null,
     contextualBackground?: string | null,
+    themedEnvironmentBackground?: string | null,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
     flatLayCustomContext?: string,
     macroCustomContext?: string,
     contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string,
     model?: string
   }) => {
     const response = await fetchWithTimeout('/listings/generate', {
@@ -67,12 +70,14 @@ export const createListingRepository = () => {
     flatLayCount?: number,
     macroCount?: number,
     contextualCount?: number,
+    themedEnvironmentCount?: number,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
     flatLayCustomContext?: string,
     macroCustomContext?: string,
-    contextualCustomContext?: string
+    contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string
   }) => {
     const response = await fetchWithTimeout('/listings/system-prompt', {
       method: 'POST',

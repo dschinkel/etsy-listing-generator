@@ -118,8 +118,8 @@ Data test IDs must represent domain concepts.
 Example: For a font selector, use `data-testid="font-selection"`.
 
 N1.10 Test names must be delivery mechanism and framework agnostic.
-Good: `adds a font`
-Bad: `posts a new font`, `adds a font by fetching from adobe`, `calls the api to add a font`.
+Good: `adds a font`, `creates environment shots`
+Bad: `posts a new font`, `adds a font by fetching from adobe`, `calls the api to add a font`, `includes themed environment shots in generation request`.
 
 N1.12 Avoid creating "useless" tests that merely verify mocked data (i.e., testing the mock). Tests MUST verify business logic, data transformations, or specific orchestrations. A test that simply asserts that a function returns exactly what its mock was told to return, without any intervening logic, is forbidden.
 

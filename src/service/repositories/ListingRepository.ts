@@ -6,6 +6,7 @@ export const createListingRepository = (dataLayer: any) => {
     flatLayCount?: number,
     macroCount?: number,
     contextualCount?: number,
+    themedEnvironmentCount?: number,
     productImage?: string,
     lifestyleBackground?: string,
     heroBackground?: string,
@@ -13,12 +14,14 @@ export const createListingRepository = (dataLayer: any) => {
     flatLayBackground?: string,
     macroBackground?: string,
     contextualBackground?: string,
+    themedEnvironmentBackground?: string,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
     flatLayCustomContext?: string,
     macroCustomContext?: string,
     contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string,
     model?: string
   }) => {
     const fallbackModels = [
@@ -104,6 +107,7 @@ export const createListingRepository = (dataLayer: any) => {
     flatLayCount?: number,
     macroCount?: number,
     contextualCount?: number,
+    themedEnvironmentCount?: number,
     productImage?: string,
     lifestyleBackground?: string,
     heroBackground?: string,
@@ -111,12 +115,14 @@ export const createListingRepository = (dataLayer: any) => {
     flatLayBackground?: string,
     macroBackground?: string,
     contextualBackground?: string,
+    themedEnvironmentBackground?: string,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
     flatLayCustomContext?: string,
     macroCustomContext?: string,
     contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string,
     model?: string
   }) => {
     console.log('Generating images with params:', {
@@ -126,6 +132,7 @@ export const createListingRepository = (dataLayer: any) => {
       flatLay: params.flatLayCount,
       macro: params.macroCount,
       contextual: params.contextualCount,
+      themedEnvironment: params.themedEnvironmentCount,
       model: params.model,
       hasProductImage: !!params.productImage
     });
@@ -157,6 +164,7 @@ export const createListingRepository = (dataLayer: any) => {
     await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImage, params.flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
     await generateShotTypeImages('macro', params.macroCount, params.productImage, params.macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
     await generateShotTypeImages('contextual', params.contextualCount, params.productImage, params.contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
+    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, params.productImage, params.themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext);
 
     return { images, systemPrompt, model: params.model };
   };
@@ -228,12 +236,14 @@ export const createListingRepository = (dataLayer: any) => {
     flatLayCount?: number,
     macroCount?: number,
     contextualCount?: number,
+    themedEnvironmentCount?: number,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
     flatLayCustomContext?: string,
     macroCustomContext?: string,
-    contextualCustomContext?: string
+    contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string
   } = {}) => {
     let systemPrompt = '';
     const safeParams = params || {};
@@ -254,6 +264,7 @@ export const createListingRepository = (dataLayer: any) => {
     collect('flat-lay', safeParams.flatLayCount || 0, safeParams.flatLayCustomContext);
     collect('macro', safeParams.macroCount || 0, safeParams.macroCustomContext);
     collect('contextual', safeParams.contextualCount || 0, safeParams.contextualCustomContext);
+    collect('themed-environment', safeParams.themedEnvironmentCount || 0, safeParams.themedEnvironmentCustomContext);
 
     if (!systemPrompt) {
       systemPrompt = dataLayer.getSystemPrompt({ type: 'hero', count: 1 });

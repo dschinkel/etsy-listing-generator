@@ -282,4 +282,25 @@ describe('Listing Generation', () => {
     
     jest.useRealTimers();
   });
+
+  it('generates themed environment shots', async () => {
+    let capturedParams = null;
+    const fakeListingRepository = {
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return { images: [{ url: 'themed_1.png', type: 'themed-environment' }] };
+      }
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      await result.current.generateListing({ themedEnvironmentCount: 1 });
+    });
+    
+    expect(capturedParams).toEqual(expect.objectContaining({ 
+      themedEnvironmentCount: 1
+    }));
+    expect(result.current.images).toEqual([{ url: 'themed_1.png', type: 'themed-environment' }]);
+  });
 });

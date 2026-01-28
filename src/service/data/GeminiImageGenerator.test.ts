@@ -35,4 +35,12 @@ describe('Gemini Image Generator', () => {
       expect(result.systemInstruction).toContain('1'); // Default count is 1
     }
   });
+
+  it('generates an image for themed environment shot type', async () => {
+    const generator = createGeminiImageGenerator();
+    const result = await generator.generateImage({ type: 'themed-environment' });
+    
+    expect(result.systemInstruction).toContain('themed environment');
+    expect(result.systemInstruction).toContain('realistic, thematic setting');
+  });
 });

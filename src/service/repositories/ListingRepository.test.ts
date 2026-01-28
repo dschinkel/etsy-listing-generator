@@ -60,4 +60,25 @@ describe('Listing Repository', () => {
     expect(result.systemPrompt).toContain('hero');
     expect(result.systemPrompt).toContain('1');
   });
+
+  it('orchestrates generation of themed environment shots', async () => {
+    const fakeDataLayer = {
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `${type}.png`, systemInstruction: `prompt for ${type}` })),
+      getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
+    };
+    const repository = createListingRepository(fakeDataLayer);
+    const params = { 
+      themedEnvironmentCount: 1,
+      themedEnvironmentCustomContext: 'In a forest'
+    };
+    
+    const result = await repository.generateImages(params);
+    
+    expect(result.images).toHaveLength(1);
+    expect(result.images[0]).toEqual({ url: 'themed-environment.png', type: 'themed-environment' });
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'themed-environment',
+      customContext: 'In a forest'
+    }));
+  });
 });

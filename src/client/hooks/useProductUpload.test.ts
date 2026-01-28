@@ -64,4 +64,16 @@ describe('useProductUpload', () => {
     expect(mockRemoveTemplate).toHaveBeenCalledWith('ToRemove');
     expect(result.current.templates).toEqual([]);
   });
+
+  it('persists themed environment shot selection', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    act(() => {
+      result.current.handleThemedEnvironmentShotsChange({ target: { value: '2' } } as any);
+      result.current.handleThemedEnvironmentCustomContextChange('Realistic thematic setting');
+    });
+
+    expect(result.current.themedEnvironmentShotsCount).toBe(2);
+    expect(result.current.themedEnvironmentCustomContext).toBe('Realistic thematic setting');
+  });
 });

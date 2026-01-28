@@ -13,6 +13,7 @@ export const useProductUpload = (repository?: any) => {
   const [flatLayShotsCount, setFlatLayShotsCount] = useState(0);
   const [macroShotsCount, setMacroShotsCount] = useState(0);
   const [contextualShotsCount, setContextualShotsCount] = useState(0);
+  const [themedEnvironmentShotsCount, setThemedEnvironmentShotsCount] = useState(0);
   const [isPrimaryImage, setIsPrimaryImage] = useState(false);
   const [lifestyleBackground, setLifestyleBackground] = useState<string | null>(null);
   const [heroBackground, setHeroBackground] = useState<string | null>(null);
@@ -20,12 +21,14 @@ export const useProductUpload = (repository?: any) => {
   const [flatLayBackground, setFlatLayBackground] = useState<string | null>(null);
   const [macroBackground, setMacroBackground] = useState<string | null>(null);
   const [contextualBackground, setContextualBackground] = useState<string | null>(null);
+  const [themedEnvironmentBackground, setThemedEnvironmentBackground] = useState<string | null>(null);
   const [lifestyleCustomContext, setLifestyleCustomContext] = useState('');
   const [heroCustomContext, setHeroCustomContext] = useState('');
   const [closeUpsCustomContext, setCloseUpsCustomContext] = useState('');
   const [flatLayCustomContext, setFlatLayCustomContext] = useState('');
   const [macroCustomContext, setMacroCustomContext] = useState('');
   const [contextualCustomContext, setContextualCustomContext] = useState('');
+  const [themedEnvironmentCustomContext, setThemedEnvironmentCustomContext] = useState('');
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
 
   useEffect(() => {
@@ -139,6 +142,17 @@ export const useProductUpload = (repository?: any) => {
     }
   };
 
+  const handleThemedEnvironmentBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThemedEnvironmentBackground(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleLifestyleShotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLifestyleShotsCount(parseInt(event.target.value, 10) || 0);
   };
@@ -163,12 +177,17 @@ export const useProductUpload = (repository?: any) => {
     setContextualShotsCount(parseInt(event.target.value, 10) || 0);
   };
 
+  const handleThemedEnvironmentShotsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setThemedEnvironmentShotsCount(parseInt(event.target.value, 10) || 0);
+  };
+
   const handleLifestyleCustomContextChange = (value: string) => setLifestyleCustomContext(value);
   const handleHeroCustomContextChange = (value: string) => setHeroCustomContext(value);
   const handleCloseUpsCustomContextChange = (value: string) => setCloseUpsCustomContext(value);
   const handleFlatLayCustomContextChange = (value: string) => setFlatLayCustomContext(value);
   const handleMacroCustomContextChange = (value: string) => setMacroCustomContext(value);
   const handleContextualCustomContextChange = (value: string) => setContextualCustomContext(value);
+  const handleThemedEnvironmentCustomContextChange = (value: string) => setThemedEnvironmentCustomContext(value);
 
   const handlePrimarySelection = () => {
     setIsPrimaryImage(!isPrimaryImage);
@@ -195,6 +214,8 @@ export const useProductUpload = (repository?: any) => {
     handleMacroShotsChange,
     contextualShotsCount,
     handleContextualShotsChange,
+    themedEnvironmentShotsCount,
+    handleThemedEnvironmentShotsChange,
     isPrimaryImage,
     handlePrimarySelection,
     lifestyleBackground,
@@ -209,6 +230,8 @@ export const useProductUpload = (repository?: any) => {
     handleMacroBackgroundUpload,
     contextualBackground,
     handleContextualBackgroundUpload,
+    themedEnvironmentBackground,
+    handleThemedEnvironmentBackgroundUpload,
     lifestyleCustomContext,
     handleLifestyleCustomContextChange,
     heroCustomContext,
@@ -221,6 +244,8 @@ export const useProductUpload = (repository?: any) => {
     handleMacroCustomContextChange,
     contextualCustomContext,
     handleContextualCustomContextChange,
+    themedEnvironmentCustomContext,
+    handleThemedEnvironmentCustomContextChange,
     templates,
     saveContextTemplate,
     removeContextTemplate,
