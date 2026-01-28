@@ -56,6 +56,7 @@ A user can:
     **FR.2.4 — Ability to specify how many images generated should be flat lay shots**
     **FR.2.5 — Ability to specify how many images generated should be macro/detail shots**
     **FR.2.6 — Ability to specify how many images generated should be contextual shots**
+    **FR.2.7 — Ability to specify how many images generated should be themed environment shots (The product is placed in a realistic, thematic setting)**
 
 **FR.3 — Specify which image will be used as the Primary Etsy image**
 
