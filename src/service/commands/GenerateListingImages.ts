@@ -13,6 +13,12 @@ export const createGenerateListingImages = (listingRepository: any) => {
     flatLayBackground?: string,
     macroBackground?: string,
     contextualBackground?: string,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string,
     model?: string
   }) => {
     return await listingRepository.generateImages(request);

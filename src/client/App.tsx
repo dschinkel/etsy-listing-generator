@@ -7,6 +7,7 @@ import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
 import { Checkbox } from './components/ui/checkbox';
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
+import { Plus } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
@@ -43,6 +44,18 @@ const App = () => {
     handleMacroBackgroundUpload,
     contextualBackground,
     handleContextualBackgroundUpload,
+    lifestyleCustomContext,
+    handleLifestyleCustomContextChange,
+    heroCustomContext,
+    handleHeroCustomContextChange,
+    closeUpsCustomContext,
+    handleCloseUpsCustomContextChange,
+    flatLayCustomContext,
+    handleFlatLayCustomContextChange,
+    macroCustomContext,
+    handleMacroCustomContextChange,
+    contextualCustomContext,
+    handleContextualCustomContextChange,
   } = useProductUpload();
 
   const repository = React.useMemo(() => createListingRepository(), []);
@@ -70,7 +83,13 @@ const App = () => {
       closeUpsCount: closeUpsCount,
       flatLayCount: flatLayShotsCount,
       macroCount: macroShotsCount,
-      contextualCount: contextualShotsCount
+      contextualCount: contextualShotsCount,
+      lifestyleCustomContext,
+      heroCustomContext,
+      closeUpsCustomContext,
+      flatLayCustomContext,
+      macroCustomContext,
+      contextualCustomContext
     });
   }, [
     lifestyleShotsCount,
@@ -79,6 +98,12 @@ const App = () => {
     flatLayShotsCount,
     macroShotsCount,
     contextualShotsCount,
+    lifestyleCustomContext,
+    heroCustomContext,
+    closeUpsCustomContext,
+    flatLayCustomContext,
+    macroCustomContext,
+    contextualCustomContext,
     fetchSystemPromptPreview
   ]);
 
@@ -116,6 +141,18 @@ const App = () => {
                     onMacroShotsChange={handleMacroShotsChange}
                     contextualShotsCount={contextualShotsCount}
                     onContextualShotsChange={handleContextualShotsChange}
+                    lifestyleCustomContext={lifestyleCustomContext}
+                    onLifestyleCustomContextChange={handleLifestyleCustomContextChange}
+                    heroCustomContext={heroCustomContext}
+                    onHeroCustomContextChange={handleHeroCustomContextChange}
+                    closeUpsCustomContext={closeUpsCustomContext}
+                    onCloseUpsCustomContextChange={handleCloseUpsCustomContextChange}
+                    flatLayCustomContext={flatLayCustomContext}
+                    onFlatLayCustomContextChange={handleFlatLayCustomContextChange}
+                    macroCustomContext={macroCustomContext}
+                    onMacroCustomContextChange={handleMacroCustomContextChange}
+                    contextualCustomContext={contextualCustomContext}
+                    onContextualCustomContextChange={handleContextualCustomContextChange}
                   />
                 </div>
                 <div className="flex-[1.5]">
@@ -167,7 +204,13 @@ const App = () => {
                   closeUpsBackground: closeUpsBackground,
                   flatLayBackground: flatLayBackground,
                   macroBackground: macroBackground,
-                  contextualBackground: contextualBackground
+                  contextualBackground: contextualBackground,
+                  lifestyleCustomContext,
+                  heroCustomContext,
+                  closeUpsCustomContext,
+                  flatLayCustomContext,
+                  macroCustomContext,
+                  contextualCustomContext
                 })}
               >
                 {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
@@ -230,6 +273,67 @@ const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInp
   );
 };
 
+const ShotTypeItem = ({ 
+  id, 
+  label, 
+  description, 
+  count, 
+  onChange, 
+  customContext, 
+  onCustomContextChange 
+}: { 
+  id: string, 
+  label: string, 
+  description: string, 
+  count: number, 
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  customContext: string,
+  onCustomContextChange: (value: string) => void
+}) => {
+  const [showCustom, setShowCustom] = React.useState(false);
+
+  return (
+    <div className="flex flex-col gap-2 border-b border-slate-800 pb-4 last:border-0">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col flex-1">
+          <Label htmlFor={id}>{label}</Label>
+          <span className="text-xs text-muted-foreground">{description}</span>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-6 w-6 mt-1" 
+            onClick={() => setShowCustom(!showCustom)}
+            title="Add custom context"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+        <Input
+          id={id}
+          type="number"
+          min="0"
+          value={count}
+          onChange={onChange}
+          data-testid={`${id}-count`}
+          className="w-20"
+        />
+      </div>
+      {showCustom && (
+        <div className="mt-2 pl-4 border-l-2 border-slate-700">
+          <Label htmlFor={`${id}-custom`} className="text-xs mb-1 block">Custom Context</Label>
+          <Input 
+            id={`${id}-custom`}
+            placeholder="e.g. In a high-end kitchen with marble countertops"
+            value={customContext}
+            onChange={(e) => onCustomContextChange(e.target.value)}
+            className="text-xs h-8"
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ShotsSelection = ({
   lifestyleShotsCount,
   onLifestyleShotsChange,
@@ -242,7 +346,19 @@ const ShotsSelection = ({
   macroShotsCount,
   onMacroShotsChange,
   contextualShotsCount,
-  onContextualShotsChange
+  onContextualShotsChange,
+  lifestyleCustomContext,
+  onLifestyleCustomContextChange,
+  heroCustomContext,
+  onHeroCustomContextChange,
+  closeUpsCustomContext,
+  onCloseUpsCustomContextChange,
+  flatLayCustomContext,
+  onFlatLayCustomContextChange,
+  macroCustomContext,
+  onMacroCustomContextChange,
+  contextualCustomContext,
+  onContextualCustomContextChange
 }: {
   lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -255,7 +371,19 @@ const ShotsSelection = ({
   macroShotsCount: number,
   onMacroShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   contextualShotsCount: number,
-  onContextualShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onContextualShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  lifestyleCustomContext: string,
+  onLifestyleCustomContextChange: (value: string) => void,
+  heroCustomContext: string,
+  onHeroCustomContextChange: (value: string) => void,
+  closeUpsCustomContext: string,
+  onCloseUpsCustomContextChange: (value: string) => void,
+  flatLayCustomContext: string,
+  onFlatLayCustomContextChange: (value: string) => void,
+  macroCustomContext: string,
+  onMacroCustomContextChange: (value: string) => void,
+  contextualCustomContext: string,
+  onContextualCustomContextChange: (value: string) => void
 }) => {
   return (
     <Card>
@@ -263,95 +391,60 @@ const ShotsSelection = ({
         <CardTitle>Shots Selection</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Label htmlFor="hero-shots">Hero Shot</Label>
-            <span className="text-xs text-muted-foreground">Eye-level, centered, slightly blurred background (Product focus).</span>
-          </div>
-          <Input
-            id="hero-shots"
-            type="number"
-            min="0"
-            value={heroShotsCount}
-            onChange={onHeroShotsChange}
-            data-testid="hero-shots-count"
-            className="w-20"
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Label htmlFor="flat-lay-shots">Flat Lay</Label>
-            <span className="text-xs text-muted-foreground">Top-down view on a textured surface with ingredients scattered around.</span>
-          </div>
-          <Input
-            id="flat-lay-shots"
-            type="number"
-            min="0"
-            value={flatLayShotsCount}
-            onChange={onFlatLayShotsChange}
-            data-testid="flat-lay-shots-count"
-            className="w-20"
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Label htmlFor="lifestyle-shots">Lifestyle</Label>
-            <span className="text-xs text-muted-foreground">The product being held by a hand or sitting in a lunchbox/gym bag.</span>
-          </div>
-          <Input
-            id="lifestyle-shots"
-            type="number"
-            min="0"
-            value={lifestyleShotsCount}
-            onChange={onLifestyleShotsChange}
-            data-testid="lifestyle-shots-count"
-            className="w-20"
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Label htmlFor="macro-shots">Macro/Detail</Label>
-            <span className="text-xs text-muted-foreground">Close-up on the pouch opening showing the texture of the banana chips.</span>
-          </div>
-          <Input
-            id="macro-shots"
-            type="number"
-            min="0"
-            value={macroShotsCount}
-            onChange={onMacroShotsChange}
-            data-testid="macro-shots-count"
-            className="w-20"
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Label htmlFor="contextual-shots">Contextual</Label>
-            <span className="text-xs text-muted-foreground">The product on a pantry shelf or a kitchen counter to show scale.</span>
-          </div>
-          <Input
-            id="contextual-shots"
-            type="number"
-            min="0"
-            value={contextualShotsCount}
-            onChange={onContextualShotsChange}
-            data-testid="contextual-shots-count"
-            className="w-20"
-          />
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Label htmlFor="close-ups">Close-ups</Label>
-          </div>
-          <Input
-            id="close-ups"
-            type="number"
-            min="0"
-            value={closeUpsCount}
-            onChange={onCloseUpsChange}
-            data-testid="close-ups-count"
-            className="w-20"
-          />
-        </div>
+        <ShotTypeItem 
+          id="hero-shots"
+          label="Hero Shot"
+          description="Eye-level, centered, slightly blurred background (Product focus)."
+          count={heroShotsCount}
+          onChange={onHeroShotsChange}
+          customContext={heroCustomContext}
+          onCustomContextChange={onHeroCustomContextChange}
+        />
+        <ShotTypeItem 
+          id="flat-lay-shots"
+          label="Flat Lay"
+          description="Top-down view on a textured surface with ingredients scattered around."
+          count={flatLayShotsCount}
+          onChange={onFlatLayShotsChange}
+          customContext={flatLayCustomContext}
+          onCustomContextChange={onFlatLayCustomContextChange}
+        />
+        <ShotTypeItem 
+          id="lifestyle-shots"
+          label="Lifestyle"
+          description="The product being held by a hand or sitting in a lunchbox/gym bag."
+          count={lifestyleShotsCount}
+          onChange={onLifestyleShotsChange}
+          customContext={lifestyleCustomContext}
+          onCustomContextChange={onLifestyleCustomContextChange}
+        />
+        <ShotTypeItem 
+          id="macro-shots"
+          label="Macro/Detail"
+          description="Close-up on the pouch opening showing the texture of the banana chips."
+          count={macroShotsCount}
+          onChange={onMacroShotsChange}
+          customContext={macroCustomContext}
+          onCustomContextChange={onMacroCustomContextChange}
+        />
+        <ShotTypeItem 
+          id="contextual-shots"
+          label="Contextual"
+          description="The product on a pantry shelf or a kitchen counter to show scale."
+          count={contextualShotsCount}
+          onChange={onContextualShotsChange}
+          customContext={contextualCustomContext}
+          onCustomContextChange={onContextualCustomContextChange}
+        />
+        <ShotTypeItem 
+          id="close-ups"
+          label="Close-ups"
+          description="Detailed shots of specific parts of the product."
+          count={closeUpsCount}
+          onChange={onCloseUpsChange}
+          customContext={closeUpsCustomContext}
+          onCustomContextChange={onCloseUpsCustomContextChange}
+        />
       </CardContent>
     </Card>
   );

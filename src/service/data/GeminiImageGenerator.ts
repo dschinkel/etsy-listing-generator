@@ -7,7 +7,7 @@ The user provides a product reference image. That image is the single source of 
 Every generated image MUST depict the SAME product.
 
 OUTPUT REQUIREMENTS:
-- Generate {{COUNT}} images.
+- Generate {{COUNT_TEXT}}.
 - Use shot type: {{SHOT_TYPE}}.
 - Keep the product as the hero subject and in sharp focus.
 
@@ -21,23 +21,31 @@ COMPOSITION:
 - Maintain correct scale and proportions.
 
 TASK:
-Generate {{COUNT}} images using shot type: {{SHOT_TYPE}}.
+Generate {{COUNT_TEXT}} using shot type: {{SHOT_TYPE}}.
 Use the provided product reference image as the identity anchor.`;
 
 export const createGeminiImageGenerator = () => {
   const apiKey = process.env.GEMINI_API_KEY || "";
   const genAI = new GoogleGenerativeAI(apiKey);
 
-  const getSystemPrompt = (params: { type: string; count?: number }) => {
+  const getSystemPrompt = (params: { type: string; count?: number; customContext?: string }) => {
     const count = params.count || 1;
-    return SYSTEM_PROMPT_TEMPLATE
-      .replace(/{{COUNT}}/g, count.toString())
+    const countText = count === 1 ? '1 image' : `${count} images`;
+    let prompt = SYSTEM_PROMPT_TEMPLATE
+      .replace(/{{COUNT_TEXT}}/g, countText)
       .replace(/{{SHOT_TYPE}}/g, params.type);
+    
+    if (params.customContext) {
+      prompt += `\n\nCUSTOM CONTEXT FOR ${params.type.toUpperCase()} SHOT:\n${params.customContext}`;
+    }
+    
+    return prompt;
   };
 
-  const generateImage = async (params: { type: string; productImage?: string; background?: string; count?: number; model?: string }): Promise<{ imageUrl: string; systemInstruction: string }> => {
+  const generateImage = async (params: { type: string; productImage?: string; background?: string; count?: number; model?: string; customContext?: string }): Promise<{ imageUrl: string; systemInstruction: string }> => {
     const count = params.count || 1;
-    const systemInstruction = getSystemPrompt({ type: params.type, count });
+    const countText = count === 1 ? '1 image' : `${count} images`;
+    const systemInstruction = getSystemPrompt({ type: params.type, count, customContext: params.customContext });
 
     const modelName = params.model || "gemini-3-pro-image-preview";
     const model = genAI.getGenerativeModel({ 
@@ -54,7 +62,7 @@ export const createGeminiImageGenerator = () => {
       ]
     });
 
-    const userPrompt = `${count} images. Shot type: ${params.type}.`;
+    const userPrompt = `${countText}. Shot type: ${params.type}.`;
     const toonPrompt = buildToonPrompt(params.type, userPrompt);
 
     const parts: any[] = [
@@ -70,7 +78,7 @@ export const createGeminiImageGenerator = () => {
     }
 
     try {
-      const result = await model.generateContent(parts, { timeout: 30000 });
+      const result = await model.generateContent(parts, { timeout: 60000 });
       const response = await result.response;
       
       const imageUrl = extractImageFromResponse(response);
@@ -94,23 +102,33 @@ export const createGeminiImageGenerator = () => {
   return { generateImage, getSystemPrompt };
 };
 
-const getPlaceholderUrl = (type: string): string => {
-  return `https://placehold.jp/24/cccccc/333333/800x800.png?text=${encodeURIComponent(type)}&t=${Date.now()}`;
+export const getPlaceholderUrl = (type: string): string => {
+  return `https://picsum.photos/seed/${type}${Date.now()}/800/800`;
 };
 
-const extractImageFromResponse = (response: any): string | null => {
+const cleanBase64 = (data: string) => data.replace(/\s/g, '');
+
+const isImageUrl = (url: string) => /https?:\/\/[^\s)]+\.(png|jpg|jpeg|webp|gif)/i.test(url);
+
+export const extractImageFromResponse = (response: any): string | null => {
   const candidates = response.candidates || [];
+  
+  // 1. Prioritize inlineData (base64)
   for (const candidate of candidates) {
     const parts = candidate.content?.parts || [];
     for (const part of parts) {
-      if (part.inlineData) {
-        return `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+      if (part.inlineData?.data && part.inlineData?.mimeType) {
+        return `data:${part.inlineData.mimeType};base64,${cleanBase64(part.inlineData.data)}`;
       }
-      if (part.fileData) {
-        return part.fileData.fileUri;
-      }
-      if (part.text) {
-        const urlMatch = part.text.match(/https?:\/\/[^\s)]+/);
+    }
+  }
+
+  // 2. Look for valid image URLs in text parts
+  for (const candidate of candidates) {
+    const parts = candidate.content?.parts || [];
+    for (const part of parts) {
+      if (part.text && isImageUrl(part.text)) {
+        const urlMatch = part.text.match(/https?:\/\/[^\s)]+\.(png|jpg|jpeg|webp|gif)/i);
         if (urlMatch) {
           return urlMatch[0];
         }
@@ -118,7 +136,7 @@ const extractImageFromResponse = (response: any): string | null => {
     }
   }
   
-  // Fallback: search anywhere in the object for something that looks like an image
+  // 3. Last resort: deep search
   return findImageDeep(response);
 };
 
@@ -134,21 +152,20 @@ const findImageDeep = (obj: any, seen = new Set(), depth = 0): string | null => 
   } else {
     // Check for inlineData-like structure
     if (obj.mimeType && obj.data && typeof obj.data === 'string' && obj.data.length > 100) {
-      return `data:${obj.mimeType};base64,${obj.data}`;
+      return `data:${obj.mimeType};base64,${cleanBase64(obj.data)}`;
     }
     // Check for URL-like strings
     for (const key in obj) {
       try {
         const value = obj[key];
         if (typeof value === 'string') {
-          if (value.startsWith('data:image')) return value;
-          if (value.match(/^https?:\/\/[^\s)]+\.(png|jpg|jpeg|webp)/i)) return value;
+          if (value.startsWith('data:image')) return cleanBase64(value);
+          if (isImageUrl(value)) return value;
         } else if (typeof value === 'object') {
           const found = findImageDeep(value, seen, depth + 1);
           if (found) return found;
         }
       } catch (e) {
-        // Handle cases where property access might throw (rare)
         continue;
       }
     }

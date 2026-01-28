@@ -24,8 +24,8 @@ describe('Generate Listing Images', () => {
     const response = await command.execute(request);
     
     expect(response.images.length).toBe(1);
-    expect(response.images.every(img => img.startsWith('http') || img.startsWith('data:'))).toBe(true);
-    expect(response.images.every(img => !img.includes('placehold.jp'))).toBe(true);
+    expect(response.images.every(img => img.url.startsWith('http') || img.url.startsWith('data:'))).toBe(true);
+    expect(response.images.every(img => !img.url.includes('placehold.jp'))).toBe(true);
     expect(response.systemPrompt).toBeDefined();
     expect(response.systemPrompt).toContain('Etsy seller');
   });
@@ -39,6 +39,7 @@ describe('Generate Listing Images', () => {
     const response = await command.execute(request);
     
     expect(response.images.length).toBe(1);
+    expect(response.images[0].type).toBe('close-up');
     expect(response.systemPrompt).toContain('close-up');
   });
 });

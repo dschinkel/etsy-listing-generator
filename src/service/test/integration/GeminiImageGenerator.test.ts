@@ -27,8 +27,9 @@ describe('Gemini Image Generator Integration', () => {
     expect(response.body.images).toBeDefined();
     expect(Array.isArray(response.body.images)).toBe(true);
     expect(response.body.images.length).toBeGreaterThan(0);
-    expect(response.body.images[0]).toMatch(/^(http|data:)/);
-    expect(response.body.images[0]).not.toContain('placehold.jp');
+    expect(response.body.images[0].url).toMatch(/^(http|data:)/);
+    expect(response.body.images[0].url).not.toContain('placehold.jp');
+    expect(response.body.images[0].type).toBe('lifestyle');
     
     expect(response.body.systemPrompt).toBeDefined();
     expect(response.body.systemPrompt).toContain('Etsy seller');

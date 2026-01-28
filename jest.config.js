@@ -1,5 +1,5 @@
 export default {
-  testTimeout: 15000,
+  testTimeout: 60000,
   projects: [
     {
       displayName: 'client',

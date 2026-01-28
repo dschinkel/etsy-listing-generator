@@ -95,6 +95,12 @@ The Fix:
 - [COMPLETED] Added backend logging to `ListingRepository` to track requested shot counts.
 - [COMPLETED] Added integration and unit tests to verify prompt persistence during zero-shot and error scenarios.
 
+## Task: Fix [COMPLETED]
+### Ensure ZIP download contains only valid images and no HTML pages
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Update `downloadAllImagesAsZip` to validate response status and content type.
+- [COMPLETED] Handle failed image fetches by using a fallback or skipping.
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
@@ -208,3 +214,24 @@ The Fix:
 - [COMPLETED] Added unit tests for `useListingGeneration` hook to verify error state handling (primary failure and fallback).
 - [COMPLETED] Added UI integration test `ListingGenerationUI.test.tsx` to verify error message visibility and positioning.
 - [COMPLETED] Verified fix with all client-side tests passing.
+
+## Task: UI Enhancement [COMPLETED]
+### Display shot type below each image in Listing Preview
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Updated `ListingPreview.tsx` to display shot type in small, light yellow text (`text-yellow-200`).
+- [COMPLETED] Modified `useListingGeneration.ts` to manage images as `{ url, type }` objects.
+- [COMPLETED] Updated server-side `ListingRepository.ts` to associate each generated image with its specific shot type.
+- [COMPLETED] Adjusted all relevant tests across frontend and backend to align with the new image data structure.
+- [COMPLETED] Increased global test timeout to 60s in `jest.config.js` to ensure stability for real API integration tests.
+- [COMPLETED] Verified fix with all tests passing and no linting errors.
+
+## Task: Fix [COMPLETED]
+### Resolve broken image in the UI
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Refactored `extractImageFromResponse` to prioritize `inlineData` and clean base64 strings.
+- [COMPLETED] Enhanced URL validation to only accept text links with image extensions.
+- [COMPLETED] Switched to more reliable placeholder and fallback services (`picsum.photos`, `placehold.co`).
+- [COMPLETED] Verified fix with new unit tests and full test suite.
+- [COMPLETED] Verified no linting or runtime errors.

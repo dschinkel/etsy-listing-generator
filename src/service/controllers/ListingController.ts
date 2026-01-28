@@ -23,7 +23,9 @@ export const createListingController = () => {
       ctx.status = error.status || 500;
       ctx.body = { 
         error: error.message || 'Internal Server Error',
-        systemPrompt: preview.systemPrompt
+        systemPrompt: error.systemPrompt || preview.systemPrompt,
+        retryable: !!error.retryable,
+        nextModel: error.nextModel
       };
     }
   };

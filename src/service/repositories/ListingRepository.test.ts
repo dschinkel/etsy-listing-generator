@@ -11,19 +11,23 @@ describe('Listing Repository', () => {
   const testImageBase64 = `data:image/png;base64,${fs.readFileSync(testImagePath).toString('base64')}`;
 
   it('orchestrates generation of different shot types', async () => {
-    const dataLayer = createGeminiImageGenerator();
-    const repository = createListingRepository(dataLayer);
+    const fakeDataLayer = {
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `${type}.png`, systemInstruction: `prompt for ${type}` })),
+      getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
+    };
+    const repository = createListingRepository(fakeDataLayer);
     const params = { 
-      lifestyleCount: 1, 
+      lifestyleCount: 1,
+      heroCount: 1,
       productImage: testImageBase64 
     };
     
     const result = await repository.generateImages(params);
     
-    expect(result.images.length).toBe(1);
-    expect(result.images.every(url => url.startsWith('http') || url.startsWith('data:'))).toBe(true);
-    expect(result.images.every(url => !url.includes('placehold.jp'))).toBe(true);
-    expect(result.systemPrompt).toContain('lifestyle');
+    expect(result.images).toHaveLength(2);
+    expect(result.images[0]).toEqual({ url: 'lifestyle.png', type: 'lifestyle' });
+    expect(result.images[1]).toEqual({ url: 'hero.png', type: 'hero' });
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledTimes(2);
   });
 
   it('handles zero counts correctly', async () => {

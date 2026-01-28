@@ -44,12 +44,10 @@ describe('Listing Generation UI', () => {
     expect(errorElement).toBeInTheDocument();
     expect(errorElement.textContent).toBe(errorMsg);
     
-    // Verify it is below the button (conceptually, by checking order in DOM)
     const button = screen.getByText('Generate Listing Images');
     const container = button.parentElement;
     expect(container).toContainElement(errorElement);
     
-    // In our implementation, error follows the button in the same flex-col container
     expect(button.nextElementSibling).toBe(errorElement);
   });
 

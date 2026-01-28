@@ -5,7 +5,13 @@ export const createGetSystemPromptPreview = (listingRepository: any) => {
     closeUpsCount?: number,
     flatLayCount?: number,
     macroCount?: number,
-    contextualCount?: number
+    contextualCount?: number,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string
   }) => {
     return listingRepository.getPromptPreview(request);
   };

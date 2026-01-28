@@ -15,6 +15,12 @@ export const createListingRepository = () => {
     flatLayBackground?: string | null,
     macroBackground?: string | null,
     contextualBackground?: string | null,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string,
     model?: string
   }) => {
     const response = await fetchWithTimeout('/listings/generate', {
@@ -26,15 +32,21 @@ export const createListingRepository = () => {
     if (!response.ok) {
       let errorDetail = '';
       let systemPrompt = '';
+      let retryable = false;
+      let nextModel = '';
       try {
         const errorJson = await response.json();
         errorDetail = errorJson.error || errorJson.message || JSON.stringify(errorJson);
         systemPrompt = errorJson.systemPrompt || '';
+        retryable = !!errorJson.retryable;
+        nextModel = errorJson.nextModel || '';
       } catch (e) {
         errorDetail = await response.text();
       }
       const error: any = new Error(`Server Error (${response.status}): ${errorDetail}`);
       error.systemPrompt = systemPrompt;
+      error.retryable = retryable;
+      error.nextModel = nextModel;
       throw error;
     }
 
@@ -47,7 +59,13 @@ export const createListingRepository = () => {
     closeUpsCount?: number,
     flatLayCount?: number,
     macroCount?: number,
-    contextualCount?: number
+    contextualCount?: number,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string
   }) => {
     const response = await fetchWithTimeout('/listings/system-prompt', {
       method: 'POST',

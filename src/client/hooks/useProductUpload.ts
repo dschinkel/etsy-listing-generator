@@ -15,6 +15,12 @@ export const useProductUpload = () => {
   const [flatLayBackground, setFlatLayBackground] = useState<string | null>(null);
   const [macroBackground, setMacroBackground] = useState<string | null>(null);
   const [contextualBackground, setContextualBackground] = useState<string | null>(null);
+  const [lifestyleCustomContext, setLifestyleCustomContext] = useState('');
+  const [heroCustomContext, setHeroCustomContext] = useState('');
+  const [closeUpsCustomContext, setCloseUpsCustomContext] = useState('');
+  const [flatLayCustomContext, setFlatLayCustomContext] = useState('');
+  const [macroCustomContext, setMacroCustomContext] = useState('');
+  const [contextualCustomContext, setContextualCustomContext] = useState('');
 
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -117,6 +123,13 @@ export const useProductUpload = () => {
     setContextualShotsCount(parseInt(event.target.value, 10) || 0);
   };
 
+  const handleLifestyleCustomContextChange = (value: string) => setLifestyleCustomContext(value);
+  const handleHeroCustomContextChange = (value: string) => setHeroCustomContext(value);
+  const handleCloseUpsCustomContextChange = (value: string) => setCloseUpsCustomContext(value);
+  const handleFlatLayCustomContextChange = (value: string) => setFlatLayCustomContext(value);
+  const handleMacroCustomContextChange = (value: string) => setMacroCustomContext(value);
+  const handleContextualCustomContextChange = (value: string) => setContextualCustomContext(value);
+
   const handlePrimarySelection = () => {
     setIsPrimaryImage(!isPrimaryImage);
   };
@@ -156,5 +169,17 @@ export const useProductUpload = () => {
     handleMacroBackgroundUpload,
     contextualBackground,
     handleContextualBackgroundUpload,
+    lifestyleCustomContext,
+    handleLifestyleCustomContextChange,
+    heroCustomContext,
+    handleHeroCustomContextChange,
+    closeUpsCustomContext,
+    handleCloseUpsCustomContextChange,
+    flatLayCustomContext,
+    handleFlatLayCustomContextChange,
+    macroCustomContext,
+    handleMacroCustomContextChange,
+    contextualCustomContext,
+    handleContextualCustomContextChange,
   };
 };

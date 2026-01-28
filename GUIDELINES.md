@@ -28,7 +28,7 @@ Always present the PLAN again before proceeding to the next step in the PLAN.
 P0.1.1 Before proceeding to the next step in the PLAN, re-load PROJECT_SPEC.md and GUIDELINES.md from disk, state what the next step is, and ask for explicit permission to proceed.
 P0.1.2 Every PLAN must include a visually appealing, styled Mermaid diagram rendered as a PNG image in the `flows/` directory only if the task requirements specifically ask for a flow. Otherwise, skip the flow. If a flow is required, the image must be named according to the feature (e.g., `flows/FR.3.1_Generate_Base_SVG.png`). You MUST use the `open` tool to display this image in the IDE's right-hand pane when presenting the PLAN.
 P0.2 The PLAN must include, in the first line, the task number and the feature name.
-P0.3 The PLAN must list each planned increment and explicitly name the test(s) that will be written for each increment if (and only if) the user chose a TDD workflow in P0.0. Each TDD increment in the PLAN must strictly follow the RED → GREEN → REFACTOR cycle, including the REFACTOR step even if no immediate refactoring is anticipated, to ensure the opportunity for improvement is never overlooked.
+P0.3 The PLAN must list each planned increment and explicitly name the test(s) that will be written for each increment if (and only if) the user chose a TDD workflow in P0.0. Each TDD increment in the PLAN must strictly follow the RED → GREEN → REFACTOR cycle. The REFACTOR step MUST ALWAYS be explicitly included in the PLAN for every TDD increment, even if no immediate refactoring is anticipated, to ensure the opportunity for improvement is never overlooked.
 P0.4 After presenting the PLAN, ask whether to proceed. Do not proceed without an explicit “continue/proceed” from the user.
 P0.5 If the user tells you to proceed, copy the approved PLAN into `tdd.log` before starting implementation (only applies when the user chose a TDD workflow in P0.0).
 P0.5.1 When copying the PLAN into `tdd.log`, include the full PLAN text verbatim under a `PLAN:` heading.
@@ -42,8 +42,11 @@ G1.11 At the end of every task, you MUST run the linter (e.g., `npx tsc --noEmit
 G1.12 At the end of every task, you MUST run all tests (e.g., `npm run test`) and fix any reported errors. This is mandatory for every task.
 P0.11 When iterating on a feature, do not mark it as [FAILED] or create new "fix" tasks if it doesn't meet acceptance criteria immediately. Instead, keep the current task [IN PROGRESS] and iterate until it is [COMPLETED].
 P0.11.1 When starting a task, you MUST move the task from [NOT STARTED] to [IN PROGRESS] in `tasks.md`.
-P0.12 NEVER call `submit` if there are uncommitted or unpushed changes related to the task. Every task completion must end with a push to the remote repository.
+P0.12 NEVER call `submit` if there are uncommitted or unpushed changes related to the task. Every task completion must end with a push to the remote repository. Commit messages must focus on domain features and intent. Do not include technical words like "verified", "Step X", or "Frontend/Backend".
+Good: `shows shot type display under image`
+Bad: `feat: UI Enhancement: Step 1: Frontend: UI: displays shot type display verified`
 P0.13 When asked to add a new feature, you must always add it at the higher level in `PROJECT_SPEC.md` first, then break that out into smaller tasks second in `tasks.md` using the `PROJECT_SPEC` feature number.
+P0.13.1 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
 P0.14 If asked for an out of bounds fix, relate it to the current task and append the information to `tasks.md` using the following format:
 ```markdown
 ## Task: Fix [COMPLETED]
@@ -110,16 +113,16 @@ N1.10 Test names must be delivery mechanism and framework agnostic.
 Good: `adds a font`
 Bad: `posts a new font`, `adds a font by fetching from adobe`, `calls the api to add a font`.
 
-N1.11 Do not test for specific CSS classes or styles (e.g., `toHaveClass('opacity-0')`). Tests must be decoupled from visual implementation details, as styling is verified through visual inspection.
+N1.12 Avoid creating "useless" tests that merely verify mocked data (i.e., testing the mock). Tests MUST verify business logic, data transformations, or specific orchestrations. A test that simply asserts that a function returns exactly what its mock was told to return, without any intervening logic, is forbidden.
 
 ---
 
 ## A1. Architecture & DDD
 
-A1.1 Use domain language for files, functions, variables, tests, and modules.
+A1.1 Use domain language for files, functions, variables, tests, and modules. Do not include implementation details or technical words in variable names. For example, instead of `downloadPromises`, use a domain-specific name like `images` if they represent the images being downloaded.
 A1.2 Organize by business domain rather than technical layer names (for example billing/, registration/).
 A1.3 Domain naming rule: domain files must not contain the word “domain” (Prompt.ts not PromptDomain.ts).
-A1.4 Avoid generic buckets like util, utils, helper, helpers. Use domain terms instead.
+A1.4 Avoid generic buckets like util, utils, helper, helpers. Use domain terms instead. This applies to directory names, file names, and code constructs (functions, variables). Do NOT create "helper functions". Instead, use well-named composed functions that describe their domain intent.
 
 A1.5 Repository abstractions:
 A1.5.1 Repository modules represent domain objects (PromptRepository, UserRepository).

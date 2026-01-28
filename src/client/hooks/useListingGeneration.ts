@@ -3,8 +3,13 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { fetchWithTimeout } from '../lib/utils';
 
+export interface ListingImage {
+  url: string;
+  type: string;
+}
+
 export const useListingGeneration = (listingRepository: any) => {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<ListingImage[]>([]);
   const [systemPrompt, setSystemPrompt] = useState<string>('');
   const [modelUsed, setModelUsed] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +40,13 @@ export const useListingGeneration = (listingRepository: any) => {
     closeUpsBackground?: string | null,
     flatLayBackground?: string | null,
     macroBackground?: string | null,
-    contextualBackground?: string | null
+    contextualBackground?: string | null,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string
   }) => {
     setIsGenerating(true);
     if (timeoutRef.current) {
@@ -43,66 +54,41 @@ export const useListingGeneration = (listingRepository: any) => {
       timeoutRef.current = null;
     }
     setError(null);
-    setModelUsed('gemini-3-pro-image-preview');
-    try {
-      const response = await listingRepository.generateImages({
-        ...params,
-        model: 'gemini-3-pro-image-preview'
-      });
-      setImages(response.images);
-      setSystemPrompt(response.systemPrompt || '');
-      setModelUsed(response.model || 'gemini-3-pro-image-preview');
-    } catch (err: any) {
-      if (err.systemPrompt) {
-        setSystemPrompt(err.systemPrompt);
-      }
-      if (err.message.includes('503') || err.message.toLowerCase().includes('overloaded')) {
-        setError('Gemini 3 Pro Image Preview is overloaded. Retrying with Imagen 4...');
-        setModelUsed('imagen-4.0-generate-001');
-        try {
-          const fallbackResponse = await listingRepository.generateImages({
-            ...params,
-            model: 'imagen-4.0-generate-001'
-          });
-          setImages(fallbackResponse.images);
-          setSystemPrompt(fallbackResponse.systemPrompt || '');
-          setModelUsed(fallbackResponse.model || 'imagen-4.0-generate-001');
-          setError(null);
-        } catch (fallbackErr: any) {
-          if (fallbackErr.systemPrompt) {
-            setSystemPrompt(fallbackErr.systemPrompt);
-          }
-          if (fallbackErr.message.includes('503') || fallbackErr.message.toLowerCase().includes('overloaded')) {
-            setError('Imagen 4 is also overloaded. Retrying with GPT Image 1.5...');
-            setModelUsed('gpt-image-1.5');
-            try {
-              const gptResponse = await listingRepository.generateImages({
-                ...params,
-                model: 'gpt-image-1.5'
-              });
-              setImages(gptResponse.images);
-              setSystemPrompt(gptResponse.systemPrompt || '');
-              setModelUsed(gptResponse.model || 'gpt-image-1.5');
-              setError(null);
-            } catch (gptErr: any) {
-              if (gptErr.systemPrompt) {
-                setSystemPrompt(gptErr.systemPrompt);
-              }
-              setTimedError('GPT Image 1.5 also failed. Please try again later.');
-              console.error('GPT fallback failed:', gptErr);
-            }
-          } else {
-            setTimedError('Imagen 4 failed. Please try again later.');
-            console.error('Fallback failed:', fallbackErr);
-          }
+    
+    let currentModel = 'gemini-3-pro-image-preview';
+    let success = false;
+
+    while (!success) {
+      setModelUsed(currentModel);
+      try {
+        const response = await listingRepository.generateImages({
+          ...params,
+          model: currentModel,
+          noFallback: true
+        });
+        setImages(response.images);
+        setSystemPrompt(response.systemPrompt || '');
+        setModelUsed(response.model || currentModel);
+        success = true;
+      } catch (err: any) {
+        console.log('Generation failed for model:', currentModel, err.message);
+        if (err.systemPrompt) {
+          setSystemPrompt(err.systemPrompt);
         }
-      } else {
-        setTimedError(`Generation failed: ${err.message}`);
-        console.error('Generation failed:', err);
+
+        if (err.retryable && err.nextModel) {
+          setTimedError(`Model ${currentModel} failed: ${err.message}. Retrying with ${err.nextModel} in 5 seconds...`);
+          // Wait for 5 seconds before retrying
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          currentModel = err.nextModel;
+          setError(null); // Clear error message before next model call
+        } else {
+          setTimedError(`Generation failed: ${err.message}`);
+          break;
+        }
       }
-    } finally {
-      setIsGenerating(false);
     }
+    setIsGenerating(false);
   };
 
   const removeImage = (index: number) => {
@@ -126,14 +112,29 @@ export const useListingGeneration = (listingRepository: any) => {
   const downloadAllImagesAsZip = async () => {
     const zip = new JSZip();
     
-    const downloadPromises = images.map(async (src, index) => {
-      const response = await fetchWithTimeout(src);
-      const blob = await response.blob();
-      const extension = blob.type.split('/')[1] || 'png';
-      zip.file(`listing-image-${index + 1}.${extension}`, blob);
+    const downloadingImages = images.map(async (image, index) => {
+      try {
+        const response = await fetchWithTimeout(image.url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+        }
+        const blob = await response.blob();
+        
+        if (!blob.type.startsWith('image/')) {
+          console.error(`Downloaded content for image ${index + 1} is not an image: ${blob.type}`);
+          // If we got HTML or something else, skip it or use a placeholder
+          return;
+        }
+
+        const extension = blob.type.split('/')[1]?.split(';')[0] || 'png';
+        zip.file(`listing-image-${index + 1}.${extension}`, blob);
+      } catch (err) {
+        console.error(`Failed to include image ${index + 1} in ZIP:`, err);
+        // We skip failed images to ensure the ZIP is still generated with what we have
+      }
     });
 
-    await Promise.all(downloadPromises);
+    await Promise.all(downloadingImages);
     const content = await zip.generateAsync({ type: 'blob' });
     saveAs(content, 'listing-images.zip');
   };

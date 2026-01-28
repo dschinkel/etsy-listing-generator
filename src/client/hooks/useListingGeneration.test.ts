@@ -4,7 +4,13 @@ import { useListingGeneration } from './useListingGeneration';
 describe('Listing Generation', () => {
   it('generates multiple lifestyle shots', async () => {
     const fakeListingRepository = {
-      generateImages: async () => ({ images: ['lifestyle_1.png', 'lifestyle_2.png', 'lifestyle_3.png'] })
+      generateImages: async () => ({ 
+        images: [
+          { url: 'lifestyle_1.png', type: 'lifestyle' }, 
+          { url: 'lifestyle_2.png', type: 'lifestyle' }, 
+          { url: 'lifestyle_3.png', type: 'lifestyle' }
+        ] 
+      })
     };
     
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -13,14 +19,18 @@ describe('Listing Generation', () => {
       await result.current.generateListing({ lifestyleCount: 3 });
     });
     
-    expect(result.current.images).toEqual(['lifestyle_1.png', 'lifestyle_2.png', 'lifestyle_3.png']);
+    expect(result.current.images).toEqual([
+      { url: 'lifestyle_1.png', type: 'lifestyle' }, 
+      { url: 'lifestyle_2.png', type: 'lifestyle' }, 
+      { url: 'lifestyle_3.png', type: 'lifestyle' }
+    ]);
   });
   it('sends product image as context', async () => {
     let capturedParams = null;
     const fakeListingRepository = {
       generateImages: async (params: any) => {
         capturedParams = params;
-        return { images: ['image.png'] };
+        return { images: [{ url: 'image.png', type: 'lifestyle' }] };
       }
     };
     
@@ -37,7 +47,8 @@ describe('Listing Generation', () => {
     expect(capturedParams).toEqual({ 
       lifestyleCount: 1, 
       productImage: base64Image,
-      model: 'gemini-3-pro-image-preview'
+      model: 'gemini-3-pro-image-preview',
+      noFallback: true
     });
   });
 
@@ -46,7 +57,7 @@ describe('Listing Generation', () => {
     const fakeListingRepository = {
       generateImages: async (params: any) => {
         capturedParams = params;
-        return { images: ['hero_1.png', 'hero_2.png'] };
+        return { images: [{ url: 'hero_1.png', type: 'hero' }, { url: 'hero_2.png', type: 'hero' }] };
       }
     };
     
@@ -58,9 +69,10 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toEqual({ 
       heroCount: 2,
-      model: 'gemini-3-pro-image-preview'
+      model: 'gemini-3-pro-image-preview',
+      noFallback: true
     });
-    expect(result.current.images).toEqual(['hero_1.png', 'hero_2.png']);
+    expect(result.current.images).toEqual([{ url: 'hero_1.png', type: 'hero' }, { url: 'hero_2.png', type: 'hero' }]);
   });
 
   it('generates close-ups', async () => {
@@ -68,7 +80,7 @@ describe('Listing Generation', () => {
     const fakeListingRepository = {
       generateImages: async (params: any) => {
         capturedParams = params;
-        return { images: ['closeup_1.png'] };
+        return { images: [{ url: 'closeup_1.png', type: 'close-up' }] };
       }
     };
     
@@ -80,14 +92,21 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toEqual({ 
       closeUpsCount: 1,
-      model: 'gemini-3-pro-image-preview'
+      model: 'gemini-3-pro-image-preview',
+      noFallback: true
     });
-    expect(result.current.images).toEqual(['closeup_1.png']);
+    expect(result.current.images).toEqual([{ url: 'closeup_1.png', type: 'close-up' }]);
   });
 
   it('removes a generated image', async () => {
     const fakeListingRepository = {
-      generateImages: async () => ({ images: ['image1.png', 'image2.png', 'image3.png'] })
+      generateImages: async () => ({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle' }, 
+          { url: 'image2.png', type: 'lifestyle' }, 
+          { url: 'image3.png', type: 'lifestyle' }
+        ] 
+      })
     };
     
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -102,7 +121,10 @@ describe('Listing Generation', () => {
       result.current.removeImage(1); // remove image2.png
     });
     
-    expect(result.current.images).toEqual(['image1.png', 'image3.png']);
+    expect(result.current.images).toEqual([
+      { url: 'image1.png', type: 'lifestyle' }, 
+      { url: 'image3.png', type: 'lifestyle' }
+    ]);
   });
 
   it('copies an image to clipboard', async () => {
@@ -122,11 +144,9 @@ describe('Listing Generation', () => {
     expect(result.current.downloadAllImagesAsZip).toBeDefined();
   });
 
-  it('sets error when both primary and fallback models fail', async () => {
+  it('sets error when server returns error', async () => {
     const fakeListingRepository = {
-      generateImages: jest.fn()
-        .mockRejectedValueOnce(new Error('503 Service Unavailable')) // Primary fails
-        .mockRejectedValueOnce(new Error('Fallback Failed')) // Fallback fails
+      generateImages: jest.fn().mockRejectedValue(new Error('Server Error (503): Service Unavailable'))
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -135,28 +155,8 @@ describe('Listing Generation', () => {
       await result.current.generateListing({ lifestyleCount: 1 });
     });
 
-    expect(result.current.error).toBe('Imagen 4 failed. Please try again later.');
+    expect(result.current.error).toBe('Generation failed: Server Error (503): Service Unavailable');
     expect(result.current.isGenerating).toBe(false);
-  });
-
-  it('sets status message and then error if primary fails with 503 and fallback fails', async () => {
-    let errorStates: (string | null)[] = [];
-    const fakeListingRepository = {
-      generateImages: jest.fn()
-        .mockImplementationOnce(() => new Promise((_, reject) => setTimeout(() => reject(new Error('503')), 10)))
-        .mockImplementationOnce(() => new Promise((_, reject) => setTimeout(() => reject(new Error('Fallback')), 10)))
-    };
-
-    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
-
-    // We can't easily capture intermediate states with renderHook/act without some tricks
-    // But we can check the final state and maybe use a custom hook to track state changes if needed.
-    
-    await act(async () => {
-      await result.current.generateListing({ lifestyleCount: 1 });
-    });
-
-    expect(result.current.error).toBe('Imagen 4 failed. Please try again later.');
   });
 
   it('sets error when non-503 error occurs', async () => {
@@ -202,5 +202,52 @@ describe('Listing Generation', () => {
     });
 
     expect(result.current.systemPrompt).toBe('error prompt');
+  });
+
+  it('retries when server indicates retryable error', async () => {
+    const error: any = new Error('503 Service Unavailable');
+    error.retryable = true;
+    error.nextModel = 'imagen-4.0-generate-001';
+
+    const fakeListingRepository = {
+      generateImages: jest.fn()
+        .mockRejectedValueOnce(error)
+        .mockResolvedValueOnce({ 
+          images: [{ url: 'imagen_result.png', type: 'lifestyle' }], 
+          model: 'imagen-4.0-generate-001',
+          systemPrompt: 'imagen prompt'
+        })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    // We need to use a shorter timeout for testing the delay, 
+    // or mock timers. Let's mock timers.
+    jest.useFakeTimers();
+
+    let generationPromise: Promise<void>;
+    await act(async () => {
+      generationPromise = result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    // Check it's showing the first model
+    expect(result.current.modelUsed).toBe('gemini-3-pro-image-preview');
+    expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
+
+    // Advance time by 5 seconds
+    await act(async () => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    await act(async () => {
+      await generationPromise;
+    });
+
+    expect(result.current.images).toEqual([{ url: 'imagen_result.png', type: 'lifestyle' }]);
+    expect(result.current.modelUsed).toBe('imagen-4.0-generate-001');
+    expect(result.current.error).toBeNull();
+    expect(fakeListingRepository.generateImages).toHaveBeenCalledTimes(2);
+    
+    jest.useRealTimers();
   });
 });

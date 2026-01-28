@@ -13,6 +13,93 @@ export const createListingRepository = (dataLayer: any) => {
     flatLayBackground?: string,
     macroBackground?: string,
     contextualBackground?: string,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string,
+    model?: string
+  }) => {
+    const fallbackModels = [
+      'gemini-3-pro-image-preview',
+      'imagen-4.0-generate-001',
+      'gpt-image-1.5'
+    ];
+
+    // If a specific model is requested that's not in our fallback list (unlikely given current UI),
+    // we should still respect it but maybe not fallback from it unless it's the first one.
+    // For now, we follow the established pattern.
+    const initialModel = params.model || fallbackModels[0];
+    const modelsToTry = fallbackModels.includes(initialModel) 
+      ? fallbackModels.slice(fallbackModels.indexOf(initialModel))
+      : [initialModel, ...fallbackModels];
+
+    let lastError: any = null;
+    let lastSystemPrompt = '';
+
+    for (const model of modelsToTry) {
+      try {
+        console.log(`Attempting generation with model: ${model}`);
+        const result = await internalGenerateImages({ ...params, model });
+        return result;
+      } catch (error: any) {
+        lastError = error;
+        if (error.systemPrompt) {
+          lastSystemPrompt = error.systemPrompt;
+        }
+
+        const isRetryable = error.status === 503 || 
+                            String(error.status).toLowerCase().includes('canceled') ||
+                            error.message?.includes('503') || 
+                            error.message?.toLowerCase().includes('overloaded') ||
+                            error.message?.toLowerCase().includes('canceled');
+
+        const nextModel = modelsToTry[modelsToTry.indexOf(model) + 1];
+
+        if (isRetryable && nextModel) {
+          console.log(`Model ${model} failed with retryable error. Trying next model...`);
+          if ((params as any).noFallback) {
+             const enhancedError: any = new Error(error.message);
+             enhancedError.status = error.status;
+             enhancedError.retryable = true;
+             enhancedError.nextModel = nextModel;
+             enhancedError.systemPrompt = lastSystemPrompt;
+             throw enhancedError;
+          }
+          continue;
+        }
+        
+        // Not retryable or last model failed
+        if (lastSystemPrompt && !error.systemPrompt) {
+          error.systemPrompt = lastSystemPrompt;
+        }
+        throw error;
+      }
+    }
+    throw lastError;
+  };
+
+  const internalGenerateImages = async (params: { 
+    lifestyleCount?: number, 
+    heroCount?: number,
+    closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number,
+    productImage?: string,
+    lifestyleBackground?: string,
+    heroBackground?: string,
+    closeUpsBackground?: string,
+    flatLayBackground?: string,
+    macroBackground?: string,
+    contextualBackground?: string,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string,
     model?: string
   }) => {
     console.log('Generating images with params:', {
@@ -25,7 +112,7 @@ export const createListingRepository = (dataLayer: any) => {
       model: params.model,
       hasProductImage: !!params.productImage
     });
-    const images: string[] = [];
+    const images: { url: string; type: string }[] = [];
     const preview = getPromptPreview(params);
     let systemPrompt = preview.systemPrompt;
     
@@ -39,12 +126,12 @@ export const createListingRepository = (dataLayer: any) => {
       }
     };
 
-    await generateShotTypeImages('lifestyle', params.lifestyleCount, params.productImage, params.lifestyleBackground, images, collectPrompt, params.model);
-    await generateShotTypeImages('hero', params.heroCount, params.productImage, params.heroBackground, images, collectPrompt, params.model);
-    await generateShotTypeImages('close-up', params.closeUpsCount, params.productImage, params.closeUpsBackground, images, collectPrompt, params.model);
-    await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImage, params.flatLayBackground, images, collectPrompt, params.model);
-    await generateShotTypeImages('macro', params.macroCount, params.productImage, params.macroBackground, images, collectPrompt, params.model);
-    await generateShotTypeImages('contextual', params.contextualCount, params.productImage, params.contextualBackground, images, collectPrompt, params.model);
+    await generateShotTypeImages('lifestyle', params.lifestyleCount, params.productImage, params.lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext);
+    await generateShotTypeImages('hero', params.heroCount, params.productImage, params.heroBackground, images, collectPrompt, params.model, params.heroCustomContext);
+    await generateShotTypeImages('close-up', params.closeUpsCount, params.productImage, params.closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext);
+    await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImage, params.flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
+    await generateShotTypeImages('macro', params.macroCount, params.productImage, params.macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
+    await generateShotTypeImages('contextual', params.contextualCount, params.productImage, params.contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
 
     return { images, systemPrompt, model: params.model };
   };
@@ -54,9 +141,10 @@ export const createListingRepository = (dataLayer: any) => {
     count: number = 0, 
     productImage?: string, 
     background?: string, 
-    images: string[] = [], 
+    images: { url: string; type: string }[] = [], 
     onResult?: (res: any) => void,
-    model?: string
+    model?: string,
+    customContext?: string
   ) => {
     for (let i = 0; i < count; i++) {
       const result = await dataLayer.generateImage({ 
@@ -64,13 +152,18 @@ export const createListingRepository = (dataLayer: any) => {
         productImage,
         background,
         count: 1,
-        model
+        model,
+        customContext
       });
       const imageUrl = result.imageUrl;
       onResult?.(result);
       ensureValidUrl(imageUrl);
-      images.push(imageUrl);
+      addGeneratedImage(images, imageUrl, type);
     }
+  };
+
+  const addGeneratedImage = (images: { url: string; type: string }[], url: string, type: string) => {
+    images.push({ url, type });
   };
 
   const ensureValidUrl = (url: string) => {
@@ -85,13 +178,19 @@ export const createListingRepository = (dataLayer: any) => {
     closeUpsCount?: number,
     flatLayCount?: number,
     macroCount?: number,
-    contextualCount?: number
+    contextualCount?: number,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string
   } = {}) => {
     let systemPrompt = '';
     const safeParams = params || {};
-    const collect = (type: string, count: number) => {
+    const collect = (type: string, count: number, customContext?: string) => {
       if (count > 0) {
-        const prompt = dataLayer.getSystemPrompt({ type, count });
+        const prompt = dataLayer.getSystemPrompt({ type, count, customContext });
         if (!systemPrompt) {
           systemPrompt = prompt;
         } else if (!systemPrompt.includes(prompt)) {
@@ -100,12 +199,12 @@ export const createListingRepository = (dataLayer: any) => {
       }
     };
 
-    collect('lifestyle', safeParams.lifestyleCount || 0);
-    collect('hero', safeParams.heroCount || 0);
-    collect('close-up', safeParams.closeUpsCount || 0);
-    collect('flat-lay', safeParams.flatLayCount || 0);
-    collect('macro', safeParams.macroCount || 0);
-    collect('contextual', safeParams.contextualCount || 0);
+    collect('lifestyle', safeParams.lifestyleCount || 0, safeParams.lifestyleCustomContext);
+    collect('hero', safeParams.heroCount || 0, safeParams.heroCustomContext);
+    collect('close-up', safeParams.closeUpsCount || 0, safeParams.closeUpsCustomContext);
+    collect('flat-lay', safeParams.flatLayCount || 0, safeParams.flatLayCustomContext);
+    collect('macro', safeParams.macroCount || 0, safeParams.macroCustomContext);
+    collect('contextual', safeParams.contextualCount || 0, safeParams.contextualCustomContext);
 
     if (!systemPrompt) {
       systemPrompt = dataLayer.getSystemPrompt({ type: 'hero', count: 1 });
