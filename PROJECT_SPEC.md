@@ -117,6 +117,14 @@ A user can:
     - Ability to download individual images directly to the hard drive.
     - Ability to download all generated images as a single ZIP file.
 
+**FR.15 — Save Custom Context Templates**
+    - Ability to save the current custom context text as a named template.
+    - Templates are stored in a local JSON database (`src/db/context-templates.json`).
+    - Ability to select a saved template from a dropdown in the Custom Context section.
+    - Selecting a template populates the custom context text area.
+    - Ability to manually edit the custom context even after selecting a template.
+    - Prompt for a name when saving a new template.
+
 ---
 
 ## 4. Technical Requirements (TR.*)

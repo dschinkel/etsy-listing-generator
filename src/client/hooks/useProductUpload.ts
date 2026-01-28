@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export const useProductUpload = () => {
+export interface ContextTemplate {
+  name: string;
+  text: string;
+}
+
+export const useProductUpload = (repository?: any) => {
   const [productImage, setProductImage] = useState<string | null>(null);
   const [lifestyleShotsCount, setLifestyleShotsCount] = useState(0);
   const [heroShotsCount, setHeroShotsCount] = useState(0);
@@ -21,6 +26,24 @@ export const useProductUpload = () => {
   const [flatLayCustomContext, setFlatLayCustomContext] = useState('');
   const [macroCustomContext, setMacroCustomContext] = useState('');
   const [contextualCustomContext, setContextualCustomContext] = useState('');
+  const [templates, setTemplates] = useState<ContextTemplate[]>([]);
+
+  useEffect(() => {
+    if (repository) {
+      repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
+        setTemplates(response.templates || []);
+      });
+    }
+  }, [repository]);
+
+  const saveContextTemplate = async (name: string, text: string) => {
+    if (repository) {
+      const response = await repository.saveTemplate({ name, text });
+      if (response.template) {
+        setTemplates(prev => [...prev, response.template]);
+      }
+    }
+  };
 
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -181,5 +204,7 @@ export const useProductUpload = () => {
     handleMacroCustomContextChange,
     contextualCustomContext,
     handleContextualCustomContextChange,
+    templates,
+    saveContextTemplate,
   };
 };

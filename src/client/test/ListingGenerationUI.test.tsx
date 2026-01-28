@@ -2,12 +2,17 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
 
-// Mock the hook to control states
+// Mock the hooks to control states
 jest.mock('../hooks/useListingGeneration', () => ({
   useListingGeneration: jest.fn()
 }));
 
+jest.mock('../hooks/useProductUpload', () => ({
+  useProductUpload: jest.fn()
+}));
+
 import { useListingGeneration } from '../hooks/useListingGeneration';
+import { useProductUpload } from '../hooks/useProductUpload';
 
 describe('Listing Generation UI', () => {
   beforeEach(() => {
@@ -21,6 +26,52 @@ describe('Listing Generation UI', () => {
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
+    });
+
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: null,
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
+      lifestyleShotsCount: 0,
+      handleLifestyleShotsChange: jest.fn(),
+      heroShotsCount: 0,
+      handleHeroShotsChange: jest.fn(),
+      closeUpsCount: 0,
+      handleCloseUpsChange: jest.fn(),
+      flatLayShotsCount: 0,
+      handleFlatLayShotsChange: jest.fn(),
+      macroShotsCount: 0,
+      handleMacroShotsChange: jest.fn(),
+      contextualShotsCount: 0,
+      handleContextualShotsChange: jest.fn(),
+      isPrimaryImage: false,
+      handlePrimarySelection: jest.fn(),
+      lifestyleBackground: null,
+      handleLifestyleBackgroundUpload: jest.fn(),
+      heroBackground: null,
+      handleHeroBackgroundUpload: jest.fn(),
+      closeUpsBackground: null,
+      handleCloseUpsBackgroundUpload: jest.fn(),
+      flatLayBackground: null,
+      handleFlatLayBackgroundUpload: jest.fn(),
+      macroBackground: null,
+      handleMacroBackgroundUpload: jest.fn(),
+      contextualBackground: null,
+      handleContextualBackgroundUpload: jest.fn(),
+      lifestyleCustomContext: '',
+      handleLifestyleCustomContextChange: jest.fn(),
+      heroCustomContext: '',
+      handleHeroCustomContextChange: jest.fn(),
+      closeUpsCustomContext: '',
+      handleCloseUpsCustomContextChange: jest.fn(),
+      flatLayCustomContext: '',
+      handleFlatLayCustomContextChange: jest.fn(),
+      macroCustomContext: '',
+      handleMacroCustomContextChange: jest.fn(),
+      contextualCustomContext: '',
+      handleContextualCustomContextChange: jest.fn(),
+      templates: [],
+      saveContextTemplate: jest.fn()
     });
   });
 
@@ -95,28 +146,104 @@ describe('Listing Generation UI', () => {
   });
 
   it('is enabled when at least one shot is selected', () => {
-    (useListingGeneration as jest.Mock).mockReturnValue({
-      images: [],
-      systemPrompt: '',
-      error: null,
-      isGenerating: false,
-      generateListing: jest.fn(),
-      removeImage: jest.fn(),
-      downloadImage: jest.fn(),
-      downloadAllImagesAsZip: jest.fn(),
-      fetchSystemPromptPreview: jest.fn()
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: null,
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
+      lifestyleShotsCount: 1, // At least one shot
+      handleLifestyleShotsChange: jest.fn(),
+      heroShotsCount: 0,
+      handleHeroShotsChange: jest.fn(),
+      closeUpsCount: 0,
+      handleCloseUpsChange: jest.fn(),
+      flatLayShotsCount: 0,
+      handleFlatLayShotsChange: jest.fn(),
+      macroShotsCount: 0,
+      handleMacroShotsChange: jest.fn(),
+      contextualShotsCount: 0,
+      handleContextualShotsChange: jest.fn(),
+      isPrimaryImage: false,
+      handlePrimarySelection: jest.fn(),
+      lifestyleBackground: null,
+      handleLifestyleBackgroundUpload: jest.fn(),
+      heroBackground: null,
+      handleHeroBackgroundUpload: jest.fn(),
+      closeUpsBackground: null,
+      handleCloseUpsBackgroundUpload: jest.fn(),
+      flatLayBackground: null,
+      handleFlatLayBackgroundUpload: jest.fn(),
+      macroBackground: null,
+      handleMacroBackgroundUpload: jest.fn(),
+      contextualBackground: null,
+      handleContextualBackgroundUpload: jest.fn(),
+      lifestyleCustomContext: '',
+      handleLifestyleCustomContextChange: jest.fn(),
+      heroCustomContext: '',
+      handleHeroCustomContextChange: jest.fn(),
+      closeUpsCustomContext: '',
+      handleCloseUpsCustomContextChange: jest.fn(),
+      flatLayCustomContext: '',
+      handleFlatLayCustomContextChange: jest.fn(),
+      macroCustomContext: '',
+      handleMacroCustomContextChange: jest.fn(),
+      contextualCustomContext: '',
+      handleContextualCustomContextChange: jest.fn(),
+      templates: [],
+      saveContextTemplate: jest.fn()
     });
 
     render(<App />);
-
-    const heroInput = screen.getByLabelText('Hero Shot');
-    fireEvent.change(heroInput, { target: { value: '1' } });
 
     const button = screen.getByText('Generate Listing Images');
     expect(button).not.toBeDisabled();
   });
 
   it('displays "Specify a Shots Selection" in green when no shots are selected', () => {
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: null,
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
+      lifestyleShotsCount: 0, // No shots
+      handleLifestyleShotsChange: jest.fn(),
+      heroShotsCount: 0,
+      handleHeroShotsChange: jest.fn(),
+      closeUpsCount: 0,
+      handleCloseUpsChange: jest.fn(),
+      flatLayShotsCount: 0,
+      handleFlatLayShotsChange: jest.fn(),
+      macroShotsCount: 0,
+      handleMacroShotsChange: jest.fn(),
+      contextualShotsCount: 0,
+      handleContextualShotsChange: jest.fn(),
+      isPrimaryImage: false,
+      handlePrimarySelection: jest.fn(),
+      lifestyleBackground: null,
+      handleLifestyleBackgroundUpload: jest.fn(),
+      heroBackground: null,
+      handleHeroBackgroundUpload: jest.fn(),
+      closeUpsBackground: null,
+      handleCloseUpsBackgroundUpload: jest.fn(),
+      flatLayBackground: null,
+      handleFlatLayBackgroundUpload: jest.fn(),
+      macroBackground: null,
+      handleMacroBackgroundUpload: jest.fn(),
+      contextualBackground: null,
+      handleContextualBackgroundUpload: jest.fn(),
+      lifestyleCustomContext: '',
+      handleLifestyleCustomContextChange: jest.fn(),
+      heroCustomContext: '',
+      handleHeroCustomContextChange: jest.fn(),
+      closeUpsCustomContext: '',
+      handleCloseUpsCustomContextChange: jest.fn(),
+      flatLayCustomContext: '',
+      handleFlatLayCustomContextChange: jest.fn(),
+      macroCustomContext: '',
+      handleMacroCustomContextChange: jest.fn(),
+      contextualCustomContext: '',
+      handleContextualCustomContextChange: jest.fn(),
+      templates: [],
+      saveContextTemplate: jest.fn()
+    });
     render(<App />);
     const message = screen.getByText('Specify a Shots Selection');
     expect(message).toBeInTheDocument();
@@ -129,9 +256,52 @@ describe('Listing Generation UI', () => {
   });
 
   it('hides "Specify a Shots Selection" when at least one shot is selected', () => {
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: null,
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
+      lifestyleShotsCount: 1, // At least one shot
+      handleLifestyleShotsChange: jest.fn(),
+      heroShotsCount: 0,
+      handleHeroShotsChange: jest.fn(),
+      closeUpsCount: 0,
+      handleCloseUpsChange: jest.fn(),
+      flatLayShotsCount: 0,
+      handleFlatLayShotsChange: jest.fn(),
+      macroShotsCount: 0,
+      handleMacroShotsChange: jest.fn(),
+      contextualShotsCount: 0,
+      handleContextualShotsChange: jest.fn(),
+      isPrimaryImage: false,
+      handlePrimarySelection: jest.fn(),
+      lifestyleBackground: null,
+      handleLifestyleBackgroundUpload: jest.fn(),
+      heroBackground: null,
+      handleHeroBackgroundUpload: jest.fn(),
+      closeUpsBackground: null,
+      handleCloseUpsBackgroundUpload: jest.fn(),
+      flatLayBackground: null,
+      handleFlatLayBackgroundUpload: jest.fn(),
+      macroBackground: null,
+      handleMacroBackgroundUpload: jest.fn(),
+      contextualBackground: null,
+      handleContextualBackgroundUpload: jest.fn(),
+      lifestyleCustomContext: '',
+      handleLifestyleCustomContextChange: jest.fn(),
+      heroCustomContext: '',
+      handleHeroCustomContextChange: jest.fn(),
+      closeUpsCustomContext: '',
+      handleCloseUpsCustomContextChange: jest.fn(),
+      flatLayCustomContext: '',
+      handleFlatLayCustomContextChange: jest.fn(),
+      macroCustomContext: '',
+      handleMacroCustomContextChange: jest.fn(),
+      contextualCustomContext: '',
+      handleContextualCustomContextChange: jest.fn(),
+      templates: [],
+      saveContextTemplate: jest.fn()
+    });
     render(<App />);
-    const heroInput = screen.getByLabelText('Hero Shot');
-    fireEvent.change(heroInput, { target: { value: '1' } });
     
     expect(screen.queryByText('Specify a Shots Selection')).not.toBeInTheDocument();
   });

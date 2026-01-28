@@ -8,13 +8,14 @@ import { Textarea } from './components/ui/textarea';
 import { Label } from './components/ui/label';
 import { Checkbox } from './components/ui/checkbox';
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
-import { Plus, Image as ImageIcon } from 'lucide-react';
+import { Plus, Image as ImageIcon, Save } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
 import { ThemeProvider } from './components/theme-provider';
 
 const App = () => {
+  const repository = React.useMemo(() => createListingRepository(), []);
   const { 
     productImage, 
     handleUpload, 
@@ -57,9 +58,10 @@ const App = () => {
     handleMacroCustomContextChange,
     contextualCustomContext,
     handleContextualCustomContextChange,
-  } = useProductUpload();
+    templates,
+    saveContextTemplate,
+  } = useProductUpload(repository);
 
-  const repository = React.useMemo(() => createListingRepository(), []);
   const { 
     images, 
     systemPrompt,
@@ -158,6 +160,8 @@ const App = () => {
                     onMacroCustomContextChange={handleMacroCustomContextChange}
                     contextualCustomContext={contextualCustomContext}
                     onContextualCustomContextChange={handleContextualCustomContextChange}
+                    templates={templates}
+                    onSaveTemplate={saveContextTemplate}
                     lifestyleBackground={lifestyleBackground}
                     onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
                     heroBackground={heroBackground}
@@ -283,8 +287,10 @@ const ShotTypeItem = ({
   description: string, 
   count: number, 
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  customContext: string,
+  customContext: string, 
   onCustomContextChange: (value: string) => void,
+  templates: { name: string, text: string }[],
+  onSaveTemplate: (name: string, text: string) => void,
   background: string | null,
   onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
@@ -349,8 +355,40 @@ const ShotTypeItem = ({
         />
       </div>
       {showCustom && (
-        <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-2xl">
-          <Label htmlFor={`${id}-custom`} className="text-xs mb-1 block">Custom Context</Label>
+        <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-2xl flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 flex-1">
+              <Label htmlFor={`${id}-custom`} className="text-xs">Custom Context</Label>
+              {templates.length > 0 && (
+                <select 
+                  className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5"
+                  onChange={(e) => {
+                    const template = templates.find(t => t.name === e.target.value);
+                    if (template) onCustomContextChange(template.text);
+                  }}
+                  value=""
+                >
+                  <option value="" disabled>Select a template...</option>
+                  {templates.map(t => (
+                    <option key={t.name} value={t.name}>{t.name}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6"
+              title="Save as template"
+              disabled={!customContext.trim()}
+              onClick={() => {
+                const name = window.prompt('Enter a name for this template:');
+                if (name) onSaveTemplate(name, customContext);
+              }}
+            >
+              <Save className="h-3 w-3" />
+            </Button>
+          </div>
           <Textarea 
             id={`${id}-custom`}
             placeholder="e.g. In a high-end kitchen with marble countertops"
@@ -389,6 +427,8 @@ const ShotsSelection = ({
   onMacroCustomContextChange,
   contextualCustomContext,
   onContextualCustomContextChange,
+  templates,
+  onSaveTemplate,
   lifestyleBackground,
   onLifestyleBackgroundUpload,
   heroBackground,
@@ -426,6 +466,8 @@ const ShotsSelection = ({
   onMacroCustomContextChange: (value: string) => void,
   contextualCustomContext: string,
   onContextualCustomContextChange: (value: string) => void,
+  templates: { name: string, text: string }[],
+  onSaveTemplate: (name: string, text: string) => void,
   lifestyleBackground: string | null,
   onLifestyleBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   heroBackground: string | null,
@@ -453,6 +495,8 @@ const ShotsSelection = ({
           onChange={onHeroShotsChange}
           customContext={heroCustomContext}
           onCustomContextChange={onHeroCustomContextChange}
+          templates={templates}
+          onSaveTemplate={onSaveTemplate}
           background={heroBackground}
           onBackgroundUpload={onHeroBackgroundUpload}
         />
@@ -464,6 +508,8 @@ const ShotsSelection = ({
           onChange={onFlatLayShotsChange}
           customContext={flatLayCustomContext}
           onCustomContextChange={onFlatLayCustomContextChange}
+          templates={templates}
+          onSaveTemplate={onSaveTemplate}
           background={flatLayBackground}
           onBackgroundUpload={onFlatLayBackgroundUpload}
         />
@@ -475,6 +521,8 @@ const ShotsSelection = ({
           onChange={onLifestyleShotsChange}
           customContext={lifestyleCustomContext}
           onCustomContextChange={onLifestyleCustomContextChange}
+          templates={templates}
+          onSaveTemplate={onSaveTemplate}
           background={lifestyleBackground}
           onBackgroundUpload={onLifestyleBackgroundUpload}
         />
@@ -486,6 +534,8 @@ const ShotsSelection = ({
           onChange={onMacroShotsChange}
           customContext={macroCustomContext}
           onCustomContextChange={onMacroCustomContextChange}
+          templates={templates}
+          onSaveTemplate={onSaveTemplate}
           background={macroBackground}
           onBackgroundUpload={onMacroBackgroundUpload}
         />
@@ -497,6 +547,8 @@ const ShotsSelection = ({
           onChange={onContextualShotsChange}
           customContext={contextualCustomContext}
           onCustomContextChange={onContextualCustomContextChange}
+          templates={templates}
+          onSaveTemplate={onSaveTemplate}
           background={contextualBackground}
           onBackgroundUpload={onContextualBackgroundUpload}
         />
@@ -508,6 +560,8 @@ const ShotsSelection = ({
           onChange={onCloseUpsChange}
           customContext={closeUpsCustomContext}
           onCustomContextChange={onCloseUpsCustomContextChange}
+          templates={templates}
+          onSaveTemplate={onSaveTemplate}
           background={closeUpsBackground}
           onBackgroundUpload={onCloseUpsBackgroundUpload}
         />

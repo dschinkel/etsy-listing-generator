@@ -336,3 +336,12 @@ The Fix:
 - [COMPLETED] Enabled concurrent image generation (within shot types) while protecting with retries.
 - [COMPLETED] Increased integration test timeout to 300s to accommodate multiple generations.
 - [COMPLETED] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.
+
+## Task: FR.15 [COMPLETED]
+### Save Custom Context Templates
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] FR.15.1: Create `src/db/context-templates.json` and backend repository/data layer for templates.
+- [COMPLETED] FR.15.2: Implement `GetContextTemplates` and `SaveContextTemplate` commands and controller endpoints.
+- [COMPLETED] FR.15.3: Update `useProductUpload` hook to fetch and manage templates.
+- [COMPLETED] FR.15.4: Update `ShotTypeItem` UI with template selection and save functionality.
+- [COMPLETED] FR.15.5: Final verification and cleanup.

@@ -49,6 +49,14 @@ router.post('/system-prompt', async (ctx) => {
   await listingController.getPromptPreview(ctx);
 });
 
+router.get('/templates', async (ctx) => {
+  await listingController.getTemplates(ctx);
+});
+
+router.post('/templates', async (ctx) => {
+  await listingController.saveTemplate(ctx);
+});
+
 // Add a GET handler just in case, returning a helpful message or redirecting
 router.get('/system-prompt', async (ctx) => {
   ctx.status = 405;

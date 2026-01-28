@@ -87,5 +87,33 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
-  return { generateImages, getSystemPromptPreview };
+  const getTemplates = async () => {
+    const response = await fetchWithTimeout('/listings/templates', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      return { templates: [] };
+    }
+
+    return await response.json();
+  };
+
+  const saveTemplate = async (template: { name: string; text: string }) => {
+    const response = await fetchWithTimeout('/listings/templates', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(template),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to save template: ${text}`);
+    }
+
+    return await response.json();
+  };
+
+  return { generateImages, getSystemPromptPreview, getTemplates, saveTemplate };
 };
