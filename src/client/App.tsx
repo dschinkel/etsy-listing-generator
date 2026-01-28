@@ -124,6 +124,10 @@ const App = () => {
                   onSelectPrimary={handlePrimarySelection}
                   onRemove={handleRemoveProductImage}
                 />
+                {/* System Prompt (moved here) */}
+                <SystemPromptPane 
+                  prompt={systemPrompt} 
+                />
               </div>
 
               {/* Middle Pane */}
@@ -169,13 +173,6 @@ const App = () => {
                   />
                 </div>
               </div>
-
-              {/* Right Pane (System Prompt) */}
-              <SystemPromptPane 
-                prompt={systemPrompt} 
-                width={promptWidth} 
-                onWidthChange={setPromptWidth} 
-              />
             </div>
             
             <div className="flex flex-col items-center gap-4">
@@ -569,53 +566,21 @@ const UploadedImage = ({
 };
 
 const SystemPromptPane = ({ 
-  prompt, 
-  width, 
-  onWidthChange 
+  prompt
 }: { 
-  prompt: string, 
-  width: number, 
-  onWidthChange: (w: number) => void 
+  prompt: string
 }) => {
-  const isResizing = React.useRef(false);
-
-  const startResizing = React.useCallback((e: React.MouseEvent) => {
-    isResizing.current = true;
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', stopResizing);
-  }, []);
-
-  const stopResizing = React.useCallback(() => {
-    isResizing.current = false;
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', stopResizing);
-  }, []);
-
-  const handleMouseMove = React.useCallback((e: MouseEvent) => {
-    if (!isResizing.current) return;
-    const newWidth = window.innerWidth - e.clientX - 32; // 32 is padding
-    if (newWidth > 200 && newWidth < 800) {
-      onWidthChange(newWidth);
-    }
-  }, [onWidthChange]);
-
   return (
-    <div className="relative flex h-full min-h-[500px]" style={{ width: `${width}px` }}>
-      <div
-        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-primary/50 transition-colors z-10"
-        onMouseDown={startResizing}
-      />
-      <Card className="w-full h-full ml-4 overflow-hidden flex flex-col">
-        <CardHeader>
-          <CardTitle>System Prompt</CardTitle>
-        </CardHeader>
-        <CardContent className="flex-1 overflow-auto">
-          <pre className="text-xs whitespace-pre-wrap font-mono bg-muted p-4 rounded-lg">
-            {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
-          </pre>
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="w-full mt-4 overflow-hidden flex flex-col">
+      <CardHeader>
+        <CardTitle className="text-sm">System Prompt</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1 overflow-auto max-h-[400px]">
+        <pre className="text-[10px] whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg">
+          {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
+        </pre>
+      </CardContent>
+    </Card>
   );
 };
 

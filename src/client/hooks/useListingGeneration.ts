@@ -55,7 +55,7 @@ export const useListingGeneration = (listingRepository: any) => {
     }
     setError(null);
     
-    let currentModel = 'gemini-3-pro-image-preview';
+    let currentModel = 'gemini-2.5-flash-image';
     let success = false;
 
     while (!success) {
@@ -76,14 +76,16 @@ export const useListingGeneration = (listingRepository: any) => {
           setSystemPrompt(err.systemPrompt);
         }
 
-        if (err.retryable && err.nextModel) {
-          setTimedError(`Model ${currentModel} failed: ${err.message}. Retrying with ${err.nextModel} in 5 seconds...`);
-          // Wait for 5 seconds before retrying
-          await new Promise(resolve => setTimeout(resolve, 5000));
+          if (err.retryable && err.nextModel) {
+          setTimedError(`Model ${currentModel} failed: ${err.message}. Retrying with ${err.nextModel}...`);
+          // No delay here because ListingRepository already has some retry logic and we want to move fast through fallbacks
           currentModel = err.nextModel;
-          setError(null); // Clear error message before next model call
+          setError(null); 
         } else {
-          setTimedError(`Generation failed: ${err.message}`);
+          const errorMessage = err.name === 'AbortError' || err.message.includes('aborted') 
+            ? 'Generation timed out. Please try again with fewer images or wait longer.'
+            : `Generation failed: ${err.message}`;
+          setTimedError(errorMessage);
           break;
         }
       }

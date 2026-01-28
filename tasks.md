@@ -326,3 +326,13 @@ The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Fix `ListingRepository` (client) to read response body only once.
 - [COMPLETED] Investigated backend failure and confirmed client-side error handling was the primary issue.
+
+## Task: Fix [COMPLETED]
+### Resolve timeouts and 500 errors when generating multiple images
+The Fix:
+- [COMPLETED] Set primary model to `gemini-2.5-flash-image` and fallback to `imagen-4.0-generate-001`.
+- [COMPLETED] Increased client-side API timeout to 180s in `src/client/lib/utils.ts`.
+- [COMPLETED] Added robust retry logic with exponential backoff (up to 2 retries per image) in `ListingRepository.ts` for 503/429 errors.
+- [COMPLETED] Enabled concurrent image generation (within shot types) while protecting with retries.
+- [COMPLETED] Increased integration test timeout to 300s to accommodate multiple generations.
+- [COMPLETED] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.

@@ -47,7 +47,7 @@ export const createGeminiImageGenerator = () => {
     const countText = count === 1 ? '1 image' : `${count} images`;
     const systemInstruction = getSystemPrompt({ type: params.type, count, customContext: params.customContext });
 
-    const modelName = params.model || "gemini-3-pro-image-preview";
+    const modelName = params.model || "gemini-2.5-flash-image";
     const model = genAI.getGenerativeModel({ 
       model: modelName,
       systemInstruction: {
@@ -78,7 +78,7 @@ export const createGeminiImageGenerator = () => {
     }
 
     try {
-      const result = await model.generateContent(parts, { timeout: 100000 });
+      const result = await model.generateContent(parts);
       const response = await result.response;
       
       const imageUrl = extractImageFromResponse(response);

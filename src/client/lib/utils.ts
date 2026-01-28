@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const API_TIMEOUT = 60000;
+export const API_TIMEOUT = 180000;
 
 export async function fetchWithTimeout(resource: string | URL | Request, options: RequestInit = {}) {
   const { timeout = API_TIMEOUT } = options as any;

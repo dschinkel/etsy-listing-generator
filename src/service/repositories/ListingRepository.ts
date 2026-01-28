@@ -22,9 +22,9 @@ export const createListingRepository = (dataLayer: any) => {
     model?: string
   }) => {
     const fallbackModels = [
-      'gemini-3-pro-image-preview',
+      'gemini-2.5-flash-image',
       'imagen-4.0-generate-001',
-      'gpt-image-1.5'
+      'gemini-1.5-flash-latest'
     ];
 
     // If a specific model is requested that's not in our fallback list (unlikely given current UI),
@@ -54,7 +54,7 @@ export const createListingRepository = (dataLayer: any) => {
         const nextModel = modelsToTry[modelsToTry.indexOf(model) + 1];
 
         if (isRetryable && nextModel) {
-          console.log(`Model ${model} failed with retryable error. Trying next model...`);
+          console.log(`Model ${model} failed with retryable error. Trying next model ${nextModel}...`);
           if ((params as any).noFallback) {
              const enhancedError: any = new Error(error.message);
              enhancedError.status = error.status;
@@ -163,20 +163,44 @@ export const createListingRepository = (dataLayer: any) => {
     model?: string,
     customContext?: string
   ) => {
+    const runGeneration = async () => {
+      let retries = 0;
+      const maxRetries = 2;
+      let success = false;
+      
+      while (!success && retries <= maxRetries) {
+        try {
+          const result = await dataLayer.generateImage({ 
+            type,
+            productImage,
+            background,
+            count: 1,
+            model,
+            customContext
+          });
+          const imageUrl = result.imageUrl;
+          onResult?.(result);
+          ensureValidUrl(imageUrl);
+          addGeneratedImage(images, imageUrl, type);
+          success = true;
+        } catch (error: any) {
+          retries++;
+          const status = error.status;
+          if ((status === 429 || status === 503) && retries <= maxRetries) {
+            console.log(`API overloaded/rate-limited (status ${status}). Retrying in ${retries * 5}s...`);
+            await new Promise(resolve => setTimeout(resolve, retries * 5000));
+            continue;
+          }
+          throw error;
+        }
+      }
+    };
+
+    const promises = [];
     for (let i = 0; i < count; i++) {
-      const result = await dataLayer.generateImage({ 
-        type,
-        productImage,
-        background,
-        count: 1,
-        model,
-        customContext
-      });
-      const imageUrl = result.imageUrl;
-      onResult?.(result);
-      ensureValidUrl(imageUrl);
-      addGeneratedImage(images, imageUrl, type);
+      promises.push(runGeneration());
     }
+    await Promise.all(promises);
   };
 
   const addGeneratedImage = (images: { url: string; type: string }[], url: string, type: string) => {
