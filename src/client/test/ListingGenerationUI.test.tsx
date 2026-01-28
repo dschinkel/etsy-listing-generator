@@ -18,7 +18,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(),
-      copyImageToClipboard: jest.fn(),
+      downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
     });
@@ -33,7 +33,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(),
-      copyImageToClipboard: jest.fn(),
+      downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
     });
@@ -60,7 +60,7 @@ describe('Listing Generation UI', () => {
       isGenerating: true,
       generateListing: jest.fn(),
       removeImage: jest.fn(),
-      copyImageToClipboard: jest.fn(),
+      downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
     });
@@ -83,7 +83,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(),
-      copyImageToClipboard: jest.fn(),
+      downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
     });
@@ -102,7 +102,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(),
-      copyImageToClipboard: jest.fn(),
+      downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
     });
@@ -146,7 +146,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(),
-      copyImageToClipboard: jest.fn(),
+      downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
     });

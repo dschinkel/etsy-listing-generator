@@ -121,20 +121,30 @@ Acceptance:
 - [COMPLETED] marks the task as [COMPLETED] in `tasks.md`
 
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
 
 ## Feature: FR.6 — Reorder or arrange ordering of images [NOT STARTED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 
 ## Feature: FR.7 — Remove images [COMPLETED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 ### FR.7.1 — Ability to Remove uploaded image [COMPLETED]
 ### FR.7.2 — Ability to remove a listing image from the list of images [COMPLETED]
 
-## Feature: FR.8 — Copy and download generated images [COMPLETED]
-### FR.8.1 — Copy generated images to clipboard [COMPLETED]
-### FR.8.2 — Download all generated images as a ZIP file [COMPLETED]
+## Feature: FR.14 — Download generated images [COMPLETED]
+Acceptance:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+### FR.14.1 — Download individual generated images directly [COMPLETED]
+### FR.14.2 — Download all generated images as a ZIP file [COMPLETED]
 
 ## Feature: FR.8 — Fill out other listing fields [NOT STARTED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 ### FR.1.8.1 — About [NOT STARTED]
 #### FR.1.8.1.1 — Title [NOT STARTED]
 #### FR.1.8.1.2 — Images [NOT STARTED]
@@ -158,12 +168,30 @@ Acceptance:
 #### FR.1.8.4.7 — Taxonomy Id [NOT STARTED]
 
 ## Feature: FR.9 — Save Listing Draft [NOT STARTED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 
 ## Feature: FR.10 — Publish Listing [NOT STARTED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 
 ## Feature: FR.11 — Push the new listing to my etsy store [NOT STARTED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 
 ### FR.11.1 — Technical Notes [NOT STARTED]
+
+## Feature: FR.12 — Custom Context for Shot Types [COMPLETED]
+Acceptance:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Ability to add specific instructions for each shot type via a "+" icon.
+- [COMPLETED] Instructions are appended to the system prompt.
+
+## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]
+Acceptance:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Ability to see the final system prompt in a side pane.
+- [COMPLETED] Side pane is resizable.
 
 ## Task: Fix [COMPLETED]
 ### Resolve 404 error when clicking generate listing images button

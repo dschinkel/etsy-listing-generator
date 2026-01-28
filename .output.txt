@@ -174,7 +174,7 @@ $ jest
  PASS   service  src/service/repositories/ListingRepository.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
@@ -230,18 +230,24 @@ $ jest
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
-      POST /listings/generate - 200 - 10ms
+      POST /listings/generate - 200 - 31ms
       at src/service/app.ts:20:11
  PASS   service  src/service/test/integration/PromptPreview.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/system-prompt
       at src/service/app.ts:17:11
     console.log
-      POST /listings/system-prompt - 200 - 82ms
+      POST /listings/system-prompt - 200 - 121ms
+      at src/service/app.ts:20:11
+    console.log
+      Incoming request: POST /listings/system-prompt
+      at src/service/app.ts:17:11
+    console.log
+      POST /listings/system-prompt - 200 - 5ms
       at src/service/app.ts:20:11
     console.log
       Incoming request: POST /listings/system-prompt
@@ -250,16 +256,10 @@ $ jest
       POST /listings/system-prompt - 200 - 1ms
       at src/service/app.ts:20:11
     console.log
-      Incoming request: POST /listings/system-prompt
-      at src/service/app.ts:17:11
-    console.log
-      POST /listings/system-prompt - 200 - 0ms
-      at src/service/app.ts:20:11
-    console.log
       Incoming request: GET /listings/system-prompt
       at src/service/app.ts:17:11
     console.log
-      GET /listings/system-prompt - 405 - 2ms
+      GET /listings/system-prompt - 405 - 0ms
       at src/service/app.ts:20:11
  PASS   client  src/client/hooks/useListingGeneration.test.ts
   ● Console
@@ -285,7 +285,7 @@ $ jest
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -316,19 +316,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -358,19 +358,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -400,19 +400,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -462,19 +462,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -504,19 +504,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -566,19 +566,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -608,19 +608,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -670,19 +670,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -712,19 +712,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -774,19 +774,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -816,19 +816,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -878,19 +878,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -920,19 +920,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -982,19 +982,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -1024,19 +1024,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -1066,19 +1066,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -1108,19 +1108,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -1150,19 +1150,19 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
           at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
-          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
+          at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:151:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
           at runWithFiberInDEV (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
@@ -1192,44 +1192,18 @@ $ jest
           at runTestInternal (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:367:16)
           at runTest (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/runTest.js:444:34)
           at Object.worker (/Users/zevia/code/ai/etsy-listing-generator/node_modules/jest-runner/build/testWorker.js:106:12)
-      155 |         setSystemPrompt(response.systemPrompt || '');
-      156 |       } catch (err) {
-    > 157 |         console.error('Failed to fetch prompt preview:', err);
+      152 |         setSystemPrompt(response.systemPrompt || '');
+      153 |       } catch (err) {
+    > 154 |         console.error('Failed to fetch prompt preview:', err);
           |                 ^
-      158 |       }
-      159 |     }, [listingRepository])
-      160 |   };
-      at src/client/hooks/useListingGeneration.ts:157:17
- PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (29.315 s)
+      155 |       }
+      156 |     }, [listingRepository])
+      157 |   };
+      at src/client/hooks/useListingGeneration.ts:154:17
+ PASS   service  src/service/commands/GenerateListingImages.test.ts (41.929 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Incoming request: POST /listings/generate
-      at src/service/app.ts:17:11
-    console.log
-      Attempting generation with model: gemini-3-pro-image-preview
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 1,
-        hero: 0,
-        closeUps: 0,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        model: 'gemini-3-pro-image-preview',
-        hasProductImage: true
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
-    console.log
-      POST /listings/generate - 200 - 27952ms
-      at src/service/app.ts:20:11
- PASS   service  src/service/commands/GenerateListingImages.test.ts (41.31 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
@@ -1261,15 +1235,41 @@ $ jest
         hasProductImage: true
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
- PASS   service  src/service/data/GeminiImageGenerator.test.ts (48.974 s)
+ PASS   service  src/service/data/GeminiImageGenerator.test.ts (46.215 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
       at _log (node_modules/dotenv/lib/main.js:142:11)
+ PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (54.083 s)
+  ● Console
+    console.log
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+    console.log
+      Incoming request: POST /listings/generate
+      at src/service/app.ts:17:11
+    console.log
+      Attempting generation with model: gemini-3-pro-image-preview
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
+    console.log
+      Generating images with params: {
+        lifestyle: 1,
+        hero: 0,
+        closeUps: 0,
+        flatLay: undefined,
+        macro: undefined,
+        contextual: undefined,
+        model: 'gemini-3-pro-image-preview',
+        hasProductImage: true
+      }
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
+    console.log
+      POST /listings/generate - 200 - 52018ms
+      at src/service/app.ts:20:11
 A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
 Test Suites: 11 passed, 11 total
 Tests:       57 passed, 57 total
 Snapshots:   0 total
-Time:        50.566 s, estimated 57 s
+Time:        55.438 s
 Ran all test suites in 2 projects.
-✨  Done in 51.39s.
+✨  Done in 56.38s.

@@ -95,17 +95,14 @@ export const useListingGeneration = (listingRepository: any) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const copyImageToClipboard = async (imageSrc: string) => {
+  const downloadImage = async (imageSrc: string, index: number) => {
     try {
       const response = await fetchWithTimeout(imageSrc);
       const blob = await response.blob();
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          [blob.type]: blob
-        })
-      ]);
+      const extension = blob.type.split('/')[1]?.split(';')[0] || 'png';
+      saveAs(blob, `listing-image-${index + 1}.${extension}`);
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error('Failed to download image: ', err);
     }
   };
 
@@ -146,8 +143,8 @@ export const useListingGeneration = (listingRepository: any) => {
     error,
     isGenerating,
     generateListing,
-    removeImage,
-    copyImageToClipboard,
+    removeImage, 
+    downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview: useCallback(async (params: any) => {
       try {

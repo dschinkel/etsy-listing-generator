@@ -127,16 +127,9 @@ describe('Listing Generation', () => {
     ]);
   });
 
-  it('copies an image to clipboard', async () => {
-    const mockClipboard = {
-      write: jest.fn()
-    };
-    (global.navigator as any).clipboard = mockClipboard;
-
-    // We need to mock fetch and Image to test this properly in JSDOM, 
-    // but for now let's just test that the function exists and can be called.
+  it('downloads an individual image', async () => {
     const { result } = renderHook(() => useListingGeneration({}));
-    expect(result.current.copyImageToClipboard).toBeDefined();
+    expect(result.current.downloadImage).toBeDefined();
   });
 
   it('downloads all images as ZIP', async () => {

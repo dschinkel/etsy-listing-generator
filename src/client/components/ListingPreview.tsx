@@ -13,11 +13,11 @@ interface ListingImage {
 interface ListingPreviewProps {
   images: ListingImage[];
   onRemove: (index: number) => void;
-  onCopy: (src: string) => void;
+  onDownload: (src: string, index: number) => void;
   onDownloadAll: () => void;
 }
 
-const ListingPreview = ({ images, onRemove, onCopy, onDownloadAll }: ListingPreviewProps) => {
+const ListingPreview = ({ images, onRemove, onDownload, onDownloadAll }: ListingPreviewProps) => {
   const { selectedImage, isModalOpen, openImage, closeImage } = useListingPreview();
 
   if (images.length === 0) return null;
@@ -65,12 +65,12 @@ const ListingPreview = ({ images, onRemove, onCopy, onDownloadAll }: ListingPrev
                       className="w-8 h-8"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onCopy(image.url);
+                        onDownload(image.url, index);
                       }}
-                      data-testid={`copy-listing-image-${index}`}
-                      title="Copy to clipboard"
+                      data-testid={`download-listing-image-${index}`}
+                      title="Download image"
                     >
-                      <Copy className="w-4 h-4" />
+                      <Download className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="destructive"

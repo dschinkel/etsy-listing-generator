@@ -67,7 +67,7 @@ const App = () => {
     isGenerating,
     generateListing, 
     removeImage, 
-    copyImageToClipboard,
+    downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview
   } = useListingGeneration(repository);
@@ -238,7 +238,7 @@ const App = () => {
             <ListingPreview 
               images={images} 
               onRemove={removeImage} 
-              onCopy={copyImageToClipboard} 
+              onDownload={downloadImage} 
               onDownloadAll={downloadAllImagesAsZip}
             />
           </div>

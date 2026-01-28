@@ -38,8 +38,16 @@ P0.8 If the user reverts an implemented plan, remove the corresponding plan and 
 P0.9 For React work, when presenting a PLAN, explicitly ask whether Step 1 (Component layer) should be a non-TDD scaffold or if it should be TDD'd (which would require explicit instruction to write UI tests).
 P0.10 At the very end of a task (after all steps and cleanup), you MUST mark the task as [COMPLETED] in `tasks.md`, run all tests one last time, run the linter and fix any errors, start the app and verify no runtime errors, and then perform a final cleanup commit and push before calling `submit`.
 
-G1.11 At the end of every task, you MUST run the linter (e.g., `npx tsc --noEmit` or `npm run lint`) and fix any reported errors. You MUST also run the application (e.g., `yarn dev` or `npm run dev`) and verify that there are no runtime errors in the logs or in the browser. This is mandatory for every task.
-G1.12 At the end of every task, you MUST run all tests (e.g., `npm run test`) and fix any reported errors. This is mandatory for every task.
+G1.10 When asked to add a new feature, you must always add it at the higher level in `PROJECT_SPEC.md` first, then break that out into smaller tasks second in `tasks.md` using the `PROJECT_SPEC` feature number.
+G1.10.1 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
+
+G1.11 Use domain language for files, functions, variables, tests, and modules. Do not include implementation details or technical words in variable names.
+G1.11.1 Example: instead of `downloadPromises`, use a domain-specific name like `images` if they represent the images being downloaded.
+
+G1.12 Organization and Naming:
+G1.12.1 Avoid generic buckets like util, utils, helper, helpers. Use domain terms instead. This applies to directory names, file names, and code constructs (functions, variables). 
+G1.12.2 Do NOT create "helper functions". Instead, use well-named composed functions that describe their domain intent.
+
 P0.11 When iterating on a feature, do not mark it as [FAILED] or create new "fix" tasks if it doesn't meet acceptance criteria immediately. Instead, keep the current task [IN PROGRESS] and iterate until it is [COMPLETED].
 P0.11.1 When starting a task, you MUST move the task from [NOT STARTED] to [IN PROGRESS] in `tasks.md`.
 P0.12 NEVER call `submit` if there are uncommitted or unpushed changes related to the task. Every task completion must end with a push to the remote repository. Commit messages must focus on domain features and intent. Do not include technical words like "verified", "Step X", or "Frontend/Backend".

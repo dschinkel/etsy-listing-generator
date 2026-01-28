@@ -69,6 +69,8 @@ A user can:
 
 **FR.4 — Show a final preview of the listing images**
     **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**
+    **FR.4.5 — Ability to see which shot type generated each image (displayed below thumbnails)**
+    **FR.4.6 — Ability to see which AI model was used for the current generation**
 **FR.5 — Redesign certain images that I don't like that**
     **FR.5.1 — Select an image to regen - create a new one**
     **FR.5.2 — Clicking the refresh button creates a new image**
@@ -104,9 +106,19 @@ A user can:
 
 **FR.10 — Publish Listing**
 
-**FR.111 — Push the new listing to my etsy store**
+**FR.11 — Push the new listing to my etsy store**
     - **FR.11.1 Technical Notes**
         - use Etsy Open API v3 to fully automate the creation of listings, including uploading images, setting titles, and writing descriptions
+
+**FR.12 — Custom Context for Shot Types**
+    - Ability to add specific instructions for each shot type via a "+" icon (e.g., "In a high-end kitchen").
+
+**FR.13 — System Prompt Preview Pane**
+    - Ability to see the final system prompt sent to the AI model in a resizable side pane.
+
+**FR.14 — Download Generated Images**
+    - Ability to download individual images directly to the hard drive.
+    - Ability to download all generated images as a single ZIP file.
 
 ---
 
@@ -117,6 +129,7 @@ A user can:
 - Work in a TDD workflow when user opts in as specified by `GUIDELINES.md`.
 - Before starting or resuming work after any prompt, re-read `GUIDELINES.md`.
 - Before starting or resuming work after any prompt, provide the next behavior PLAN as specified by `GUIDELINES.md`.
+- Every task created in `tasks.md` MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
 
 ### 4.2 Project Bootstrap
 - Initial project boilerplate must be copied from: `~/zevia/code/ai/react-app-boilerplate`
