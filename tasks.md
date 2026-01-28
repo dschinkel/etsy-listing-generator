@@ -186,6 +186,7 @@ Acceptance:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Ability to add specific instructions for each shot type via a "+" icon.
 - [COMPLETED] Instructions are appended to the system prompt.
+- [COMPLETED] Custom context textbox should be multiline, longer horizontally by default and draggable horizontally.
 
 ## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]
 Acceptance:

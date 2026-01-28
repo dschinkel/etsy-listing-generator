@@ -4,6 +4,7 @@ import { useListingGeneration } from './hooks/useListingGeneration';
 import { createListingRepository } from './repositories/ListingRepository';
 import { Button } from './components/ui/button';
 import { Input } from './components/ui/input';
+import { Textarea } from './components/ui/textarea';
 import { Label } from './components/ui/label';
 import { Checkbox } from './components/ui/checkbox';
 import { Card, CardHeader, CardTitle, CardContent } from './components/ui/card';
@@ -319,14 +320,14 @@ const ShotTypeItem = ({
         />
       </div>
       {showCustom && (
-        <div className="mt-2 pl-4 border-l-2 border-slate-700">
+        <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-2xl">
           <Label htmlFor={`${id}-custom`} className="text-xs mb-1 block">Custom Context</Label>
-          <Input 
+          <Textarea 
             id={`${id}-custom`}
             placeholder="e.g. In a high-end kitchen with marble countertops"
             value={customContext}
             onChange={(e) => onCustomContextChange(e.target.value)}
-            className="text-xs h-8"
+            className="text-xs min-h-[80px] resize-x"
           />
         </div>
       )}

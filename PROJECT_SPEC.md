@@ -112,6 +112,7 @@ A user can:
 
 **FR.12 — Custom Context for Shot Types**
     - Ability to add specific instructions for each shot type via a "+" icon (e.g., "In a high-end kitchen").
+    - Custom context textbox should be multiline, be longer horizontally by default and draggable in terms of making it horizontally longer.
 
 **FR.13 — System Prompt Preview Pane**
     - Ability to see the final system prompt sent to the AI model in a resizable side pane.
