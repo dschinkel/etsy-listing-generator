@@ -26,7 +26,7 @@ An AI-powered tool for Etsy sellers to generate consistent product listing image
 - **Domain-Driven Tests**: Test suites use domain-specific language (e.g., "fake" instead of "mock") and avoid simulated behaviors in favor of real API interactions where appropriate.
 
 ## Features
-- **Shot Types**: Supports Hero, Lifestyle, Close-up, Flat lay, Macro, and Contextual shots.
+- **Shot Types**: Supports Hero, Lifestyle, Close-up, Flat lay, Macro, Contextual, and Themed Environment shots.
 - **System Prompt Pane**: Resizable UI element to inspect the AI's internal instructions.
 - **Listing Management**: View, copy to clipboard, or download all generated images as a ZIP file.
 
