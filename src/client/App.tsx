@@ -75,6 +75,8 @@ const App = () => {
     templates,
     saveContextTemplate,
     removeContextTemplate,
+    totalShots,
+    isReadyToGenerate,
   } = useProductUpload(repository);
 
   const { 
@@ -91,8 +93,6 @@ const App = () => {
   } = useListingGeneration(repository);
 
   const [promptWidth, setPromptWidth] = React.useState(500);
-
-  const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
 
   React.useEffect(() => {
     fetchSystemPromptPreview({
@@ -206,7 +206,12 @@ const App = () => {
             </div>
             
             <div className="flex flex-col items-center gap-4">
-              {totalShots < 1 && (
+              {!productImage && (
+                <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
+                  Upload a product image to start
+                </div>
+              )}
+              {productImage && totalShots < 1 && (
                 <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
                   Specify a Shots Selection
                 </div>
@@ -214,7 +219,7 @@ const App = () => {
               <Button 
                 size="lg" 
                 className="w-full max-w-xs"
-                disabled={isGenerating || totalShots < 1}
+                disabled={isGenerating || !isReadyToGenerate}
                 onClick={() => generateListing({ 
                   lifestyleCount: lifestyleShotsCount,
                   heroCount: heroShotsCount,

@@ -78,7 +78,9 @@ describe('Listing Generation UI', () => {
       handleThemedEnvironmentCustomContextChange: jest.fn(),
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn()
+      removeContextTemplate: jest.fn(),
+      totalShots: 0,
+      isReadyToGenerate: false
     });
   });
 
@@ -94,6 +96,25 @@ describe('Listing Generation UI', () => {
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
+    });
+
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: 'some-image',
+      lifestyleShotsCount: 1,
+      totalShots: 1,
+      isReadyToGenerate: true,
+      // ... include other necessary mock fields if needed, 
+      // but usually the hook mock just needs what the component uses.
+      // Let's ensure it has at least the basic return structure.
+      heroShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+      themedEnvironmentShotsCount: 0,
+      templates: [],
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(),
     });
 
     render(<App />);
@@ -123,6 +144,22 @@ describe('Listing Generation UI', () => {
       fetchSystemPromptPreview: jest.fn()
     });
 
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: 'some-image',
+      lifestyleShotsCount: 1,
+      totalShots: 1,
+      isReadyToGenerate: true,
+      heroShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+      themedEnvironmentShotsCount: 0,
+      templates: [],
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(),
+    });
+
     render(<App />);
 
     const errorElement = screen.getByTestId('generation-error');
@@ -146,31 +183,42 @@ describe('Listing Generation UI', () => {
       fetchSystemPromptPreview: jest.fn()
     });
 
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: 'some-image',
+      lifestyleShotsCount: 0,
+      totalShots: 0,
+      isReadyToGenerate: false,
+      heroShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+      themedEnvironmentShotsCount: 0,
+      templates: [],
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(),
+    });
+
     render(<App />);
 
     const button = screen.getByText('Generate Listing Images');
     expect(button).toBeDisabled();
   });
 
-  it('is enabled when at least one shot is selected', () => {
+  it('is enabled when at least one shot is selected and product image is uploaded', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: null,
+      productImage: 'some-image',
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 1, // At least one shot
-      handleLifestyleShotsChange: jest.fn(),
+      totalShots: 1,
+      isReadyToGenerate: true,
       heroShotsCount: 0,
-      handleHeroShotsChange: jest.fn(),
       closeUpsCount: 0,
-      handleCloseUpsChange: jest.fn(),
       flatLayShotsCount: 0,
-      handleFlatLayShotsChange: jest.fn(),
       macroShotsCount: 0,
-      handleMacroShotsChange: jest.fn(),
       contextualShotsCount: 0,
-      handleContextualShotsChange: jest.fn(),
       themedEnvironmentShotsCount: 0,
-      handleThemedEnvironmentShotsChange: jest.fn(),
       isPrimaryImage: false,
       handlePrimarySelection: jest.fn(),
       lifestyleBackground: null,
@@ -212,26 +260,48 @@ describe('Listing Generation UI', () => {
     expect(button).not.toBeDisabled();
   });
 
-  it('displays "Specify a Shots Selection" in green when no shots are selected', () => {
+  it('displays "Upload a product image to start" when no product image is uploaded', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
       productImage: null,
+      lifestyleShotsCount: 1,
+      totalShots: 1,
+      isReadyToGenerate: false,
+      heroShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+      themedEnvironmentShotsCount: 0,
+      templates: [],
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(),
+    });
+    render(<App />);
+    const message = screen.getByText('Upload a product image to start');
+    expect(message).toBeInTheDocument();
+    expect(message.className).toContain('yellow');
+    
+    const button = screen.getByText('Generate Listing Images');
+    expect(button).toBeDisabled();
+  });
+
+  it('displays "Specify a Shots Selection" in green when product image is uploaded but no shots selected', () => {
+    (useProductUpload as jest.Mock).mockReturnValue({
+      productImage: 'some-image',
+      lifestyleShotsCount: 0, // No shots
+      totalShots: 0,
+      isReadyToGenerate: false,
+      heroShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+      themedEnvironmentShotsCount: 0,
+      templates: [],
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
-      lifestyleShotsCount: 0, // No shots
-      handleLifestyleShotsChange: jest.fn(),
-      heroShotsCount: 0,
-      handleHeroShotsChange: jest.fn(),
-      closeUpsCount: 0,
-      handleCloseUpsChange: jest.fn(),
-      flatLayShotsCount: 0,
-      handleFlatLayShotsChange: jest.fn(),
-      macroShotsCount: 0,
-      handleMacroShotsChange: jest.fn(),
-      contextualShotsCount: 0,
-      handleContextualShotsChange: jest.fn(),
-      themedEnvironmentShotsCount: 0,
-      handleThemedEnvironmentShotsChange: jest.fn(),
-      isPrimaryImage: false,
       handlePrimarySelection: jest.fn(),
       lifestyleBackground: null,
       handleLifestyleBackgroundUpload: jest.fn(),
@@ -260,10 +330,7 @@ describe('Listing Generation UI', () => {
       contextualCustomContext: '',
       handleContextualCustomContextChange: jest.fn(),
       themedEnvironmentCustomContext: '',
-      handleThemedEnvironmentCustomContextChange: jest.fn(),
-      templates: [],
-      saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn()
+      handleThemedEnvironmentCustomContextChange: jest.fn()
     });
     render(<App />);
     const message = screen.getByText('Specify a Shots Selection');
@@ -276,26 +343,23 @@ describe('Listing Generation UI', () => {
     expect(button.previousElementSibling).toBe(message);
   });
 
-  it('hides "Specify a Shots Selection" when at least one shot is selected', () => {
+  it('hides "Specify a Shots Selection" when both product image and at least one shot are present', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: null,
+      productImage: 'some-image',
+      lifestyleShotsCount: 1, // At least one shot
+      totalShots: 1,
+      isReadyToGenerate: true,
+      heroShotsCount: 0,
+      closeUpsCount: 0,
+      flatLayShotsCount: 0,
+      macroShotsCount: 0,
+      contextualShotsCount: 0,
+      themedEnvironmentShotsCount: 0,
+      templates: [],
+      saveContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
-      lifestyleShotsCount: 1, // At least one shot
-      handleLifestyleShotsChange: jest.fn(),
-      heroShotsCount: 0,
-      handleHeroShotsChange: jest.fn(),
-      closeUpsCount: 0,
-      handleCloseUpsChange: jest.fn(),
-      flatLayShotsCount: 0,
-      handleFlatLayShotsChange: jest.fn(),
-      macroShotsCount: 0,
-      handleMacroShotsChange: jest.fn(),
-      contextualShotsCount: 0,
-      handleContextualShotsChange: jest.fn(),
-      themedEnvironmentShotsCount: 0,
-      handleThemedEnvironmentShotsChange: jest.fn(),
-      isPrimaryImage: false,
       handlePrimarySelection: jest.fn(),
       lifestyleBackground: null,
       handleLifestyleBackgroundUpload: jest.fn(),
@@ -324,10 +388,7 @@ describe('Listing Generation UI', () => {
       contextualCustomContext: '',
       handleContextualCustomContextChange: jest.fn(),
       themedEnvironmentCustomContext: '',
-      handleThemedEnvironmentCustomContextChange: jest.fn(),
-      templates: [],
-      saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn()
+      handleThemedEnvironmentCustomContextChange: jest.fn()
     });
     render(<App />);
     

@@ -92,18 +92,15 @@ describe('useProductUpload', () => {
     // Use a small data URL to simulate an image
     const fakeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
     
-    // We can't easily mock FileReader internals, so we'll test the derived state 
-    // by assuming if productImage is set, isReadyToGenerate works.
-    // To do this headlessly we can either:
-    // 1. Mock handleUpload to set the state immediately
-    // 2. Use a different way to set the state (not possible if not exposed)
-    // 3. Just trust the logic we wrote which is pure: totalShots > 0 && productImage !== null
-    
-    // Let's try to mock handleUpload for this test
-    const realHandleUpload = result.current.handleUpload;
-    result.current.handleUpload = jest.fn(); // This won't work because it's a value from the hook.
+    // Mock FileReader to trigger onload immediately with our fake image
+    const mockReader = {
+      readAsDataURL: jest.fn(function(this: any) {
+        this.onloadend();
+      }),
+      get result() { return fakeImage; }
+    };
+    jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
 
-    // Better: let's just use the current handleUpload but mock FileReader or wait for it.
     const file = new File([''], 'test.png', { type: 'image/png' });
     
     await act(async () => {
@@ -111,11 +108,10 @@ describe('useProductUpload', () => {
       result.current.handleUpload({ target: { files: [file] } } as any);
     });
 
-    // Since FileReader is async, we wait.
-    await waitFor(() => {
-      expect(result.current.productImage).not.toBeNull();
-      expect(result.current.isReadyToGenerate).toBe(true);
-    });
+    expect(result.current.productImage).toBe(fakeImage);
+    expect(result.current.isReadyToGenerate).toBe(true);
+
+    (global.FileReader as jest.Mock).mockRestore();
   });
 
   it('persists themed environment shot selection', () => {
