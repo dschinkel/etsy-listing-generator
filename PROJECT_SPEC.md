@@ -68,6 +68,7 @@ A user can:
     **FR.2.2 — Ability to upload a background image to be used for contextual shots**
 
 **FR.4 — Show a final preview of the listing images**
+    **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**
 **FR.5 — Redesign certain images that I don't like that**
     **FR.5.1 — Select an image to regen - create a new one**
     **FR.5.2 — Clicking the refresh button creates a new image**

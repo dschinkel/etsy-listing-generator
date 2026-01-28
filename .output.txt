@@ -1,5 +1,6 @@
 yarn run v1.22.22
 $ jest
+ PASS   service  src/service/data/GeminiImageGeneratorExtraction.test.ts
  PASS   service  src/service/repositories/ListingRepositoryFallback.test.ts
   ● Console
     console.log
@@ -170,11 +171,10 @@ $ jest
         hasProductImage: false
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
- PASS   service  src/service/data/GeminiImageGeneratorExtraction.test.ts
  PASS   service  src/service/repositories/ListingRepository.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
@@ -209,7 +209,7 @@ $ jest
  PASS   service  src/service/test/integration/GenerateListingImagesError.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/generate
@@ -230,24 +230,18 @@ $ jest
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
-      POST /listings/generate - 200 - 37ms
+      POST /listings/generate - 200 - 10ms
       at src/service/app.ts:20:11
  PASS   service  src/service/test/integration/PromptPreview.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/system-prompt
       at src/service/app.ts:17:11
     console.log
-      POST /listings/system-prompt - 200 - 36ms
-      at src/service/app.ts:20:11
-    console.log
-      Incoming request: POST /listings/system-prompt
-      at src/service/app.ts:17:11
-    console.log
-      POST /listings/system-prompt - 200 - 0ms
+      POST /listings/system-prompt - 200 - 82ms
       at src/service/app.ts:20:11
     console.log
       Incoming request: POST /listings/system-prompt
@@ -256,10 +250,16 @@ $ jest
       POST /listings/system-prompt - 200 - 1ms
       at src/service/app.ts:20:11
     console.log
+      Incoming request: POST /listings/system-prompt
+      at src/service/app.ts:17:11
+    console.log
+      POST /listings/system-prompt - 200 - 0ms
+      at src/service/app.ts:20:11
+    console.log
       Incoming request: GET /listings/system-prompt
       at src/service/app.ts:17:11
     console.log
-      GET /listings/system-prompt - 405 - 0ms
+      GET /listings/system-prompt - 405 - 2ms
       at src/service/app.ts:20:11
  PASS   client  src/client/hooks/useListingGeneration.test.ts
   ● Console
@@ -284,7 +284,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -327,7 +327,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -369,7 +369,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -411,7 +411,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -473,7 +473,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -515,7 +515,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -577,7 +577,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -619,7 +619,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -681,7 +681,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -723,7 +723,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -785,7 +785,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -827,7 +827,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -889,7 +889,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -931,7 +931,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -993,7 +993,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -1035,7 +1035,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -1077,7 +1077,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -1119,7 +1119,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -1161,7 +1161,7 @@ $ jest
     console.error
       Failed to fetch prompt preview: ReferenceError: fetch is not defined
           at fetchWithTimeout (/Users/zevia/code/ai/etsy-listing-generator/src/client/lib/utils.ts:17:22)
-          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:70:44)
+          at Object.getSystemPromptPreview (/Users/zevia/code/ai/etsy-listing-generator/src/client/repositories/ListingRepository.ts:77:44)
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/hooks/useListingGeneration.ts:154:50
           at /Users/zevia/code/ai/etsy-listing-generator/src/client/App.tsx:80:5
           at Object.react_stack_bottom_frame (/Users/zevia/code/ai/etsy-listing-generator/node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
@@ -1200,10 +1200,10 @@ $ jest
       159 |     }, [listingRepository])
       160 |   };
       at src/client/hooks/useListingGeneration.ts:157:17
- PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (27.637 s)
+ PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (29.315 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/generate
@@ -1224,12 +1224,12 @@ $ jest
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
-      POST /listings/generate - 200 - 25930ms
+      POST /listings/generate - 200 - 27952ms
       at src/service/app.ts:20:11
- PASS   service  src/service/commands/GenerateListingImages.test.ts (42.624 s)
+ PASS   service  src/service/commands/GenerateListingImages.test.ts (41.31 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
@@ -1261,15 +1261,15 @@ $ jest
         hasProductImage: true
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
- PASS   service  src/service/data/GeminiImageGenerator.test.ts (51.342 s)
+ PASS   service  src/service/data/GeminiImageGenerator.test.ts (48.974 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
       at _log (node_modules/dotenv/lib/main.js:142:11)
 A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
 Test Suites: 11 passed, 11 total
 Tests:       57 passed, 57 total
 Snapshots:   0 total
-Time:        53.264 s, estimated 56 s
+Time:        50.566 s, estimated 57 s
 Ran all test suites in 2 projects.
-✨  Done in 53.97s.
+✨  Done in 51.39s.

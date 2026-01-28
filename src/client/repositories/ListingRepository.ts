@@ -30,27 +30,34 @@ export const createListingRepository = () => {
     });
     
     if (!response.ok) {
-      let errorDetail = '';
-      let systemPrompt = '';
-      let retryable = false;
-      let nextModel = '';
-      try {
-        const errorJson = await response.json();
-        errorDetail = errorJson.error || errorJson.message || JSON.stringify(errorJson);
-        systemPrompt = errorJson.systemPrompt || '';
-        retryable = !!errorJson.retryable;
-        nextModel = errorJson.nextModel || '';
-      } catch (e) {
-        errorDetail = await response.text();
-      }
-      const error: any = new Error(`Server Error (${response.status}): ${errorDetail}`);
-      error.systemPrompt = systemPrompt;
-      error.retryable = retryable;
-      error.nextModel = nextModel;
-      throw error;
+      await handleErrorResponse(response);
     }
 
     return await response.json();
+  };
+
+  const handleErrorResponse = async (response: Response) => {
+    const text = await response.text();
+    let errorDetail = text;
+    let systemPrompt = '';
+    let retryable = false;
+    let nextModel = '';
+
+    try {
+      const errorJson = JSON.parse(text);
+      errorDetail = errorJson.error || errorJson.message || JSON.stringify(errorJson);
+      systemPrompt = errorJson.systemPrompt || '';
+      retryable = !!errorJson.retryable;
+      nextModel = errorJson.nextModel || '';
+    } catch (e) {
+      // Use raw text as errorDetail if not JSON
+    }
+
+    const error: any = new Error(`Server Error (${response.status}): ${errorDetail}`);
+    error.systemPrompt = systemPrompt;
+    error.retryable = retryable;
+    error.nextModel = nextModel;
+    throw error;
   };
 
   const getSystemPromptPreview = async (params: {

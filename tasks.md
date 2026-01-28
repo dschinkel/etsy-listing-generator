@@ -111,6 +111,15 @@ The Fix:
 - [COMPLETED] Verified fix with full test suite (57 tests).
 - [COMPLETED] Verified no linting or runtime errors.
 
+## Feature: FR.4.4 — View full res image in modal [COMPLETED]
+### FR.4.4.1 — Ability to click a Listing Preview Thumb and it shows me the full res image in a modal [COMPLETED]
+Acceptance:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Clicking a thumbnail in Listing Preview opens a modal.
+- [COMPLETED] The modal displays the full resolution image.
+- [COMPLETED] The modal can be closed.
+- [COMPLETED] marks the task as [COMPLETED] in `tasks.md`
+
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 ### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
 ### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
@@ -261,3 +270,10 @@ The Fix:
 - [COMPLETED] Updated `extractImageFromResponse` and `findImageDeep` in `GeminiImageGenerator.ts` to strictly require `image/` mime type for `inlineData`.
 - [COMPLETED] Added regression test in `GeminiImageGeneratorExtraction.test.ts`.
 - [COMPLETED] Verified fix with full test suite (56 tests).
+
+## Task: Fix [COMPLETED]
+### Resolve 'body stream already read' error when custom context is added
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Fix `ListingRepository` (client) to read response body only once.
+- [COMPLETED] Investigated backend failure and confirmed client-side error handling was the primary issue.
