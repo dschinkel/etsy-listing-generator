@@ -235,3 +235,11 @@ The Fix:
 - [COMPLETED] Switched to more reliable placeholder and fallback services (`picsum.photos`, `placehold.co`).
 - [COMPLETED] Verified fix with new unit tests and full test suite.
 - [COMPLETED] Verified no linting or runtime errors.
+
+## Task: Fix [COMPLETED]
+### Ensure image generation retries with the next model on any model failure
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Broadened `isRetryableError` in `ListingRepository` to include 5xx, 429, and common error strings.
+- [COMPLETED] Updated `useListingGeneration.test.ts` to verify client-side retry orchestration.
+- [COMPLETED] Verified fix with full test suite (55 tests).
