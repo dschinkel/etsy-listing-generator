@@ -279,6 +279,8 @@ const ShotTypeItem = ({
   onChange, 
   customContext, 
   onCustomContextChange,
+  templates,
+  onSaveTemplate,
   background,
   onBackgroundUpload
 }: { 

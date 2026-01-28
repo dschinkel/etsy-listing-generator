@@ -325,4 +325,12 @@ describe('Listing Generation UI', () => {
 
     expect(screen.getByText(mockPrompt)).toBeInTheDocument();
   });
+
+  it('toggles custom context without crashing', () => {
+    render(<App />);
+    const addButtons = screen.getAllByTitle('Add custom context');
+    fireEvent.click(addButtons[0]);
+    
+    expect(screen.getByText('Custom Context')).toBeInTheDocument();
+  });
 });

@@ -345,3 +345,11 @@ The Fix:
 - [COMPLETED] FR.15.3: Update `useProductUpload` hook to fetch and manage templates.
 - [COMPLETED] FR.15.4: Update `ShotTypeItem` UI with template selection and save functionality.
 - [COMPLETED] FR.15.5: Final verification and cleanup.
+
+## Task: Fix [COMPLETED]
+### Resolve ReferenceError: templates is not defined in App.tsx
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Create a reproduction test in `ListingGenerationUI.test.tsx`.
+- [x] Fix the missing `templates` and `onSaveTemplate` in `ShotTypeItem` destructuring in `App.tsx`.
+- [x] Verify the fix with tests.

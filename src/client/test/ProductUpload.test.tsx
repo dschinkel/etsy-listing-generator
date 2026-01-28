@@ -2,6 +2,16 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
 
+// Mock fetch for API calls in hooks
+global.fetch = jest.fn().mockImplementation(() => 
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({ templates: [], systemPrompt: '' }),
+    text: () => Promise.resolve(''),
+    blob: () => Promise.resolve(new Blob())
+  })
+);
+
 beforeEach(() => {
   render(<App />);
 });

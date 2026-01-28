@@ -1,20 +1,39 @@
 import { createListingRepository } from './ListingRepository';
 
 describe('Listing Repository Fallback', () => {
-  it('retries with next model when primary fails with 503', async () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('retries with next model when primary fails with 503 after max internal retries', async () => {
     const mockDataLayer = {
       generateImage: jest.fn()
+        .mockRejectedValueOnce({ status: 503, message: 'Overloaded' })
+        .mockRejectedValueOnce({ status: 503, message: 'Overloaded' })
         .mockRejectedValueOnce({ status: 503, message: 'Overloaded' })
         .mockResolvedValueOnce({ imageUrl: 'http://image1.com', systemInstruction: 'imagen prompt' }),
       getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
     };
     
     const repository = createListingRepository(mockDataLayer);
-    const result = await repository.generateImages({ lifestyleCount: 1 });
+    const generatePromise = repository.generateImages({ lifestyleCount: 1 });
     
-    expect(mockDataLayer.generateImage).toHaveBeenCalledTimes(2);
-    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(1, expect.objectContaining({ model: 'gemini-3-pro-image-preview' }));
-    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(2, expect.objectContaining({ model: 'imagen-4.0-generate-001' }));
+    // Fast-forward through internal retries
+    for (let i = 0; i < 3; i++) {
+      await jest.runAllTimersAsync();
+    }
+
+    const result = await generatePromise;
+    
+    expect(mockDataLayer.generateImage).toHaveBeenCalledTimes(4);
+    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(1, expect.objectContaining({ model: 'gemini-2.5-flash-image' }));
+    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(2, expect.objectContaining({ model: 'gemini-2.5-flash-image' }));
+    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(3, expect.objectContaining({ model: 'gemini-2.5-flash-image' }));
+    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(4, expect.objectContaining({ model: 'imagen-4.0-generate-001' }));
     expect(result.images).toEqual([{ url: 'http://image1.com', type: 'lifestyle' }]);
     expect(result.model).toBe('imagen-4.0-generate-001');
   });
@@ -32,10 +51,10 @@ describe('Listing Repository Fallback', () => {
     const result = await repository.generateImages({ lifestyleCount: 1 });
     
     expect(mockDataLayer.generateImage).toHaveBeenCalledTimes(3);
-    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(1, expect.objectContaining({ model: 'gemini-3-pro-image-preview' }));
+    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(1, expect.objectContaining({ model: 'gemini-2.5-flash-image' }));
     expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(2, expect.objectContaining({ model: 'imagen-4.0-generate-001' }));
-    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(3, expect.objectContaining({ model: 'gpt-image-1.5' }));
-    expect(result.model).toBe('gpt-image-1.5');
+    expect(mockDataLayer.generateImage).toHaveBeenNthCalledWith(3, expect.objectContaining({ model: 'gemini-1.5-flash-latest' }));
+    expect(result.model).toBe('gemini-1.5-flash-latest');
   });
 
   it('throws the last error if all models fail', async () => {

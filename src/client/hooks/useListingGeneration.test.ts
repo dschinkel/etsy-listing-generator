@@ -47,7 +47,7 @@ describe('Listing Generation', () => {
     expect(capturedParams).toEqual({ 
       lifestyleCount: 1, 
       productImage: base64Image,
-      model: 'gemini-3-pro-image-preview',
+      model: 'gemini-2.5-flash-image',
       noFallback: true
     });
   });
@@ -69,7 +69,7 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toEqual({ 
       heroCount: 2,
-      model: 'gemini-3-pro-image-preview',
+      model: 'gemini-2.5-flash-image',
       noFallback: true
     });
     expect(result.current.images).toEqual([{ url: 'hero_1.png', type: 'hero' }, { url: 'hero_2.png', type: 'hero' }]);
@@ -92,7 +92,7 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toEqual({ 
       closeUpsCount: 1,
-      model: 'gemini-3-pro-image-preview',
+      model: 'gemini-2.5-flash-image',
       noFallback: true
     });
     expect(result.current.images).toEqual([{ url: 'closeup_1.png', type: 'close-up' }]);
@@ -224,8 +224,8 @@ describe('Listing Generation', () => {
     });
 
     // Check it's showing the first model
-    expect(result.current.modelUsed).toBe('gemini-3-pro-image-preview');
-    expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
+    expect(result.current.modelUsed).toBe('gemini-2.5-flash-image');
+    expect(result.current.error).toContain('gemini-2.5-flash-image failed');
 
     // Advance time by 5 seconds
     await act(async () => {
@@ -267,7 +267,7 @@ describe('Listing Generation', () => {
       generationPromise = result.current.generateListing({ lifestyleCount: 1 });
     });
 
-    expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
+    expect(result.current.error).toContain('gemini-2.5-flash-image failed');
 
     await act(async () => {
       jest.advanceTimersByTime(5000);

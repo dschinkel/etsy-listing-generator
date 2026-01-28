@@ -78,7 +78,8 @@ export const useListingGeneration = (listingRepository: any) => {
 
           if (err.retryable && err.nextModel) {
           setTimedError(`Model ${currentModel} failed: ${err.message}. Retrying with ${err.nextModel}...`);
-          // No delay here because ListingRepository already has some retry logic and we want to move fast through fallbacks
+          // Brief delay to allow UI to show retry status and avoid hammering the backend
+          await new Promise(resolve => setTimeout(resolve, 2000));
           currentModel = err.nextModel;
           setError(null); 
         } else {
