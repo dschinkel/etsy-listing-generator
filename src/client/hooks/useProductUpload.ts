@@ -31,6 +31,9 @@ export const useProductUpload = (repository?: any) => {
   const [themedEnvironmentCustomContext, setThemedEnvironmentCustomContext] = useState('');
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
 
+  const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
+  const isReadyToGenerate = totalShots > 0 && productImage !== null;
+
   useEffect(() => {
     if (repository) {
       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
@@ -249,5 +252,7 @@ export const useProductUpload = (repository?: any) => {
     templates,
     saveContextTemplate,
     removeContextTemplate,
+    totalShots,
+    isReadyToGenerate,
   };
 };

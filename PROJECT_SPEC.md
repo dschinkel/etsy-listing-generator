@@ -49,6 +49,8 @@ A user can:
     **FR.1.2 - Ability to upload a PNG image as the product image to be used as context for generating listing images**
     **FR.1.2 - Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images**
 
+**FR.1.3 - Ensure that generation is disabled if no product image is loaded.**
+
 **FR.2 — Specify number of type of images to generate**
     **FR.2.1 — Ability to specify how many images generated should be lifestyle shots**
     **FR.2.2 — Ability to specify how many images generated should be hero shots**
