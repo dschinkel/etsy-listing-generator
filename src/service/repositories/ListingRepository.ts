@@ -49,11 +49,7 @@ export const createListingRepository = (dataLayer: any) => {
           lastSystemPrompt = error.systemPrompt;
         }
 
-        const isRetryable = error.status === 503 || 
-                            String(error.status).toLowerCase().includes('canceled') ||
-                            error.message?.includes('503') || 
-                            error.message?.toLowerCase().includes('overloaded') ||
-                            error.message?.toLowerCase().includes('canceled');
+        const isRetryable = isRetryableError(error);
 
         const nextModel = modelsToTry[modelsToTry.indexOf(model) + 1];
 
@@ -78,6 +74,27 @@ export const createListingRepository = (dataLayer: any) => {
       }
     }
     throw lastError;
+  };
+
+  const isRetryableError = (error: any) => {
+    const statusStr = String(error.status || '');
+    const status = parseInt(statusStr, 10);
+    const message = String(error.message || error || '').toLowerCase();
+    
+    if (status >= 500 || status === 429) return true;
+    if (statusStr.toLowerCase().includes('canceled')) return true;
+    
+    const retryablePhrases = [
+      'overloaded', 
+      'canceled', 
+      'timeout', 
+      'deadline exceeded', 
+      'try again', 
+      'service unavailable',
+      'internal error'
+    ];
+    
+    return retryablePhrases.some(phrase => message.includes(phrase));
   };
 
   const internalGenerateImages = async (params: { 

@@ -250,4 +250,43 @@ describe('Listing Generation', () => {
     
     jest.useRealTimers();
   });
+
+  it('retries when server indicates retryable error for non-503 failures', async () => {
+    const error: any = new Error('Internal Server Error');
+    error.retryable = true;
+    error.nextModel = 'imagen-4.0-generate-001';
+
+    const fakeListingRepository = {
+      generateImages: jest.fn()
+        .mockRejectedValueOnce(error)
+        .mockResolvedValueOnce({ 
+          images: [{ url: 'fallback_result.png', type: 'lifestyle' }], 
+          model: 'imagen-4.0-generate-001',
+          systemPrompt: 'fallback prompt'
+        })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    jest.useFakeTimers();
+
+    let generationPromise: Promise<void>;
+    await act(async () => {
+      generationPromise = result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
+
+    await act(async () => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    await act(async () => {
+      await generationPromise;
+    });
+
+    expect(result.current.images[0].url).toBe('fallback_result.png');
+    expect(result.current.modelUsed).toBe('imagen-4.0-generate-001');
+    
+    jest.useRealTimers();
+  });
 });

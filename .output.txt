@@ -16,10 +16,10 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Model gemini-3-pro-image-preview failed with retryable error. Trying next model...
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:61:19)
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:57:19)
     console.log
       Attempting generation with model: imagen-4.0-generate-001
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -34,7 +34,7 @@ $ jest
         model: 'imagen-4.0-generate-001',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -49,10 +49,10 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Model gemini-3-pro-image-preview failed with retryable error. Trying next model...
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:61:19)
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:57:19)
     console.log
       Attempting generation with model: imagen-4.0-generate-001
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -67,10 +67,10 @@ $ jest
         model: 'imagen-4.0-generate-001',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Model imagen-4.0-generate-001 failed with retryable error. Trying next model...
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:61:19)
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:57:19)
     console.log
       Attempting generation with model: gpt-image-1.5
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -85,7 +85,7 @@ $ jest
         model: 'gpt-image-1.5',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -100,10 +100,10 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Model gemini-3-pro-image-preview failed with retryable error. Trying next model...
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:61:19)
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:57:19)
     console.log
       Attempting generation with model: imagen-4.0-generate-001
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -118,10 +118,10 @@ $ jest
         model: 'imagen-4.0-generate-001',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Model imagen-4.0-generate-001 failed with retryable error. Trying next model...
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:61:19)
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:57:19)
     console.log
       Attempting generation with model: gpt-image-1.5
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -136,7 +136,7 @@ $ jest
         model: 'gpt-image-1.5',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -151,10 +151,10 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Model gemini-3-pro-image-preview failed with retryable error. Trying next model...
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:61:19)
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:57:19)
     console.log
       Attempting generation with model: imagen-4.0-generate-001
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -169,12 +169,11 @@ $ jest
         model: 'imagen-4.0-generate-001',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
- PASS   service  src/service/data/GeminiImageGeneratorExtraction.test.ts
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
  PASS   service  src/service/repositories/ListingRepository.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
@@ -190,7 +189,7 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: true
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -205,11 +204,12 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
+ PASS   service  src/service/data/GeminiImageGeneratorExtraction.test.ts
  PASS   service  src/service/test/integration/GenerateListingImagesError.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/generate
@@ -228,14 +228,14 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: false
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
-      POST /listings/generate - 200 - 20ms
+      POST /listings/generate - 200 - 37ms
       at src/service/app.ts:20:11
  PASS   service  src/service/test/integration/PromptPreview.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/system-prompt
@@ -247,7 +247,7 @@ $ jest
       Incoming request: POST /listings/system-prompt
       at src/service/app.ts:17:11
     console.log
-      POST /listings/system-prompt - 200 - 1ms
+      POST /listings/system-prompt - 200 - 0ms
       at src/service/app.ts:20:11
     console.log
       Incoming request: POST /listings/system-prompt
@@ -274,6 +274,9 @@ $ jest
       at Object.generateListing (src/client/hooks/useListingGeneration.ts:74:17)
     console.log
       Generation failed for model: gemini-3-pro-image-preview 503 Service Unavailable
+      at Object.generateListing (src/client/hooks/useListingGeneration.ts:74:17)
+    console.log
+      Generation failed for model: gemini-3-pro-image-preview Internal Server Error
       at Object.generateListing (src/client/hooks/useListingGeneration.ts:74:17)
  PASS   client  src/client/test/ListingGenerationUI.test.tsx
  PASS   client  src/client/test/ProductUpload.test.tsx
@@ -1197,15 +1200,10 @@ $ jest
       159 |     }, [listingRepository])
       160 |   };
       at src/client/hooks/useListingGeneration.ts:157:17
- PASS   service  src/service/data/GeminiImageGenerator.test.ts (54.38 s)
+ PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (28.66 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
-      at _log (node_modules/dotenv/lib/main.js:142:11)
- PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (58.767 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  override existing env vars with { override: true }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/generate
@@ -1224,14 +1222,14 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: true
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
-      POST /listings/generate - 200 - 57581ms
+      POST /listings/generate - 200 - 27429ms
       at src/service/app.ts:20:11
- PASS   service  src/service/commands/GenerateListingImages.test.ts (68.193 s)
+ PASS   service  src/service/commands/GenerateListingImages.test.ts (38.128 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  override existing env vars with { override: true }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
@@ -1247,7 +1245,7 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: true
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
     console.log
       Attempting generation with model: gemini-3-pro-image-preview
       at Object.generateImages (src/service/repositories/ListingRepository.ts:43:17)
@@ -1262,11 +1260,16 @@ $ jest
         model: 'gemini-3-pro-image-preview',
         hasProductImage: true
       }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:105:13)
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:122:13)
+ PASS   service  src/service/data/GeminiImageGenerator.test.ts (53.919 s)
+  ● Console
+    console.log
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+      at _log (node_modules/dotenv/lib/main.js:142:11)
 A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
 Test Suites: 11 passed, 11 total
-Tests:       54 passed, 54 total
+Tests:       55 passed, 55 total
 Snapshots:   0 total
-Time:        69.378 s
+Time:        55.302 s, estimated 69 s
 Ran all test suites in 2 projects.
-✨  Done in 70.26s.
+✨  Done in 55.95s.
