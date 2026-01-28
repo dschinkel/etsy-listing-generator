@@ -298,8 +298,8 @@ const ShotTypeItem = ({
     <div className="flex flex-col gap-2 border-b border-slate-800 pb-4 last:border-0">
       <div className="flex items-center justify-between gap-4">
         <div className="flex flex-col flex-1">
-          <Label htmlFor={id}>{label}</Label>
-          <span className="text-xs text-muted-foreground">{description}</span>
+          <Label htmlFor={id} className="text-base font-semibold">{label}</Label>
+          <span className="text-sm text-muted-foreground">{description}</span>
           <div className="flex items-center gap-2 mt-1">
             <Button 
               variant="ghost" 

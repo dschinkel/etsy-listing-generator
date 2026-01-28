@@ -27,6 +27,14 @@ Acceptance:
 - [COMPLETED] Buttons placed to the right of the plus button with 10px padding.
 - [COMPLETED] Background Uploads section removed.
 
+## Feature: UI Enhancement [COMPLETED]
+### Increase the size of the text in each section of Shots Selection
+Acceptance:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Labels in `ShotTypeItem` increased to `text-base font-semibold`.
+- [COMPLETED] Descriptions in `ShotTypeItem` increased to `text-sm`.
+- [COMPLETED] Verified UI changes manually.
+
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
 ### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.1 - lifestyle shots [COMPLETED]
 ### FR.4.2 - Show thumbnail previews of images generated based on user input from FR.2.2 - hero shots [COMPLETED]
