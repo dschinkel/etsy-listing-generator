@@ -300,6 +300,13 @@ The Fix:
 - [COMPLETED] Verified fix with full test suite (56 tests).
 
 ## Task: Fix [COMPLETED]
+### Ensure browser opens automatically on yarn dev
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Updated `vite.config.ts` to include `server.open: true`.
+- [COMPLETED] Verified configuration.
+
+## Task: Fix [COMPLETED]
 ### Resolve 'body stream already read' error when custom context is added
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
