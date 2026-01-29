@@ -482,7 +482,10 @@ const ShotTypeItem = ({
                 size="icon"
                 className="h-6 w-6 text-muted-foreground hover:text-foreground"
                 title="Clear custom context"
-                onClick={() => onCustomContextChange("")}
+                onClick={() => {
+                  onCustomContextChange("");
+                  setSelectedTemplate("");
+                }}
                 data-testid={`${id}-clear-context`}
               >
                 <Eraser className="h-3 w-3" />
@@ -503,7 +506,13 @@ const ShotTypeItem = ({
             id={`${id}-custom`}
             placeholder="e.g. In a high-end kitchen with marble countertops"
             value={customContext}
-            onChange={(e) => onCustomContextChange(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              onCustomContextChange(newValue);
+              if (!newValue.trim()) {
+                setSelectedTemplate("");
+              }
+            }}
             className="text-xs min-h-[80px] resize-x"
           />
         </div>

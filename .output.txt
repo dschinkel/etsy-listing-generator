@@ -1,26 +1,7 @@
 yarn run v1.22.22
-$ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/hooks/useListingGeneration.test.ts src/client/test/ListingGenerationUI.test.tsx
- PASS   client  src/client/hooks/useListingGeneration.test.ts
-  ● Console
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Server Error (503): Service Unavailable
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:78:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Something went wrong
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:78:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Something went wrong
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:78:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image 503 Service Unavailable
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:78:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Internal Server Error
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:78:17)
- PASS   client  src/client/test/ListingGenerationUI.test.tsx
-  ● Console
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+$ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/test/ListingGenerationUI.test.tsx
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -44,8 +25,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -69,8 +50,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -94,8 +75,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -119,8 +100,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -144,8 +125,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -169,8 +150,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       120 |     });
       121 |
     > 122 |     render(<App />);
@@ -194,8 +175,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:122:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -219,8 +200,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -244,8 +225,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -269,8 +250,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -294,8 +275,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -319,8 +300,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -344,8 +325,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       163 |     });
       164 |
     > 165 |     render(<App />);
@@ -369,8 +350,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:165:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -394,8 +375,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -419,8 +400,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -444,8 +425,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -469,8 +450,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -494,8 +475,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -519,8 +500,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       202 |     });
       203 |
     > 204 |     render(<App />);
@@ -544,8 +525,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:204:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -569,8 +550,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -594,8 +575,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -619,8 +600,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -644,8 +625,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -669,8 +650,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -694,8 +675,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       257 |     });
       258 |
     > 259 |     render(<App />);
@@ -719,8 +700,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:259:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -744,8 +725,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -769,8 +750,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -794,8 +775,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -819,8 +800,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -844,8 +825,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -869,8 +850,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       279 |       removeContextTemplate: jest.fn(),
       280 |     });
     > 281 |     render(<App />);
@@ -894,8 +875,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:281:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -919,8 +900,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -944,8 +925,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -969,8 +950,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -994,8 +975,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -1019,8 +1000,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -1044,8 +1025,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       335 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       336 |     });
     > 337 |     render(<App />);
@@ -1069,8 +1050,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:337:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1094,8 +1075,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1119,8 +1100,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1144,8 +1125,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1169,8 +1150,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1194,8 +1175,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1219,8 +1200,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       393 |       handleThemedEnvironmentCustomContextChange: jest.fn()
       394 |     });
     > 395 |     render(<App />);
@@ -1244,8 +1225,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:395:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       479 |     });
       480 |
     > 481 |     render(<App />);
@@ -1269,8 +1250,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:481:11)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       546 |     });
       547 |
     > 548 |     render(<App />);
@@ -1294,8 +1275,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:548:11)
-    console.warn
-      Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+  console.warn
+    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
       555 |
       556 |     const removeButton = screen.getByTestId('hero-shots-remove-template');
     > 557 |     fireEvent.click(removeButton);
@@ -1398,8 +1379,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at Function.fireEvent.<computed> [as click] (node_modules/@testing-library/dom/dist/events.js:110:36)
       at Function.fireEvent.<computed> [as click] (node_modules/@testing-library/react/dist/fire-event.js:15:52)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:557:15)
-    console.error
-      You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+  console.error
+    You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
       617 |     });
       618 |
     > 619 |     render(<App />);
@@ -1423,8 +1404,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
       at render (node_modules/@testing-library/react/dist/pure.js:291:10)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:619:11)
-    console.warn
-      Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+  console.warn
+    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
       623 |
       624 |     const saveButton = screen.getByTitle('Save as template');
     > 625 |     fireEvent.click(saveButton);
@@ -1527,9 +1508,25 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at Function.fireEvent.<computed> [as click] (node_modules/@testing-library/dom/dist/events.js:110:36)
       at Function.fireEvent.<computed> [as click] (node_modules/@testing-library/react/dist/fire-event.js:15:52)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:625:15)
-Test Suites: 2 passed, 2 total
-Tests:       33 passed, 33 total
+ PASS   client  src/client/test/ListingGenerationUI.test.tsx
+  Listing Generation UI
+    ✓ displays error message below the generate button (120 ms)
+    ✓ displays status message during fallback (51 ms)
+    ✓ is disabled when no shots are selected (49 ms)
+    ✓ is enabled when at least one shot is selected and product image is uploaded (48 ms)
+    ✓ displays "Upload a product image to start" when no product image is uploaded (41 ms)
+    ✓ displays "Specify a Shots Selection" in green when product image is uploaded but no shots selected (44 ms)
+    ✓ hides "Specify a Shots Selection" when both product image and at least one shot are present (42 ms)
+    ✓ displays system prompt even when generation fails (20 ms)
+    ✓ toggles custom context without crashing (24 ms)
+    ✓ populates and appends templates to custom context (61 ms)
+    ✓ removes a template (150 ms)
+    ✓ saves a template (120 ms)
+    ✓ allows setting an image as primary (26 ms)
+    ✓ has reduced gap in listing preview items (20 ms)
+Test Suites: 1 passed, 1 total
+Tests:       14 passed, 14 total
 Snapshots:   0 total
-Time:        2.896 s
-Ran all test suites matching /src\/client\/hooks\/useListingGeneration.test.ts|src\/client\/test\/ListingGenerationUI.test.tsx/i.
-✨  Done in 3.51s.
+Time:        2.026 s
+Ran all test suites matching /src\/client\/test\/ListingGenerationUI.test.tsx/i.
+✨  Done in 2.80s.
