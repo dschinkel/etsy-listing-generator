@@ -75,6 +75,37 @@ export async function deleteImageFromAssets(imageUrl: string): Promise<void> {
   }
 }
 
+/**
+ * Resolves a local image URL to a base64 data URL.
+ */
+export async function resolveLocalImageUrl(imageUrl: string): Promise<string> {
+  if (imageUrl.startsWith('data:')) {
+    return imageUrl;
+  }
+
+  let filePath: string | null = null;
+
+  if (imageUrl.startsWith('/src/assets/generated-images/')) {
+    const fileName = imageUrl.replace('/src/assets/generated-images/', '');
+    filePath = path.join(GENERATED_ASSETS_DIR, fileName);
+  } else if (imageUrl.startsWith('/src/assets/uploads/')) {
+    const fileName = imageUrl.replace('/src/assets/uploads/', '');
+    filePath = path.join(UPLOADS_ASSETS_DIR, fileName);
+  } else if (imageUrl.startsWith('/src/assets/archived-images/')) {
+    const fileName = imageUrl.replace('/src/assets/archived-images/', '');
+    filePath = path.join(ARCHIVED_ASSETS_DIR, fileName);
+  }
+
+  if (filePath && fs.existsSync(filePath)) {
+    const buffer = fs.readFileSync(filePath);
+    const extension = path.extname(filePath).substring(1) || 'png';
+    const mimeType = `image/${extension === 'jpg' ? 'jpeg' : extension}`;
+    return `data:${mimeType};base64,${buffer.toString('base64')}`;
+  }
+
+  return imageUrl;
+}
+
 const ARCHIVED_ASSETS_DIR = path.join(process.cwd(), 'src', 'assets', 'archived-images');
 const UPLOADS_ASSETS_DIR = path.join(process.cwd(), 'src', 'assets', 'uploads');
 

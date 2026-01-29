@@ -112,9 +112,4 @@ Acceptance:
 (See [tasks/completed/task-fr21-archive-uploads.md](tasks/completed/task-fr21-archive-uploads.md))
 
 ## Feature: FR.22 — Select Archived Uploads [COMPLETED]
-Acceptance:
-- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] FR.22.1 — Collapsible section showing archived photos
-- [x] FR.22.2 — Select up to 2 archived images
-- [x] FR.22.3 — Preview selected archived images
-- [x] FR.22.4 — TDD at hook layer
+(See [tasks/completed/task-fr22-select-archived-uploads.md](tasks/completed/task-fr22-select-archived-uploads.md))

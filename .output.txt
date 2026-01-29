@@ -1,9 +1,9 @@
 yarn run v1.22.22
-$ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/hooks/useListingGeneration.test.ts src/client/hooks/useProductUpload.test.ts src/client/repositories/ListingRepository.test.ts src/service/repositories/ListingRepository.test.ts src/service/test/integration/GenerateListingImagesError.test.ts src/service/test/integration/FourLifestyleShots.test.ts
+$ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/hooks/useListingGeneration.test.ts src/client/hooks/useProductUpload.test.ts src/service/repositories/ListingRepository.test.ts src/service/data/GeminiImageGenerator.test.ts src/service/test/integration/FourLifestyleShots.test.ts src/service/test/integration/GeminiImageGenerator.test.ts src/service/test/integration/GenerateListingImagesError.test.ts
  PASS   service  src/service/repositories/ListingRepository.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-2.5-flash-image
@@ -56,7 +56,7 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
  PASS   service  src/service/test/integration/GenerateListingImagesError.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/generate
@@ -78,9 +78,8 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
     console.log
-      POST /listings/generate - 200 - 19ms
+      POST /listings/generate - 200 - 38ms
       at src/service/app.ts:22:11
- PASS   client  src/client/repositories/ListingRepository.test.ts
  PASS   client  src/client/hooks/useProductUpload.test.ts
   ● Console
     console.error
@@ -400,10 +399,10 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
     console.log
       Generation failed for model: gemini-2.5-flash-image Internal Server Error
       at Object.generateListing (src/client/hooks/useListingGeneration.ts:80:17)
- PASS   service  src/service/test/integration/FourLifestyleShots.test.ts (16.69 s)
+ PASS   service  src/service/test/integration/FourLifestyleShots.test.ts (19.588 s)
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Incoming request: POST /listings/generate
@@ -425,11 +424,43 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
     console.log
-      POST /listings/generate - 200 - 15869ms
+      POST /listings/generate - 200 - 18175ms
       at src/service/app.ts:22:11
-Test Suites: 6 passed, 6 total
-Tests:       56 passed, 56 total
+ PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (22.236 s)
+  ● Console
+    console.log
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+    console.log
+      Incoming request: POST /listings/generate
+      at src/service/app.ts:19:11
+    console.log
+      Attempting generation with model: gemini-2.5-flash-image
+      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
+    console.log
+      Generating images with params: {
+        lifestyle: 1,
+        hero: 0,
+        closeUps: 0,
+        flatLay: undefined,
+        macro: undefined,
+        contextual: undefined,
+        themedEnvironment: undefined,
+        model: 'gemini-2.5-flash-image',
+        hasProductImage: true
+      }
+      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
+    console.log
+      POST /listings/generate - 200 - 20751ms
+      at src/service/app.ts:22:11
+ PASS   service  src/service/data/GeminiImageGenerator.test.ts (45.207 s)
+  ● Console
+    console.log
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+Test Suites: 7 passed, 7 total
+Tests:       55 passed, 55 total
 Snapshots:   0 total
-Time:        17.52 s
-Ran all test suites matching /src\/client\/hooks\/useListingGeneration.test.ts|src\/client\/hooks\/useProductUpload.test.ts|src\/client\/repositories\/ListingRepository.test.ts|src\/service\/repositories\/ListingRepository.test.ts|src\/service\/test\/integration\/GenerateListingImagesError.test.ts|src\/service\/test\/integration\/FourLifestyleShots.test.ts/i in 2 projects.
-✨  Done in 18.68s.
+Time:        46.118 s, estimated 52 s
+Ran all test suites matching /src\/client\/hooks\/useListingGeneration.test.ts|src\/client\/hooks\/useProductUpload.test.ts|src\/service\/repositories\/ListingRepository.test.ts|src\/service\/data\/GeminiImageGenerator.test.ts|src\/service\/test\/integration\/FourLifestyleShots.test.ts|src\/service\/test\/integration\/GeminiImageGenerator.test.ts|src\/service\/test\/integration\/GenerateListingImagesError.test.ts/i in 2 projects.
+✨  Done in 46.88s.

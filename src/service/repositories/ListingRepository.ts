@@ -1,4 +1,4 @@
-import { saveImageToAssets } from '../lib/assetManager';
+import { saveImageToAssets, resolveLocalImageUrl } from '../lib/assetManager';
 
 export const createListingRepository = (dataLayer: any) => {
   const generateImages = async (params: { 
@@ -141,6 +141,30 @@ export const createListingRepository = (dataLayer: any) => {
     const images: { url: string; type: string }[] = [];
     const preview = getPromptPreview(params);
     let systemPrompt = preview.systemPrompt;
+
+    const resolvedProductImages = params.productImages 
+      ? await Promise.all(params.productImages.map(img => resolveLocalImageUrl(img)))
+      : undefined;
+    
+    const resolveBg = async (bg?: string) => bg ? await resolveLocalImageUrl(bg) : undefined;
+    
+    const [
+      lifestyleBackground,
+      heroBackground,
+      closeUpsBackground,
+      flatLayBackground,
+      macroBackground,
+      contextualBackground,
+      themedEnvironmentBackground
+    ] = await Promise.all([
+      resolveBg(params.lifestyleBackground),
+      resolveBg(params.heroBackground),
+      resolveBg(params.closeUpsBackground),
+      resolveBg(params.flatLayBackground),
+      resolveBg(params.macroBackground),
+      resolveBg(params.contextualBackground),
+      resolveBg(params.themedEnvironmentBackground)
+    ]);
     
     const collectPrompt = (result: { systemInstruction: string }) => {
       if (result.systemInstruction) {
@@ -160,13 +184,13 @@ export const createListingRepository = (dataLayer: any) => {
       }
     };
 
-    await generateShotTypeImages('lifestyle', params.lifestyleCount, params.productImages, params.lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext);
-    await generateShotTypeImages('hero', params.heroCount, params.productImages, params.heroBackground, images, collectPrompt, params.model, params.heroCustomContext);
-    await generateShotTypeImages('close-up', params.closeUpsCount, params.productImages, params.closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext);
-    await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImages, params.flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
-    await generateShotTypeImages('macro', params.macroCount, params.productImages, params.macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
-    await generateShotTypeImages('contextual', params.contextualCount, params.productImages, params.contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
-    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, params.productImages, params.themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext);
+    await generateShotTypeImages('lifestyle', params.lifestyleCount, resolvedProductImages, lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext);
+    await generateShotTypeImages('hero', params.heroCount, resolvedProductImages, heroBackground, images, collectPrompt, params.model, params.heroCustomContext);
+    await generateShotTypeImages('close-up', params.closeUpsCount, resolvedProductImages, closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext);
+    await generateShotTypeImages('flat-lay', params.flatLayCount, resolvedProductImages, flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
+    await generateShotTypeImages('macro', params.macroCount, resolvedProductImages, macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
+    await generateShotTypeImages('contextual', params.contextualCount, resolvedProductImages, contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
+    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, resolvedProductImages, themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext);
 
     return { images, systemPrompt, model: params.model };
   };
@@ -284,11 +308,17 @@ export const createListingRepository = (dataLayer: any) => {
   }) => {
     let image: { url: string; type: string } | null = null;
     
+    const resolvedProductImages = params.productImages 
+      ? await Promise.all(params.productImages.map(img => resolveLocalImageUrl(img)))
+      : undefined;
+    
+    const background = params.background ? await resolveLocalImageUrl(params.background) : undefined;
+
     await generateShotTypeImages(
       params.type, 
       1, 
-      params.productImages, 
-      params.background, 
+      resolvedProductImages, 
+      background, 
       [], // We don't need the images array here, we'll capture it via onResult
       (res) => {
         image = { url: res.imageUrl, type: params.type };
