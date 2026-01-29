@@ -94,6 +94,7 @@ const App = () => {
     clearPrimaryImage: clearGeneratedPrimaryImages,
     downloadImage,
     downloadAllImagesAsZip,
+    regenerateImage,
     fetchSystemPromptPreview
   } = useListingGeneration(repository);
 
@@ -284,11 +285,13 @@ const App = () => {
                     </Button>
 
                     {isGenerating && modelUsed && (
-                      <div className="text-sm text-orange-500 flex items-center gap-2" data-testid="model-status">
-                        <span>Calling model:</span>
-                        <span className="px-2 py-0.5 border border-orange-500 rounded-md text-xs font-medium animate-pulse">
-                          {modelUsed}
-                        </span>
+                      <div className="text-sm text-orange-500 flex flex-col items-center gap-2" data-testid="model-status">
+                        <div className="flex items-center gap-2">
+                          <span>Calling model:</span>
+                          <span className="px-2 py-0.5 border border-orange-500 rounded-md text-xs font-medium animate-pulse">
+                            {modelUsed}
+                          </span>
+                        </div>
                       </div>
                     )}
 

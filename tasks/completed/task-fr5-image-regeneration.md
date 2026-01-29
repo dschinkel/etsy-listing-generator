@@ -14,3 +14,11 @@ Implementation Details:
   - Updated service-layer `ListingRepository` to support single image generation.
   - Added `generateSingle` endpoint to `ListingController` and wired it in `app.ts`.
 - **Integration**: Connected UI buttons to the hook in `App.tsx`.
+
+## PR.5 Fix [COMPLETED]
+### Uncaught ReferenceError: regenerateImage is not defined
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Added `regenerateImage` to the `useListingGeneration` destructuring in `App.tsx`.
+- [x] Updated `useListingGeneration` hook to track `modelUsed` during single image regeneration.
+- [x] Verified that all tests pass.

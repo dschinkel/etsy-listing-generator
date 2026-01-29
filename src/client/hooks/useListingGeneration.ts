@@ -177,13 +177,15 @@ export const useListingGeneration = (listingRepository: any) => {
     if (!imageToReplace) return;
 
     setIsGenerating(true);
+    setModelUsed('gemini-2.5-flash-image');
     setError(null);
 
     try {
       const response = await listingRepository.generateSingleImage({
         type: imageToReplace.type,
         customContext,
-        productImage
+        productImage,
+        model: 'gemini-2.5-flash-image'
       });
 
       if (response.image) {
@@ -198,6 +200,10 @@ export const useListingGeneration = (listingRepository: any) => {
           newImages[index] = response.image;
           return newImages;
         });
+        
+        if (response.model) {
+          setModelUsed(response.model);
+        }
       }
     } catch (err: any) {
       console.error('Regeneration failed:', err);
