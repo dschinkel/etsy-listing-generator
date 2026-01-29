@@ -7,20 +7,7 @@ Acceptance:
 ### 0.2 Add a title to the app. Title should be in the header [COMPLETED]
 
 ## Feature: FR.1 — Upload a product image [COMPLETED]
-### FR.1.2 — Ability to upload a PNG image as the product image to be used as context for generating listing images [COMPLETED]
-### FR.1.2 — Ability to upload a jpg/jpeg image as the product image to be used as context for generating listing images [COMPLETED]
-### FR.1.3 — Ensure that generation is disabled if no product image is loaded [COMPLETED]
-The Fix:
-- [x] Moved generation readiness logic to `useProductUpload` hook.
-- [x] Added `totalShots` and `isReadyToGenerate` to hook output.
-- [x] Verified logic with headless TDD tests.
-- [x] Updated `App.tsx` to disable "Generate Listing Images" button based on readiness.
-- [x] Added helpful UI messages prompting for upload or shot selection.
-- [x] Updated UI tests to handle new state requirements.
-Acceptance:
-- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] "Generate Listing Images" button is disabled if `productImage` is null.
-- [x] A message or visual cue informs the user to upload a product image if they try to generate without one (already partially handled by disabled button).
+(See [tasks/task-fr1-upload-product-image.md](tasks/task-fr1-upload-product-image.md))
 
 ## Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
 ### FR.2.1 — Ability to specify how many images generated should be lifestyle shots [COMPLETED]
@@ -35,7 +22,25 @@ Acceptance:
 - User can specify the count for themed environment shots in the UI.
 - The backend correctly handles themed environment shots and generates them using the thematic setting description.
 
+## Feature: UI Refinement - Shots Selection Gap [COMPLETED]
+The Fix (TDD):
+- [x] RED: Added failing test `ShotTypeGap.test.tsx` to verify vertical alignment and gap constraint.
+- [x] GREEN: Updated `ShotTypeItem` in `App.tsx` to use `justify-between` for vertical alignment and `max-w-3xl` to reduce the horizontal gap.
+- [x] RED: Added failing test `Whitespace.test.tsx` to verify further width reduction to `max-w-xl`.
+- [x] GREEN: Reduced `max-w-3xl` to `max-w-md` in `ShotTypeItem` and set `w-fit` on `ShotsSelection` card to eliminate trailing horizontal whitespace.
+- [x] Verified all tests passing.
+- [x] Removed temporary test files as requested (cosmetic fix).
+
 ## Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
+The Fix (TDD):
+- [x] RED: Added failing unit test for `setPrimaryImage` in `useListingGeneration.test.ts`.
+- [x] RED: Added failing UI integration test in `ListingGenerationUI.test.tsx`.
+- [x] GREEN: Added `isPrimary?: boolean` to `ListingImage` interface.
+- [x] GREEN: Implemented `setPrimaryImage(index)` in `useListingGeneration` hook.
+- [x] GREEN: Added "Set as Primary Etsy Image" checkbox in `ListingPreview.tsx`.
+- [x] REFACTOR: Reduced gap in listing preview items using TDD (changed `gap-2` to `gap-1`).
+- [x] REFACTOR: Added additional test case for removing primary image to ensure state consistency.
+- [x] Verified all 73 tests passing.
 
 ## Feature: FR.3 — Upload a background for product image [COMPLETED]
 Acceptance:
@@ -45,29 +50,21 @@ Acceptance:
 - [COMPLETED] Background Uploads section removed.
 
 ## Feature: UI Enhancement [COMPLETED]
-### Increase the size of the text in each section of Shots Selection [COMPLETED]
+### Align "Generate Listing Images" button to center [COMPLETED]
 Acceptance:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Labels in `ShotTypeItem` increased to `text-base font-semibold`.
-- [COMPLETED] Descriptions in `ShotTypeItem` increased to `text-sm`.
-- [COMPLETED] Verified UI changes manually.
+- [x] "Generate Listing Images" button is centered horizontally relative to the Shots Selection section.
+- [x] Status and error messages associated with generation are also aligned with the button.
 
-### Make shot type headers yellow [COMPLETED]
+### Reduce Shot Type counter width [COMPLETED]
 Acceptance:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Labels in `ShotTypeItem` updated to `text-yellow-200`.
-- [COMPLETED] Verified UI changes manually.
+- [x] The counter input in Shots Selection is shortened for a more compact UI.
+- [x] Verified existing UI tests pass.
+
+## Feature: UI Refinement - Auto-scroll to Listing Preview [COMPLETED]
+(See [tasks/task-fr16-auto-scroll.md](tasks/task-fr16-auto-scroll.md))
 
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
-### FR.4.1 - Show thumbnail previews of images generated based on user input from FR.2.1 - lifestyle shots [COMPLETED]
-### FR.4.2 - Show thumbnail previews of images generated based on user input from FR.2.2 - hero shots [COMPLETED]
-### FR.4.3 - Show thumbnail previews of images generated based on user input from FR.2.3 - close-ups [COMPLETED]
-
-Technical Requirements:
-- [COMPLETED] Use product image as context for Gemini when generating lifestyle images
-- [COMPLETED] Use nano banana as the model to generate the images with a reusable system prompt for different shot types
-- [COMPLETED] Properly send system prompt using Gemini's systemInstruction feature
-- GEMINI_API_KEY= that you'll use to hit Gemini for generation of my listing images
+(See [tasks/task-fr4-listing-preview.md](tasks/task-fr4-listing-preview.md))
 
 ## Task: Fix [COMPLETED]
 ### Resolve 500 error and SyntaxError when clicking generate listing images button
@@ -141,14 +138,6 @@ The Fix:
 - [COMPLETED] Verified fix with full test suite (57 tests).
 - [COMPLETED] Verified no linting or runtime errors.
 
-## Feature: FR.4.4 — View full res image in modal [COMPLETED]
-### FR.4.4.1 — Ability to click a Listing Preview Thumb and it shows me the full res image in a modal [COMPLETED]
-Acceptance:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Clicking a thumbnail in Listing Preview opens a modal.
-- [COMPLETED] The modal displays the full resolution image.
-- [COMPLETED] The modal can be closed.
-- [COMPLETED] marks the task as [COMPLETED] in `tasks.md`
 
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 Acceptance:
@@ -173,29 +162,7 @@ Acceptance:
 ### FR.14.2 — Download all generated images as a ZIP file [COMPLETED]
 
 ## Feature: FR.8 — Fill out other listing fields [NOT STARTED]
-Acceptance:
-- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-### FR.1.8.1 — About [NOT STARTED]
-#### FR.1.8.1.1 — Title [NOT STARTED]
-#### FR.1.8.1.2 — Images [NOT STARTED]
-#### FR.1.8.1.3 — Description [NOT STARTED]
-#### FR.1.8.1.4 — Personalization (optiona) [NOT STARTED]
-### FR.1.8.2 — Price & Inventory [NOT STARTED]
-#### FR.1.8.2.1 — Price [NOT STARTED]
-#### FR.1.8.2.2 — Quantity [NOT STARTED]
-#### FR.1.8.2.3 — SKU [NOT STARTED]
-### FR.1.8.3 — Variations [NOT STARTED]
-### FR.1.8.4 — Details [NOT STARTED]
-#### FR.1.8.4.1 — Category [NOT STARTED]
-#### FR.1.8.4.2 — Tags [NOT STARTED]
-### FR.1.8.4 — Other fields [NOT STARTED]
-#### FR.1.8.4.1 — Who Made [NOT STARTED]
-#### FR.1.8.4.2 — When Made [NOT STARTED]
-#### FR.1.8.4.3 — Is Supply [NOT STARTED]
-#### FR.1.8.4.4 — Shipping Profile [NOT STARTED]
-#### FR.1.8.4.5 — Product Type [NOT STARTED]
-#### FR.1.8.4.6 — Readiness [NOT STARTED]
-#### FR.1.8.4.7 — Taxonomy Id [NOT STARTED]
+(See [tasks/task-fr8-listing-fields.md](tasks/task-fr8-listing-fields.md))
 
 ## Feature: FR.9 — Save Listing Draft [NOT STARTED]
 Acceptance:
@@ -322,6 +289,16 @@ The Fix:
 - [COMPLETED] Updated `useListingGeneration.test.ts` to verify client-side retry orchestration.
 - [COMPLETED] Verified fix with full test suite (55 tests).
 
+## Task: Persistence [COMPLETED]
+### Persist generated images in assets/generated-images
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Updated `src/service/lib/assetManager.ts` to use `assets/generated-images` directory.
+- [x] Updated URL paths returned by server to `/assets/generated-images/`.
+- [x] Cleaned up old `assets/generated` directory.
+- [x] Updated integration tests to support the new image URL format.
+- [x] Verified that images are correctly saved and served from the new directory.
+
 ## Task: Fix [COMPLETED]
 ### Resolve broken image caused by metadata extraction
 The Fix:
@@ -355,22 +332,7 @@ The Fix:
 - [COMPLETED] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.
 
 ## Task: FR.15 [COMPLETED]
-### Save Custom Context Templates
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] FR.15.1: Create `src/db/context-templates.json` and backend repository/data layer for templates.
-- [COMPLETED] FR.15.2: Implement `GetContextTemplates` and `SaveContextTemplate` commands and controller endpoints.
-- [COMPLETED] FR.15.3: Update `useProductUpload` hook to fetch and manage templates.
-- [COMPLETED] FR.15.4: Update `ShotTypeItem` UI with template selection and save functionality.
-- [COMPLETED] FR.15.5: Final verification and cleanup.
-- [COMPLETED] FR.15.6: Ability to remove a saved custom context template.
-    - Acceptance:
-        - Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-    - RED: Test that DELETE /listings/templates/:name removes a template in ListingController.test.ts.
-    - GREEN: Implement remove method in ContextTemplateRepository, RemoveContextTemplate command, and DELETE route in ListingController.
-    - RED: Test removeTemplate in client ListingRepository.test.ts and useProductUpload.test.ts.
-    - GREEN: Implement removeTemplate in client ListingRepository and useProductUpload hook.
-    - UI: Update ShotTypeItem to use shadcn Select and add a remove button.
-    - Verification and Cleanup.
+(See [tasks/task-fr15-context-templates.md](tasks/task-fr15-context-templates.md))
 
 ## Task: Fix [COMPLETED]
 ### Resolve ReferenceError: templates is not defined in App.tsx
