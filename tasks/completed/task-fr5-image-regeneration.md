@@ -32,4 +32,13 @@ The Fix:
 - [x] Moved the `Regenerate` button in `ListingPreview.tsx` to be always visible above the primary checkbox.
 - [x] Integrated `ModelStatus` into `ListingPreview.tsx` to show the model used specifically for the image being regenerated.
 - [x] Updated `App.tsx` to use the shared `ModelStatus` component and avoid duplicate displays during regeneration.
-- [x] Verified with unit and UI tests (52 core tests passing).
+- [x] Verified with unit and UI tests (56 core tests passing).
+
+## PR.5 Fix [COMPLETED]
+### Custom context inclusion in regeneration system prompt
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Verified that `ListingRepository.ts` (service) passes `customContext` to `dataLayer.generateImage`.
+- [x] Verified that `GeminiImageGenerator.ts` includes `customContext` in the system prompt.
+- [x] Added a regression test in `GeminiImageGenerator.test.ts` to ensure `customContext` is present in `systemInstruction`.
+- [x] Confirmed DRY principles are followed as both generation flows share the same prompt builder.

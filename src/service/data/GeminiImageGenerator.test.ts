@@ -43,4 +43,15 @@ describe('Gemini Image Generator', () => {
     expect(result.systemInstruction).toContain('themed environment');
     expect(result.systemInstruction).toContain('realistic, thematic setting');
   });
+
+  it('includes custom context in system instruction', async () => {
+    const generator = createGeminiImageGenerator();
+    const result = await generator.generateImage({ 
+      type: 'lifestyle', 
+      customContext: 'In a modern kitchen with marble island' 
+    });
+    
+    expect(result.systemInstruction).toContain('CUSTOM CONTEXT FOR LIFESTYLE SHOT:');
+    expect(result.systemInstruction).toContain('In a modern kitchen with marble island');
+  });
 });
