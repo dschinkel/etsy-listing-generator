@@ -14,3 +14,12 @@ The Implementation (TDD):
 - [x] REFACTOR: Reduced gap in listing preview items using TDD (changed `gap-2` to `gap-1`).
 - [x] REFACTOR: Added additional test case for removing primary image to ensure state consistency.
 - [x] Verified all 73 tests passing.
+
+## PR.3 Fix [COMPLETED]
+### Generated image selection does not uncheck uploaded image
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Added `PrimaryCoordination.test.tsx` to reproduce the issue.
+- [x] Updated `useListingGeneration.ts` to allow toggling of the primary flag (fix for unchecking).
+- [x] Updated `App.tsx`'s `handleSetGeneratedPrimary` to call `clearProductPrimaryImage` only when a generated image is being *selected* (not unselected).
+- [x] Verified all 48 core tests passing.

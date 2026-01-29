@@ -150,8 +150,11 @@ const App = () => {
   };
 
   const handleSetGeneratedPrimary = (index: number) => {
+    const wasAlreadyPrimary = images[index]?.isPrimary;
     setGeneratedPrimaryImage(index);
-    clearProductPrimaryImage();
+    if (!wasAlreadyPrimary) {
+      clearProductPrimaryImage();
+    }
   };
 
   return (

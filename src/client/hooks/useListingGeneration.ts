@@ -161,7 +161,7 @@ export const useListingGeneration = (listingRepository: any) => {
   const setPrimaryImage = (index: number) => {
     setImages(prev => prev.map((img, i) => ({
       ...img,
-      isPrimary: i === index
+      isPrimary: i === index ? !img.isPrimary : false
     })));
   };
 
