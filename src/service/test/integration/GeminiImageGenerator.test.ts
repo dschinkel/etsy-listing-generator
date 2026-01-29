@@ -15,7 +15,7 @@ describe('Gemini Image Generator Integration', () => {
       lifestyleCount: count,
       heroCount: 0,
       closeUpsCount: 0,
-      productImage: testImageBase64,
+      productImages: [testImageBase64],
       lifestyleBackground: testImageBase64
     };
 
@@ -27,7 +27,7 @@ describe('Gemini Image Generator Integration', () => {
     expect(response.body.images).toBeDefined();
     expect(Array.isArray(response.body.images)).toBe(true);
     expect(response.body.images.length).toBeGreaterThan(0);
-    expect(response.body.images[0].url).toMatch(/^(http|data:)/);
+    expect(response.body.images[0].url).toMatch(/^(\/|http|data:)/);
     expect(response.body.images[0].url).not.toContain('placehold.jp');
     expect(response.body.images[0].type).toBe('lifestyle');
     

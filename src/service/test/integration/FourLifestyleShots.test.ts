@@ -17,7 +17,7 @@ describe('Four Lifestyle Shots Integration', () => {
       flatLayCount: 0,
       macroCount: 0,
       contextualCount: 0,
-      productImage: testImageBase64,
+      productImages: [testImageBase64],
     };
 
     const response = await supertest(app.callback())

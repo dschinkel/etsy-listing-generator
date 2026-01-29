@@ -14,7 +14,7 @@ describe('Gemini Image Generator', () => {
     const params = { 
       type: 'lifestyle', 
       count: 1,
-      productImage: testImageBase64
+      productImages: [testImageBase64]
     };
     
     const result = await generator.generateImage(params);

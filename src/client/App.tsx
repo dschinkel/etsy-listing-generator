@@ -163,7 +163,7 @@ const App = () => {
   };
 
   const handleRegenerateImage = (index: number, customContext: string) => {
-    regenerateImage(index, customContext, productImages[0]);
+    regenerateImage(index, customContext, productImages);
   };
 
   return (

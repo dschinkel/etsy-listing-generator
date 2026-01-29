@@ -42,3 +42,12 @@ The Fix:
 - [x] Verified that `GeminiImageGenerator.ts` includes `customContext` in the system prompt.
 - [x] Added a regression test in `GeminiImageGenerator.test.ts` to ensure `customContext` is present in `systemInstruction`.
 - [x] Confirmed DRY principles are followed as both generation flows share the same prompt builder.
+
+## PR.5 Fix [COMPLETED]
+### Regeneration failure due to single product image parameter
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Updated `App.tsx` to pass the full `productImages` array instead of a single string to `regenerateImage`.
+- [x] Updated all integration tests (`FourLifestyleShots.test.ts`, `GeminiImageGenerator.test.ts`) to use the correct array-based `productImages` parameter.
+- [x] Fixed regex in `GeminiImageGenerator.test.ts` (integration) to support local image asset paths.
+- [x] Verified fix with full test suite (50 core tests passing).

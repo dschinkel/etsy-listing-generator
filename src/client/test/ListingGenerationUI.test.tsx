@@ -454,6 +454,7 @@ describe('Listing Generation UI', () => {
   it('populates and appends templates to custom context', () => {
     const onHeroCustomContextChange = jest.fn();
     (useProductUpload as jest.Mock).mockReturnValue({
+      productImages: [],
       heroShotsCount: 1,
       heroCustomContext: 'Existing',
       handleHeroCustomContextChange: onHeroCustomContextChange,
@@ -522,6 +523,7 @@ describe('Listing Generation UI', () => {
   it( 'removes a template', async () => {
     const onRemoveTemplate = jest.fn();
     (useProductUpload as jest.Mock).mockReturnValue({
+      productImages: [],
       heroShotsCount: 1,
       heroCustomContext: '',
       handleHeroCustomContextChange: jest.fn(),
@@ -593,6 +595,7 @@ describe('Listing Generation UI', () => {
   it('saves a template', async () => {
     const onSaveTemplate = jest.fn();
     (useProductUpload as jest.Mock).mockReturnValue({
+      productImages: [],
       heroShotsCount: 1,
       heroCustomContext: 'My context',
       handleHeroCustomContextChange: jest.fn(),
