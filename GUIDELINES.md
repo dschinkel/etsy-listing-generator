@@ -79,7 +79,7 @@ P0.15.2 To ensure compliance with P0.15 and P0.15.1, you must perform a line-cou
 T1.1 Work in RED → GREEN → REFACTOR cycles.
 T1.2 In RED, write exactly one failing test that defines a single small behavior increment. Do not write multiple tests in a single RED step.
 T1.3 Default test level rules:
-T1.3.1 For React work, start by creating the component layer code (the "View") without tests. This is usually Step 1 of the PLAN, but it is NOT part of the TDD workflow (no RED phase). TDD (RED → GREEN → REFACTOR) MUST start at the hook layer (Step 2) once the component code is present. You MUST NEVER write UI component tests or integration tests (e.g., tests that use `fireEvent`, `render` of components to verify behavior) unless explicitly instructed by the user. When creating component layer code, provide props as placeholders for where we will inject hook logic later. Component code must not contain logic; logic belongs in hooks and lower layers.
+T1.3.1 For React work, start by creating the component layer code (the "View") without tests. This is usually Step 1 of the PLAN, but it is NOT part of the TDD workflow (no RED phase). TDD (RED → GREEN → REFACTOR) MUST start at the hook layer (Step 2) once the component code is present. You MUST NEVER write UI component tests or integration tests (e.g., tests that use `fireEvent`, `render` of components to verify behavior) unless explicitly instructed by the user. Even in autonomous mode, you must ask for permission before creating UI tests that live above React hooks. Component code must not contain logic; logic belongs in hooks and lower layers.
 T1.3.2 For non-React work, write tests at the behavioral/business layer level (headless/functional) and avoid end-to-end/system tests unless explicitly instructed.
 T1.3.3 You MUST NEVER write tests at the Controller layer. Controllers are delivery-mechanism adapters and must remain pass-through only. Business behavior must be defined and tested at the Command (Use Case) or Domain layer.
 T1.3.4 Disallowed by default (unless explicitly instructed or for service data layer): browser/UI integration tests, real network calls, end-to-end tests, full-stack HTTP tests.
@@ -98,7 +98,8 @@ T1.12 Always follow an outside-in TDD approach. Start implementation at the high
 T1.13 The backend / service code should also be implemented outside-in. This means starting from the entry point (Controller/App route) and working down through the use cases to the data layer, ensuring each layer is defined by a test before its implementation and dependencies are built.
 T1.14 Strict Outside-In Ordering: When presenting a PLAN or executing tasks, you MUST always start from the highest level of the delivery mechanism (UI for frontend, Controller for backend) and work your way down. You must never start from the domain or data layer and work up. The PLAN must explicitly list steps in this top-down order.
 T1.15 You MUST NOT use `@jest-environment` comments to set the test environment in individual test files. Instead, ensure the global `jest.config.js` is configured with `projects` to automatically apply the correct environment (e.g., `jsdom` for `src/client` and `node` for `src/service`) based on the file path.
-T1.16 Repeated code in tests, such as `render(<App />);`, MUST be DRY'd up by moving it to a `beforeEach` block at the appropriate scope.
+T1.16 Integration test timeouts MUST NOT exceed 30 seconds in the codebase. The overall test timeout global threshold MUST be 30 seconds. If this needs to be increased, you MUST ask the user for permission first.
+T1.17 Repeated code in tests, such as `render(<App />);`, MUST be DRY'd up by moving it to a `beforeEach` block at the appropriate scope.
 
 ---
 

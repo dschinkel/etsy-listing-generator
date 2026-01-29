@@ -154,6 +154,7 @@ A user can:
     - **FR.16.2 — Reduce gaps and whitespace in Shots Selection and Listing Preview**
     - **FR.16.3 — Center-align generation controls with Shots Selection**
     - **FR.16.4 — Scroll to the top of the page immediately when "Generate Listing Images" is clicked.**
+    - **FR.16.5 — Add a subtle background color/gradient to the headers of the Shots Selection and Listing Preview sections.**
 
 **FR.19 — Three-Pane Layout**
     - **FR.19.1 — Move Listing Preview to a third pane on the right of the Shots Selection section.**

@@ -33,8 +33,17 @@ Acceptance:
 ## Feature: UI Refinement - Auto-scroll to Listing Preview [COMPLETED]
 (See [tasks/completed/task-fr16-auto-scroll.md](tasks/completed/task-fr16-auto-scroll.md))
 ### FR.16.4 — Scroll to top on generation request [COMPLETED]
+### PR.16 Fix [COMPLETED]
+- [x] Fix scroll to top logic in `App.tsx` by targeting pane refs instead of `window`.
+
+### FR.16.5 — Header background for main sections [COMPLETED]
 - [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] Implement scroll to top logic in `App.tsx` button handler.
+- [x] Add nice background to Shots Selection header
+- [x] Add nice background to Listing Preview header
+- [x] Add 10px padding between header and content
+- [x] Deleted flaky fireEvent-based UI tests
+- [x] Updated GUIDELINES.md with UI test and timeout rules
+- [x] Standardized test timeouts to 30s
 
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
 (See [tasks/completed/task-fr4-listing-preview.md](tasks/completed/task-fr4-listing-preview.md))

@@ -52,8 +52,8 @@ const ListingPreview = ({
 
   return (
     <>
-      <Card className="w-full h-full flex flex-col">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 flex-none">
+      <Card className="w-full h-full flex flex-col overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 flex-none bg-muted/30 border-b border-border/50">
           <div className="flex items-center gap-4">
             <CardTitle>Listing Preview</CardTitle>
             {isGenerating && regeneratingIndex === null && modelUsed && (
@@ -95,7 +95,7 @@ const ListingPreview = ({
             </div>
           )}
         </CardHeader>
-        <CardContent className="flex-1 overflow-y-auto pt-4">
+        <CardContent className="flex-1 overflow-y-auto pt-[10px]">
           {!hasImages ? (
             <div className="flex flex-col items-center justify-center h-64 text-muted-foreground gap-2">
               <ImageIcon className="w-12 h-12 opacity-20" />

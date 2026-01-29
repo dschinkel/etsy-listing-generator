@@ -31,5 +31,5 @@ describe('Four Lifestyle Shots Integration', () => {
       expect(img.type).toBe('lifestyle');
       expect(img.url).toMatch(/^(\/|http|data:)/);
     });
-  }, 300000); // Increase timeout for image generation
+  });
 });

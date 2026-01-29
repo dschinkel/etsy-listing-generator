@@ -97,6 +97,7 @@ const App = () => {
     resetCounts,
     archivedUploads,
     toggleArchivedUpload,
+    isProductImageArchived,
   } = useProductUpload(repository);
 
   const { 
@@ -120,12 +121,14 @@ const App = () => {
   } = useListingGeneration(repository);
 
   const [promptWidth, setPromptWidth] = React.useState(500);
+  const leftPaneRef = React.useRef<HTMLDivElement>(null);
+  const middlePaneRef = React.useRef<HTMLDivElement>(null);
   const previewRef = React.useRef<HTMLDivElement>(null);
   const wasGeneratingRef = React.useRef(false);
 
   React.useEffect(() => {
     if (wasGeneratingRef.current && !isGenerating && images.length > 0) {
-      previewRef.current?.scrollIntoView({ behavior: 'smooth' });
+      previewRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     }
     wasGeneratingRef.current = isGenerating;
   }, [isGenerating, images.length]);
@@ -191,7 +194,7 @@ const App = () => {
         <main className="flex-1 p-8 overflow-hidden">
           <div className="flex gap-4 items-start h-[calc(100vh-12rem)] max-w-full mx-auto px-4">
             {/* Left Pane */}
-            <div className="flex flex-col items-center gap-8 w-1/5 h-full overflow-y-auto pr-2">
+            <div ref={leftPaneRef} className="flex flex-col items-center gap-8 w-1/5 h-full overflow-y-auto pr-2">
               <div className="w-full flex flex-col gap-4">
                 <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
                 <ArchivedUploads 
@@ -221,7 +224,7 @@ const App = () => {
             </div>
 
             {/* Middle Pane */}
-            <div className="flex flex-col gap-8 w-1/4 h-full overflow-y-auto items-start pr-2">
+            <div ref={middlePaneRef} className="flex flex-col gap-8 w-1/4 h-full overflow-y-auto items-start pr-2">
               <div className="flex flex-col items-center gap-4 w-full">
                 <div className="flex-initial">
                   <ShotsSelection 
@@ -289,7 +292,8 @@ const App = () => {
                     className="w-full max-w-xs"
                     disabled={isGenerating || !isReadyToGenerate}
                     onClick={() => {
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      leftPaneRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+                      middlePaneRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
                       generateListing({ 
                         lifestyleCount: lifestyleShotsCount,
                         heroCount: heroShotsCount,
@@ -889,11 +893,11 @@ const ShotsSelection = ({
   ];
 
   return (
-    <Card className="w-fit">
-      <CardHeader>
+    <Card className="w-fit overflow-hidden">
+      <CardHeader className="bg-muted/30 border-b border-border/50 pb-4">
         <CardTitle>Shots Selection</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 pt-[10px]">
         {shotTypes.map((shot) => (
           <ShotTypeItem 
             key={shot.id}
