@@ -16,12 +16,26 @@ import {
   DialogFooter,
   DialogClose
 } from './components/ui/dialog';
-import { Plus, Image as ImageIcon, Save, Trash, Eraser, Archive } from 'lucide-react';
+import { 
+  Plus, 
+  Image as ImageIcon, 
+  Save, 
+  Trash, 
+  Eraser, 
+  Archive,
+  ChevronDown,
+  ChevronUp
+} from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
 import ModelStatus from './components/ModelStatus';
 import { ThemeProvider } from './components/theme-provider';
+import { 
+  Collapsible, 
+  CollapsibleContent, 
+  CollapsibleTrigger 
+} from './components/ui/collapsible';
 
 const App = () => {
   const repository = React.useMemo(() => createListingRepository(), []);
@@ -81,6 +95,8 @@ const App = () => {
     totalShots,
     isReadyToGenerate,
     resetCounts,
+    archivedUploads,
+    toggleArchivedUpload,
   } = useProductUpload(repository);
 
   const { 
@@ -176,7 +192,15 @@ const App = () => {
           <div className="flex gap-4 items-start h-[calc(100vh-12rem)] max-w-full mx-auto px-4">
             {/* Left Pane */}
             <div className="flex flex-col items-center gap-8 w-1/5 h-full overflow-y-auto pr-2">
-              <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
+              <div className="w-full flex flex-col gap-4">
+                <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
+                <ArchivedUploads 
+                  images={archivedUploads} 
+                  selectedImages={productImages}
+                  onToggle={toggleArchivedUpload}
+                  disabled={productImages.length >= 2}
+                />
+              </div>
               <div className="flex flex-col gap-4 w-full">
                 {productImages.map((src, index) => (
                   <UploadedImage 
@@ -329,6 +353,79 @@ const App = () => {
         <Footer />
       </div>
     </ThemeProvider>
+  );
+};
+
+const ArchivedUploads = ({ 
+  images, 
+  selectedImages, 
+  onToggle,
+  disabled
+}: { 
+  images: string[], 
+  selectedImages: string[], 
+  onToggle: (url: string) => void,
+  disabled?: boolean
+}) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="w-full space-y-2"
+    >
+      <div className="flex items-center justify-between space-x-4 px-4 py-2 border rounded-lg bg-card">
+        <h4 className="text-sm font-semibold">
+          Archived Uploads
+        </h4>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" size="sm" className="w-9 p-0">
+            {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            <span className="sr-only">Toggle</span>
+          </Button>
+        </CollapsibleTrigger>
+      </div>
+      <CollapsibleContent className="space-y-2">
+        <Card className="w-full">
+          <CardContent className="p-2">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-700">
+              {images.length === 0 ? (
+                <div className="text-[10px] text-muted-foreground p-4 text-center w-full">
+                  No archived uploads found
+                </div>
+              ) : (
+                images.map((url, index) => {
+                  const isSelected = selectedImages.includes(url);
+                  return (
+                    <div 
+                      key={index} 
+                      className={`relative flex-none w-16 h-16 rounded cursor-pointer border-2 transition-all ${
+                        isSelected ? 'border-primary scale-95' : 'border-transparent hover:border-slate-500'
+                      } ${disabled && !isSelected ? 'opacity-50 grayscale pointer-events-none' : ''}`}
+                      onClick={() => onToggle(url)}
+                    >
+                      <img 
+                        src={url} 
+                        alt={`Archived ${index}`} 
+                        className="w-full h-full object-cover rounded"
+                      />
+                      {isSelected && (
+                        <div className="absolute inset-0 bg-primary/20 flex items-center justify-center rounded">
+                          <div className="bg-primary text-primary-foreground rounded-full p-0.5">
+                            <Plus className="w-3 h-3 rotate-45" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
 

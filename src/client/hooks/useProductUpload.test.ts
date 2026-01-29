@@ -4,7 +4,8 @@ import { useProductUpload } from './useProductUpload';
 describe('useProductUpload', () => {
   const mockRepository = {
     getTemplates: jest.fn().mockResolvedValue({ templates: [] }),
-    saveTemplate: jest.fn().mockResolvedValue({ template: {} })
+    saveTemplate: jest.fn().mockResolvedValue({ template: {} }),
+    getArchivedUploads: jest.fn().mockResolvedValue({ images: [] })
   };
 
   it('initializes with default values', () => {
@@ -12,6 +13,21 @@ describe('useProductUpload', () => {
     expect(result.current.productImages).toEqual([]);
     expect(result.current.lifestyleShotsCount).toBe(0);
     expect(result.current.templates).toEqual([]);
+    expect(result.current.archivedUploads).toEqual([]);
+  });
+
+  it('loads archived uploads on initialization', async () => {
+    const images = ['archived1.png', 'archived2.png'];
+    mockRepository.getArchivedUploads.mockResolvedValueOnce({ images });
+
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    expect(result.current.archivedUploads).toEqual(images);
+    expect(mockRepository.getArchivedUploads).toHaveBeenCalled();
   });
 
   it('allows uploading up to 2 reference images', async () => {

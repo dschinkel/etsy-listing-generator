@@ -30,6 +30,7 @@ export const useProductUpload = (repository?: any) => {
   const [contextualCustomContext, setContextualCustomContext] = useState('');
   const [themedEnvironmentCustomContext, setThemedEnvironmentCustomContext] = useState('');
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
+  const [archivedUploads, setArchivedUploads] = useState<string[]>([]);
 
   const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
   const isReadyToGenerate = totalShots > 0 && productImages.length > 0;
@@ -38,6 +39,9 @@ export const useProductUpload = (repository?: any) => {
     if (repository) {
       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
         setTemplates(response.templates || []);
+      });
+      repository.getArchivedUploads().then((response: { images: string[] }) => {
+        setArchivedUploads(response.images || []);
       });
     }
   }, [repository]);
@@ -344,5 +348,6 @@ export const useProductUpload = (repository?: any) => {
     removeContextTemplate,
     totalShots,
     isReadyToGenerate,
+    archivedUploads,
   };
 };

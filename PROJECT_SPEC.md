@@ -172,6 +172,12 @@ A user can:
     - **FR.21.1 — Ability to archive an individual uploaded product image to `./src/assets/uploads`.**
     - **FR.21.2 — Archived uploaded images should be copies, preserved even if the originals are removed from the upload list.**
 
+**FR.22 — Select Archived Uploads**
+    - **FR.22.1 — Ability to see a collapsible section showing small thumbnails of archived photos in `./src/assets/uploads`.**
+    - **FR.22.2 — Ability to select up to two archived images to be used as product reference images.**
+    - **FR.22.3 — Selected archived images show a preview just like manually uploaded images.**
+    - **FR.22.4 — Use shadcn for the collapsing section.**
+
 ---
 
 ## 4. Technical Requirements (TR.*)

@@ -96,14 +96,16 @@ Acceptance:
 (See [tasks/completed/task-fr19-three-pane-layout.md](tasks/completed/task-fr19-three-pane-layout.md))
 ### FR.19.5 — Expand Listing Preview width to the full right edge of the viewport [COMPLETED]
 
-## Feature: FR.20 — Archive Listing Images [IN PROGRESS]
+## Feature: FR.20 — Archive Listing Images [COMPLETED]
 (See [tasks/completed/task-fr20-archive-images.md](tasks/completed/task-fr20-archive-images.md))
-### FR.20.4 — Ability to archive an individual listing image [NOT STARTED]
-- [ ] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [ ] TDD `archiveImage(index)` in `useListingGeneration`
 
-## Feature: FR.21 — Archive Uploaded Images [NOT STARTED]
+## Feature: FR.21 — Archive Uploaded Images [COMPLETED]
+(See [tasks/completed/task-fr21-archive-uploads.md](tasks/completed/task-fr21-archive-uploads.md))
+
+## Feature: FR.22 — Select Archived Uploads [IN PROGRESS]
 Acceptance:
 - [ ] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [ ] TDD `archiveProductImage(index)` in `useProductUpload`
-- [ ] Ability to archive uploaded images to `./src/assets/uploads`
+- [ ] FR.22.1 — Collapsible section showing archived photos
+- [ ] FR.22.2 — Select up to 2 archived images
+- [ ] FR.22.3 — Preview selected archived images
+- [ ] FR.22.4 — TDD at hook layer
