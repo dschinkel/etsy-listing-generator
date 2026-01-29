@@ -7,7 +7,7 @@ Acceptance:
 ### 0.2 Add a title to the app. Title should be in the header [COMPLETED]
 
 ## Feature: FR.1 — Upload a product image [COMPLETED]
-(See [tasks/task-fr1-upload-product-image.md](tasks/task-fr1-upload-product-image.md))
+(See [tasks/completed/task-fr1-upload-product-image.md](tasks/completed/task-fr1-upload-product-image.md))
 
 ## Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
 ### FR.2.1 — Ability to specify how many images generated should be lifestyle shots [COMPLETED]
@@ -61,19 +61,19 @@ Acceptance:
 - [x] Verified existing UI tests pass.
 
 ## Feature: UI Refinement - Auto-scroll to Listing Preview [COMPLETED]
-(See [tasks/task-fr16-auto-scroll.md](tasks/task-fr16-auto-scroll.md))
+(See [tasks/completed/task-fr16-auto-scroll.md](tasks/completed/task-fr16-auto-scroll.md))
 
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
-(See [tasks/task-fr4-listing-preview.md](tasks/task-fr4-listing-preview.md))
+(See [tasks/completed/task-fr4-listing-preview.md](tasks/completed/task-fr4-listing-preview.md))
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve 403 Forbidden error in integration tests by correctly loading environment variables
 The Fix:
 - [COMPLETED] Installed `dotenv` to manage environment variables.
 - [COMPLETED] Initialized `dotenv.config()` in `src/service/app.ts` to ensure `GEMINI_API_KEY` is loaded from `.env`.
 - [COMPLETED] Verified that all tests, including the real Gemini integration test, pass successfully.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Ensure all individual production API calls timeout at 15 seconds
 The Fix:
 - [COMPLETED] Implemented 15s timeout for Gemini API calls in `src/service/data/GeminiImageGenerator.ts` using `RequestOptions`.
@@ -131,9 +131,9 @@ Acceptance:
 - [COMPLETED] Custom context textbox should be multiline, longer horizontally by default and draggable horizontally.
 
 ## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]
-(See [tasks/task-fr13-system-prompt-preview.md](tasks/task-fr13-system-prompt-preview.md))
+(See [tasks/completed/task-fr13-system-prompt-preview.md](tasks/completed/task-fr13-system-prompt-preview.md))
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve 404 error when clicking generate listing images button
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -142,14 +142,14 @@ The Fix:
 - [COMPLETED] Updated `package.json` to run both frontend and backend concurrently in `dev` mode.
 - [COMPLETED] Ensured environment variables are loaded at the earliest possible stage in `src/service/index.ts`.
 
-## Task: DRY Refactoring of ListingRepository [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Refactor duplicated image generation functions into a single generic function
 The Fix:
 - [COMPLETED] Updated `GUIDELINES.md` with rule `Q1.9` to enforce DRY principles.
 - [COMPLETED] Refactored `src/service/repositories/ListingRepository.ts` to replace duplicated shot-type functions with `generateShotTypeImages`.
 - [COMPLETED] Verified all tests pass and application starts without errors.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve hanging integration test 'generates images using gemini'
 The Fix:
 - [COMPLETED] Added 50-second timeout to Gemini API calls to stay within Jest's 60s timeout.
@@ -157,7 +157,7 @@ The Fix:
 - [COMPLETED] Improved error logging in `GeminiImageGenerator` to better diagnose API issues like 503 Overloaded.
 - [COMPLETED] Verified that tests now finish and report errors correctly instead of hanging indefinitely.
 
-## Task: Documentation [COMPLETED]
+## PR.0 Fix [COMPLETED]
 ### Update README.md with project-specific information and recent changes
 The Fix:
 - [COMPLETED] Renamed project to "Etsy Listing Generator".
@@ -165,13 +165,14 @@ The Fix:
 - [COMPLETED] Documented UI enhancements (System Prompt pane, status feedback).
 - [COMPLETED] Documented technical architecture (Onion architecture, functional modules).
 - [COMPLETED] Documented testing infrastructure (15s timeout).
+- [COMPLETED] Verified fix with `README.md` update.
 
-## Task: Refactor [COMPLETED]
+## PR.0 Fix [COMPLETED]
 ### Use concise domain prose for test names
 The Fix:
 - [COMPLETED] Renamed technical test names to concise domain prose (e.g., "gets system prompt") in `PromptPreview.test.ts`.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Ensure error messages are visible and correctly positioned
 The Fix:
 - [COMPLETED] Fixed a bug in `useListingGeneration.ts` where `error` and `isGenerating` states were not returned by the hook.
@@ -180,7 +181,7 @@ The Fix:
 - [COMPLETED] Added UI integration test `ListingGenerationUI.test.tsx` to verify error message visibility and positioning.
 - [COMPLETED] Verified fix with all client-side tests passing.
 
-## Task: UI Enhancement [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Display shot type below each image in Listing Preview
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -191,7 +192,7 @@ The Fix:
 - [COMPLETED] Increased global test timeout to 60s in `jest.config.js` to ensure stability for real API integration tests.
 - [COMPLETED] Verified fix with all tests passing and no linting errors.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve broken image in the UI
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -201,7 +202,7 @@ The Fix:
 - [COMPLETED] Verified fix with new unit tests and full test suite.
 - [COMPLETED] Verified no linting or runtime errors.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Ensure image generation retries with the next model on any model failure
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -209,7 +210,7 @@ The Fix:
 - [COMPLETED] Updated `useListingGeneration.test.ts` to verify client-side retry orchestration.
 - [COMPLETED] Verified fix with full test suite (55 tests).
 
-## Task: Persistence [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Persist generated images in assets/generated-images
 The Fix:
 - [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -219,7 +220,7 @@ The Fix:
 - [x] Updated integration tests to support the new image URL format.
 - [x] Verified that images are correctly saved and served from the new directory.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve broken image caused by metadata extraction
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -227,21 +228,21 @@ The Fix:
 - [COMPLETED] Added regression test in `GeminiImageGeneratorExtraction.test.ts`.
 - [COMPLETED] Verified fix with full test suite (56 tests).
 
-## Task: Fix [COMPLETED]
+## PR.0 Fix [COMPLETED]
 ### Ensure browser opens automatically on yarn dev
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Updated `vite.config.ts` to include `server.open: true`.
 - [COMPLETED] Verified configuration.
 
-## Task: Fix [COMPLETED]
+## PR.12 Fix [COMPLETED]
 ### Resolve 'body stream already read' error when custom context is added
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Fix `ListingRepository` (client) to read response body only once.
 - [COMPLETED] Investigated backend failure and confirmed client-side error handling was the primary issue.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve timeouts and 500 errors when generating multiple images
 The Fix:
 - [COMPLETED] Set primary model to `gemini-2.5-flash-image` and fallback to `imagen-4.0-generate-001`.
@@ -252,4 +253,4 @@ The Fix:
 - [COMPLETED] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.
 
 ## Task: FR.15 [COMPLETED]
-(See [tasks/task-fr15-context-templates.md](tasks/task-fr15-context-templates.md))
+(See [tasks/completed/task-fr15-context-templates.md](tasks/completed/task-fr15-context-templates.md))

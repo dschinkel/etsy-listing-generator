@@ -11,7 +11,7 @@ Acceptance:
 - Verified data propagation and UI layout.
 - Updated integration tests to accommodate the new response structure.
 
-## Task: Fix [COMPLETED]
+## PR.13 Fix [COMPLETED]
 ### Resolve 500 error when clicking generate listing images and add System Prompt pane to UI
 The Fix:
 - [COMPLETED] Updated `GeminiImageGenerator.ts` to return placeholder and system prompt on empty API response.
@@ -24,7 +24,7 @@ The Fix:
 - [COMPLETED] Refactored all server-side and client-side classes to functional modules using factory functions.
 - [COMPLETED] Updated `GUIDELINES.md` to strictly forbid the use of classes and mandate the functional module pattern.
 
-## Task: Fix [COMPLETED]
+## PR.13 Fix [COMPLETED]
 ### Resolve 404 or empty response for /listings/system-prompt
 The Fix:
 - [COMPLETED] Added request logging middleware to `src/service/app.ts` for better server diagnostics.
@@ -34,7 +34,7 @@ The Fix:
 - [COMPLETED] Added a health check endpoint and a catch-all 404 route with detailed logging.
 - [COMPLETED] Verified fix with real-server tests and integration tests.
 
-## Task: Fix [COMPLETED]
+## PR.13 Fix [COMPLETED]
 ### Ensure system prompt is always returned and displayed
 The Fix:
 - [COMPLETED] Updated `ListingRepository` (server) to pre-populate `systemPrompt` from preview logic.

@@ -57,16 +57,18 @@ P0.13 When asked to add a new feature, you must always add it at the higher leve
 P0.13.1 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
 P0.14 If asked for an out of bounds fix, relate it to the current task and append the information to `tasks.md` using the following format:
 ```markdown
-## Task: Fix [COMPLETED]
+## PR.<feature number> Fix [COMPLETED]
 ### <Description of the fix>
 The Fix:
 - [COMPLETED] <Subtask 1>
 - [COMPLETED] <Subtask 2>
 ...
 ```
+Example: `## PR.12 Fix [COMPLETED]` for a fix related to Feature FR.12.
 
-P0.15 If a task in `tasks.md` exceeds 15 lines, move its details to a new file in the `tasks/` directory following the naming convention `task-fr<feature number>-<feature name>.md` and replace the content in `tasks.md` with a link to that file. When moving a feature, ensure all related 'Task: Fix' sections or sub-tasks are also moved to the same file to keep related history together.
-P0.15.1 To ensure compliance with P0.15, you must perform a line-count audit of all sections in `tasks.md` before finalizing any task. You can use `wc -l` on extracted sections or manually count them when reading the file.
+P0.15 If a task in `tasks.md` exceeds 15 lines, move its details to a new file in the `tasks/` directory following the naming convention `task-fr<feature number>-<feature name>.md` and replace the content in `tasks.md` with a link to that file. When moving a feature, ensure all related 'PR.<number> Fix' sections or sub-tasks are also moved to the same file to keep related history together.
+P0.15.1 When all items are completed in a specific task file under `tasks/`, move the file to the `tasks/completed/` folder and update the link in `tasks.md`.
+P0.15.2 To ensure compliance with P0.15 and P0.15.1, you must perform a line-count audit of all sections in `tasks.md` and check completion status of task files before finalizing any task. You can use `wc -l` on extracted sections or manually count them when reading the file.
 
 ---
 

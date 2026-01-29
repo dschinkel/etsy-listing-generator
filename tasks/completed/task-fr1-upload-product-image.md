@@ -14,7 +14,7 @@ Acceptance:
 - [x] "Generate Listing Images" button is disabled if `productImage` is null.
 - [x] A message or visual cue informs the user to upload a product image if they try to generate without one (already partially handled by disabled button).
 
-## Task: Fix [COMPLETED]
+## PR.1 Fix [COMPLETED]
 ### Resolve ReferenceError: productImage is not defined in App.tsx
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD

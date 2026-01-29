@@ -16,7 +16,7 @@
     - UI: Update ShotTypeItem to use shadcn Select and add a remove button.
     - Verification and Cleanup.
 
-## Task: Fix [COMPLETED]
+## PR.15 Fix [COMPLETED]
 ### Resolve ReferenceError: templates is not defined in App.tsx
 The Fix:
 - [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -24,7 +24,7 @@ The Fix:
 - [x] Fix the missing `templates` and `onSaveTemplate` in `ShotTypeItem` destructuring in `App.tsx`.
 - [x] Verify the fix with tests.
 
-## Task: Fix [COMPLETED]
+## PR.15 Fix [COMPLETED]
 ### Ensure template selection populates custom context without duplication
 The Fix:
 - [x] Fixed backend duplication in `ListingRepository` by matching prompt instructions while ignoring count differences.

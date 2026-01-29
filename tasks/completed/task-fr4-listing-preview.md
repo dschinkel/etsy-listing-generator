@@ -18,7 +18,7 @@ Acceptance:
 - [COMPLETED] The modal can be closed.
 - [COMPLETED] marks the task as [COMPLETED] in `tasks.md`
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve 500 error and SyntaxError when clicking generate listing images button
 The Fix:
 - [COMPLETED] Improved backend error handling in `src/service/app.ts` to ensure JSON responses.
@@ -27,7 +27,7 @@ The Fix:
 - [COMPLETED] Resolved `TypeError: images.map is not a function` in `ListingPreview.tsx` by correctly extracting images array from response in `useListingGeneration.ts`.
 - [COMPLETED] Verified fix with full test suite (31 passing tests).
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve broken image in the UI from the response
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -36,14 +36,14 @@ The Fix:
 - [COMPLETED] Updated tests to verify the new image URL format.
 - [COMPLETED] All tests pass (41 passing tests).
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Ensure ZIP download contains only valid images and no HTML pages
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Update `downloadAllImagesAsZip` to validate response status and content type.
 - [COMPLETED] Handle failed image fetches by using a fallback or skipping.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve broken image caused by double data-URL prefixing
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -53,7 +53,7 @@ The Fix:
 - [COMPLETED] Verified fix with full test suite (57 tests).
 - [COMPLETED] Verified no linting or runtime errors.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve broken image in the UI
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
@@ -63,7 +63,7 @@ The Fix:
 - [COMPLETED] Verified fix with new unit tests and full test suite.
 - [COMPLETED] Verified no linting or runtime errors.
 
-## Task: Fix [COMPLETED]
+## PR.4 Fix [COMPLETED]
 ### Resolve broken image caused by metadata extraction
 The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
