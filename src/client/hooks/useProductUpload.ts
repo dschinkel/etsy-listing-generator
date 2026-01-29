@@ -184,13 +184,68 @@ export const useProductUpload = (repository?: any) => {
     setThemedEnvironmentShotsCount(parseInt(event.target.value, 10) || 0);
   };
 
-  const handleLifestyleCustomContextChange = (value: string) => setLifestyleCustomContext(value);
-  const handleHeroCustomContextChange = (value: string) => setHeroCustomContext(value);
-  const handleCloseUpsCustomContextChange = (value: string) => setCloseUpsCustomContext(value);
-  const handleFlatLayCustomContextChange = (value: string) => setFlatLayCustomContext(value);
-  const handleMacroCustomContextChange = (value: string) => setMacroCustomContext(value);
-  const handleContextualCustomContextChange = (value: string) => setContextualCustomContext(value);
-  const handleThemedEnvironmentCustomContextChange = (value: string) => setThemedEnvironmentCustomContext(value);
+  const handleLifestyleCustomContextChange = (value: string) => {
+    setLifestyleCustomContext(value);
+    if (value.trim() && lifestyleShotsCount === 0) {
+      setLifestyleShotsCount(1);
+    } else if (!value.trim() && lifestyleShotsCount > 0) {
+      setLifestyleShotsCount(0);
+    }
+  };
+
+  const handleHeroCustomContextChange = (value: string) => {
+    setHeroCustomContext(value);
+    if (value.trim() && heroShotsCount === 0) {
+      setHeroShotsCount(1);
+    } else if (!value.trim() && heroShotsCount > 0) {
+      setHeroShotsCount(0);
+    }
+  };
+
+  const handleCloseUpsCustomContextChange = (value: string) => {
+    setCloseUpsCustomContext(value);
+    if (value.trim() && closeUpsCount === 0) {
+      setCloseUpsCount(1);
+    } else if (!value.trim() && closeUpsCount > 0) {
+      setCloseUpsCount(0);
+    }
+  };
+
+  const handleFlatLayCustomContextChange = (value: string) => {
+    setFlatLayCustomContext(value);
+    if (value.trim() && flatLayShotsCount === 0) {
+      setFlatLayShotsCount(1);
+    } else if (!value.trim() && flatLayShotsCount > 0) {
+      setFlatLayShotsCount(0);
+    }
+  };
+
+  const handleMacroCustomContextChange = (value: string) => {
+    setMacroCustomContext(value);
+    if (value.trim() && macroShotsCount === 0) {
+      setMacroShotsCount(1);
+    } else if (!value.trim() && macroShotsCount > 0) {
+      setMacroShotsCount(0);
+    }
+  };
+
+  const handleContextualCustomContextChange = (value: string) => {
+    setContextualCustomContext(value);
+    if (value.trim() && contextualShotsCount === 0) {
+      setContextualShotsCount(1);
+    } else if (!value.trim() && contextualShotsCount > 0) {
+      setContextualShotsCount(0);
+    }
+  };
+
+  const handleThemedEnvironmentCustomContextChange = (value: string) => {
+    setThemedEnvironmentCustomContext(value);
+    if (value.trim() && themedEnvironmentShotsCount === 0) {
+      setThemedEnvironmentShotsCount(1);
+    } else if (!value.trim() && themedEnvironmentShotsCount > 0) {
+      setThemedEnvironmentShotsCount(0);
+    }
+  };
 
   const handlePrimarySelection = () => {
     setIsPrimaryImage(!isPrimaryImage);
