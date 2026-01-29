@@ -65,6 +65,9 @@ The Fix:
 ...
 ```
 
+P0.15 If a task in `tasks.md` exceeds 15 lines, move its details to a new file in the `tasks/` directory following the naming convention `task-fr<feature number>-<feature name>.md` and replace the content in `tasks.md` with a link to that file. 
+P0.15.1 To ensure compliance with P0.15, you must perform a line-count audit of all sections in `tasks.md` before finalizing any task. You can use `wc -l` on extracted sections or manually count them when reading the file.
+
 ---
 
 ## T1. TDD Workflow (non-negotiable, only when user opts-in per P0.0)
@@ -98,7 +101,8 @@ T1.16 Repeated code in tests, such as `render(<App />);`, MUST be DRY'd up by mo
 ## N1. Test Naming (non-negotiable; applies when tests are being written)
 
 N1.1 Tests and test suites (describes) must describe business behavior in clear prose.
-N1.2 Do not include function names, endpoints, browser/view terms, or technical sources in test or describe names. This keeps them decoupled from the actual implementation. Test names do not need to specify their parent names or unnecessary technical words (e.g., use "removes a font" instead of "removes a font use case" or "RemoveFontCommand removes a font").
+N1.2 Do not include function names (e.g., `removeImage`, `callback`), endpoints, browser/view terms, or technical sources (e.g., `from server`) in test or describe names. This keeps them decoupled from the actual implementation. Test names do not need to specify their parent names or unnecessary technical words (e.g., use "removes a font" instead of "removes a font use case" or "RemoveFontCommand removes a font").
+N1.2.1 Example: instead of `deletes image from server when removeImage is called`, use `deletes image`.
 N1.3 Avoid “should” and avoid overly-specific phrasing. Prefer short domain behavior labels. 
 N1.3.1 Test names (`it`, `test`) must be written in all lowercase.
 N1.3.2 Describe names (`describe`) should be written in normal case (sentence case or title case) with spaces.
@@ -481,6 +485,8 @@ test('parseTags() returns valid results')
 test('GET /api/scoring creates [store]-seo-scores.json = {} if missing')
 test('returns filled-outer svg when requested')
 test('fetches filled outer outline svg')
+test('deletes image from server when removeImage is called')
+test('clears all images when clearImages is called')
 ```
 
 Good examples (use this style):

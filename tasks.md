@@ -186,10 +186,7 @@ Acceptance:
 - [COMPLETED] Custom context textbox should be multiline, longer horizontally by default and draggable horizontally.
 
 ## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]
-Acceptance:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Ability to see the final system prompt in a side pane.
-- [COMPLETED] Side pane is resizable.
+(See [tasks/task-fr13-system-prompt-preview.md](tasks/task-fr13-system-prompt-preview.md))
 
 ## Task: Fix [COMPLETED]
 ### Resolve 404 error when clicking generate listing images button
