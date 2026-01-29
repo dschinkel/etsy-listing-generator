@@ -1,4 +1,5 @@
 import { createGenerateListingImages } from '../commands/GenerateListingImages';
+import { createGenerateSingleImage } from '../commands/GenerateSingleImage';
 import { createGetSystemPromptPreview } from '../commands/GetSystemPromptPreview';
 import { createGetContextTemplates } from '../commands/GetContextTemplates';
 import { createSaveContextTemplate } from '../commands/SaveContextTemplate';
@@ -21,6 +22,7 @@ export const createListingController = () => {
   const getContextTemplates = createGetContextTemplates(templateRepository);
   const saveContextTemplate = createSaveContextTemplate(templateRepository);
   const removeContextTemplate = createRemoveContextTemplate(templateRepository);
+  const generateSingleImage = createGenerateSingleImage(repository);
 
   const generate = async (ctx: any) => {
     try {
@@ -40,6 +42,19 @@ export const createListingController = () => {
         retryable: !!error.retryable,
         nextModel: error.nextModel
       };
+    }
+  };
+
+  const generateSingle = async (ctx: any) => {
+    try {
+      const request = ctx.request.body;
+      const result = await generateSingleImage.execute(request);
+      ctx.body = result;
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in generateSingle:', error);
+      ctx.status = error.status || 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
     }
   };
 
@@ -112,5 +127,5 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage };
+  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage };
 };

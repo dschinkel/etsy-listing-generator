@@ -158,6 +158,10 @@ const App = () => {
     }
   };
 
+  const handleRegenerateImage = (index: number, customContext: string) => {
+    regenerateImage(index, customContext, productImage);
+  };
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -304,11 +308,13 @@ const App = () => {
             <div ref={previewRef}>
               <ListingPreview 
                 images={images} 
+                isGenerating={isGenerating}
                 onRemove={removeImage} 
                 onClearAll={clearImages}
                 onDownload={downloadImage} 
                 onDownloadAll={downloadAllImagesAsZip}
                 onSetPrimary={handleSetGeneratedPrimary}
+                onRegenerate={handleRegenerateImage}
               />
             </div>
           </div>

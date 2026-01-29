@@ -78,4 +78,26 @@ describe('Listing Repository (Client)', () => {
       body: expect.stringContaining('"themedEnvironmentCustomContext":"In a forest"')
     }));
   });
+
+  it('requests single image regeneration', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ image: { url: 'new.png', type: 'lifestyle' } }),
+    });
+
+    const repository = createListingRepository();
+    const params = {
+      type: 'lifestyle',
+      customContext: 'Better lighting',
+      productImage: 'data:image/png;base64,prod'
+    };
+
+    const result = await repository.generateSingleImage(params);
+
+    expect(result).toEqual({ image: { url: 'new.png', type: 'lifestyle' } });
+    expect(global.fetch).toHaveBeenCalledWith('/listings/generate/single', expect.objectContaining({
+      method: 'POST',
+      body: JSON.stringify(params)
+    }));
+  });
 });

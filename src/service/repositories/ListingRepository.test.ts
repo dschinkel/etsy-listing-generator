@@ -81,4 +81,25 @@ describe('Listing Repository', () => {
       customContext: 'In a forest'
     }));
   });
+
+  it('generates a single image', async () => {
+    const fakeDataLayer = {
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
+      getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
+    };
+    const repository = createListingRepository(fakeDataLayer);
+    const params = { 
+      type: 'lifestyle',
+      customContext: 'Better lighting'
+    };
+    
+    const result = await repository.generateSingleImage(params);
+    
+    expect(result.image.type).toBe('lifestyle');
+    expect(result.image.url).toContain('/assets/generated-images/lifestyle');
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'lifestyle',
+      customContext: 'Better lighting'
+    }));
+  });
 });

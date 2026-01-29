@@ -44,6 +44,10 @@ router.post('/generate', async (ctx) => {
   await listingController.generate(ctx);
 });
 
+router.post('/generate/single', async (ctx) => {
+  await listingController.generateSingle(ctx);
+});
+
 router.get('/health', async (ctx) => {
   ctx.status = 200;
   ctx.body = { status: 'ok' };

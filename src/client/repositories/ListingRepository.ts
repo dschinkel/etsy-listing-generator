@@ -39,6 +39,26 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
+  const generateSingleImage = async (params: {
+    type: string,
+    customContext?: string,
+    productImage?: string | null,
+    background?: string | null,
+    model?: string
+  }) => {
+    const response = await fetchWithTimeout('/listings/generate/single', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    
+    if (!response.ok) {
+      await handleErrorResponse(response);
+    }
+
+    return await response.json();
+  };
+
   const handleErrorResponse = async (response: Response) => {
     const text = await response.text();
     let errorDetail = text;
@@ -149,5 +169,13 @@ export const createListingRepository = () => {
     return response.ok;
   };
 
-  return { generateImages, getSystemPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage };
+  return { 
+    generateImages, 
+    generateSingleImage,
+    getSystemPromptPreview, 
+    getTemplates, 
+    saveTemplate, 
+    removeTemplate, 
+    deleteImage 
+  };
 };

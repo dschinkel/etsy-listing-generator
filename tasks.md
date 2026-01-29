@@ -35,11 +35,8 @@ Acceptance:
 (See [tasks/completed/task-pr0-meta-fixes.md](tasks/completed/task-pr0-meta-fixes.md))
 
 
-## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
-Acceptance:
-- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-### FR.5.1 — Select an image to regen - create a new one [NOT STARTED]
-### FR.5.2 — Clicking the refresh button creates a new image [NOT STARTED]
+## Feature: FR.5 — Redesign certain images that I don't like [COMPLETED]
+(See [tasks/completed/task-fr5-image-regeneration.md](tasks/completed/task-fr5-image-regeneration.md))
 
 ## Feature: FR.6 — Reorder or arrange ordering of images [NOT STARTED]
 Acceptance:

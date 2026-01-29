@@ -172,17 +172,53 @@ export const useListingGeneration = (listingRepository: any) => {
     })));
   };
 
+  const regenerateImage = async (index: number, customContext: string, productImage?: string | null) => {
+    const imageToReplace = images[index];
+    if (!imageToReplace) return;
+
+    setIsGenerating(true);
+    setError(null);
+
+    try {
+      const response = await listingRepository.generateSingleImage({
+        type: imageToReplace.type,
+        customContext,
+        productImage
+      });
+
+      if (response.image) {
+        // Delete the old image from the server
+        listingRepository.deleteImage(imageToReplace.url).catch((err: any) => {
+          console.error('Failed to delete old image during regeneration:', err);
+        });
+
+        // Replace the image in the state
+        setImages(prev => {
+          const newImages = [...prev];
+          newImages[index] = response.image;
+          return newImages;
+        });
+      }
+    } catch (err: any) {
+      console.error('Regeneration failed:', err);
+      setError(`Regeneration failed: ${err.message}`);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return {
     images,
     systemPrompt,
     modelUsed,
     error,
     isGenerating,
-    generateListing,
+    generateListing, 
     removeImage, 
     clearImages,
     setPrimaryImage,
     clearPrimaryImage,
+    regenerateImage,
     downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview: useCallback(async (params: any) => {

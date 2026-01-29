@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
-import { X, Copy, Download } from 'lucide-react';
+import { X, Copy, Download, Plus, RefreshCw } from 'lucide-react';
 import ImageModal from './ImageModal';
 import { useListingPreview } from './useListingPreview';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
 
 interface ListingImage {
   url: string;
@@ -15,15 +16,28 @@ interface ListingImage {
 
 interface ListingPreviewProps {
   images: ListingImage[];
+  isGenerating?: boolean;
   onRemove: (index: number) => void;
   onClearAll: () => void;
   onDownload: (src: string, index: number) => void;
   onDownloadAll: () => void;
   onSetPrimary: (index: number) => void;
+  onRegenerate: (index: number, customContext: string) => void;
 }
 
-const ListingPreview = ({ images, onRemove, onClearAll, onDownload, onDownloadAll, onSetPrimary }: ListingPreviewProps) => {
+const ListingPreview = ({ 
+  images, 
+  isGenerating = false,
+  onRemove, 
+  onClearAll, 
+  onDownload, 
+  onDownloadAll, 
+  onSetPrimary,
+  onRegenerate 
+}: ListingPreviewProps) => {
   const { selectedImage, isModalOpen, openImage, closeImage } = useListingPreview();
+  const [regenContexts, setRegenContexts] = React.useState<Record<number, string>>({});
+  const [showRegenInputs, setShowRegenInputs] = React.useState<Record<number, boolean>>({});
 
   if (images.length === 0) return null;
 
@@ -104,9 +118,45 @@ const ListingPreview = ({ images, onRemove, onClearAll, onDownload, onDownloadAl
                     </Button>
                   </div>
                 </div>
-                <span className="text-xs text-yellow-200 font-medium px-1" data-testid={`listing-image-type-${index}`}>
-                  {image.type}
-                </span>
+                
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-xs text-yellow-200 font-medium" data-testid={`listing-image-type-${index}`}>
+                    {image.type}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5"
+                    onClick={() => setShowRegenInputs(prev => ({ ...prev, [index]: !prev[index] }))}
+                    title="Add custom context for regeneration"
+                    data-testid={`toggle-regen-context-${index}`}
+                  >
+                    <Plus className="h-3 w-3" />
+                  </Button>
+                </div>
+
+                {showRegenInputs[index] && (
+                  <div className="flex flex-col gap-1 px-1 mt-1">
+                    <Textarea
+                      placeholder="Custom context for this image..."
+                      className="text-[10px] min-h-[40px] p-1"
+                      value={regenContexts[index] || ""}
+                      onChange={(e) => setRegenContexts(prev => ({ ...prev, [index]: e.target.value }))}
+                      data-testid={`regen-context-input-${index}`}
+                    />
+                    <Button
+                      size="sm"
+                      className="h-7 text-[10px] flex items-center gap-1"
+                      disabled={isGenerating}
+                      onClick={() => onRegenerate(index, regenContexts[index] || "")}
+                      data-testid={`regenerate-image-${index}`}
+                    >
+                      <RefreshCw className={`h-2 w-2 ${isGenerating ? 'animate-spin' : ''}`} />
+                      Regenerate
+                    </Button>
+                  </div>
+                )}
+
                 <div className="flex items-center space-x-2 px-1">
                   <Checkbox 
                     id={`primary-etsy-image-${index}`} 

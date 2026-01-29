@@ -78,9 +78,11 @@ A user can:
     **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**
     **FR.4.5 — Ability to see which shot type generated each image (displayed below thumbnails)**
     **FR.4.6 — Ability to see which AI model was used for the current generation**
-**FR.5 — Redesign certain images that I don't like that**
-    **FR.5.1 — Select an image to regen - create a new one**
-    **FR.5.2 — Clicking the refresh button creates a new image**
+**FR.5 — Redesign certain images that I don't like**
+    - **FR.5.1 — Ability to add specific custom context to an existing generated image via a "+" button.**
+    - **FR.5.2 — Ability to regenerate a single image using its specific custom context via a "Regenerate" button.**
+    - **FR.5.3 — The regenerated image replaces the original image in the Listing Preview.**
+    - **FR.5.4 — Regeneration uses the same model and logic as the main generation process.**
 
 **FR.6— Reorder or arrange ordering of images**
 

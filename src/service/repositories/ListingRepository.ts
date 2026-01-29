@@ -275,5 +275,34 @@ export const createListingRepository = (dataLayer: any) => {
     return { systemPrompt };
   };
 
-  return { generateImages, getPromptPreview };
+  const generateSingleImage = async (params: {
+    type: string,
+    customContext?: string,
+    productImage?: string,
+    background?: string,
+    model?: string
+  }) => {
+    let image: { url: string; type: string } | null = null;
+    
+    await generateShotTypeImages(
+      params.type, 
+      1, 
+      params.productImage, 
+      params.background, 
+      [], // We don't need the images array here, we'll capture it via onResult
+      (res) => {
+        image = { url: res.imageUrl, type: params.type };
+      },
+      params.model,
+      params.customContext
+    );
+
+    if (!image) {
+      throw new Error('Failed to generate single image');
+    }
+
+    return { image };
+  };
+
+  return { generateImages, getPromptPreview, generateSingleImage };
 };
