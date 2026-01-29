@@ -207,6 +207,7 @@ const App = () => {
                     key={index}
                     src={src} 
                     isPrimary={isPrimaryImage && index === 0}
+                    isArchived={isProductImageArchived(index)}
                     onSelectPrimary={index === 0 ? handleSelectProductPrimary : undefined}
                     onRemove={() => handleRemoveProductImage(index)}
                     onArchive={() => archiveProductImage(index)}
@@ -910,12 +911,14 @@ const ShotsSelection = ({
 const UploadedImage = ({ 
   src, 
   isPrimary, 
+  isArchived,
   onSelectPrimary,
   onRemove,
   onArchive
 }: { 
   src: string | null, 
   isPrimary: boolean, 
+  isArchived: boolean,
   onSelectPrimary?: () => void,
   onRemove: () => void,
   onArchive: () => void
@@ -937,10 +940,12 @@ const UploadedImage = ({
             size="sm"
             className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
             onClick={onArchive}
+            disabled={isArchived}
             data-testid="archive-product-image"
+            title={isArchived ? "Already archived" : "Archive image"}
           >
             <Archive className="w-3 h-3" />
-            Archive
+            {isArchived ? 'Archived' : 'Archive'}
           </Button>
           <Button
             variant="destructive"

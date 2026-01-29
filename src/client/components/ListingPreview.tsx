@@ -130,8 +130,9 @@ const ListingPreview = ({
                           e.stopPropagation();
                           onArchiveImage(index);
                         }}
+                        disabled={image.isArchived}
                         data-testid={`archive-listing-image-${index}`}
-                        title="Archive image"
+                        title={image.isArchived ? "Already archived" : "Archive image"}
                       >
                         <Archive className="w-4 h-4" />
                       </Button>

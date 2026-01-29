@@ -86,7 +86,8 @@ describe('Listing Generation UI', () => {
       totalShots: 0,
       isReadyToGenerate: false,
       archivedUploads: [],
-      toggleArchivedUpload: jest.fn()
+      toggleArchivedUpload: jest.fn(),
+      isProductImageArchived: jest.fn().mockReturnValue(false)
     });
   });
 

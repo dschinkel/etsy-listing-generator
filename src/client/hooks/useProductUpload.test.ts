@@ -321,4 +321,33 @@ describe('useProductUpload', () => {
 
     expect(mockArchiveImages).toHaveBeenCalledWith([fakeImage], 'uploads');
   });
+
+  it('tracks archived state for product images', async () => {
+    const mockArchiveImages = jest.fn().mockResolvedValue({ success: true });
+    const repository = { ...mockRepository, archiveImages: mockArchiveImages };
+    const { result } = renderHook(() => useProductUpload(repository));
+    
+    const fakeImage = 'data:image/png;base64,image1';
+    
+    await act(async () => {
+      const mockReader = {
+        readAsDataURL: jest.fn(function(this: any) {
+          this.onloadend();
+        }),
+        get result() { return fakeImage; }
+      };
+      jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+      const file = new File([''], 'test.png', { type: 'image/png' });
+      result.current.handleUpload({ target: { files: [file] } } as any);
+      (global.FileReader as jest.Mock).mockRestore();
+    });
+
+    expect(result.current.isProductImageArchived(0)).toBe(false);
+
+    await act(async () => {
+      await result.current.archiveProductImage(0);
+    });
+
+    expect(result.current.isProductImageArchived(0)).toBe(true);
+  });
 });

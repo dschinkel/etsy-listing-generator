@@ -575,4 +575,52 @@ describe('Listing Generation', () => {
 
     expect(fakeListingRepository.archiveImages).toHaveBeenCalledWith(['image2.png']);
   });
+
+  it('tracks archived state for individual images', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [{ url: 'image1.png', type: 'lifestyle' }] 
+      }),
+      archiveImages: jest.fn().mockResolvedValue({ success: true })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    expect(result.current.images[0].isArchived).toBeFalsy();
+
+    await act(async () => {
+      await result.current.archiveImage(0);
+    });
+
+    expect(result.current.images[0].isArchived).toBe(true);
+  });
+
+  it('tracks archived state for all images when archived together', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle' },
+          { url: 'image2.png', type: 'hero' }
+        ] 
+      }),
+      archiveImages: jest.fn().mockResolvedValue({ success: true })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1, heroCount: 1 });
+    });
+
+    await act(async () => {
+      await result.current.archiveAllImages();
+    });
+
+    expect(result.current.images[0].isArchived).toBe(true);
+    expect(result.current.images[1].isArchived).toBe(true);
+  });
 });

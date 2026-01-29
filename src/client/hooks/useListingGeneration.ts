@@ -7,6 +7,7 @@ export interface ListingImage {
   url: string;
   type: string;
   isPrimary?: boolean;
+  isArchived?: boolean;
 }
 
 export const useListingGeneration = (listingRepository: any) => {
@@ -180,6 +181,7 @@ export const useListingGeneration = (listingRepository: any) => {
     try {
       const imageUrls = images.map(img => img.url);
       await listingRepository.archiveImages(imageUrls);
+      setImages(prev => prev.map(img => ({ ...img, isArchived: true })));
     } catch (err: any) {
       console.error('Failed to archive images:', err);
       setTimedError(`Archiving failed: ${err.message}`);
@@ -192,6 +194,7 @@ export const useListingGeneration = (listingRepository: any) => {
 
     try {
       await listingRepository.archiveImages([imageToArchive.url]);
+      setImages(prev => prev.map((img, i) => i === index ? { ...img, isArchived: true } : img));
     } catch (err: any) {
       console.error('Failed to archive individual image:', err);
       setTimedError(`Archiving failed: ${err.message}`);

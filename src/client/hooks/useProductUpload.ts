@@ -31,6 +31,7 @@ export const useProductUpload = (repository?: any) => {
   const [themedEnvironmentCustomContext, setThemedEnvironmentCustomContext] = useState('');
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
   const [archivedUploads, setArchivedUploads] = useState<string[]>([]);
+  const [archivedInSession, setArchivedInSession] = useState<Set<string>>(new Set());
 
   const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
   const isReadyToGenerate = totalShots > 0 && productImages.length > 0;
@@ -287,11 +288,17 @@ export const useProductUpload = (repository?: any) => {
     if (imageToArchive && repository) {
       try {
         await repository.archiveImages([imageToArchive], 'uploads');
+        setArchivedInSession(prev => new Set(prev).add(imageToArchive));
       } catch (err: any) {
         console.error('Failed to archive product image:', err);
         alert(`Failed to archive product image: ${err.message}`);
       }
     }
+  };
+
+  const isProductImageArchived = (index: number) => {
+    const url = productImages[index];
+    return url ? archivedInSession.has(url) : false;
   };
 
   const resetCounts = () => {
@@ -362,5 +369,6 @@ export const useProductUpload = (repository?: any) => {
     isReadyToGenerate,
     archivedUploads,
     toggleArchivedUpload,
+    isProductImageArchived,
   };
 };
