@@ -102,9 +102,9 @@ describe('Listing Generation', () => {
     const fakeListingRepository = {
       generateImages: async () => ({ 
         images: [
-          { url: 'image1.png', type: 'lifestyle' }, 
-          { url: 'image2.png', type: 'lifestyle' }, 
-          { url: 'image3.png', type: 'lifestyle' }
+          { url: '/src/assets/generated-images/image1.png', type: 'lifestyle' }, 
+          { url: '/src/assets/generated-images/image2.png', type: 'lifestyle' }, 
+          { url: '/src/assets/generated-images/image3.png', type: 'lifestyle' }
         ] 
       }),
       deleteImage: jest.fn().mockResolvedValue(true)
@@ -123,9 +123,10 @@ describe('Listing Generation', () => {
     });
     
     expect(result.current.images).toEqual([
-      { url: 'image1.png', type: 'lifestyle' }, 
-      { url: 'image3.png', type: 'lifestyle' }
+      { url: '/src/assets/generated-images/image1.png', type: 'lifestyle' }, 
+      { url: '/src/assets/generated-images/image3.png', type: 'lifestyle' }
     ]);
+    expect(fakeListingRepository.deleteImage).toHaveBeenCalledWith('/src/assets/generated-images/image2.png');
   });
 
   it('downloads an individual image', async () => {

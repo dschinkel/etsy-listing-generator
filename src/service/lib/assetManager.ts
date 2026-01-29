@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fetch } from 'undici';
 
-const GENERATED_ASSETS_DIR = path.join(process.cwd(), 'assets', 'generated-images');
+const GENERATED_ASSETS_DIR = path.join(process.cwd(), 'src', 'assets', 'generated-images');
 
 if (!fs.existsSync(GENERATED_ASSETS_DIR)) {
   fs.mkdirSync(GENERATED_ASSETS_DIR, { recursive: true });
@@ -52,18 +52,18 @@ export async function saveImageToAssets(imageData: string, type: string): Promis
   
   fs.writeFileSync(filePath, buffer);
   
-  return `/assets/generated-images/${fullFileName}`;
+  return `/src/assets/generated-images/${fullFileName}`;
 }
 
 /**
- * Deletes an image from the assets/generated-images directory.
+ * Deletes an image from the src/assets/generated-images directory.
  */
 export async function deleteImageFromAssets(imageUrl: string): Promise<void> {
-  if (!imageUrl.startsWith('/assets/generated-images/')) {
+  if (!imageUrl.startsWith('/src/assets/generated-images/')) {
     return; // Not a local generated image
   }
 
-  const fileName = imageUrl.replace('/assets/generated-images/', '');
+  const fileName = imageUrl.replace('/src/assets/generated-images/', '');
   const filePath = path.join(GENERATED_ASSETS_DIR, fileName);
 
   try {

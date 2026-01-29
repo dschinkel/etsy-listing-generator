@@ -163,4 +163,44 @@ describe('useProductUpload', () => {
     expect(result.current.lifestyleShotsCount).toBe(0);
     expect(result.current.heroShotsCount).toBe(0);
   });
+
+  it('deletes product image from server when removed', async () => {
+    const mockDeleteImage = jest.fn().mockResolvedValue(true);
+    const repository = { ...mockRepository, deleteImage: mockDeleteImage };
+    const { result } = renderHook(() => useProductUpload(repository));
+    
+    const serverImageUrl = '/src/assets/generated-images/product.png';
+    
+    // Simulate setting a server-side image URL (e.g. from a previous upload)
+    // We can't easily trigger the reader.onloadend from handleUpload in tests 
+    // without mocking FileReader, which we did in another test.
+    // Let's just mock the state setter or assume it's set.
+    
+    await act(async () => {
+      // Direct state setting is not possible from outside, so we use handleUpload mock logic if needed
+      // but here we just want to test if handleRemoveProductImage calls deleteImage
+      
+      // Let's use the same mockReader approach
+      const mockReader = {
+        readAsDataURL: jest.fn(function(this: any) {
+          this.onloadend();
+        }),
+        get result() { return serverImageUrl; }
+      };
+      const spy = jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+      
+      const file = new File([''], 'test.png', { type: 'image/png' });
+      result.current.handleUpload({ target: { files: [file] } } as any);
+      spy.mockRestore();
+    });
+
+    expect(result.current.productImage).toBe(serverImageUrl);
+
+    await act(async () => {
+      result.current.handleRemoveProductImage();
+    });
+
+    expect(result.current.productImage).toBeNull();
+    expect(mockDeleteImage).toHaveBeenCalledWith(serverImageUrl);
+  });
 });

@@ -1,9 +1,9 @@
 yarn run v1.22.22
-$ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/hooks/useListingGeneration.test.ts src/client/hooks/useProductUpload.test.ts src/client/test/ListingGenerationUI.test.tsx src/service/repositories/ListingRepository.test.ts src/service/data/GeminiImageGenerator.test.ts
+$ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/hooks/useListingGeneration.test.ts src/client/test/ListingGenerationUI.test.tsx src/service/repositories/ListingRepository.test.ts
  PASS   service  src/service/repositories/ListingRepository.test.ts
   ● Console
     console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
       at _log (node_modules/dotenv/lib/main.js:142:11)
     console.log
       Attempting generation with model: gemini-2.5-flash-image
@@ -53,133 +53,6 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
         hasProductImage: false
       }
       at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
- PASS   client  src/client/hooks/useProductUpload.test.ts
-  ● Console
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      38 |     if (repository) {
-      39 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 40 |         setTemplates(response.templates || []);
-         |         ^
-      41 |       });
-      42 |     }
-      43 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:40:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      38 |     if (repository) {
-      39 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 40 |         setTemplates(response.templates || []);
-         |         ^
-      41 |       });
-      42 |     }
-      43 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:40:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      38 |     if (repository) {
-      39 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 40 |         setTemplates(response.templates || []);
-         |         ^
-      41 |       });
-      42 |     }
-      43 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:40:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      38 |     if (repository) {
-      39 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 40 |         setTemplates(response.templates || []);
-         |         ^
-      41 |       });
-      42 |     }
-      43 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:40:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      38 |     if (repository) {
-      39 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 40 |         setTemplates(response.templates || []);
-         |         ^
-      41 |       });
-      42 |     }
-      43 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:40:9
  PASS   client  src/client/hooks/useListingGeneration.test.ts
   ● Console
     console.log
@@ -1554,8 +1427,6 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
       at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15718:11)
       at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
-      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15718:11)
-      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
       at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15476:11)
       at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
       at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15476:11)
@@ -1683,8 +1554,6 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
       at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15718:11)
       at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
-      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15718:11)
-      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
       at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15476:11)
       at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
       at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15476:11)
@@ -1707,14 +1576,9 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
       at Function.fireEvent.<computed> [as click] (node_modules/@testing-library/dom/dist/events.js:110:36)
       at Function.fireEvent.<computed> [as click] (node_modules/@testing-library/react/dist/fire-event.js:15:52)
       at Object.<anonymous> (src/client/test/ListingGenerationUI.test.tsx:633:15)
- PASS   service  src/service/data/GeminiImageGenerator.test.ts (32.682 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-Test Suites: 5 passed, 5 total
-Tests:       56 passed, 56 total
+Test Suites: 3 passed, 3 total
+Tests:       43 passed, 43 total
 Snapshots:   0 total
-Time:        33.292 s, estimated 34 s
-Ran all test suites matching /src\/client\/hooks\/useListingGeneration.test.ts|src\/client\/hooks\/useProductUpload.test.ts|src\/client\/test\/ListingGenerationUI.test.tsx|src\/service\/repositories\/ListingRepository.test.ts|src\/service\/data\/GeminiImageGenerator.test.ts/i in 2 projects.
-✨  Done in 33.94s.
+Time:        3.072 s
+Ran all test suites matching /src\/client\/hooks\/useListingGeneration.test.ts|src\/client\/test\/ListingGenerationUI.test.tsx|src\/service\/repositories\/ListingRepository.test.ts/i in 2 projects.
+✨  Done in 3.92s.

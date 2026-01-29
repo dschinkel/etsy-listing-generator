@@ -82,3 +82,6 @@ Acceptance:
 
 ## Feature: FR.18 — Persistence and Infrastructure [COMPLETED]
 (See [tasks/completed/task-fr18-persistence-infra.md](tasks/completed/task-fr18-persistence-infra.md))
+
+## Feature: FR.19 — Three-Pane Layout [COMPLETED]
+(See [tasks/completed/task-fr19-three-pane-layout.md](tasks/completed/task-fr19-three-pane-layout.md))

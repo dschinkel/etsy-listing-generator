@@ -1,11 +1,11 @@
 ## Feature: FR.18 — Persistence and Infrastructure [COMPLETED]
 
-### FR.18.1 — Persist generated images in `assets/generated-images` [COMPLETED]
+### FR.18.1 — Persist generated images in `src/assets/generated-images` [COMPLETED]
 Acceptance:
 - [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] Updated `src/service/lib/assetManager.ts` to use `assets/generated-images` directory.
-- [x] Updated URL paths returned by server to `/assets/generated-images/`.
-- [x] Cleaned up old `assets/generated` directory.
+- [x] Updated `src/service/lib/assetManager.ts` to use `src/assets/generated-images` directory.
+- [x] Updated URL paths returned by server to `/src/assets/generated-images/`.
+- [x] Cleaned up old `assets/generated-images` directory.
 - [x] Updated integration tests to support the new image URL format.
 - [x] Verified that images are correctly saved and served from the new directory.
 
@@ -26,3 +26,12 @@ Acceptance:
 - [x] Reduced image counts in integration tests to 1 image to ensure they fit within the 15s Jest and API timeout limits.
 - [x] Updated `README.md` to document the new 15s API reliability standard.
 - [x] Verified `AbortError` triggers correctly at 15s for Gemini calls.
+
+### FR.18.4 — Image Storage Migration & Deletion [COMPLETED]
+Acceptance:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Migrate `GENERATED_ASSETS_DIR` to `src/assets/generated-images`.
+- [x] Ensure `assetManager.ts` correctly deletes files from the new directory.
+- [x] Verify deletion on uploaded product image removal.
+- [x] Verify deletion on listing preview image removal.
+- [x] Verify deletion on "Clear All" images.

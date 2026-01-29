@@ -252,6 +252,11 @@ export const useProductUpload = (repository?: any) => {
   };
 
   const handleRemoveProductImage = () => {
+    if (productImage && productImage.startsWith('/src/assets/generated-images/')) {
+      repository?.deleteImage(productImage).catch((err: any) => {
+        console.error('Failed to delete product image from server:', err);
+      });
+    }
     setProductImage(null);
     setIsPrimaryImage(false);
   };

@@ -70,9 +70,10 @@ A user can:
     - **FR.17.2 — Upload buttons are located in the "Shots Selection" list, to the right of the "+" (custom context) button with 10px padding**
 
 **FR.18 — Persistence and Infrastructure**
-    - **FR.18.1 — Persist generated images in `assets/generated-images`**
+    - **FR.18.1 — Persist generated images in `src/assets/generated-images`**
     - **FR.18.2 — Automated model retry and fallback logic**
     - **FR.18.3 — Enforce 15-second timeout for individual production API calls**
+    - **FR.18.4 — Ensure images are deleted from disk when the corresponding record is removed (Uploaded product image, Listing preview image, or "Clear All").**
 
 **FR.4 — Show a final preview of the listing images**
     **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**
@@ -146,6 +147,11 @@ A user can:
     - **FR.16.1 — Auto-scroll to Listing Preview after generation**
     - **FR.16.2 — Reduce gaps and whitespace in Shots Selection and Listing Preview**
     - **FR.16.3 — Center-align generation controls with Shots Selection**
+
+**FR.19 — Three-Pane Layout**
+    - **FR.19.1 — Move Listing Preview to a third pane on the right of the Shots Selection section.**
+    - **FR.19.2 — Ensure the Listing Preview section fills the page vertically.**
+    - **FR.19.3 — Implement internal scrolling for the Listing Preview pane so the main page remains fixed.**
 
 ---
 

@@ -169,141 +169,140 @@ const App = () => {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
-        <main className="flex-1 p-8">
-          <div className="flex flex-col gap-8 w-full max-w-[1600px] mx-auto">
-            <div className="flex gap-8 items-start">
-              {/* Left Pane */}
-              <div className="flex flex-col items-center gap-8 w-1/4">
-                <UploadImage onUpload={handleUpload} />
-                <UploadedImage 
-                  src={productImage} 
-                  isPrimary={isPrimaryImage}
-                  onSelectPrimary={handleSelectProductPrimary}
-                  onRemove={handleRemoveProductImage}
-                />
-                {/* System Prompt (moved here) */}
-                <SystemPromptPane 
-                  prompt={systemPrompt} 
-                />
-              </div>
+        <main className="flex-1 p-8 overflow-hidden">
+          <div className="flex gap-8 items-start h-[calc(100vh-12rem)] max-w-[1800px] mx-auto">
+            {/* Left Pane */}
+            <div className="flex flex-col items-center gap-8 w-1/4 h-full overflow-y-auto pr-2">
+              <UploadImage onUpload={handleUpload} />
+              <UploadedImage 
+                src={productImage} 
+                isPrimary={isPrimaryImage}
+                onSelectPrimary={handleSelectProductPrimary}
+                onRemove={handleRemoveProductImage}
+              />
+              {/* System Prompt (moved here) */}
+              <SystemPromptPane 
+                prompt={systemPrompt} 
+              />
+            </div>
 
-              {/* Middle Pane */}
-              <div className="flex flex-col gap-8 flex-1 items-start">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="flex-initial">
-                    <ShotsSelection 
-                      lifestyleShotsCount={lifestyleShotsCount}
-                      onLifestyleShotsChange={handleLifestyleShotsChange}
-                      heroShotsCount={heroShotsCount}
-                      onHeroShotsChange={handleHeroShotsChange}
-                      closeUpsCount={closeUpsCount}
-                      onCloseUpsChange={handleCloseUpsChange}
-                      flatLayShotsCount={flatLayShotsCount}
-                      onFlatLayShotsChange={handleFlatLayShotsChange}
-                      macroShotsCount={macroShotsCount}
-                      onMacroShotsChange={handleMacroShotsChange}
-                      contextualShotsCount={contextualShotsCount}
-                      onContextualShotsChange={handleContextualShotsChange}
-                      themedEnvironmentShotsCount={themedEnvironmentShotsCount}
-                      onThemedEnvironmentShotsChange={handleThemedEnvironmentShotsChange}
-                      lifestyleCustomContext={lifestyleCustomContext}
-                      onLifestyleCustomContextChange={handleLifestyleCustomContextChange}
-                      heroCustomContext={heroCustomContext}
-                      onHeroCustomContextChange={handleHeroCustomContextChange}
-                      closeUpsCustomContext={closeUpsCustomContext}
-                      onCloseUpsCustomContextChange={handleCloseUpsCustomContextChange}
-                      flatLayCustomContext={flatLayCustomContext}
-                      onFlatLayCustomContextChange={handleFlatLayCustomContextChange}
-                      macroCustomContext={macroCustomContext}
-                      onMacroCustomContextChange={handleMacroCustomContextChange}
-                      contextualCustomContext={contextualCustomContext}
-                      onContextualCustomContextChange={handleContextualCustomContextChange}
-                      themedEnvironmentCustomContext={themedEnvironmentCustomContext}
-                      onThemedEnvironmentCustomContextChange={handleThemedEnvironmentCustomContextChange}
-                      templates={templates}
-                      onSaveTemplate={saveContextTemplate}
-                      onRemoveTemplate={removeContextTemplate}
-                      lifestyleBackground={lifestyleBackground}
-                      onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
-                      heroBackground={heroBackground}
-                      onHeroBackgroundUpload={handleHeroBackgroundUpload}
-                      closeUpsBackground={closeUpsBackground}
-                      onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
-                      flatLayBackground={flatLayBackground}
-                      onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
-                      macroBackground={macroBackground}
-                      onMacroBackgroundUpload={handleMacroBackgroundUpload}
-                      contextualBackground={contextualBackground}
-                      onContextualBackgroundUpload={handleContextualBackgroundUpload}
-                      themedEnvironmentBackground={themedEnvironmentBackground}
-                      onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
-                    />
-                  </div>
+            {/* Middle Pane */}
+            <div className="flex flex-col gap-8 w-1/3 h-full overflow-y-auto items-start pr-2">
+              <div className="flex flex-col items-center gap-4 w-full">
+                <div className="flex-initial">
+                  <ShotsSelection 
+                    lifestyleShotsCount={lifestyleShotsCount}
+                    onLifestyleShotsChange={handleLifestyleShotsChange}
+                    heroShotsCount={heroShotsCount}
+                    onHeroShotsChange={handleHeroShotsChange}
+                    closeUpsCount={closeUpsCount}
+                    onCloseUpsChange={handleCloseUpsChange}
+                    flatLayShotsCount={flatLayShotsCount}
+                    onFlatLayShotsChange={handleFlatLayShotsChange}
+                    macroShotsCount={macroShotsCount}
+                    onMacroShotsChange={handleMacroShotsChange}
+                    contextualShotsCount={contextualShotsCount}
+                    onContextualShotsChange={handleContextualShotsChange}
+                    themedEnvironmentShotsCount={themedEnvironmentShotsCount}
+                    onThemedEnvironmentShotsChange={handleThemedEnvironmentShotsChange}
+                    lifestyleCustomContext={lifestyleCustomContext}
+                    onLifestyleCustomContextChange={handleLifestyleCustomContextChange}
+                    heroCustomContext={heroCustomContext}
+                    onHeroCustomContextChange={handleHeroCustomContextChange}
+                    closeUpsCustomContext={closeUpsCustomContext}
+                    onCloseUpsCustomContextChange={handleCloseUpsCustomContextChange}
+                    flatLayCustomContext={flatLayCustomContext}
+                    onFlatLayCustomContextChange={handleFlatLayCustomContextChange}
+                    macroCustomContext={macroCustomContext}
+                    onMacroCustomContextChange={handleMacroCustomContextChange}
+                    contextualCustomContext={contextualCustomContext}
+                    onContextualCustomContextChange={handleContextualCustomContextChange}
+                    themedEnvironmentCustomContext={themedEnvironmentCustomContext}
+                    onThemedEnvironmentCustomContextChange={handleThemedEnvironmentCustomContextChange}
+                    templates={templates}
+                    onSaveTemplate={saveContextTemplate}
+                    onRemoveTemplate={removeContextTemplate}
+                    lifestyleBackground={lifestyleBackground}
+                    onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
+                    heroBackground={heroBackground}
+                    onHeroBackgroundUpload={handleHeroBackgroundUpload}
+                    closeUpsBackground={closeUpsBackground}
+                    onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+                    flatLayBackground={flatLayBackground}
+                    onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
+                    macroBackground={macroBackground}
+                    onMacroBackgroundUpload={handleMacroBackgroundUpload}
+                    contextualBackground={contextualBackground}
+                    onContextualBackgroundUpload={handleContextualBackgroundUpload}
+                    themedEnvironmentBackground={themedEnvironmentBackground}
+                    onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
+                  />
+                </div>
 
-                  <div className="flex flex-col items-center gap-4 w-full">
-                    {!productImage && (
-                      <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
-                        Upload a product image to start
-                      </div>
-                    )}
-                    {productImage && totalShots < 1 && (
-                      <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
-                        Specify a Shots Selection
-                      </div>
-                    )}
-                    <Button 
-                      size="lg" 
-                      className="w-full max-w-xs"
-                      disabled={isGenerating || !isReadyToGenerate}
-                      onClick={() => {
-                        generateListing({ 
-                          lifestyleCount: lifestyleShotsCount,
-                          heroCount: heroShotsCount,
-                          closeUpsCount: closeUpsCount,
-                          flatLayCount: flatLayShotsCount,
-                          macroCount: macroShotsCount,
-                          contextualCount: contextualShotsCount,
-                          themedEnvironmentCount: themedEnvironmentShotsCount,
-                          productImage: productImage,
-                          lifestyleBackground: lifestyleBackground,
-                          heroBackground: heroBackground,
-                          closeUpsBackground: closeUpsBackground,
-                          flatLayBackground: flatLayBackground,
-                          macroBackground: macroBackground,
-                          contextualBackground: contextualBackground,
-                          themedEnvironmentBackground: themedEnvironmentBackground,
-                          lifestyleCustomContext,
-                          heroCustomContext,
-                          closeUpsCustomContext,
-                          flatLayCustomContext,
-                          macroCustomContext,
-                          contextualCustomContext,
-                          themedEnvironmentCustomContext
-                        });
-                        resetCounts();
-                      }}
+                <div className="flex flex-col items-center gap-4 w-full">
+                  {!productImage && (
+                    <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
+                      Upload a product image to start
+                    </div>
+                  )}
+                  {productImage && totalShots < 1 && (
+                    <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
+                      Specify a Shots Selection
+                    </div>
+                  )}
+                  <Button 
+                    size="lg" 
+                    className="w-full max-w-xs"
+                    disabled={isGenerating || !isReadyToGenerate}
+                    onClick={() => {
+                      generateListing({ 
+                        lifestyleCount: lifestyleShotsCount,
+                        heroCount: heroShotsCount,
+                        closeUpsCount: closeUpsCount,
+                        flatLayCount: flatLayShotsCount,
+                        macroCount: macroShotsCount,
+                        contextualCount: contextualShotsCount,
+                        themedEnvironmentCount: themedEnvironmentShotsCount,
+                        productImage: productImage,
+                        lifestyleBackground: lifestyleBackground,
+                        heroBackground: heroBackground,
+                        closeUpsBackground: closeUpsBackground,
+                        flatLayBackground: flatLayBackground,
+                        macroBackground: macroBackground,
+                        contextualBackground: contextualBackground,
+                        themedEnvironmentBackground: themedEnvironmentBackground,
+                        lifestyleCustomContext,
+                        heroCustomContext,
+                        closeUpsCustomContext,
+                        flatLayCustomContext,
+                        macroCustomContext,
+                        contextualCustomContext,
+                        themedEnvironmentCustomContext
+                      });
+                      resetCounts();
+                    }}
+                  >
+                    {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
+                  </Button>
+
+                  {isGenerating && regeneratingIndex === null && modelUsed && (
+                    <ModelStatus model={modelUsed} />
+                  )}
+
+                  {error && (
+                    <div 
+                      className="w-full max-w-2xl mx-auto p-4 bg-red-500/10 border border-red-500/50 text-red-500 rounded-md text-sm text-center font-medium"
+                      data-testid="generation-error"
                     >
-                      {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
-                    </Button>
-
-                    {isGenerating && regeneratingIndex === null && modelUsed && (
-                      <ModelStatus model={modelUsed} />
-                    )}
-
-                    {error && (
-                      <div 
-                        className="w-full max-w-2xl mx-auto p-4 bg-red-500/10 border border-red-500/50 text-red-500 rounded-md text-sm text-center font-medium"
-                        data-testid="generation-error"
-                      >
-                        {error}
-                      </div>
-                    )}
-                  </div>
+                      {error}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            
-            <div ref={previewRef}>
+
+            {/* Right Pane */}
+            <div ref={previewRef} className="flex-1 h-full overflow-y-auto pr-2">
               <ListingPreview 
                 images={images} 
                 isGenerating={isGenerating}

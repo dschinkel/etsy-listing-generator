@@ -38,6 +38,7 @@ app.use(async (ctx, next) => {
 
 app.use(bodyParser({ jsonLimit: '50mb' }));
 
+app.use(serve(path.join(process.cwd(), 'src', 'assets')));
 app.use(serve(path.join(process.cwd(), 'assets')));
 
 router.post('/generate', async (ctx) => {

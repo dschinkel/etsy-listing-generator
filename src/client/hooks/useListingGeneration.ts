@@ -106,7 +106,10 @@ export const useListingGeneration = (listingRepository: any) => {
         console.error('Failed to delete image from server:', err);
       });
     }
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages(prev => {
+      const newImages = prev.filter((_, i) => i !== index);
+      return newImages;
+    });
   };
 
   const downloadImage = async (imageSrc: string, index: number) => {
