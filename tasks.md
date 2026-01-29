@@ -11,6 +11,7 @@ Acceptance:
 
 ## Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
 (See [tasks/completed/task-fr2-image-counts.md](tasks/completed/task-fr2-image-counts.md))
+### FR.2.8 — Clear counts after generation request [COMPLETED]
 
 ## Feature: UI Refinement - Shots Selection Gap [COMPLETED]
 (See [tasks/completed/task-ui-refinement-shots-gap.md](tasks/completed/task-ui-refinement-shots-gap.md))

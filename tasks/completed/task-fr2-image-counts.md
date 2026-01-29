@@ -6,7 +6,8 @@
 ### FR.2.5 — Ability to specify how many images generated should be macro/detail shots [COMPLETED]
 ### FR.2.6 — Ability to specify how many images generated should be contextual shots [COMPLETED]
 ### FR.2.7 — Ability to specify how many images generated should be themed environment shots [COMPLETED]
+### FR.2.8 — Clear counts after generation request [COMPLETED]
 Acceptance:
 - Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- User can specify the count for themed environment shots in the UI.
-- The backend correctly handles themed environment shots and generates them using the thematic setting description.
+- [x] Once the "Generate Listing Images" button is clicked and the request is made, all shot counts in the Shots Selection section are reset to 0.
+- [x] Verified with unit tests at the hook layer (`useProductUpload.test.ts`).

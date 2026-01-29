@@ -144,4 +144,23 @@ describe('useProductUpload', () => {
     });
     expect(result.current.isPrimaryImage).toBe(false);
   });
+
+  it('resets shot counts', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    act(() => {
+      result.current.handleLifestyleShotsChange({ target: { value: '3' } } as any);
+      result.current.handleHeroShotsChange({ target: { value: '2' } } as any);
+    });
+
+    expect(result.current.lifestyleShotsCount).toBe(3);
+    expect(result.current.heroShotsCount).toBe(2);
+
+    act(() => {
+      (result.current as any).resetCounts();
+    });
+
+    expect(result.current.lifestyleShotsCount).toBe(0);
+    expect(result.current.heroShotsCount).toBe(0);
+  });
 });

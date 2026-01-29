@@ -78,6 +78,7 @@ const App = () => {
     removeContextTemplate,
     totalShots,
     isReadyToGenerate,
+    resetCounts,
   } = useProductUpload(repository);
 
   const { 
@@ -247,30 +248,33 @@ const App = () => {
                       size="lg" 
                       className="w-full max-w-xs"
                       disabled={isGenerating || !isReadyToGenerate}
-                      onClick={() => generateListing({ 
-                        lifestyleCount: lifestyleShotsCount,
-                        heroCount: heroShotsCount,
-                        closeUpsCount: closeUpsCount,
-                        flatLayCount: flatLayShotsCount,
-                        macroCount: macroShotsCount,
-                        contextualCount: contextualShotsCount,
-                        themedEnvironmentCount: themedEnvironmentShotsCount,
-                        productImage: productImage,
-                        lifestyleBackground: lifestyleBackground,
-                        heroBackground: heroBackground,
-                        closeUpsBackground: closeUpsBackground,
-                        flatLayBackground: flatLayBackground,
-                        macroBackground: macroBackground,
-                        contextualBackground: contextualBackground,
-                        themedEnvironmentBackground: themedEnvironmentBackground,
-                        lifestyleCustomContext,
-                        heroCustomContext,
-                        closeUpsCustomContext,
-                        flatLayCustomContext,
-                        macroCustomContext,
-                        contextualCustomContext,
-                        themedEnvironmentCustomContext
-                      })}
+                      onClick={() => {
+                        generateListing({ 
+                          lifestyleCount: lifestyleShotsCount,
+                          heroCount: heroShotsCount,
+                          closeUpsCount: closeUpsCount,
+                          flatLayCount: flatLayShotsCount,
+                          macroCount: macroShotsCount,
+                          contextualCount: contextualShotsCount,
+                          themedEnvironmentCount: themedEnvironmentShotsCount,
+                          productImage: productImage,
+                          lifestyleBackground: lifestyleBackground,
+                          heroBackground: heroBackground,
+                          closeUpsBackground: closeUpsBackground,
+                          flatLayBackground: flatLayBackground,
+                          macroBackground: macroBackground,
+                          contextualBackground: contextualBackground,
+                          themedEnvironmentBackground: themedEnvironmentBackground,
+                          lifestyleCustomContext,
+                          heroCustomContext,
+                          closeUpsCustomContext,
+                          flatLayCustomContext,
+                          macroCustomContext,
+                          contextualCustomContext,
+                          themedEnvironmentCustomContext
+                        });
+                        resetCounts();
+                      }}
                     >
                       {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
                     </Button>

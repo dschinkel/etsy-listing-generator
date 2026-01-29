@@ -260,6 +260,16 @@ export const useProductUpload = (repository?: any) => {
     setIsPrimaryImage(false);
   };
 
+  const resetCounts = () => {
+    setLifestyleShotsCount(0);
+    setHeroShotsCount(0);
+    setCloseUpsCount(0);
+    setFlatLayShotsCount(0);
+    setMacroShotsCount(0);
+    setContextualShotsCount(0);
+    setThemedEnvironmentShotsCount(0);
+  };
+
   return {
     productImage, 
     handleUpload, 
@@ -281,6 +291,7 @@ export const useProductUpload = (repository?: any) => {
     isPrimaryImage,
     handlePrimarySelection,
     clearPrimaryImage,
+    resetCounts,
     lifestyleBackground,
     handleLifestyleBackgroundUpload,
     heroBackground,
