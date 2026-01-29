@@ -67,39 +67,11 @@ Acceptance:
 (See [tasks/task-fr4-listing-preview.md](tasks/task-fr4-listing-preview.md))
 
 ## Task: Fix [COMPLETED]
-### Resolve 500 error and SyntaxError when clicking generate listing images button
-The Fix:
-- [COMPLETED] Improved backend error handling in `src/service/app.ts` to ensure JSON responses.
-- [COMPLETED] Updated `src/client/repositories/ListingRepository.ts` to validate response status before parsing JSON.
-- [COMPLETED] Added explicit error re-throwing in `src/service/data/GeminiImageGenerator.ts`.
-- [COMPLETED] Resolved `TypeError: images.map is not a function` in `ListingPreview.tsx` by correctly extracting images array from response in `useListingGeneration.ts`.
-- [COMPLETED] Verified fix with full test suite (31 passing tests).
-
-## Task: Fix [COMPLETED]
 ### Resolve 403 Forbidden error in integration tests by correctly loading environment variables
 The Fix:
 - [COMPLETED] Installed `dotenv` to manage environment variables.
 - [COMPLETED] Initialized `dotenv.config()` in `src/service/app.ts` to ensure `GEMINI_API_KEY` is loaded from `.env`.
 - [COMPLETED] Verified that all tests, including the real Gemini integration test, pass successfully.
-
-## Task: Fix [COMPLETED]
-### Resolve broken image in the UI from the response
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Updated `GeminiImageGenerator.ts` to use `picsum.photos` for more reliable placeholder URLs.
-- [COMPLETED] Enhanced `ListingPreview.tsx` with an `onError` handler and fallback image (`placehold.co`) for better resilience.
-- [COMPLETED] Updated tests to verify the new image URL format.
-- [COMPLETED] All tests pass (41 passing tests).
-
-## Task: Fix [COMPLETED]
-### Resolve 404 or empty response for /listings/system-prompt
-The Fix:
-- [COMPLETED] Added request logging middleware to `src/service/app.ts` for better server diagnostics.
-- [COMPLETED] Standardized `koa-bodyparser` initialization for better ESM/CJS interop.
-- [COMPLETED] Refactored router to use prefix `/listings` and improved route matching.
-- [COMPLETED] Updated Vite proxy to use `127.0.0.1` for more reliable local resolution.
-- [COMPLETED] Added a health check endpoint and a catch-all 404 route with detailed logging.
-- [COMPLETED] Verified fix with real-server tests and integration tests.
 
 ## Task: Fix [COMPLETED]
 ### Ensure all individual production API calls timeout at 15 seconds
@@ -111,33 +83,6 @@ The Fix:
 - [COMPLETED] Reduced image counts in integration tests to 1 image to ensure they fit within the 15s Jest and API timeout limits.
 - [COMPLETED] Updated `README.md` to document the new 15s API reliability standard.
 - [COMPLETED] Verified `AbortError` triggers correctly at 15s for Gemini calls.
-
-## Task: Fix [COMPLETED]
-### Ensure system prompt is always returned and displayed
-The Fix:
-- [COMPLETED] Updated `ListingRepository` (server) to pre-populate `systemPrompt` from preview logic.
-- [COMPLETED] Updated `ListingController` (server) to include `systemPrompt` in error responses.
-- [COMPLETED] Updated `ListingRepository` (client) to extract `systemPrompt` from error responses and attach it to thrown errors.
-- [COMPLETED] Updated `useListingGeneration` hook (client) to set `systemPrompt` even when an error occurs.
-- [COMPLETED] Added backend logging to `ListingRepository` to track requested shot counts.
-- [COMPLETED] Added integration and unit tests to verify prompt persistence during zero-shot and error scenarios.
-
-## Task: Fix [COMPLETED]
-### Ensure ZIP download contains only valid images and no HTML pages
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Update `downloadAllImagesAsZip` to validate response status and content type.
-- [COMPLETED] Handle failed image fetches by using a fallback or skipping.
-## Task: Fix [COMPLETED]
-### Resolve broken image caused by double data-URL prefixing
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Implemented `toDataUrl` to robustly handle base64 data that may already contain a protocol prefix.
-- [COMPLETED] Refactored `extractImageFromResponse` and `findImageDeep` to use `toDataUrl`, preventing double-prefixing.
-- [COMPLETED] Added regression test case for pre-prefixed data.
-- [COMPLETED] Verified fix with full test suite (57 tests).
-- [COMPLETED] Verified no linting or runtime errors.
-
 
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 Acceptance:
@@ -196,28 +141,6 @@ The Fix:
 - [COMPLETED] Configured Vite proxy in `vite.config.ts` to forward `/listings` requests to the backend.
 - [COMPLETED] Updated `package.json` to run both frontend and backend concurrently in `dev` mode.
 - [COMPLETED] Ensured environment variables are loaded at the earliest possible stage in `src/service/index.ts`.
-
-## Task: Fix [COMPLETED]
-### Resolve 500 error when clicking generate listing images and add System Prompt pane to UI
-The Fix:
-- [COMPLETED] Updated `GeminiImageGenerator.ts` to return placeholder and system prompt on empty API response.
-- [COMPLETED] Exposed `systemInstruction` through `ListingRepository` and `GenerateListingImages` command.
-- [COMPLETED] Added `systemPrompt` state and exposure in `useListingGeneration.ts` hook.
-- [COMPLETED] Implemented `SystemPromptPane` in `App.tsx` with horizontal resizability and mono-spaced display.
-- [COMPLETED] Verified data propagation and UI layout.
-- [COMPLETED] Updated integration tests to accommodate the new response structure.
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Refactored all server-side and client-side classes to functional modules using factory functions.
-- [COMPLETED] Updated `GUIDELINES.md` to strictly forbid the use of classes and mandate the functional module pattern.
-
-## Task: Fix [COMPLETED]
-### Remove 'prompt' parameter from GeminiImageGenerator and internalize prompts
-The Fix:
-- [COMPLETED] Moved shot type prompts from `ListingRepository` to `GeminiImageGenerator`.
-- [COMPLETED] Updated `GeminiImageGenerator.generateImage` to internalize prompt selection.
-- [COMPLETED] Updated all callers and tests to match the new signature without the `prompt` parameter.
-- [COMPLETED] Removed "Nano Banana" identity from system prompt as it is not necessary.
-- [COMPLETED] All primary backend and integration tests pass.
 
 ## Task: DRY Refactoring of ListingRepository [COMPLETED]
 ### Refactor duplicated image generation functions into a single generic function
@@ -330,19 +253,3 @@ The Fix:
 
 ## Task: FR.15 [COMPLETED]
 (See [tasks/task-fr15-context-templates.md](tasks/task-fr15-context-templates.md))
-
-## Task: Fix [COMPLETED]
-### Resolve ReferenceError: templates is not defined in App.tsx
-The Fix:
-- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] Create a reproduction test in `ListingGenerationUI.test.tsx`.
-- [x] Fix the missing `templates` and `onSaveTemplate` in `ShotTypeItem` destructuring in `App.tsx`.
-- [x] Verify the fix with tests.
-
-## Task: Fix [COMPLETED]
-### Ensure template selection populates custom context without duplication
-The Fix:
-- [x] Fixed backend duplication in `ListingRepository` by matching prompt instructions while ignoring count differences.
-- [x] Updated `App.tsx` to append template text to custom context and avoid duplicate strings.
-- [x] Verified fix with new test cases in `ListingGenerationUI.test.tsx` and manual verification.
-- [x] All 70 tests passing.

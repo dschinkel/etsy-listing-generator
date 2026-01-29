@@ -65,7 +65,7 @@ The Fix:
 ...
 ```
 
-P0.15 If a task in `tasks.md` exceeds 15 lines, move its details to a new file in the `tasks/` directory following the naming convention `task-fr<feature number>-<feature name>.md` and replace the content in `tasks.md` with a link to that file. 
+P0.15 If a task in `tasks.md` exceeds 15 lines, move its details to a new file in the `tasks/` directory following the naming convention `task-fr<feature number>-<feature name>.md` and replace the content in `tasks.md` with a link to that file. When moving a feature, ensure all related 'Task: Fix' sections or sub-tasks are also moved to the same file to keep related history together.
 P0.15.1 To ensure compliance with P0.15, you must perform a line-count audit of all sections in `tasks.md` before finalizing any task. You can use `wc -l` on extracted sections or manually count them when reading the file.
 
 ---
