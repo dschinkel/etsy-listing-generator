@@ -96,19 +96,11 @@ Acceptance:
 (See [tasks/completed/task-fr19-three-pane-layout.md](tasks/completed/task-fr19-three-pane-layout.md))
 ### FR.19.5 — Expand Listing Preview width to the full right edge of the viewport [COMPLETED]
 
-## Feature: FR.20 — Archive Listing Images [IN PROGRESS]
+## Feature: FR.20 — Archive Listing Images [COMPLETED]
 (See [tasks/completed/task-fr20-archive-images.md](tasks/completed/task-fr20-archive-images.md))
-### FR.20.5 — Prevent duplicate archiving of listing images [NOT STARTED]
-- [ ] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [ ] TDD track archived state in `useListingGeneration`
-- [ ] Disable archive button in `ListingPreview` if image is archived
 
-## Feature: FR.21 — Archive Uploaded Images [IN PROGRESS]
+## Feature: FR.21 — Archive Uploaded Images [COMPLETED]
 (See [tasks/completed/task-fr21-archive-uploads.md](tasks/completed/task-fr21-archive-uploads.md))
-### FR.21.3 — Prevent duplicate archiving of uploaded images [NOT STARTED]
-- [ ] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [ ] TDD track archived state in `useProductUpload`
-- [ ] Disable archive button in `App.tsx` (UploadedImage) if image is archived
 
 ## Feature: FR.22 — Select Archived Uploads [COMPLETED]
 Acceptance:

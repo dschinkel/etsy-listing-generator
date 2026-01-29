@@ -14,6 +14,12 @@ Acceptance:
 - [x] REFACTOR: Extracted individual archiving logic into reusable methods.
 - [x] Verified all tests passing.
 
+### FR.20.5 — Prevent duplicate archiving of listing images [COMPLETED]
+- [x] RED: Added test to `useListingGeneration.test.ts` verifying that `archiveImage` sets an `isArchived` flag.
+- [x] GREEN: Update `archiveImage` and `archiveAllImages` to set `isArchived: true`.
+- [x] REFACTOR: Ensure state updates are efficient.
+- [x] Disable archive button in `ListingPreview` if image is archived
+
 ### FR.20.1 — Backend Archive Logic [COMPLETED]
 - [x] Create `src/service/commands/ArchiveListingImages.ts`.
 - [x] Update `src/service/repositories/ListingRepository.ts` with `archiveImages`.
