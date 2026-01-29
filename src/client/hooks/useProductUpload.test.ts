@@ -30,6 +30,37 @@ describe('useProductUpload', () => {
     expect(mockRepository.getArchivedUploads).toHaveBeenCalled();
   });
 
+  it('selects and unselects archived uploads', async () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    const archivedUrl = 'archived1.png';
+
+    act(() => {
+      result.current.toggleArchivedUpload(archivedUrl);
+    });
+    expect(result.current.productImages).toContain(archivedUrl);
+
+    act(() => {
+      result.current.toggleArchivedUpload(archivedUrl);
+    });
+    expect(result.current.productImages).not.toContain(archivedUrl);
+  });
+
+  it('limits archived upload selection to 2', async () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    act(() => {
+      result.current.toggleArchivedUpload('img1.png');
+      result.current.toggleArchivedUpload('img2.png');
+    });
+    expect(result.current.productImages).toHaveLength(2);
+
+    act(() => {
+      result.current.toggleArchivedUpload('img3.png');
+    });
+    expect(result.current.productImages).toHaveLength(2);
+    expect(result.current.productImages).not.toContain('img3.png');
+  });
+
   it('allows uploading up to 2 reference images', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     const fakeImage1 = 'data:image/png;base64,image1';

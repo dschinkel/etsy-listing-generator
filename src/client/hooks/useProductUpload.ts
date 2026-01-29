@@ -270,6 +270,18 @@ export const useProductUpload = (repository?: any) => {
     setIsPrimaryImage(false);
   };
 
+  const toggleArchivedUpload = (url: string) => {
+    setProductImages(prev => {
+      if (prev.includes(url)) {
+        return prev.filter(img => img !== url);
+      }
+      if (prev.length < 2) {
+        return [...prev, url];
+      }
+      return prev;
+    });
+  };
+
   const archiveProductImage = async (index: number) => {
     const imageToArchive = productImages[index];
     if (imageToArchive && repository) {
@@ -349,5 +361,6 @@ export const useProductUpload = (repository?: any) => {
     totalShots,
     isReadyToGenerate,
     archivedUploads,
+    toggleArchivedUpload,
   };
 };
