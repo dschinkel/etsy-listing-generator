@@ -469,6 +469,36 @@ describe('Listing Generation', () => {
     expect(fakeListingRepository.deleteImage).toHaveBeenCalledWith('old_image.png');
   });
 
+  it('tracks the index of the image being regenerated', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [{ url: 'old.png', type: 'lifestyle' }] 
+      }),
+      generateSingleImage: async () => ({ 
+        image: { url: 'new.png', type: 'lifestyle' } 
+      }),
+      deleteImage: async () => true
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    let generationPromise: Promise<void>;
+    act(() => {
+      generationPromise = result.current.regenerateImage(0, 'context');
+    });
+    expect(result.current.regeneratingIndex).toBe(0);
+
+    await act(async () => {
+      await generationPromise;
+    });
+
+    expect(result.current.regeneratingIndex).toBeNull();
+  });
+
   it('unsets generated primary images', async () => {
     const fakeListingRepository = {
       generateImages: jest.fn().mockResolvedValue({ 

@@ -20,6 +20,7 @@ import { Plus, Image as ImageIcon, Save, Trash, Eraser } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
+import ModelStatus from './components/ModelStatus';
 import { ThemeProvider } from './components/theme-provider';
 
 const App = () => {
@@ -87,6 +88,7 @@ const App = () => {
     modelUsed,
     error,
     isGenerating,
+    regeneratingIndex,
     generateListing, 
     removeImage, 
     clearImages,
@@ -284,15 +286,8 @@ const App = () => {
                       {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
                     </Button>
 
-                    {isGenerating && modelUsed && (
-                      <div className="text-sm text-orange-500 flex flex-col items-center gap-2" data-testid="model-status">
-                        <div className="flex items-center gap-2">
-                          <span>Calling model:</span>
-                          <span className="px-2 py-0.5 border border-orange-500 rounded-md text-xs font-medium animate-pulse">
-                            {modelUsed}
-                          </span>
-                        </div>
-                      </div>
+                    {isGenerating && regeneratingIndex === null && modelUsed && (
+                      <ModelStatus model={modelUsed} />
                     )}
 
                     {error && (
@@ -312,6 +307,8 @@ const App = () => {
               <ListingPreview 
                 images={images} 
                 isGenerating={isGenerating}
+                regeneratingIndex={regeneratingIndex}
+                modelUsed={modelUsed}
                 onRemove={removeImage} 
                 onClearAll={clearImages}
                 onDownload={downloadImage} 

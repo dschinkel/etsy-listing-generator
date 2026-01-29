@@ -7,6 +7,7 @@ import { useListingPreview } from './useListingPreview';
 import { Checkbox } from './ui/checkbox';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
+import ModelStatus from './ModelStatus';
 
 interface ListingImage {
   url: string;
@@ -17,6 +18,8 @@ interface ListingImage {
 interface ListingPreviewProps {
   images: ListingImage[];
   isGenerating?: boolean;
+  regeneratingIndex?: number | null;
+  modelUsed?: string;
   onRemove: (index: number) => void;
   onClearAll: () => void;
   onDownload: (src: string, index: number) => void;
@@ -28,6 +31,8 @@ interface ListingPreviewProps {
 const ListingPreview = ({ 
   images, 
   isGenerating = false,
+  regeneratingIndex = null,
+  modelUsed = '',
   onRemove, 
   onClearAll, 
   onDownload, 
@@ -144,18 +149,25 @@ const ListingPreview = ({
                       onChange={(e) => setRegenContexts(prev => ({ ...prev, [index]: e.target.value }))}
                       data-testid={`regen-context-input-${index}`}
                     />
-                    <Button
-                      size="sm"
-                      className="h-7 text-[10px] flex items-center gap-1"
-                      disabled={isGenerating}
-                      onClick={() => onRegenerate(index, regenContexts[index] || "")}
-                      data-testid={`regenerate-image-${index}`}
-                    >
-                      <RefreshCw className={`h-2 w-2 ${isGenerating ? 'animate-spin' : ''}`} />
-                      Regenerate
-                    </Button>
                   </div>
                 )}
+
+                <div className="flex flex-col gap-1 px-1 mt-1">
+                  <Button
+                    size="sm"
+                    className="h-7 text-[10px] flex items-center gap-1"
+                    disabled={isGenerating}
+                    onClick={() => onRegenerate(index, regenContexts[index] || "")}
+                    data-testid={`regenerate-image-${index}`}
+                  >
+                    <RefreshCw className={`h-2 w-2 ${(isGenerating && regeneratingIndex === index) ? 'animate-spin' : ''}`} />
+                    Regenerate
+                  </Button>
+                  
+                  {isGenerating && regeneratingIndex === index && modelUsed && (
+                    <ModelStatus model={modelUsed} />
+                  )}
+                </div>
 
                 <div className="flex items-center space-x-2 px-1">
                   <Checkbox 

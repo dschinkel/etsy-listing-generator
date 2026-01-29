@@ -19,8 +19,10 @@ describe('Listing Generation UI', () => {
     (useListingGeneration as jest.Mock).mockReturnValue({
       images: [],
       systemPrompt: '',
+      modelUsed: '',
       error: null,
       isGenerating: false,
+      regeneratingIndex: null,
       generateListing: jest.fn(),
       removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
@@ -91,8 +93,10 @@ describe('Listing Generation UI', () => {
     (useListingGeneration as jest.Mock).mockReturnValue({
       images: [],
       systemPrompt: '',
+      modelUsed: '',
       error: errorMsg,
       isGenerating: false,
+      regeneratingIndex: null,
       generateListing: jest.fn(),
       removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
@@ -138,10 +142,13 @@ describe('Listing Generation UI', () => {
     (useListingGeneration as jest.Mock).mockReturnValue({
       images: [],
       systemPrompt: '',
+      modelUsed: 'gemini-2.5-flash-image',
       error: statusMsg,
       isGenerating: true,
+      regeneratingIndex: null,
       generateListing: jest.fn(),
       removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -679,5 +686,28 @@ describe('Listing Generation UI', () => {
     // The container for the image and its details
     const previewItem = screen.getByTestId('listing-image-0').parentElement?.parentElement;
     expect(previewItem).toHaveClass('gap-1');
+  });
+
+  it('shows model status when regenerating a specific image', () => {
+    const mockImages = [{ url: 'image1.png', type: 'lifestyle' }];
+    (useListingGeneration as jest.Mock).mockReturnValue({
+      images: mockImages,
+      systemPrompt: '',
+      modelUsed: 'gemini-2.5-flash-image',
+      error: null,
+      isGenerating: true,
+      regeneratingIndex: 0,
+      generateListing: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
+      downloadImage: jest.fn(),
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
+    });
+
+    render(<App />);
+    
+    expect(screen.getByTestId('model-status')).toBeInTheDocument();
+    expect(screen.getByText('gemini-2.5-flash-image')).toBeInTheDocument();
   });
 });

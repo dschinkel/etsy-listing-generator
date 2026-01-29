@@ -22,3 +22,14 @@ The Fix:
 - [x] Added `regenerateImage` to the `useListingGeneration` destructuring in `App.tsx`.
 - [x] Updated `useListingGeneration` hook to track `modelUsed` during single image regeneration.
 - [x] Verified that all tests pass.
+
+## PR.5 Fix [COMPLETED]
+### Model tracking and UI layout for regeneration
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Updated `useListingGeneration` hook to track `regeneratingIndex` during regeneration.
+- [x] Extracted `ModelStatus` component to `src/client/components/ModelStatus.tsx` for reusability.
+- [x] Moved the `Regenerate` button in `ListingPreview.tsx` to be always visible above the primary checkbox.
+- [x] Integrated `ModelStatus` into `ListingPreview.tsx` to show the model used specifically for the image being regenerated.
+- [x] Updated `App.tsx` to use the shared `ModelStatus` component and avoid duplicate displays during regeneration.
+- [x] Verified with unit and UI tests (52 core tests passing).

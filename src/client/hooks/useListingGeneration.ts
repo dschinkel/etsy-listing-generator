@@ -15,6 +15,7 @@ export const useListingGeneration = (listingRepository: any) => {
   const [modelUsed, setModelUsed] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const setTimedError = (message: string) => {
@@ -177,6 +178,7 @@ export const useListingGeneration = (listingRepository: any) => {
     if (!imageToReplace) return;
 
     setIsGenerating(true);
+    setRegeneratingIndex(index);
     setModelUsed('gemini-2.5-flash-image');
     setError(null);
 
@@ -210,6 +212,7 @@ export const useListingGeneration = (listingRepository: any) => {
       setError(`Regeneration failed: ${err.message}`);
     } finally {
       setIsGenerating(false);
+      setRegeneratingIndex(null);
     }
   };
 
@@ -219,6 +222,7 @@ export const useListingGeneration = (listingRepository: any) => {
     modelUsed,
     error,
     isGenerating,
+    regeneratingIndex,
     generateListing, 
     removeImage, 
     clearImages,
