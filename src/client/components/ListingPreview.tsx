@@ -102,7 +102,7 @@ const ListingPreview = ({
               <p className="text-sm">No images generated yet</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" data-testid="listing-preview">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" data-testid="listing-preview">
               {images.map((image, index) => (
                 <div key={index} className="flex flex-col gap-1">
                   <div className="relative group aspect-square">
