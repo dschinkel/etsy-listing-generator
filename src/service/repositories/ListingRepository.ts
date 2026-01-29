@@ -304,5 +304,13 @@ export const createListingRepository = (dataLayer: any) => {
     return { image };
   };
 
-  return { generateImages, getPromptPreview, generateSingleImage };
+  return { 
+    generateImages, 
+    getPromptPreview, 
+    generateSingleImage,
+    archiveImages: async (imageUrls: string[]) => {
+      const { archiveImageFiles } = await import('../lib/assetManager');
+      await archiveImageFiles(imageUrls);
+    }
+  };
 };

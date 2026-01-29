@@ -74,3 +74,32 @@ export async function deleteImageFromAssets(imageUrl: string): Promise<void> {
     console.error(`Failed to delete image: ${filePath}`, error);
   }
 }
+
+const ARCHIVED_ASSETS_DIR = path.join(process.cwd(), 'src', 'assets', 'archived-images');
+
+/**
+ * Archives a list of image URLs by copying them to the archived-images directory.
+ */
+export async function archiveImageFiles(imageUrls: string[]): Promise<void> {
+  if (!fs.existsSync(ARCHIVED_ASSETS_DIR)) {
+    fs.mkdirSync(ARCHIVED_ASSETS_DIR, { recursive: true });
+  }
+
+  for (const url of imageUrls) {
+    if (!url.startsWith('/src/assets/generated-images/')) {
+      continue;
+    }
+
+    const fileName = url.replace('/src/assets/generated-images/', '');
+    const sourcePath = path.join(GENERATED_ASSETS_DIR, fileName);
+    const destPath = path.join(ARCHIVED_ASSETS_DIR, fileName);
+
+    try {
+      if (fs.existsSync(sourcePath)) {
+        fs.copyFileSync(sourcePath, destPath);
+      }
+    } catch (error) {
+      console.error(`Failed to archive image: ${sourcePath}`, error);
+    }
+  }
+}

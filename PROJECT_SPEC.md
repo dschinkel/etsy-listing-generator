@@ -153,6 +153,11 @@ A user can:
     - **FR.19.2 — Ensure the Listing Preview section fills the page vertically.**
     - **FR.19.3 — Implement internal scrolling for the Listing Preview pane so the main page remains fixed.**
 
+**FR.20 — Archive Listing Images**
+    - **FR.20.1 — Ability to archive (save) the current list of listing images to `./src/assets/archived-images`.**
+    - **FR.20.2 — Add an "Archive All" button next to "Clear All" in the Listing Preview section.**
+    - **FR.20.3 — Archived images should be copies of the generated images, preserved even if the originals are deleted.**
+
 ---
 
 ## 4. Technical Requirements (TR.*)

@@ -526,4 +526,28 @@ describe('Listing Generation', () => {
 
     expect(result.current.images[0].isPrimary).toBe(false);
   });
+
+  it('archives all images', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle' },
+          { url: 'image2.png', type: 'hero' }
+        ] 
+      }),
+      archiveImages: jest.fn().mockResolvedValue({ success: true })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1, heroCount: 1 });
+    });
+
+    await act(async () => {
+      await result.current.archiveAllImages();
+    });
+
+    expect(fakeListingRepository.archiveImages).toHaveBeenCalledWith(['image1.png', 'image2.png']);
+  });
 });

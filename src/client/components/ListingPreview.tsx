@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
-import { X, Copy, Download, Plus, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { X, Archive, Copy, Download, Plus, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import ImageModal from './ImageModal';
 import { useListingPreview } from './useListingPreview';
 import { Checkbox } from './ui/checkbox';
@@ -22,6 +22,7 @@ interface ListingPreviewProps {
   modelUsed?: string;
   onRemove: (index: number) => void;
   onClearAll: () => void;
+  onArchiveAll: () => void;
   onDownload: (src: string, index: number) => void;
   onDownloadAll: () => void;
   onSetPrimary: (index: number) => void;
@@ -35,6 +36,7 @@ const ListingPreview = ({
   modelUsed = '',
   onRemove, 
   onClearAll, 
+  onArchiveAll,
   onDownload, 
   onDownloadAll, 
   onSetPrimary,
@@ -53,6 +55,16 @@ const ListingPreview = ({
           <CardTitle>Listing Preview</CardTitle>
           {hasImages && (
             <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onArchiveAll}
+                className="flex items-center gap-2"
+                data-testid="archive-all-images"
+              >
+                <Archive className="w-4 h-4" />
+                Archive All
+              </Button>
               <Button 
                 variant="destructive" 
                 size="sm" 

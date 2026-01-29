@@ -74,6 +74,10 @@ router.delete('/images', async (ctx) => {
   await listingController.deleteImage(ctx);
 });
 
+router.post('/archive', async (ctx) => {
+  await listingController.archive(ctx);
+});
+
 // Add a GET handler just in case, returning a helpful message or redirecting
 router.get('/system-prompt', async (ctx) => {
   ctx.status = 405;

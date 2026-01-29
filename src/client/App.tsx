@@ -92,6 +92,7 @@ const App = () => {
     generateListing, 
     removeImage, 
     clearImages,
+    archiveAllImages,
     setPrimaryImage: setGeneratedPrimaryImage,
     clearPrimaryImage: clearGeneratedPrimaryImages,
     downloadImage,
@@ -310,6 +311,7 @@ const App = () => {
                 modelUsed={modelUsed}
                 onRemove={removeImage} 
                 onClearAll={clearImages}
+                onArchiveAll={archiveAllImages}
                 onDownload={downloadImage} 
                 onDownloadAll={downloadAllImagesAsZip}
                 onSetPrimary={handleSetGeneratedPrimary}

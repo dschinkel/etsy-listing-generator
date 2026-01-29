@@ -169,6 +169,21 @@ export const createListingRepository = () => {
     return response.ok;
   };
 
+  const archiveImages = async (imageUrls: string[]) => {
+    const response = await fetchWithTimeout('/listings/archive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrls }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to archive images: ${text}`);
+    }
+
+    return await response.json();
+  };
+
   return { 
     generateImages, 
     generateSingleImage,
@@ -176,6 +191,7 @@ export const createListingRepository = () => {
     getTemplates, 
     saveTemplate, 
     removeTemplate, 
-    deleteImage 
+    deleteImage,
+    archiveImages
   };
 };

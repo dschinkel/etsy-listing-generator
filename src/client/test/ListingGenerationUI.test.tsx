@@ -24,7 +24,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       regeneratingIndex: null,
       generateListing: jest.fn(),
-      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), archiveAllImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
@@ -98,7 +98,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       regeneratingIndex: null,
       generateListing: jest.fn(),
-      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), archiveAllImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
@@ -147,7 +147,7 @@ describe('Listing Generation UI', () => {
       isGenerating: true,
       regeneratingIndex: null,
       generateListing: jest.fn(),
-      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), archiveAllImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
@@ -426,6 +426,17 @@ describe('Listing Generation UI', () => {
   });
 
   it('toggles custom context without crashing', () => {
+    (useListingGeneration as jest.Mock).mockReturnValue({
+      images: [],
+      systemPrompt: '',
+      error: null,
+      isGenerating: false,
+      generateListing: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), archiveAllImages: jest.fn(), deleteImage: jest.fn(),
+      downloadImage: jest.fn(),
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
+    });
     render(<App />);
     const addButtons = screen.getAllByTitle('Add custom context');
     fireEvent.click(addButtons[0]);
@@ -653,7 +664,7 @@ describe('Listing Generation UI', () => {
       error: null,
       isGenerating: false,
       generateListing: jest.fn(),
-      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), archiveAllImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage,
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
@@ -674,7 +685,7 @@ describe('Listing Generation UI', () => {
       error: null,
       isGenerating: false,
       generateListing: jest.fn(),
-      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), archiveAllImages: jest.fn(), deleteImage: jest.fn(),
       setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),

@@ -1,5 +1,6 @@
 import { createGenerateListingImages } from '../commands/GenerateListingImages';
 import { createGenerateSingleImage } from '../commands/GenerateSingleImage';
+import { createArchiveListingImages } from '../commands/ArchiveListingImages';
 import { createGetSystemPromptPreview } from '../commands/GetSystemPromptPreview';
 import { createGetContextTemplates } from '../commands/GetContextTemplates';
 import { createSaveContextTemplate } from '../commands/SaveContextTemplate';
@@ -23,6 +24,7 @@ export const createListingController = () => {
   const saveContextTemplate = createSaveContextTemplate(templateRepository);
   const removeContextTemplate = createRemoveContextTemplate(templateRepository);
   const generateSingleImage = createGenerateSingleImage(repository);
+  const archiveListingImages = createArchiveListingImages(repository);
 
   const generate = async (ctx: any) => {
     try {
@@ -127,5 +129,18 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage };
+  const archive = async (ctx: any) => {
+    try {
+      const request = ctx.request.body;
+      const result = await archiveListingImages.execute(request);
+      ctx.body = result;
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in archive:', error);
+      ctx.status = error.status || 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage, archive };
 };

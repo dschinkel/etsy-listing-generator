@@ -176,6 +176,16 @@ export const useListingGeneration = (listingRepository: any) => {
     })));
   };
 
+  const archiveAllImages = async () => {
+    try {
+      const imageUrls = images.map(img => img.url);
+      await listingRepository.archiveImages(imageUrls);
+    } catch (err: any) {
+      console.error('Failed to archive images:', err);
+      setTimedError(`Archiving failed: ${err.message}`);
+    }
+  };
+
   const regenerateImage = async (index: number, customContext: string, productImage?: string | null) => {
     const imageToReplace = images[index];
     if (!imageToReplace) return;
@@ -234,6 +244,7 @@ export const useListingGeneration = (listingRepository: any) => {
     regenerateImage,
     downloadImage,
     downloadAllImagesAsZip,
+    archiveAllImages,
     fetchSystemPromptPreview: useCallback(async (params: any) => {
       try {
         const response = await listingRepository.getSystemPromptPreview(params);

@@ -85,3 +85,6 @@ Acceptance:
 
 ## Feature: FR.19 — Three-Pane Layout [COMPLETED]
 (See [tasks/completed/task-fr19-three-pane-layout.md](tasks/completed/task-fr19-three-pane-layout.md))
+
+## Feature: FR.20 — Archive Listing Images [COMPLETED]
+(See [tasks/completed/task-fr20-archive-images.md](tasks/completed/task-fr20-archive-images.md))
