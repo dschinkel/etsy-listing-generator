@@ -4,7 +4,8 @@ export const createGenerateSingleImage = (listingRepository: any) => {
     customContext?: string,
     productImages?: string[],
     background?: string,
-    model?: string
+    model?: string,
+    systemPrompt?: string
   }) => {
     return await listingRepository.generateSingleImage(request);
   };

@@ -203,7 +203,8 @@ export const createListingRepository = (dataLayer: any) => {
     images: { url: string; type: string }[] = [], 
     onResult?: (res: any) => void,
     model?: string,
-    customContext?: string
+    customContext?: string,
+    systemPrompt?: string
   ) => {
     const runGeneration = async () => {
       let retries = 0;
@@ -218,7 +219,8 @@ export const createListingRepository = (dataLayer: any) => {
             background,
             count: 1,
             model,
-            customContext
+            customContext,
+            systemPrompt
           });
           const imageUrl = await saveImageToAssets(result.imageUrl, type);
           onResult?.({ ...result, imageUrl });
@@ -304,9 +306,11 @@ export const createListingRepository = (dataLayer: any) => {
     customContext?: string,
     productImages?: string[],
     background?: string,
-    model?: string
+    model?: string,
+    systemPrompt?: string
   }) => {
     let image: { url: string; type: string } | null = null;
+    let systemPromptUsed = '';
     
     const resolvedProductImages = params.productImages 
       ? await Promise.all(params.productImages.map(img => resolveLocalImageUrl(img)))
@@ -322,16 +326,18 @@ export const createListingRepository = (dataLayer: any) => {
       [], // We don't need the images array here, we'll capture it via onResult
       (res) => {
         image = { url: res.imageUrl, type: params.type };
+        systemPromptUsed = res.systemInstruction;
       },
       params.model,
-      params.customContext
+      params.customContext,
+      params.systemPrompt
     );
 
     if (!image) {
       throw new Error('Failed to generate single image');
     }
 
-    return { image };
+    return { image, systemPrompt: systemPromptUsed };
   };
 
   return { 

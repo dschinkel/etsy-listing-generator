@@ -501,6 +501,45 @@ describe('Listing Generation', () => {
     expect(result.current.regeneratingIndex).toBeNull();
   });
 
+  it('appends custom context to system prompt and sends it with product images during regeneration', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [{ url: 'old.png', type: 'lifestyle' }],
+        systemPrompt: 'Original system prompt'
+      }),
+      generateSingleImage: jest.fn().mockResolvedValue({ 
+        image: { url: 'new.png', type: 'lifestyle' },
+        systemPrompt: 'Original system prompt\nCustom context'
+      }),
+      deleteImage: async () => true
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    const productImages = ['prod1', 'prod2'];
+
+    await act(async () => {
+      await result.current.generateListing({ 
+        lifestyleCount: 1,
+        productImages
+      });
+    });
+
+    expect(result.current.systemPrompt).toBe('Original system prompt');
+
+    await act(async () => {
+      await result.current.regenerateImage(0, 'Custom context', productImages);
+    });
+
+    // Verify it was called with the appended system prompt and product images
+    expect(fakeListingRepository.generateSingleImage).toHaveBeenCalledWith(expect.objectContaining({
+      systemPrompt: 'Original system prompt\nCustom context',
+      productImages: ['prod1', 'prod2']
+    }));
+    
+    // Verify systemPrompt state was updated
+    expect(result.current.systemPrompt).toBe('Original system prompt\nCustom context');
+  });
+
   it('unsets generated primary images', async () => {
     const fakeListingRepository = {
       generateImages: jest.fn().mockResolvedValue({ 

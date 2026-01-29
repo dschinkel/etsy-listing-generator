@@ -44,7 +44,8 @@ export const createListingRepository = () => {
     customContext?: string,
     productImages?: string[],
     background?: string | null,
-    model?: string
+    model?: string,
+    systemPrompt?: string
   }) => {
     const response = await fetchWithTimeout('/listings/generate/single', {
       method: 'POST',

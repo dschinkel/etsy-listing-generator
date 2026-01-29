@@ -130,6 +130,12 @@ const App = () => {
     if (wasGeneratingRef.current && !isGenerating && images.length > 0) {
       previewRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    if (isGenerating && !wasGeneratingRef.current) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      leftPaneRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      middlePaneRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      previewRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     wasGeneratingRef.current = isGenerating;
   }, [isGenerating, images.length]);
 
@@ -292,8 +298,6 @@ const App = () => {
                     className="w-full max-w-xs"
                     disabled={isGenerating || !isReadyToGenerate}
                     onClick={() => {
-                      leftPaneRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-                      middlePaneRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
                       generateListing({ 
                         lifestyleCount: lifestyleShotsCount,
                         heroCount: heroShotsCount,

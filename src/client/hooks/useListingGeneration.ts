@@ -210,12 +210,15 @@ export const useListingGeneration = (listingRepository: any) => {
     setModelUsed('gemini-2.5-flash-image');
     setError(null);
 
+    const updatedSystemPrompt = systemPrompt ? `${systemPrompt}\n${customContext}` : customContext;
+
     try {
       const response = await listingRepository.generateSingleImage({
         type: imageToReplace.type,
         customContext,
         productImages,
-        model: 'gemini-2.5-flash-image'
+        model: 'gemini-2.5-flash-image',
+        systemPrompt: updatedSystemPrompt
       });
 
       if (response.image) {
@@ -231,6 +234,12 @@ export const useListingGeneration = (listingRepository: any) => {
           return newImages;
         });
         
+        if (response.systemPrompt) {
+          setSystemPrompt(response.systemPrompt);
+        } else {
+          setSystemPrompt(updatedSystemPrompt);
+        }
+
         if (response.model) {
           setModelUsed(response.model);
         }
