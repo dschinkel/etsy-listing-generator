@@ -22,7 +22,8 @@ describe('Listing Generation UI', () => {
       error: null,
       isGenerating: false,
       generateListing: jest.fn(),
-      removeImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      setPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -92,7 +93,8 @@ describe('Listing Generation UI', () => {
       error: errorMsg,
       isGenerating: false,
       generateListing: jest.fn(),
-      removeImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      setPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -138,7 +140,7 @@ describe('Listing Generation UI', () => {
       error: statusMsg,
       isGenerating: true,
       generateListing: jest.fn(),
-      removeImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -177,7 +179,7 @@ describe('Listing Generation UI', () => {
       error: null,
       isGenerating: false,
       generateListing: jest.fn(),
-      removeImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -404,7 +406,7 @@ describe('Listing Generation UI', () => {
       error: errorMsg,
       isGenerating: false,
       generateListing: jest.fn(),
-      removeImage: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -491,7 +493,7 @@ describe('Listing Generation UI', () => {
     expect(onHeroCustomContextChange).toHaveBeenCalledWith('Existing\nIn a kitchen');
   });
 
-  it( 'calls removeContextTemplate when remove button is clicked and confirmed', async () => {
+  it( 'removes a template', async () => {
     const onRemoveTemplate = jest.fn();
     (useProductUpload as jest.Mock).mockReturnValue({
       heroShotsCount: 1,
@@ -562,7 +564,7 @@ describe('Listing Generation UI', () => {
     expect(onRemoveTemplate).toHaveBeenCalledWith('Kitchen');
   });
 
-  it('calls saveContextTemplate when save button is clicked and confirmed', async () => {
+  it('saves a template', async () => {
     const onSaveTemplate = jest.fn();
     (useProductUpload as jest.Mock).mockReturnValue({
       heroShotsCount: 1,
@@ -629,7 +631,52 @@ describe('Listing Generation UI', () => {
     
     const confirmSaveButton = screen.getByRole('button', { name: 'Save Template' });
     fireEvent.click(confirmSaveButton);
-
     expect(onSaveTemplate).toHaveBeenCalledWith('New Template', 'My context');
+  });
+
+  it('allows setting an image as primary', () => {
+    const setPrimaryImage = jest.fn();
+    (useListingGeneration as jest.Mock).mockReturnValue({
+      images: [
+        { url: 'image1.png', type: 'lifestyle' },
+        { url: 'image2.png', type: 'hero' }
+      ],
+      systemPrompt: '',
+      error: null,
+      isGenerating: false,
+      generateListing: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      setPrimaryImage,
+      downloadImage: jest.fn(),
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
+    });
+
+    render(<App />);
+
+    const primaryCheckbox = screen.getByTestId('set-primary-etsy-image-0');
+    fireEvent.click(primaryCheckbox);
+    expect(setPrimaryImage).toHaveBeenCalledWith(0);
+  });
+
+  it('has reduced gap in listing preview items', () => {
+    (useListingGeneration as jest.Mock).mockReturnValue({
+      images: [{ url: 'image1.png', type: 'lifestyle' }],
+      systemPrompt: '',
+      error: null,
+      isGenerating: false,
+      generateListing: jest.fn(),
+      removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
+      setPrimaryImage: jest.fn(),
+      downloadImage: jest.fn(),
+      downloadAllImagesAsZip: jest.fn(),
+      fetchSystemPromptPreview: jest.fn()
+    });
+
+    render(<App />);
+    
+    // The container for the image and its details
+    const previewItem = screen.getByTestId('listing-image-0').parentElement?.parentElement;
+    expect(previewItem).toHaveClass('gap-1');
   });
 });

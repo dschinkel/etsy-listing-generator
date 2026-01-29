@@ -61,10 +61,17 @@ A user can:
     **FR.2.7 — Ability to specify how many images generated should be themed environment shots (The product is placed in a realistic, thematic setting)**
 
 **FR.3 — Specify which image will be used as the Primary Etsy image**
+    - **FR.3.1 — Ability to mark an uploaded product image as primary**
+    - **FR.3.2 — Ability to mark a single generated image as the Primary Etsy Image**
 
-**FR.3 — Upload a background for product image**
-    - Ability to upload a background image for each specific shot type.
-    - Upload buttons are located in the "Shots Selection" list, to the right of the "+" (custom context) button with 10px padding.
+**FR.17 — Background Upload for Shot Types**
+    - **FR.17.1 — Ability to upload a background image for each specific shot type**
+    - **FR.17.2 — Upload buttons are located in the "Shots Selection" list, to the right of the "+" (custom context) button with 10px padding**
+
+**FR.18 — Persistence and Infrastructure**
+    - **FR.18.1 — Persist generated images in `assets/generated-images`**
+    - **FR.18.2 — Automated model retry and fallback logic**
+    - **FR.18.3 — Enforce 15-second timeout for individual production API calls**
 
 **FR.4 — Show a final preview of the listing images**
     **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**
@@ -128,6 +135,11 @@ A user can:
     - Ability to manually edit the custom context even after selecting a template.
     - Prompt for a name when saving a new template.
     - Ability to remove a saved custom context template.
+
+**FR.16 — UI Refinement and Auto-scroll**
+    - **FR.16.1 — Auto-scroll to Listing Preview after generation**
+    - **FR.16.2 — Reduce gaps and whitespace in Shots Selection and Listing Preview**
+    - **FR.16.3 — Center-align generation controls with Shots Selection**
 
 ---
 

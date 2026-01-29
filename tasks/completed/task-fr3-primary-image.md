@@ -1,5 +1,11 @@
-## Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
-The Fix (TDD):
+### FR.3.2 — Ability to mark a single generated image as the Primary Etsy Image [COMPLETED]
+Acceptance:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Only one can be primary.
+- [x] Add this feature.
+- [x] TDD this feature.
+
+The Implementation (TDD):
 - [x] RED: Added failing unit test for `setPrimaryImage` in `useListingGeneration.test.ts`.
 - [x] RED: Added failing UI integration test in `ListingGenerationUI.test.tsx`.
 - [x] GREEN: Added `isPrimary?: boolean` to `ListingImage` interface.

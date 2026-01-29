@@ -18,8 +18,8 @@ Acceptance:
 ## Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
 (See [tasks/completed/task-fr3-primary-image.md](tasks/completed/task-fr3-primary-image.md))
 
-## Feature: FR.3 — Upload a background for product image [COMPLETED]
-(See [tasks/completed/task-fr3-background-upload.md](tasks/completed/task-fr3-background-upload.md))
+## Feature: FR.17 — Background Upload for Shot Types [COMPLETED]
+(See [tasks/completed/task-fr17-background-upload.md](tasks/completed/task-fr17-background-upload.md))
 
 ## Feature: UI Enhancement [COMPLETED]
 (See [tasks/completed/task-ui-enhancement.md](tasks/completed/task-ui-enhancement.md))
@@ -32,6 +32,7 @@ Acceptance:
 
 ## PR.0 Fix [COMPLETED]
 (See [tasks/completed/task-pr0-meta-fixes.md](tasks/completed/task-pr0-meta-fixes.md))
+
 
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 Acceptance:
@@ -84,3 +85,6 @@ Acceptance:
 
 ## Task: FR.15 [COMPLETED]
 (See [tasks/completed/task-fr15-context-templates.md](tasks/completed/task-fr15-context-templates.md))
+
+## Feature: FR.18 — Persistence and Infrastructure [COMPLETED]
+(See [tasks/completed/task-fr18-persistence-infra.md](tasks/completed/task-fr18-persistence-infra.md))

@@ -1,6 +1,8 @@
 import Koa from 'koa';
 import Router from '@koa/router';
 import bodyParser from 'koa-bodyparser';
+import serve from 'koa-static';
+import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { createListingController } from './controllers/ListingController';
 
@@ -36,6 +38,8 @@ app.use(async (ctx, next) => {
 
 app.use(bodyParser({ jsonLimit: '50mb' }));
 
+app.use(serve(path.join(process.cwd(), 'assets')));
+
 router.post('/generate', async (ctx) => {
   await listingController.generate(ctx);
 });
@@ -59,6 +63,10 @@ router.post('/templates', async (ctx) => {
 
 router.delete('/templates/:name', async (ctx) => {
   await listingController.removeTemplate(ctx);
+});
+
+router.delete('/images', async (ctx) => {
+  await listingController.deleteImage(ctx);
 });
 
 // Add a GET handler just in case, returning a helpful message or redirecting

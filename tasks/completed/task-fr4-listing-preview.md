@@ -78,16 +78,6 @@ The Fix:
 - [COMPLETED] Initialized `dotenv.config()` in `src/service/app.ts` to ensure `GEMINI_API_KEY` is loaded from `.env`.
 - [COMPLETED] Verified that all tests, including the real Gemini integration test, pass successfully.
 
-## PR.4 Fix [COMPLETED]
-### Ensure all individual production API calls timeout at 15 seconds
-The Fix:
-- [COMPLETED] Implemented 15s timeout for Gemini API calls in `src/service/data/GeminiImageGenerator.ts` using `RequestOptions`.
-- [COMPLETED] Created `fetchWithTimeout` utility in `src/client/lib/utils.ts` to enforce a 15s timeout on `fetch` calls.
-- [COMPLETED] Updated `ListingRepository.ts` (client) to use `fetchWithTimeout` for image generation and prompt previews.
-- [COMPLETED] Updated `useListingGeneration.ts` to use `fetchWithTimeout` for clipboard and ZIP operations.
-- [COMPLETED] Reduced image counts in integration tests to 1 image to ensure they fit within the 15s Jest and API timeout limits.
-- [COMPLETED] Updated `README.md` to document the new 15s API reliability standard.
-- [COMPLETED] Verified `AbortError` triggers correctly at 15s for Gemini calls.
 
 ## PR.4 Fix [COMPLETED]
 ### Resolve 404 error when clicking generate listing images button
@@ -122,9 +112,8 @@ The Fix:
 - [COMPLETED] Added UI integration test `ListingGenerationUI.test.tsx` to verify error message visibility and positioning.
 - [COMPLETED] Verified fix with all client-side tests passing.
 
-## PR.4 Fix [COMPLETED]
-### Display shot type below each image in Listing Preview
-The Fix:
+### FR.4.5 — Ability to see which shot type generated each image (displayed below thumbnails) [COMPLETED]
+Acceptance:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Updated `ListingPreview.tsx` to display shot type in small, light yellow text (`text-yellow-200`).
 - [COMPLETED] Modified `useListingGeneration.ts` to manage images as `{ url, type }` objects.
@@ -133,30 +122,14 @@ The Fix:
 - [COMPLETED] Increased global test timeout to 60s in `jest.config.js` to ensure stability for real API integration tests.
 - [COMPLETED] Verified fix with all tests passing and no linting errors.
 
-## PR.4 Fix [COMPLETED]
-### Persist generated images in assets/generated-images
-The Fix:
+
+
+### FR.4.6 — Ability to see which AI model was used for the current generation [COMPLETED]
+Acceptance:
 - [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] Updated `src/service/lib/assetManager.ts` to use `assets/generated-images` directory.
-- [x] Updated URL paths returned by server to `/assets/generated-images/`.
-- [x] Cleaned up old `assets/generated` directory.
-- [x] Updated integration tests to support the new image URL format.
-- [x] Verified that images are correctly saved and served from the new directory.
-
-## PR.4 Fix [COMPLETED]
-### Ensure image generation retries with the next model on any model failure
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Broadened `isRetryableError` in `ListingRepository` to include 5xx, 429, and common error strings.
-- [COMPLETED] Updated `useListingGeneration.test.ts` to verify client-side retry orchestration.
-- [COMPLETED] Verified fix with full test suite (55 tests).
-
-## PR.4 Fix [COMPLETED]
-### Resolve timeouts and 500 errors when generating multiple images
-The Fix:
-- [COMPLETED] Set primary model to `gemini-2.5-flash-image` and fallback to `imagen-4.0-generate-001`.
-- [COMPLETED] Increased client-side API timeout to 180s in `src/client/lib/utils.ts`.
-- [COMPLETED] Added robust retry logic with exponential backoff (up to 2 retries per image) in `ListingRepository.ts` for 503/429 errors.
-- [COMPLETED] Enabled concurrent image generation (within shot types) while protecting with retries.
-- [COMPLETED] Increased integration test timeout to 300s to accommodate multiple generations.
-- [COMPLETED] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.
+- [x] Set primary model to `gemini-2.5-flash-image` and fallback to `imagen-4.0-generate-001`.
+- [x] Increased client-side API timeout to 180s in `src/client/lib/utils.ts`.
+- [x] Added robust retry logic with exponential backoff (up to 2 retries per image) in `ListingRepository.ts` for 503/429 errors.
+- [x] Enabled concurrent image generation (within shot types) while protecting with retries.
+- [x] Increased integration test timeout to 300s to accommodate multiple generations.
+- [x] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.

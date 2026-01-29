@@ -87,12 +87,23 @@ const App = () => {
     isGenerating,
     generateListing, 
     removeImage, 
+    clearImages,
+    setPrimaryImage,
     downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview
   } = useListingGeneration(repository);
 
   const [promptWidth, setPromptWidth] = React.useState(500);
+  const previewRef = React.useRef<HTMLDivElement>(null);
+  const wasGeneratingRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (wasGeneratingRef.current && !isGenerating && images.length > 0) {
+      previewRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    wasGeneratingRef.current = isGenerating;
+  }, [isGenerating, images.length]);
 
   React.useEffect(() => {
     fetchSystemPromptPreview({
@@ -152,127 +163,133 @@ const App = () => {
               </div>
 
               {/* Middle Pane */}
-              <div className="flex gap-8 flex-1 items-start">
-                <div className="flex-[2]">
-                  <ShotsSelection 
-                    lifestyleShotsCount={lifestyleShotsCount}
-                    onLifestyleShotsChange={handleLifestyleShotsChange}
-                    heroShotsCount={heroShotsCount}
-                    onHeroShotsChange={handleHeroShotsChange}
-                    closeUpsCount={closeUpsCount}
-                    onCloseUpsChange={handleCloseUpsChange}
-                    flatLayShotsCount={flatLayShotsCount}
-                    onFlatLayShotsChange={handleFlatLayShotsChange}
-                    macroShotsCount={macroShotsCount}
-                    onMacroShotsChange={handleMacroShotsChange}
-                    contextualShotsCount={contextualShotsCount}
-                    onContextualShotsChange={handleContextualShotsChange}
-                    themedEnvironmentShotsCount={themedEnvironmentShotsCount}
-                    onThemedEnvironmentShotsChange={handleThemedEnvironmentShotsChange}
-                    lifestyleCustomContext={lifestyleCustomContext}
-                    onLifestyleCustomContextChange={handleLifestyleCustomContextChange}
-                    heroCustomContext={heroCustomContext}
-                    onHeroCustomContextChange={handleHeroCustomContextChange}
-                    closeUpsCustomContext={closeUpsCustomContext}
-                    onCloseUpsCustomContextChange={handleCloseUpsCustomContextChange}
-                    flatLayCustomContext={flatLayCustomContext}
-                    onFlatLayCustomContextChange={handleFlatLayCustomContextChange}
-                    macroCustomContext={macroCustomContext}
-                    onMacroCustomContextChange={handleMacroCustomContextChange}
-                    contextualCustomContext={contextualCustomContext}
-                    onContextualCustomContextChange={handleContextualCustomContextChange}
-                    themedEnvironmentCustomContext={themedEnvironmentCustomContext}
-                    onThemedEnvironmentCustomContextChange={handleThemedEnvironmentCustomContextChange}
-                    templates={templates}
-                    onSaveTemplate={saveContextTemplate}
-                    onRemoveTemplate={removeContextTemplate}
-                    lifestyleBackground={lifestyleBackground}
-                    onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
-                    heroBackground={heroBackground}
-                    onHeroBackgroundUpload={handleHeroBackgroundUpload}
-                    closeUpsBackground={closeUpsBackground}
-                    onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
-                    flatLayBackground={flatLayBackground}
-                    onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
-                    macroBackground={macroBackground}
-                    onMacroBackgroundUpload={handleMacroBackgroundUpload}
-                    contextualBackground={contextualBackground}
-                    onContextualBackgroundUpload={handleContextualBackgroundUpload}
-                    themedEnvironmentBackground={themedEnvironmentBackground}
-                    onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
-                  />
+              <div className="flex flex-col gap-8 flex-1 items-start">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="flex-initial">
+                    <ShotsSelection 
+                      lifestyleShotsCount={lifestyleShotsCount}
+                      onLifestyleShotsChange={handleLifestyleShotsChange}
+                      heroShotsCount={heroShotsCount}
+                      onHeroShotsChange={handleHeroShotsChange}
+                      closeUpsCount={closeUpsCount}
+                      onCloseUpsChange={handleCloseUpsChange}
+                      flatLayShotsCount={flatLayShotsCount}
+                      onFlatLayShotsChange={handleFlatLayShotsChange}
+                      macroShotsCount={macroShotsCount}
+                      onMacroShotsChange={handleMacroShotsChange}
+                      contextualShotsCount={contextualShotsCount}
+                      onContextualShotsChange={handleContextualShotsChange}
+                      themedEnvironmentShotsCount={themedEnvironmentShotsCount}
+                      onThemedEnvironmentShotsChange={handleThemedEnvironmentShotsChange}
+                      lifestyleCustomContext={lifestyleCustomContext}
+                      onLifestyleCustomContextChange={handleLifestyleCustomContextChange}
+                      heroCustomContext={heroCustomContext}
+                      onHeroCustomContextChange={handleHeroCustomContextChange}
+                      closeUpsCustomContext={closeUpsCustomContext}
+                      onCloseUpsCustomContextChange={handleCloseUpsCustomContextChange}
+                      flatLayCustomContext={flatLayCustomContext}
+                      onFlatLayCustomContextChange={handleFlatLayCustomContextChange}
+                      macroCustomContext={macroCustomContext}
+                      onMacroCustomContextChange={handleMacroCustomContextChange}
+                      contextualCustomContext={contextualCustomContext}
+                      onContextualCustomContextChange={handleContextualCustomContextChange}
+                      themedEnvironmentCustomContext={themedEnvironmentCustomContext}
+                      onThemedEnvironmentCustomContextChange={handleThemedEnvironmentCustomContextChange}
+                      templates={templates}
+                      onSaveTemplate={saveContextTemplate}
+                      onRemoveTemplate={removeContextTemplate}
+                      lifestyleBackground={lifestyleBackground}
+                      onLifestyleBackgroundUpload={handleLifestyleBackgroundUpload}
+                      heroBackground={heroBackground}
+                      onHeroBackgroundUpload={handleHeroBackgroundUpload}
+                      closeUpsBackground={closeUpsBackground}
+                      onCloseUpsBackgroundUpload={handleCloseUpsBackgroundUpload}
+                      flatLayBackground={flatLayBackground}
+                      onFlatLayBackgroundUpload={handleFlatLayBackgroundUpload}
+                      macroBackground={macroBackground}
+                      onMacroBackgroundUpload={handleMacroBackgroundUpload}
+                      contextualBackground={contextualBackground}
+                      onContextualBackgroundUpload={handleContextualBackgroundUpload}
+                      themedEnvironmentBackground={themedEnvironmentBackground}
+                      onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
+                    />
+                  </div>
+
+                  <div className="flex flex-col items-center gap-4 w-full">
+                    {!productImage && (
+                      <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
+                        Upload a product image to start
+                      </div>
+                    )}
+                    {productImage && totalShots < 1 && (
+                      <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
+                        Specify a Shots Selection
+                      </div>
+                    )}
+                    <Button 
+                      size="lg" 
+                      className="w-full max-w-xs"
+                      disabled={isGenerating || !isReadyToGenerate}
+                      onClick={() => generateListing({ 
+                        lifestyleCount: lifestyleShotsCount,
+                        heroCount: heroShotsCount,
+                        closeUpsCount: closeUpsCount,
+                        flatLayCount: flatLayShotsCount,
+                        macroCount: macroShotsCount,
+                        contextualCount: contextualShotsCount,
+                        themedEnvironmentCount: themedEnvironmentShotsCount,
+                        productImage: productImage,
+                        lifestyleBackground: lifestyleBackground,
+                        heroBackground: heroBackground,
+                        closeUpsBackground: closeUpsBackground,
+                        flatLayBackground: flatLayBackground,
+                        macroBackground: macroBackground,
+                        contextualBackground: contextualBackground,
+                        themedEnvironmentBackground: themedEnvironmentBackground,
+                        lifestyleCustomContext,
+                        heroCustomContext,
+                        closeUpsCustomContext,
+                        flatLayCustomContext,
+                        macroCustomContext,
+                        contextualCustomContext,
+                        themedEnvironmentCustomContext
+                      })}
+                    >
+                      {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
+                    </Button>
+
+                    {isGenerating && modelUsed && (
+                      <div className="text-sm text-orange-500 flex items-center gap-2" data-testid="model-status">
+                        <span>Calling model:</span>
+                        <span className="px-2 py-0.5 border border-orange-500 rounded-md text-xs font-medium animate-pulse">
+                          {modelUsed}
+                        </span>
+                      </div>
+                    )}
+
+                    {error && (
+                      <div 
+                        className="w-full max-w-2xl mx-auto p-4 bg-red-500/10 border border-red-500/50 text-red-500 rounded-md text-sm text-center font-medium"
+                        data-testid="generation-error"
+                      >
+                        {error}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div className="flex flex-col items-center gap-4">
-              {!productImage && (
-                <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
-                  Upload a product image to start
-                </div>
-              )}
-              {productImage && totalShots < 1 && (
-                <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
-                  Specify a Shots Selection
-                </div>
-              )}
-              <Button 
-                size="lg" 
-                className="w-full max-w-xs"
-                disabled={isGenerating || !isReadyToGenerate}
-                onClick={() => generateListing({ 
-                  lifestyleCount: lifestyleShotsCount,
-                  heroCount: heroShotsCount,
-                  closeUpsCount: closeUpsCount,
-                  flatLayCount: flatLayShotsCount,
-                  macroCount: macroShotsCount,
-                  contextualCount: contextualShotsCount,
-                  themedEnvironmentCount: themedEnvironmentShotsCount,
-                  productImage: productImage,
-                  lifestyleBackground: lifestyleBackground,
-                  heroBackground: heroBackground,
-                  closeUpsBackground: closeUpsBackground,
-                  flatLayBackground: flatLayBackground,
-                  macroBackground: macroBackground,
-                  contextualBackground: contextualBackground,
-                  themedEnvironmentBackground: themedEnvironmentBackground,
-                  lifestyleCustomContext,
-                  heroCustomContext,
-                  closeUpsCustomContext,
-                  flatLayCustomContext,
-                  macroCustomContext,
-                  contextualCustomContext,
-                  themedEnvironmentCustomContext
-                })}
-              >
-                {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
-              </Button>
-
-              {isGenerating && modelUsed && (
-                <div className="text-sm text-orange-500 flex items-center gap-2" data-testid="model-status">
-                  <span>Calling model:</span>
-                  <span className="px-2 py-0.5 border border-orange-500 rounded-md text-xs font-medium animate-pulse">
-                    {modelUsed}
-                  </span>
-                </div>
-              )}
-
-              {error && (
-                <div 
-                  className="w-full max-w-2xl mx-auto p-4 bg-red-500/10 border border-red-500/50 text-red-500 rounded-md text-sm text-center font-medium"
-                  data-testid="generation-error"
-                >
-                  {error}
-                </div>
-              )}
+            <div ref={previewRef}>
+              <ListingPreview 
+                images={images} 
+                onRemove={removeImage} 
+                onClearAll={clearImages}
+                onDownload={downloadImage} 
+                onDownloadAll={downloadAllImagesAsZip}
+                onSetPrimary={setPrimaryImage}
+              />
             </div>
-
-            <ListingPreview 
-              images={images} 
-              onRemove={removeImage} 
-              onDownload={downloadImage} 
-              onDownloadAll={downloadAllImagesAsZip}
-            />
           </div>
         </main>
         <Footer />
@@ -357,8 +374,8 @@ const ShotTypeItem = ({
 
   return (
     <div className="flex flex-col gap-2 border-b border-slate-800 pb-4 last:border-0">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex flex-col flex-1">
+      <div className="flex items-center justify-between gap-4 max-w-md">
+        <div className="flex flex-col">
           <Label htmlFor={id} className="text-base font-semibold text-yellow-200">{label}</Label>
           <span className="text-base text-muted-foreground">{description}</span>
           <div className="flex items-center gap-2 mt-1">
@@ -409,11 +426,11 @@ const ShotTypeItem = ({
           value={count}
           onChange={onChange}
           data-testid={`${id}-count`}
-          className="w-20"
+          className="w-14"
         />
       </div>
       {showCustom && (
-        <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-2xl flex flex-col gap-2">
+        <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-md flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 flex-1">
               <Label htmlFor={`${id}-custom`} className="text-xs">Custom Context</Label>
@@ -718,7 +735,7 @@ const ShotsSelection = ({
   ];
 
   return (
-    <Card>
+    <Card className="w-fit">
       <CardHeader>
         <CardTitle>Shots Selection</CardTitle>
       </CardHeader>

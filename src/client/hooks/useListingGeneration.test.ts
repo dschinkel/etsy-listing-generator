@@ -106,7 +106,8 @@ describe('Listing Generation', () => {
           { url: 'image2.png', type: 'lifestyle' }, 
           { url: 'image3.png', type: 'lifestyle' }
         ] 
-      })
+      }),
+      deleteImage: jest.fn().mockResolvedValue(true)
     };
     
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -209,7 +210,8 @@ describe('Listing Generation', () => {
           images: [{ url: 'imagen_result.png', type: 'lifestyle' }], 
           model: 'imagen-4.0-generate-001',
           systemPrompt: 'imagen prompt'
-        })
+        }),
+      deleteImage: jest.fn()
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -256,7 +258,8 @@ describe('Listing Generation', () => {
           images: [{ url: 'fallback_result.png', type: 'lifestyle' }], 
           model: 'imagen-4.0-generate-001',
           systemPrompt: 'fallback prompt'
-        })
+        }),
+      deleteImage: jest.fn()
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -302,5 +305,136 @@ describe('Listing Generation', () => {
       themedEnvironmentCount: 1
     }));
     expect(result.current.images).toEqual([{ url: 'themed_1.png', type: 'themed-environment' }]);
+  });
+
+  it('retains previous images when new ones are generated', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn()
+        .mockResolvedValueOnce({ images: [{ url: 'image1.png', type: 'lifestyle' }] })
+        .mockResolvedValueOnce({ images: [{ url: 'image2.png', type: 'hero' }] }),
+      deleteImage: jest.fn().mockResolvedValue(true)
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+    expect(result.current.images).toHaveLength(1);
+    expect(result.current.images[0].url).toBe('image1.png');
+
+    await act(async () => {
+      await result.current.generateListing({ heroCount: 1 });
+    });
+    expect(result.current.images).toHaveLength(2);
+    expect(result.current.images[0].url).toBe('image1.png');
+    expect(result.current.images[1].url).toBe('image2.png');
+  });
+
+  it('clears all images', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ images: [{ url: 'image1.png', type: 'lifestyle' }] }),
+      deleteImage: jest.fn().mockResolvedValue(true)
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+    expect(result.current.images).toHaveLength(1);
+
+    act(() => {
+      result.current.clearImages();
+    });
+    expect(result.current.images).toHaveLength(0);
+    expect(fakeListingRepository.deleteImage).toHaveBeenCalledWith('image1.png');
+  });
+
+  it('deletes image', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ images: [{ url: 'image1.png', type: 'lifestyle' }] }),
+      deleteImage: jest.fn().mockResolvedValue(true)
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    act(() => {
+      result.current.removeImage(0);
+    });
+
+    expect(result.current.images).toHaveLength(0);
+    expect(fakeListingRepository.deleteImage).toHaveBeenCalledWith('image1.png');
+  });
+
+  it('sets primary image and unsets others', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn()
+        .mockResolvedValueOnce({ 
+          images: [
+            { url: 'image1.png', type: 'lifestyle' },
+            { url: 'image2.png', type: 'hero' }
+          ] 
+        }),
+      deleteImage: jest.fn().mockResolvedValue(true)
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1, heroCount: 1 });
+    });
+
+    expect(result.current.images[0].isPrimary).toBeFalsy();
+    expect(result.current.images[1].isPrimary).toBeFalsy();
+
+    act(() => {
+      result.current.setPrimaryImage(0);
+    });
+
+    expect(result.current.images[0].isPrimary).toBe(true);
+    expect(result.current.images[1].isPrimary).toBe(false);
+
+    act(() => {
+      result.current.setPrimaryImage(1);
+    });
+
+    expect(result.current.images[0].isPrimary).toBe(false);
+    expect(result.current.images[1].isPrimary).toBe(true);
+  });
+
+  it('unsets primary state if the primary image is removed', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn().mockResolvedValue({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle' },
+          { url: 'image2.png', type: 'hero' }
+        ] 
+      }),
+      deleteImage: jest.fn().mockResolvedValue(true)
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1, heroCount: 1 });
+    });
+
+    act(() => {
+      result.current.setPrimaryImage(0);
+    });
+    expect(result.current.images[0].isPrimary).toBe(true);
+
+    act(() => {
+      result.current.removeImage(0);
+    });
+
+    expect(result.current.images).toHaveLength(1);
+    expect(result.current.images[0].url).toBe('image2.png');
+    expect(result.current.images[0].isPrimary).toBeFalsy();
   });
 });

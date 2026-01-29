@@ -39,7 +39,8 @@ P0.9 For React work, when presenting a PLAN, explicitly ask whether Step 1 (Comp
 P0.10 At the very end of a task (after all steps and cleanup), you MUST mark the task as [COMPLETED] in `tasks.md`, run all tests one last time, run the linter and fix any errors, start the app and verify no runtime errors, and then perform a final cleanup commit and push before calling `submit`.
 
 G1.10 When asked to add a new feature, you must always add it at the higher level in `PROJECT_SPEC.md` first, then break that out into smaller tasks second in `tasks.md` using the `PROJECT_SPEC` feature number.
-G1.10.1 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
+G1.10.1 Ensure that new behaviors (adding new functionality, UI elements, or logic) are treated as **Features** (FR.x) and not as "Fixes". A "Fix" (PR.x) is strictly for correcting existing behavior that is broken or not meeting the original spec. If a "Fix" actually introduces new behavior, it must be promoted to a Feature in `PROJECT_SPEC.md` and `tasks.md`.
+G1.10.2 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
 
 G1.11 Use domain language for files, functions, variables, tests, and modules. Do not include implementation details or technical words in variable names.
 G1.11.1 Example: instead of `downloadPromises`, use a domain-specific name like `images` if they represent the images being downloaded.
@@ -53,8 +54,9 @@ P0.11.1 When starting a task, you MUST move the task from [NOT STARTED] to [IN P
 P0.12 NEVER call `submit` if there are uncommitted or unpushed changes related to the task. Every task completion must end with a push to the remote repository. Commit messages must focus on domain features and intent. Do not include technical words like "verified", "Step X", or "Frontend/Backend".
 Good: `shows shot type display under image`
 Bad: `feat: UI Enhancement: Step 1: Frontend: UI: displays shot type display verified`
-P0.13 When asked to add a new feature, you must always add it at the higher level in `PROJECT_SPEC.md` first, then break that out into smaller tasks second in `tasks.md` using the `PROJECT_SPEC` feature number.
-P0.13.1 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
+P0.13 When asked to add a new feature, you must always add it at the higher level in `PROJECT_SPEC.md` first, then break that out into smaller tasks second in `tasks.md` using the `PROJECT_SPEC` feature number. 
+P0.13.1 Ensure that new behaviors (adding new functionality, UI elements, or logic) are treated as **Features** (FR.x) and not as "Fixes". A "Fix" (PR.x) is strictly for correcting existing behavior that is broken or not meeting the original spec. If a "Fix" actually introduces new behavior, it must be promoted to a Feature in `PROJECT_SPEC.md` and `tasks.md`.
+P0.13.2 Every task created in `tasks.md` (whether by the user or the agent) MUST have as its first acceptance criterion: `- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD`.
 P0.14 If asked for an out of bounds fix, relate it to the current task and append the information to `tasks.md` using the following format:
 ```markdown
 ## PR.<feature number> Fix [COMPLETED]

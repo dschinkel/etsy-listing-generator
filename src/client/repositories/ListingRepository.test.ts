@@ -5,7 +5,7 @@ describe('Listing Repository (Client)', () => {
     global.fetch = jest.fn();
   });
 
-  it('fetches templates from api', async () => {
+  it('fetches templates', async () => {
     const templates = [{ name: 'Test', text: 'Test text' }];
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -21,7 +21,7 @@ describe('Listing Repository (Client)', () => {
     }));
   });
 
-  it('saves a template via api', async () => {
+  it('saves a template', async () => {
     const template = { name: 'New', text: 'New text' };
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -38,7 +38,7 @@ describe('Listing Repository (Client)', () => {
     }));
   });
 
-  it('removes a template via api', async () => {
+  it('removes a template', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true }),

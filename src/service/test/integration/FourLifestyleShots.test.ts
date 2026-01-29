@@ -29,7 +29,7 @@ describe('Four Lifestyle Shots Integration', () => {
     expect(response.body.images.length).toBe(4);
     response.body.images.forEach((img: any) => {
       expect(img.type).toBe('lifestyle');
-      expect(img.url).toMatch(/^(http|data:)/);
+      expect(img.url).toMatch(/^(\/|http|data:)/);
     });
   }, 300000); // Increase timeout for image generation
 });

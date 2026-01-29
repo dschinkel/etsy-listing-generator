@@ -28,15 +28,12 @@ The Fix:
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 - [COMPLETED] Updated `ShotTypeItem` in `App.tsx` to check if the template text is already present in the custom context before appending.
 - [COMPLETED] Verified fix with all tests passing.
-- [COMPLETED] FR.15.6: Ability to remove a saved custom context template.
-    - Acceptance:
-        - Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-    - RED: Test that DELETE /listings/templates/:name removes a template in ListingController.test.ts.
-    - GREEN: Implement remove method in ContextTemplateRepository, RemoveContextTemplate command, and DELETE route in ListingController.
-    - RED: Test removeTemplate in client ListingRepository.test.ts and useProductUpload.test.ts.
-    - GREEN: Implement removeTemplate in client ListingRepository and useProductUpload hook.
-    - UI: Update ShotTypeItem to use shadcn Select and add a remove button.
-    - Verification and Cleanup.
+### FR.15.6 — Ability to remove a saved custom context template [COMPLETED]
+Acceptance:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Implement remove method in ContextTemplateRepository, RemoveContextTemplate command, and DELETE route in ListingController.
+- [COMPLETED] Implement removeTemplate in client ListingRepository and useProductUpload hook.
+- [COMPLETED] Update ShotTypeItem to use shadcn Select and add a remove button.
 
 ## PR.15 Fix [COMPLETED]
 ### Resolve ReferenceError: templates is not defined in App.tsx

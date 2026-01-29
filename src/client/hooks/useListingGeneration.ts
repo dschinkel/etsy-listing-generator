@@ -6,6 +6,7 @@ import { fetchWithTimeout } from '../lib/utils';
 export interface ListingImage {
   url: string;
   type: string;
+  isPrimary?: boolean;
 }
 
 export const useListingGeneration = (listingRepository: any) => {
@@ -69,7 +70,7 @@ export const useListingGeneration = (listingRepository: any) => {
           model: currentModel,
           noFallback: true
         });
-        setImages(response.images);
+        setImages(prev => [...prev, ...response.images]);
         setSystemPrompt(response.systemPrompt || '');
         setModelUsed(response.model || currentModel);
         success = true;
@@ -98,6 +99,12 @@ export const useListingGeneration = (listingRepository: any) => {
   };
 
   const removeImage = (index: number) => {
+    const imageToDelete = images[index];
+    if (imageToDelete) {
+      listingRepository.deleteImage(imageToDelete.url).catch((err: any) => {
+        console.error('Failed to delete image from server:', err);
+      });
+    }
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
@@ -142,6 +149,22 @@ export const useListingGeneration = (listingRepository: any) => {
     saveAs(content, 'listing-images.zip');
   };
 
+  const clearImages = () => {
+    images.forEach(image => {
+      listingRepository.deleteImage(image.url).catch((err: any) => {
+        console.error('Failed to delete image from server during clear all:', err);
+      });
+    });
+    setImages([]);
+  };
+
+  const setPrimaryImage = (index: number) => {
+    setImages(prev => prev.map((img, i) => ({
+      ...img,
+      isPrimary: i === index
+    })));
+  };
+
   return {
     images,
     systemPrompt,
@@ -150,6 +173,8 @@ export const useListingGeneration = (listingRepository: any) => {
     isGenerating,
     generateListing,
     removeImage, 
+    clearImages,
+    setPrimaryImage,
     downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview: useCallback(async (params: any) => {

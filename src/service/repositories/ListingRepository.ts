@@ -1,3 +1,5 @@
+import { saveImageToAssets } from '../lib/assetManager';
+
 export const createListingRepository = (dataLayer: any) => {
   const generateImages = async (params: { 
     lifestyleCount?: number, 
@@ -194,8 +196,8 @@ export const createListingRepository = (dataLayer: any) => {
             model,
             customContext
           });
-          const imageUrl = result.imageUrl;
-          onResult?.(result);
+          const imageUrl = await saveImageToAssets(result.imageUrl, type);
+          onResult?.({ ...result, imageUrl });
           ensureValidUrl(imageUrl);
           addGeneratedImage(images, imageUrl, type);
           success = true;

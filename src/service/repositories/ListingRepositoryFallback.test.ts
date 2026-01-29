@@ -9,7 +9,7 @@ describe('Listing Repository Fallback', () => {
     jest.useRealTimers();
   });
 
-  it('retries with next model when primary fails with 503 after max internal retries', async () => {
+  it('retries when primary fails', async () => {
     const mockDataLayer = {
       generateImage: jest.fn()
         .mockRejectedValueOnce({ status: 503, message: 'Overloaded' })

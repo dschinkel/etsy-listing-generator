@@ -134,5 +134,20 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
-  return { generateImages, getSystemPromptPreview, getTemplates, saveTemplate, removeTemplate };
+  const deleteImage = async (url: string) => {
+    const response = await fetchWithTimeout('/listings/images', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      console.error(`Failed to delete image: ${text}`);
+    }
+
+    return response.ok;
+  };
+
+  return { generateImages, getSystemPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage };
 };

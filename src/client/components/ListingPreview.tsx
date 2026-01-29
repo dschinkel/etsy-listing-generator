@@ -4,20 +4,25 @@ import { Button } from './ui/button';
 import { X, Copy, Download } from 'lucide-react';
 import ImageModal from './ImageModal';
 import { useListingPreview } from './useListingPreview';
+import { Checkbox } from './ui/checkbox';
+import { Label } from './ui/label';
 
 interface ListingImage {
   url: string;
   type: string;
+  isPrimary?: boolean;
 }
 
 interface ListingPreviewProps {
   images: ListingImage[];
   onRemove: (index: number) => void;
+  onClearAll: () => void;
   onDownload: (src: string, index: number) => void;
   onDownloadAll: () => void;
+  onSetPrimary: (index: number) => void;
 }
 
-const ListingPreview = ({ images, onRemove, onDownload, onDownloadAll }: ListingPreviewProps) => {
+const ListingPreview = ({ images, onRemove, onClearAll, onDownload, onDownloadAll, onSetPrimary }: ListingPreviewProps) => {
   const { selectedImage, isModalOpen, openImage, closeImage } = useListingPreview();
 
   if (images.length === 0) return null;
@@ -27,21 +32,33 @@ const ListingPreview = ({ images, onRemove, onDownload, onDownloadAll }: Listing
       <Card className="w-full mt-8">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle>Listing Preview</CardTitle>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={onDownloadAll}
-            className="flex items-center gap-2"
-            data-testid="download-all-images"
-          >
-            <Download className="w-4 h-4" />
-            Download All (.zip)
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="destructive" 
+              size="sm" 
+              onClick={onClearAll}
+              className="flex items-center gap-2"
+              data-testid="clear-all-images"
+            >
+              <X className="w-4 h-4" />
+              Clear All
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={onDownloadAll}
+              className="flex items-center gap-2"
+              data-testid="download-all-images"
+            >
+              <Download className="w-4 h-4" />
+              Download All (.zip)
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" data-testid="listing-preview">
             {images.map((image, index) => (
-              <div key={index} className="flex flex-col gap-2">
+              <div key={index} className="flex flex-col gap-1">
                 <div className="relative group aspect-square">
                   <img
                     src={image.url}
@@ -90,6 +107,20 @@ const ListingPreview = ({ images, onRemove, onDownload, onDownloadAll }: Listing
                 <span className="text-xs text-yellow-200 font-medium px-1" data-testid={`listing-image-type-${index}`}>
                   {image.type}
                 </span>
+                <div className="flex items-center space-x-2 px-1">
+                  <Checkbox 
+                    id={`primary-etsy-image-${index}`} 
+                    checked={image.isPrimary || false}
+                    onCheckedChange={() => onSetPrimary(index)}
+                    data-testid={`set-primary-etsy-image-${index}`}
+                  />
+                  <Label 
+                    htmlFor={`primary-etsy-image-${index}`}
+                    className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                  >
+                    Set as Primary Etsy Image
+                  </Label>
+                </div>
               </div>
             ))}
           </div>

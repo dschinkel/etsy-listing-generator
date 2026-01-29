@@ -6,6 +6,7 @@ import { createRemoveContextTemplate } from '../commands/RemoveContextTemplate';
 import { createListingRepository } from '../repositories/ListingRepository';
 import { createContextTemplateRepository } from '../repositories/ContextTemplateRepository';
 import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
+import { deleteImageFromAssets } from '../lib/assetManager';
 import * as path from 'path';
 
 export const createListingController = () => {
@@ -93,5 +94,23 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, getPromptPreview, getTemplates, saveTemplate, removeTemplate };
+  const deleteImage = async (ctx: any) => {
+    try {
+      const { url } = ctx.request.body;
+      if (!url) {
+        ctx.status = 400;
+        ctx.body = { error: 'Image URL is required' };
+        return;
+      }
+      await deleteImageFromAssets(url);
+      ctx.status = 200;
+      ctx.body = { success: true };
+    } catch (error: any) {
+      console.error('Error in deleteImage:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  return { generate, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage };
 };
