@@ -551,4 +551,28 @@ describe('Listing Generation', () => {
 
     expect(fakeListingRepository.archiveImages).toHaveBeenCalledWith(['image1.png', 'image2.png']);
   });
+
+  it('archives an individual listing image', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle' },
+          { url: 'image2.png', type: 'hero' }
+        ] 
+      }),
+      archiveImages: jest.fn().mockResolvedValue({ success: true })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1, heroCount: 1 });
+    });
+
+    await act(async () => {
+      await result.current.archiveImage(1); // Archive image2.png
+    });
+
+    expect(fakeListingRepository.archiveImages).toHaveBeenCalledWith(['image2.png']);
+  });
 });

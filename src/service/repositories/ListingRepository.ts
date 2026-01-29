@@ -308,9 +308,9 @@ export const createListingRepository = (dataLayer: any) => {
     generateImages, 
     getPromptPreview, 
     generateSingleImage,
-    archiveImages: async (imageUrls: string[]) => {
+    archiveImages: async (imageUrls: string[], target?: 'archived' | 'uploads') => {
       const { archiveImageFiles } = await import('../lib/assetManager');
-      await archiveImageFiles(imageUrls);
+      await archiveImageFiles(imageUrls, target);
     }
   };
 };

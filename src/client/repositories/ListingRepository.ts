@@ -169,11 +169,11 @@ export const createListingRepository = () => {
     return response.ok;
   };
 
-  const archiveImages = async (imageUrls: string[]) => {
+  const archiveImages = async (imageUrls: string[], target: 'archived' | 'uploads' = 'archived') => {
     const response = await fetchWithTimeout('/listings/archive', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageUrls }),
+      body: JSON.stringify({ imageUrls, target }),
     });
 
     if (!response.ok) {

@@ -247,4 +247,31 @@ describe('useProductUpload', () => {
     expect(result.current.productImages).toEqual([]);
     expect(mockDeleteImage).toHaveBeenCalledWith(serverImageUrl);
   });
+
+  it('archives an individual product image', async () => {
+    const mockArchiveImages = jest.fn().mockResolvedValue({ success: true });
+    const repository = { ...mockRepository, archiveImages: mockArchiveImages };
+    const { result } = renderHook(() => useProductUpload(repository));
+    
+    const fakeImage = 'data:image/png;base64,image1';
+    
+    await act(async () => {
+      const mockReader = {
+        readAsDataURL: jest.fn(function(this: any) {
+          this.onloadend();
+        }),
+        get result() { return fakeImage; }
+      };
+      jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+      const file = new File([''], 'test.png', { type: 'image/png' });
+      result.current.handleUpload({ target: { files: [file] } } as any);
+      (global.FileReader as jest.Mock).mockRestore();
+    });
+
+    await act(async () => {
+      await result.current.archiveProductImage(0);
+    });
+
+    expect(mockArchiveImages).toHaveBeenCalledWith([fakeImage], 'uploads');
+  });
 });

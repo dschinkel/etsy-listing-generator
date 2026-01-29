@@ -16,7 +16,7 @@ import {
   DialogFooter,
   DialogClose
 } from './components/ui/dialog';
-import { Plus, Image as ImageIcon, Save, Trash, Eraser } from 'lucide-react';
+import { Plus, Image as ImageIcon, Save, Trash, Eraser, Archive } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
@@ -44,6 +44,7 @@ const App = () => {
     isPrimaryImage,
     handlePrimarySelection,
     clearPrimaryImage: clearProductPrimaryImage,
+    archiveProductImage,
     lifestyleBackground,
     handleLifestyleBackgroundUpload,
     heroBackground,
@@ -93,6 +94,7 @@ const App = () => {
     removeImage, 
     clearImages,
     archiveAllImages,
+    archiveImage,
     setPrimaryImage: setGeneratedPrimaryImage,
     clearPrimaryImage: clearGeneratedPrimaryImages,
     downloadImage,
@@ -183,6 +185,7 @@ const App = () => {
                     isPrimary={isPrimaryImage && index === 0}
                     onSelectPrimary={index === 0 ? handleSelectProductPrimary : undefined}
                     onRemove={() => handleRemoveProductImage(index)}
+                    onArchive={() => archiveProductImage(index)}
                   />
                 ))}
               </div>
@@ -314,6 +317,7 @@ const App = () => {
                 onRemove={removeImage} 
                 onClearAll={clearImages}
                 onArchiveAll={archiveAllImages}
+                onArchiveImage={archiveImage}
                 onDownload={downloadImage} 
                 onDownloadAll={downloadAllImagesAsZip}
                 onSetPrimary={handleSetGeneratedPrimary}
@@ -810,12 +814,14 @@ const UploadedImage = ({
   src, 
   isPrimary, 
   onSelectPrimary,
-  onRemove
+  onRemove,
+  onArchive
 }: { 
   src: string | null, 
   isPrimary: boolean, 
   onSelectPrimary?: () => void,
-  onRemove: () => void
+  onRemove: () => void,
+  onArchive: () => void
 }) => {
   if (!src) return null;
 
@@ -829,6 +835,16 @@ const UploadedImage = ({
             data-testid="uploaded-product-image"
             className="max-w-xs rounded shadow-lg"
           />
+          <Button
+            variant="secondary"
+            size="sm"
+            className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
+            onClick={onArchive}
+            data-testid="archive-product-image"
+          >
+            <Archive className="w-3 h-3" />
+            Archive
+          </Button>
           <Button
             variant="destructive"
             size="sm"

@@ -266,6 +266,18 @@ export const useProductUpload = (repository?: any) => {
     setIsPrimaryImage(false);
   };
 
+  const archiveProductImage = async (index: number) => {
+    const imageToArchive = productImages[index];
+    if (imageToArchive && repository) {
+      try {
+        await repository.archiveImages([imageToArchive], 'uploads');
+      } catch (err: any) {
+        console.error('Failed to archive product image:', err);
+        alert(`Failed to archive product image: ${err.message}`);
+      }
+    }
+  };
+
   const resetCounts = () => {
     setLifestyleShotsCount(0);
     setHeroShotsCount(0);
@@ -297,6 +309,7 @@ export const useProductUpload = (repository?: any) => {
     isPrimaryImage,
     handlePrimarySelection,
     clearPrimaryImage,
+    archiveProductImage,
     resetCounts,
     lifestyleBackground,
     handleLifestyleBackgroundUpload,

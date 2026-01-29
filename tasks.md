@@ -96,5 +96,14 @@ Acceptance:
 (See [tasks/completed/task-fr19-three-pane-layout.md](tasks/completed/task-fr19-three-pane-layout.md))
 ### FR.19.5 — Expand Listing Preview width to the full right edge of the viewport [COMPLETED]
 
-## Feature: FR.20 — Archive Listing Images [COMPLETED]
+## Feature: FR.20 — Archive Listing Images [IN PROGRESS]
 (See [tasks/completed/task-fr20-archive-images.md](tasks/completed/task-fr20-archive-images.md))
+### FR.20.4 — Ability to archive an individual listing image [NOT STARTED]
+- [ ] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [ ] TDD `archiveImage(index)` in `useListingGeneration`
+
+## Feature: FR.21 — Archive Uploaded Images [NOT STARTED]
+Acceptance:
+- [ ] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [ ] TDD `archiveProductImage(index)` in `useProductUpload`
+- [ ] Ability to archive uploaded images to `./src/assets/uploads`

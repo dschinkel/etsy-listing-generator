@@ -76,30 +76,48 @@ export async function deleteImageFromAssets(imageUrl: string): Promise<void> {
 }
 
 const ARCHIVED_ASSETS_DIR = path.join(process.cwd(), 'src', 'assets', 'archived-images');
+const UPLOADS_ASSETS_DIR = path.join(process.cwd(), 'src', 'assets', 'uploads');
 
 /**
- * Archives a list of image URLs by copying them to the archived-images directory.
+ * Archives a list of image URLs by copying them to the target directory.
  */
-export async function archiveImageFiles(imageUrls: string[]): Promise<void> {
-  if (!fs.existsSync(ARCHIVED_ASSETS_DIR)) {
-    fs.mkdirSync(ARCHIVED_ASSETS_DIR, { recursive: true });
+export async function archiveImageFiles(imageUrls: string[], target: 'archived' | 'uploads' = 'archived'): Promise<void> {
+  const destDir = target === 'uploads' ? UPLOADS_ASSETS_DIR : ARCHIVED_ASSETS_DIR;
+
+  if (!fs.existsSync(destDir)) {
+    fs.mkdirSync(destDir, { recursive: true });
   }
 
   for (const url of imageUrls) {
-    if (!url.startsWith('/src/assets/generated-images/')) {
+    let sourcePath: string;
+    let fileName: string;
+
+    if (url.startsWith('/src/assets/generated-images/')) {
+      fileName = url.replace('/src/assets/generated-images/', '');
+      sourcePath = path.join(GENERATED_ASSETS_DIR, fileName);
+    } else if (url.startsWith('data:image/')) {
+      // For data URLs (common in uploads), we need to save them first
+      try {
+        const tempType = target === 'uploads' ? 'upload' : 'archive';
+        const savedUrl = await saveImageToAssets(url, tempType);
+        fileName = savedUrl.replace('/src/assets/generated-images/', '');
+        sourcePath = path.join(GENERATED_ASSETS_DIR, fileName);
+      } catch (error) {
+        console.error(`Failed to process data URL for archiving: ${url.substring(0, 50)}...`, error);
+        continue;
+      }
+    } else {
       continue;
     }
 
-    const fileName = url.replace('/src/assets/generated-images/', '');
-    const sourcePath = path.join(GENERATED_ASSETS_DIR, fileName);
-    const destPath = path.join(ARCHIVED_ASSETS_DIR, fileName);
+    const destPath = path.join(destDir, fileName);
 
     try {
       if (fs.existsSync(sourcePath)) {
         fs.copyFileSync(sourcePath, destPath);
       }
     } catch (error) {
-      console.error(`Failed to archive image: ${sourcePath}`, error);
+      console.error(`Failed to archive image: ${sourcePath} to ${destPath}`, error);
     }
   }
 }

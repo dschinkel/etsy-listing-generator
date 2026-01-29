@@ -166,6 +166,11 @@ A user can:
     - **FR.20.1 — Ability to archive (save) the current list of listing images to `./src/assets/archived-images`.**
     - **FR.20.2 — Add an "Archive All" button next to "Clear All" in the Listing Preview section.**
     - **FR.20.3 — Archived images should be copies of the generated images, preserved even if the originals are deleted.**
+    - **FR.20.4 — Ability to archive an individual listing image from the Listing Preview.**
+
+**FR.21 — Archive Uploaded Images**
+    - **FR.21.1 — Ability to archive an individual uploaded product image to `./src/assets/uploads`.**
+    - **FR.21.2 — Archived uploaded images should be copies, preserved even if the originals are removed from the upload list.**
 
 ---
 

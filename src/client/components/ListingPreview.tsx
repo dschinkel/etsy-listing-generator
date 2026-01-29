@@ -23,6 +23,7 @@ interface ListingPreviewProps {
   onRemove: (index: number) => void;
   onClearAll: () => void;
   onArchiveAll: () => void;
+  onArchiveImage: (index: number) => void;
   onDownload: (src: string, index: number) => void;
   onDownloadAll: () => void;
   onSetPrimary: (index: number) => void;
@@ -37,6 +38,7 @@ const ListingPreview = ({
   onRemove, 
   onClearAll, 
   onArchiveAll,
+  onArchiveImage,
   onDownload, 
   onDownloadAll, 
   onSetPrimary,
@@ -120,6 +122,19 @@ const ListingPreview = ({
                       }}
                     />
                     <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="w-8 h-8"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onArchiveImage(index);
+                        }}
+                        data-testid={`archive-listing-image-${index}`}
+                        title="Archive image"
+                      >
+                        <Archive className="w-4 h-4" />
+                      </Button>
                       <Button
                         variant="secondary"
                         size="icon"
