@@ -16,7 +16,7 @@ import {
   DialogFooter,
   DialogClose
 } from './components/ui/dialog';
-import { Plus, Image as ImageIcon, Save, Trash } from 'lucide-react';
+import { Plus, Image as ImageIcon, Save, Trash, Eraser } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
@@ -476,16 +476,28 @@ const ShotTypeItem = ({
                 </div>
               )}
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              title="Save as template"
-              disabled={!customContext.trim()}
-              onClick={() => setIsSaveDialogOpen(true)}
-            >
-              <Save className="h-3 w-3" />
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                title="Clear custom context"
+                onClick={() => onCustomContextChange("")}
+                data-testid={`${id}-clear-context`}
+              >
+                <Eraser className="h-3 w-3" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                title="Save as template"
+                disabled={!customContext.trim()}
+                onClick={() => setIsSaveDialogOpen(true)}
+              >
+                <Save className="h-3 w-3" />
+              </Button>
+            </div>
           </div>
           <Textarea 
             id={`${id}-custom`}

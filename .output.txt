@@ -1530,6 +1530,6 @@ $ /Users/zevia/code/ai/etsy-listing-generator/node_modules/.bin/jest src/client/
 Test Suites: 2 passed, 2 total
 Tests:       33 passed, 33 total
 Snapshots:   0 total
-Time:        3.068 s
+Time:        2.896 s
 Ran all test suites matching /src\/client\/hooks\/useListingGeneration.test.ts|src\/client\/test\/ListingGenerationUI.test.tsx/i.
-✨  Done in 3.85s.
+✨  Done in 3.51s.

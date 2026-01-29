@@ -80,6 +80,7 @@ Acceptance:
 - [COMPLETED] Instructions are appended to the system prompt.
 - [COMPLETED] Custom context textbox should be multiline, longer horizontally by default and draggable horizontally.
 - [COMPLETED] FR.12.3: Ensure count is at least 1 when custom context is added/selected, and reset to 0 when cleared.
+- [COMPLETED] FR.12.4: Clear Custom Context button next to save button (before it).
 - [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
 
 ## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]

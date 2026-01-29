@@ -1,9 +1,5 @@
 [
   {
-    "name": "test",
-    "text": "Edit the provided image by updating the personalized text elements only.\n\nReplace any existing name or text with a randomly chosen name.\nReplace any existing number with a randomly chosen number where applicable.\n\nPreserve the original typography, letterforms, sizing, spacing, outlines, and any dimensional or embossed appearance.\nDo not change the product shape, icons, graphics, colors, materials, lighting, shadows, camera angle, or background.\n\nOnly the personalized text content should change. All other aspects must remain identical."
-  },
-  {
     "name": "Themed Environment - Mars",
     "text": "CUSTOM CONTEXT — THEMED ENVIRONMENT (REAL PLANET MARS)\n\nThe environment must depict the REAL planet Mars, not a fictional or stylized world.\n\nThis is NOT a game world, cartoon world, fantasy setting, or illustrative scene.\n\nDepict the surface of Mars as seen in real NASA rover photography:\n– Red and rust-colored soil\n– Rocky terrain\n– Dust, pebbles, and uneven ground\n– A barren, desolate outdoor landscape\n– Natural sunlight with realistic shadows\n\nDo not stylize the environment.\nDo not use bright pastel colors.\nDo not depict candy, castles, smiling objects, characters, or illustrations.\nDo not create a whimsical, playful, or cartoon-like scene.\n\nThe background must clearly read as the real planet Mars at first glance."
   }
