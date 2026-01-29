@@ -184,6 +184,19 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
+  const getArchivedUploads = async () => {
+    const response = await fetchWithTimeout('/listings/archived-uploads', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      return { images: [] };
+    }
+
+    return await response.json();
+  };
+
   return { 
     generateImages, 
     generateSingleImage,
@@ -192,6 +205,7 @@ export const createListingRepository = () => {
     saveTemplate, 
     removeTemplate, 
     deleteImage,
-    archiveImages
+    archiveImages,
+    getArchivedUploads
   };
 };

@@ -121,3 +121,25 @@ export async function archiveImageFiles(imageUrls: string[], target: 'archived' 
     }
   }
 }
+
+/**
+ * Lists all image files in the uploads directory.
+ */
+export async function getArchivedUploadFiles(): Promise<string[]> {
+  if (!fs.existsSync(UPLOADS_ASSETS_DIR)) {
+    return [];
+  }
+
+  try {
+    const files = fs.readdirSync(UPLOADS_ASSETS_DIR);
+    return files
+      .filter(file => {
+        const ext = path.extname(file).toLowerCase();
+        return ['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext);
+      })
+      .map(file => `/src/assets/uploads/${file}`);
+  } catch (error) {
+    console.error(`Failed to list archived uploads: ${UPLOADS_ASSETS_DIR}`, error);
+    return [];
+  }
+}

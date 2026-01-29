@@ -142,5 +142,17 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage, archive };
+  const getArchivedUploads = async (ctx: any) => {
+    try {
+      const images = await repository.getArchivedUploads();
+      ctx.body = { images };
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in getArchivedUploads:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage, archive, getArchivedUploads };
 };

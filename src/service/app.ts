@@ -78,6 +78,10 @@ router.post('/archive', async (ctx) => {
   await listingController.archive(ctx);
 });
 
+router.get('/archived-uploads', async (ctx) => {
+  await listingController.getArchivedUploads(ctx);
+});
+
 // Add a GET handler just in case, returning a helpful message or redirecting
 router.get('/system-prompt', async (ctx) => {
   ctx.status = 405;
