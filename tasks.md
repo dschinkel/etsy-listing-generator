@@ -10,55 +10,19 @@ Acceptance:
 (See [tasks/completed/task-fr1-upload-product-image.md](tasks/completed/task-fr1-upload-product-image.md))
 
 ## Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
-### FR.2.1 — Ability to specify how many images generated should be lifestyle shots [COMPLETED]
-### FR.2.2 — Ability to specify how many images generated should be hero shots [COMPLETED]
-### FR.2.3 — Ability to specify how many images generated should be close-ups [COMPLETED]
-### FR.2.4 — Ability to specify how many images generated should be flat lay shots [COMPLETED]
-### FR.2.5 — Ability to specify how many images generated should be macro/detail shots [COMPLETED]
-### FR.2.6 — Ability to specify how many images generated should be contextual shots [COMPLETED]
-### FR.2.7 — Ability to specify how many images generated should be themed environment shots [COMPLETED]
-Acceptance:
-- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- User can specify the count for themed environment shots in the UI.
-- The backend correctly handles themed environment shots and generates them using the thematic setting description.
+(See [tasks/completed/task-fr2-image-counts.md](tasks/completed/task-fr2-image-counts.md))
 
 ## Feature: UI Refinement - Shots Selection Gap [COMPLETED]
-The Fix (TDD):
-- [x] RED: Added failing test `ShotTypeGap.test.tsx` to verify vertical alignment and gap constraint.
-- [x] GREEN: Updated `ShotTypeItem` in `App.tsx` to use `justify-between` for vertical alignment and `max-w-3xl` to reduce the horizontal gap.
-- [x] RED: Added failing test `Whitespace.test.tsx` to verify further width reduction to `max-w-xl`.
-- [x] GREEN: Reduced `max-w-3xl` to `max-w-md` in `ShotTypeItem` and set `w-fit` on `ShotsSelection` card to eliminate trailing horizontal whitespace.
-- [x] Verified all tests passing.
-- [x] Removed temporary test files as requested (cosmetic fix).
+(See [tasks/completed/task-ui-refinement-shots-gap.md](tasks/completed/task-ui-refinement-shots-gap.md))
 
 ## Feature: FR.3 — Specify which image will be used as the Primary Etsy image [COMPLETED]
-The Fix (TDD):
-- [x] RED: Added failing unit test for `setPrimaryImage` in `useListingGeneration.test.ts`.
-- [x] RED: Added failing UI integration test in `ListingGenerationUI.test.tsx`.
-- [x] GREEN: Added `isPrimary?: boolean` to `ListingImage` interface.
-- [x] GREEN: Implemented `setPrimaryImage(index)` in `useListingGeneration` hook.
-- [x] GREEN: Added "Set as Primary Etsy Image" checkbox in `ListingPreview.tsx`.
-- [x] REFACTOR: Reduced gap in listing preview items using TDD (changed `gap-2` to `gap-1`).
-- [x] REFACTOR: Added additional test case for removing primary image to ensure state consistency.
-- [x] Verified all 73 tests passing.
+(See [tasks/completed/task-fr3-primary-image.md](tasks/completed/task-fr3-primary-image.md))
 
 ## Feature: FR.3 — Upload a background for product image [COMPLETED]
-Acceptance:
-- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Background upload buttons moved to Shots Selection list.
-- [COMPLETED] Buttons placed to the right of the plus button with 10px padding.
-- [COMPLETED] Background Uploads section removed.
+(See [tasks/completed/task-fr3-background-upload.md](tasks/completed/task-fr3-background-upload.md))
 
 ## Feature: UI Enhancement [COMPLETED]
-### Align "Generate Listing Images" button to center [COMPLETED]
-Acceptance:
-- [x] "Generate Listing Images" button is centered horizontally relative to the Shots Selection section.
-- [x] Status and error messages associated with generation are also aligned with the button.
-
-### Reduce Shot Type counter width [COMPLETED]
-Acceptance:
-- [x] The counter input in Shots Selection is shortened for a more compact UI.
-- [x] Verified existing UI tests pass.
+(See [tasks/completed/task-ui-enhancement.md](tasks/completed/task-ui-enhancement.md))
 
 ## Feature: UI Refinement - Auto-scroll to Listing Preview [COMPLETED]
 (See [tasks/completed/task-fr16-auto-scroll.md](tasks/completed/task-fr16-auto-scroll.md))
@@ -66,23 +30,8 @@ Acceptance:
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
 (See [tasks/completed/task-fr4-listing-preview.md](tasks/completed/task-fr4-listing-preview.md))
 
-## PR.4 Fix [COMPLETED]
-### Resolve 403 Forbidden error in integration tests by correctly loading environment variables
-The Fix:
-- [COMPLETED] Installed `dotenv` to manage environment variables.
-- [COMPLETED] Initialized `dotenv.config()` in `src/service/app.ts` to ensure `GEMINI_API_KEY` is loaded from `.env`.
-- [COMPLETED] Verified that all tests, including the real Gemini integration test, pass successfully.
-
-## PR.4 Fix [COMPLETED]
-### Ensure all individual production API calls timeout at 15 seconds
-The Fix:
-- [COMPLETED] Implemented 15s timeout for Gemini API calls in `src/service/data/GeminiImageGenerator.ts` using `RequestOptions`.
-- [COMPLETED] Created `fetchWithTimeout` utility in `src/client/lib/utils.ts` to enforce a 15s timeout on `fetch` calls.
-- [COMPLETED] Updated `ListingRepository.ts` (client) to use `fetchWithTimeout` for image generation and prompt previews.
-- [COMPLETED] Updated `useListingGeneration.ts` to use `fetchWithTimeout` for clipboard and ZIP operations.
-- [COMPLETED] Reduced image counts in integration tests to 1 image to ensure they fit within the 15s Jest and API timeout limits.
-- [COMPLETED] Updated `README.md` to document the new 15s API reliability standard.
-- [COMPLETED] Verified `AbortError` triggers correctly at 15s for Gemini calls.
+## PR.0 Fix [COMPLETED]
+(See [tasks/completed/task-pr0-meta-fixes.md](tasks/completed/task-pr0-meta-fixes.md))
 
 ## Feature: FR.5 — Redesign certain images that I don't like [NOT STARTED]
 Acceptance:
@@ -132,125 +81,6 @@ Acceptance:
 
 ## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]
 (See [tasks/completed/task-fr13-system-prompt-preview.md](tasks/completed/task-fr13-system-prompt-preview.md))
-
-## PR.4 Fix [COMPLETED]
-### Resolve 404 error when clicking generate listing images button
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Created `src/service/index.ts` to start the backend Koa server.
-- [COMPLETED] Configured Vite proxy in `vite.config.ts` to forward `/listings` requests to the backend.
-- [COMPLETED] Updated `package.json` to run both frontend and backend concurrently in `dev` mode.
-- [COMPLETED] Ensured environment variables are loaded at the earliest possible stage in `src/service/index.ts`.
-
-## PR.4 Fix [COMPLETED]
-### Refactor duplicated image generation functions into a single generic function
-The Fix:
-- [COMPLETED] Updated `GUIDELINES.md` with rule `Q1.9` to enforce DRY principles.
-- [COMPLETED] Refactored `src/service/repositories/ListingRepository.ts` to replace duplicated shot-type functions with `generateShotTypeImages`.
-- [COMPLETED] Verified all tests pass and application starts without errors.
-
-## PR.4 Fix [COMPLETED]
-### Resolve hanging integration test 'generates images using gemini'
-The Fix:
-- [COMPLETED] Added 50-second timeout to Gemini API calls to stay within Jest's 60s timeout.
-- [COMPLETED] Protected `findImageDeep` against infinite recursion by adding circular reference detection (using a Set) and a depth limit of 10.
-- [COMPLETED] Improved error logging in `GeminiImageGenerator` to better diagnose API issues like 503 Overloaded.
-- [COMPLETED] Verified that tests now finish and report errors correctly instead of hanging indefinitely.
-
-## PR.0 Fix [COMPLETED]
-### Update README.md with project-specific information and recent changes
-The Fix:
-- [COMPLETED] Renamed project to "Etsy Listing Generator".
-- [COMPLETED] Documented image generation strategy (Gemini 3 Pro + Imagen 4 fallback).
-- [COMPLETED] Documented UI enhancements (System Prompt pane, status feedback).
-- [COMPLETED] Documented technical architecture (Onion architecture, functional modules).
-- [COMPLETED] Documented testing infrastructure (15s timeout).
-- [COMPLETED] Verified fix with `README.md` update.
-
-## PR.0 Fix [COMPLETED]
-### Use concise domain prose for test names
-The Fix:
-- [COMPLETED] Renamed technical test names to concise domain prose (e.g., "gets system prompt") in `PromptPreview.test.ts`.
-
-## PR.4 Fix [COMPLETED]
-### Ensure error messages are visible and correctly positioned
-The Fix:
-- [COMPLETED] Fixed a bug in `useListingGeneration.ts` where `error` and `isGenerating` states were not returned by the hook.
-- [COMPLETED] Moved the error message display in `App.tsx` from above to below the "Generate Listing Image" button.
-- [COMPLETED] Added unit tests for `useListingGeneration` hook to verify error state handling (primary failure and fallback).
-- [COMPLETED] Added UI integration test `ListingGenerationUI.test.tsx` to verify error message visibility and positioning.
-- [COMPLETED] Verified fix with all client-side tests passing.
-
-## PR.4 Fix [COMPLETED]
-### Display shot type below each image in Listing Preview
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Updated `ListingPreview.tsx` to display shot type in small, light yellow text (`text-yellow-200`).
-- [COMPLETED] Modified `useListingGeneration.ts` to manage images as `{ url, type }` objects.
-- [COMPLETED] Updated server-side `ListingRepository.ts` to associate each generated image with its specific shot type.
-- [COMPLETED] Adjusted all relevant tests across frontend and backend to align with the new image data structure.
-- [COMPLETED] Increased global test timeout to 60s in `jest.config.js` to ensure stability for real API integration tests.
-- [COMPLETED] Verified fix with all tests passing and no linting errors.
-
-## PR.4 Fix [COMPLETED]
-### Resolve broken image in the UI
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Refactored `extractImageFromResponse` to prioritize `inlineData` and clean base64 strings.
-- [COMPLETED] Enhanced URL validation to only accept text links with image extensions.
-- [COMPLETED] Switched to more reliable placeholder and fallback services (`picsum.photos`, `placehold.co`).
-- [COMPLETED] Verified fix with new unit tests and full test suite.
-- [COMPLETED] Verified no linting or runtime errors.
-
-## PR.4 Fix [COMPLETED]
-### Ensure image generation retries with the next model on any model failure
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Broadened `isRetryableError` in `ListingRepository` to include 5xx, 429, and common error strings.
-- [COMPLETED] Updated `useListingGeneration.test.ts` to verify client-side retry orchestration.
-- [COMPLETED] Verified fix with full test suite (55 tests).
-
-## PR.4 Fix [COMPLETED]
-### Persist generated images in assets/generated-images
-The Fix:
-- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [x] Updated `src/service/lib/assetManager.ts` to use `assets/generated-images` directory.
-- [x] Updated URL paths returned by server to `/assets/generated-images/`.
-- [x] Cleaned up old `assets/generated` directory.
-- [x] Updated integration tests to support the new image URL format.
-- [x] Verified that images are correctly saved and served from the new directory.
-
-## PR.4 Fix [COMPLETED]
-### Resolve broken image caused by metadata extraction
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Updated `extractImageFromResponse` and `findImageDeep` in `GeminiImageGenerator.ts` to strictly require `image/` mime type for `inlineData`.
-- [COMPLETED] Added regression test in `GeminiImageGeneratorExtraction.test.ts`.
-- [COMPLETED] Verified fix with full test suite (56 tests).
-
-## PR.0 Fix [COMPLETED]
-### Ensure browser opens automatically on yarn dev
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Updated `vite.config.ts` to include `server.open: true`.
-- [COMPLETED] Verified configuration.
-
-## PR.12 Fix [COMPLETED]
-### Resolve 'body stream already read' error when custom context is added
-The Fix:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Fix `ListingRepository` (client) to read response body only once.
-- [COMPLETED] Investigated backend failure and confirmed client-side error handling was the primary issue.
-
-## PR.4 Fix [COMPLETED]
-### Resolve timeouts and 500 errors when generating multiple images
-The Fix:
-- [COMPLETED] Set primary model to `gemini-2.5-flash-image` and fallback to `imagen-4.0-generate-001`.
-- [COMPLETED] Increased client-side API timeout to 180s in `src/client/lib/utils.ts`.
-- [COMPLETED] Added robust retry logic with exponential backoff (up to 2 retries per image) in `ListingRepository.ts` for 503/429 errors.
-- [COMPLETED] Enabled concurrent image generation (within shot types) while protecting with retries.
-- [COMPLETED] Increased integration test timeout to 300s to accommodate multiple generations.
-- [COMPLETED] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.
 
 ## Task: FR.15 [COMPLETED]
 (See [tasks/completed/task-fr15-context-templates.md](tasks/completed/task-fr15-context-templates.md))

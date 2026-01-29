@@ -6,6 +6,28 @@
 - [COMPLETED] FR.15.3: Update `useProductUpload` hook to fetch and manage templates.
 - [COMPLETED] FR.15.4: Update `ShotTypeItem` UI with template selection and save functionality.
 - [COMPLETED] FR.15.5: Final verification and cleanup.
+
+## PR.12 Fix [COMPLETED]
+### Resolve 'body stream already read' error when custom context is added
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Fix `ListingRepository` (client) to read response body only once.
+- [COMPLETED] Investigated backend failure and confirmed client-side error handling was the primary issue.
+
+## PR.15 Fix [COMPLETED]
+### Resolve 'templates is not defined' error
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Fixed a bug where `templates` was used but not defined in `useProductUpload.ts`.
+- [COMPLETED] Correctly initialized `templates` state and connected it to the `getContextTemplates` command.
+- [COMPLETED] Verified fix with all tests passing.
+
+## PR.15 Fix [COMPLETED]
+### Avoid duplication in custom context when selecting a template
+The Fix:
+- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [COMPLETED] Updated `ShotTypeItem` in `App.tsx` to check if the template text is already present in the custom context before appending.
+- [COMPLETED] Verified fix with all tests passing.
 - [COMPLETED] FR.15.6: Ability to remove a saved custom context template.
     - Acceptance:
         - Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
