@@ -9,9 +9,50 @@ describe('useProductUpload', () => {
 
   it('initializes with default values', () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
-    expect(result.current.productImage).toBeNull();
+    expect(result.current.productImages).toEqual([]);
     expect(result.current.lifestyleShotsCount).toBe(0);
     expect(result.current.templates).toEqual([]);
+  });
+
+  it('allows uploading up to 2 reference images', async () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    const fakeImage1 = 'data:image/png;base64,image1';
+    const fakeImage2 = 'data:image/png;base64,image2';
+    const fakeImage3 = 'data:image/png;base64,image3';
+
+    let currentImage = fakeImage1;
+    const mockReader = {
+      readAsDataURL: jest.fn(function(this: any) {
+        this.onloadend();
+      }),
+      get result() { return currentImage; }
+    };
+    jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+
+    const file1 = new File([''], 'test1.png', { type: 'image/png' });
+    const file2 = new File([''], 'test2.png', { type: 'image/png' });
+    const file3 = new File([''], 'test3.png', { type: 'image/png' });
+
+    await act(async () => {
+      currentImage = fakeImage1;
+      result.current.handleUpload({ target: { files: [file1] } } as any);
+    });
+    expect(result.current.productImages).toEqual([fakeImage1]);
+
+    await act(async () => {
+      currentImage = fakeImage2;
+      result.current.handleUpload({ target: { files: [file2] } } as any);
+    });
+    expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
+
+    await act(async () => {
+      currentImage = fakeImage3;
+      result.current.handleUpload({ target: { files: [file3] } } as any);
+    });
+    // Should still be 2 images
+    expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
+
+    (global.FileReader as jest.Mock).mockRestore();
   });
 
   it('loads templates on initialization', async () => {
@@ -65,28 +106,19 @@ describe('useProductUpload', () => {
     expect(result.current.templates).toEqual([]);
   });
 
-  it('is not ready to generate without product image', () => {
+  it('is not ready to generate without product images', () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
     act(() => {
       result.current.handleLifestyleShotsChange({ target: { value: '1' } } as any);
     });
 
-    expect(result.current.productImage).toBeNull();
+    expect(result.current.productImages).toEqual([]);
     expect(result.current.lifestyleShotsCount).toBe(1);
     expect((result.current as any).isReadyToGenerate).toBe(false);
-
-    // Now upload image (Simulated)
-    act(() => {
-      // We manually trigger handleUpload or directly set the state if we were testing internal state,
-      // but since we want to test behavior, let's see if we can use handleUpload with a mock file.
-      const file = new File([''], 'test.png', { type: 'image/png' });
-      // handleUpload uses FileReader which is async, might be tricky in act() without waitFor.
-      // Alternatively, we can check that it returns true when productImage IS set.
-    });
   });
 
-  it('is ready to generate when product image and shots are present', async () => {
+  it('is ready to generate when product images and shots are present', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
     // Use a small data URL to simulate an image
@@ -108,7 +140,7 @@ describe('useProductUpload', () => {
       result.current.handleUpload({ target: { files: [file] } } as any);
     });
 
-    expect(result.current.productImage).toBe(fakeImage);
+    expect(result.current.productImages[0]).toBe(fakeImage);
     expect(result.current.isReadyToGenerate).toBe(true);
 
     (global.FileReader as jest.Mock).mockRestore();
@@ -131,18 +163,39 @@ describe('useProductUpload', () => {
     expect(result.current.themedEnvironmentShotsCount).toBe(2); // Should remain 2, not 1
   });
 
-  it('unsets product primary image', () => {
+  it('allows removing an individual product image', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
-    
-    act(() => {
-      result.current.handlePrimarySelection();
+    const fakeImage1 = 'data:image/png;base64,image1';
+    const fakeImage2 = 'data:image/png;base64,image2';
+
+    let currentImage = fakeImage1;
+    const mockReader = {
+      readAsDataURL: jest.fn(function(this: any) {
+        this.onloadend();
+      }),
+      get result() { return currentImage; }
+    };
+    jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+
+    const file1 = new File([''], 'test1.png', { type: 'image/png' });
+    const file2 = new File([''], 'test2.png', { type: 'image/png' });
+
+    await act(async () => {
+      currentImage = fakeImage1;
+      result.current.handleUpload({ target: { files: [file1] } } as any);
+      currentImage = fakeImage2;
+      result.current.handleUpload({ target: { files: [file2] } } as any);
     });
-    expect(result.current.isPrimaryImage).toBe(true);
+
+    expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
 
     act(() => {
-      result.current.clearPrimaryImage();
+      result.current.handleRemoveProductImage(0);
     });
-    expect(result.current.isPrimaryImage).toBe(false);
+
+    expect(result.current.productImages).toEqual([fakeImage2]);
+
+    (global.FileReader as jest.Mock).mockRestore();
   });
 
   it('resets shot counts', () => {
@@ -171,16 +224,7 @@ describe('useProductUpload', () => {
     
     const serverImageUrl = '/src/assets/generated-images/product.png';
     
-    // Simulate setting a server-side image URL (e.g. from a previous upload)
-    // We can't easily trigger the reader.onloadend from handleUpload in tests 
-    // without mocking FileReader, which we did in another test.
-    // Let's just mock the state setter or assume it's set.
-    
     await act(async () => {
-      // Direct state setting is not possible from outside, so we use handleUpload mock logic if needed
-      // but here we just want to test if handleRemoveProductImage calls deleteImage
-      
-      // Let's use the same mockReader approach
       const mockReader = {
         readAsDataURL: jest.fn(function(this: any) {
           this.onloadend();
@@ -194,13 +238,13 @@ describe('useProductUpload', () => {
       spy.mockRestore();
     });
 
-    expect(result.current.productImage).toBe(serverImageUrl);
+    expect(result.current.productImages[0]).toBe(serverImageUrl);
 
     await act(async () => {
-      result.current.handleRemoveProductImage();
+      result.current.handleRemoveProductImage(0);
     });
 
-    expect(result.current.productImage).toBeNull();
+    expect(result.current.productImages).toEqual([]);
     expect(mockDeleteImage).toHaveBeenCalledWith(serverImageUrl);
   });
 });

@@ -8,6 +8,11 @@ Acceptance:
 
 ## Feature: FR.1 — Upload a product image [COMPLETED]
 (See [tasks/completed/task-fr1-upload-product-image.md](tasks/completed/task-fr1-upload-product-image.md))
+### FR.1.4 — Multiple Reference Images [COMPLETED]
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] FR.1.4.1 — Ability to upload up to 2 reference context images
+- [x] FR.1.4.2 — Send both images to the AI model
+- [x] FR.1.4.3 — UI updates for dual image support
 
 ## Feature: FR.2 — Specify number of type of images to generate [COMPLETED]
 (See [tasks/completed/task-fr2-image-counts.md](tasks/completed/task-fr2-image-counts.md))
@@ -27,9 +32,13 @@ Acceptance:
 
 ## Feature: UI Refinement - Auto-scroll to Listing Preview [COMPLETED]
 (See [tasks/completed/task-fr16-auto-scroll.md](tasks/completed/task-fr16-auto-scroll.md))
+### FR.16.4 — Scroll to top on generation request [COMPLETED]
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Implement scroll to top logic in `App.tsx` button handler.
 
 ## Feature: FR.4 — Show a final preview of the listing images [COMPLETED]
 (See [tasks/completed/task-fr4-listing-preview.md](tasks/completed/task-fr4-listing-preview.md))
+### FR.4.7 — Relocate AI model status message to top left of Listing Preview [COMPLETED]
 
 ## PR.0 Fix [COMPLETED]
 (See [tasks/completed/task-pr0-meta-fixes.md](tasks/completed/task-pr0-meta-fixes.md))

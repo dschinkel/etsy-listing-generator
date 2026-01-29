@@ -48,7 +48,7 @@ export const createGeminiImageGenerator = () => {
     return prompt;
   };
 
-  const generateImage = async (params: { type: string; productImage?: string; background?: string; count?: number; model?: string; customContext?: string }): Promise<{ imageUrl: string; systemInstruction: string }> => {
+  const generateImage = async (params: { type: string; productImages?: string[]; background?: string; count?: number; model?: string; customContext?: string }): Promise<{ imageUrl: string; systemInstruction: string }> => {
     const count = params.count || 1;
     const countText = count === 1 ? '1 image' : `${count} images`;
     const systemInstruction = getSystemPrompt({ type: params.type, count, customContext: params.customContext });
@@ -75,8 +75,10 @@ export const createGeminiImageGenerator = () => {
       toonPrompt
     ];
 
-    if (params.productImage) {
-      parts.push(toGenerativePart(params.productImage));
+    if (params.productImages && params.productImages.length > 0) {
+      params.productImages.forEach(img => {
+        parts.push(toGenerativePart(img));
+      });
     }
 
     if (params.background) {

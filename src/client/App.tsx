@@ -26,7 +26,7 @@ import { ThemeProvider } from './components/theme-provider';
 const App = () => {
   const repository = React.useMemo(() => createListingRepository(), []);
   const { 
-    productImage, 
+    productImages, 
     handleUpload, 
     handleRemoveProductImage,
     lifestyleShotsCount, 
@@ -163,7 +163,7 @@ const App = () => {
   };
 
   const handleRegenerateImage = (index: number, customContext: string) => {
-    regenerateImage(index, customContext, productImage);
+    regenerateImage(index, customContext, productImages[0]);
   };
 
   return (
@@ -174,13 +174,18 @@ const App = () => {
           <div className="flex gap-4 items-start h-[calc(100vh-12rem)] max-w-full mx-auto px-4">
             {/* Left Pane */}
             <div className="flex flex-col items-center gap-8 w-1/5 h-full overflow-y-auto pr-2">
-              <UploadImage onUpload={handleUpload} />
-              <UploadedImage 
-                src={productImage} 
-                isPrimary={isPrimaryImage}
-                onSelectPrimary={handleSelectProductPrimary}
-                onRemove={handleRemoveProductImage}
-              />
+              <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
+              <div className="flex flex-col gap-4 w-full">
+                {productImages.map((src, index) => (
+                  <UploadedImage 
+                    key={index}
+                    src={src} 
+                    isPrimary={isPrimaryImage && index === 0}
+                    onSelectPrimary={index === 0 ? handleSelectProductPrimary : undefined}
+                    onRemove={() => handleRemoveProductImage(index)}
+                  />
+                ))}
+              </div>
               {/* System Prompt (moved here) */}
               <SystemPromptPane 
                 prompt={systemPrompt} 
@@ -241,12 +246,12 @@ const App = () => {
                 </div>
 
                 <div className="flex flex-col items-center gap-4 w-full">
-                  {!productImage && (
+                  {productImages.length === 0 && (
                     <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
                       Upload a product image to start
                     </div>
                   )}
-                  {productImage && totalShots < 1 && (
+                  {productImages.length > 0 && totalShots < 1 && (
                     <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
                       Specify a Shots Selection
                     </div>
@@ -256,6 +261,7 @@ const App = () => {
                     className="w-full max-w-xs"
                     disabled={isGenerating || !isReadyToGenerate}
                     onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
                       generateListing({ 
                         lifestyleCount: lifestyleShotsCount,
                         heroCount: heroShotsCount,
@@ -264,7 +270,7 @@ const App = () => {
                         macroCount: macroShotsCount,
                         contextualCount: contextualShotsCount,
                         themedEnvironmentCount: themedEnvironmentShotsCount,
-                        productImage: productImage,
+                        productImages: productImages,
                         lifestyleBackground: lifestyleBackground,
                         heroBackground: heroBackground,
                         closeUpsBackground: closeUpsBackground,
@@ -285,10 +291,6 @@ const App = () => {
                   >
                     {isGenerating ? 'Generating Listing Images...' : 'Generate Listing Images'}
                   </Button>
-
-                  {isGenerating && regeneratingIndex === null && modelUsed && (
-                    <ModelStatus model={modelUsed} />
-                  )}
 
                   {error && (
                     <div 
@@ -326,14 +328,14 @@ const App = () => {
   );
 };
 
-const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void }) => {
+const UploadImage = ({ onUpload, disabled }: { onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void, disabled?: boolean }) => {
   return (
-    <Card className="w-full border-dashed">
+    <Card className={`w-full border-dashed ${disabled ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
       <CardContent className="pt-6">
         <div className="flex flex-col items-center justify-center gap-4">
           <Label htmlFor="product-image-upload" className="cursor-pointer text-center">
             <div className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary transition-colors">
-              Click to upload product image
+              {disabled ? 'Max 2 images uploaded' : 'Click to upload product image'}
             </div>
           </Label>
           <Input
@@ -343,6 +345,7 @@ const UploadImage = ({ onUpload }: { onUpload: (event: React.ChangeEvent<HTMLInp
             onChange={onUpload}
             data-testid="product-image-upload"
             className="hidden"
+            disabled={disabled}
           />
         </div>
       </CardContent>
@@ -811,7 +814,7 @@ const UploadedImage = ({
 }: { 
   src: string | null, 
   isPrimary: boolean, 
-  onSelectPrimary: () => void,
+  onSelectPrimary?: () => void,
   onRemove: () => void
 }) => {
   if (!src) return null;
@@ -836,17 +839,19 @@ const UploadedImage = ({
             Remove
           </Button>
         </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="primary-image"
-            checked={isPrimary}
-            onCheckedChange={onSelectPrimary}
-            data-testid="set-primary-image"
-          />
-          <Label htmlFor="primary-image" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Set as Primary Etsy Image
-          </Label>
-        </div>
+        {onSelectPrimary && (
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="primary-image"
+              checked={isPrimary}
+              onCheckedChange={onSelectPrimary}
+              data-testid="set-primary-image"
+            />
+            <Label htmlFor="primary-image" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Set as Primary Etsy Image
+            </Label>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

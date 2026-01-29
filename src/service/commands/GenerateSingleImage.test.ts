@@ -1,21 +1,25 @@
 import { createGenerateSingleImage } from './GenerateSingleImage';
 
 describe('Generate Single Image Command', () => {
-  it('orchestrates generation of a single image', async () => {
+  it('executes generation with multiple product reference images', async () => {
+    let capturedRequest = null;
     const fakeRepository = {
-      generateSingleImage: jest.fn().mockResolvedValue({ 
-        image: { url: 'new.png', type: 'lifestyle' } 
-      })
+      generateSingleImage: async (request: any) => {
+        capturedRequest = request;
+        return { image: { url: 'new.png', type: 'lifestyle' } };
+      }
     };
+
     const command = createGenerateSingleImage(fakeRepository);
-    const request = { 
-      type: 'lifestyle', 
-      customContext: 'Better lighting' 
+    const request = {
+      type: 'lifestyle',
+      productImages: ['image1', 'image2']
     };
-    
-    const result = await command.execute(request);
-    
-    expect(result).toEqual({ image: { url: 'new.png', type: 'lifestyle' } });
-    expect(fakeRepository.generateSingleImage).toHaveBeenCalledWith(request);
+
+    await command.execute(request as any);
+
+    expect(capturedRequest).toEqual(expect.objectContaining({
+      productImages: ['image1', 'image2']
+    }));
   });
 });

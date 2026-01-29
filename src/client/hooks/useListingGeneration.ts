@@ -37,7 +37,7 @@ export const useListingGeneration = (listingRepository: any) => {
     macroCount?: number,
     contextualCount?: number,
     themedEnvironmentCount?: number,
-    productImage?: string | null,
+    productImages?: string[],
     lifestyleBackground?: string | null,
     heroBackground?: string | null,
     closeUpsBackground?: string | null,
@@ -186,7 +186,7 @@ export const useListingGeneration = (listingRepository: any) => {
     }
   };
 
-  const regenerateImage = async (index: number, customContext: string, productImage?: string | null) => {
+  const regenerateImage = async (index: number, customContext: string, productImages?: string[]) => {
     const imageToReplace = images[index];
     if (!imageToReplace) return;
 
@@ -199,7 +199,7 @@ export const useListingGeneration = (listingRepository: any) => {
       const response = await listingRepository.generateSingleImage({
         type: imageToReplace.type,
         customContext,
-        productImage,
+        productImages,
         model: 'gemini-2.5-flash-image'
       });
 

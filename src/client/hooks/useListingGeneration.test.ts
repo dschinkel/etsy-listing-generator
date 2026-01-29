@@ -25,7 +25,7 @@ describe('Listing Generation', () => {
       { url: 'lifestyle_3.png', type: 'lifestyle' }
     ]);
   });
-  it('sends product image as context', async () => {
+  it('sends product images as context', async () => {
     let capturedParams = null;
     const fakeListingRepository = {
       generateImages: async (params: any) => {
@@ -35,18 +35,18 @@ describe('Listing Generation', () => {
     };
     
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
-    const base64Image = 'data:image/png;base64,encoded_data';
+    const base64Images = ['data:image/png;base64,image1', 'data:image/png;base64,image2'];
     
     await act(async () => {
       await result.current.generateListing({ 
         lifestyleCount: 1,
-        productImage: base64Image 
+        productImages: base64Images 
       });
     });
     
     expect(capturedParams).toEqual({ 
       lifestyleCount: 1, 
-      productImage: base64Image,
+      productImages: base64Images,
       model: 'gemini-2.5-flash-image',
       noFallback: true
     });
@@ -459,12 +459,13 @@ describe('Listing Generation', () => {
     expect(result.current.images[0].url).toBe('old_image.png');
 
     await act(async () => {
-      await result.current.regenerateImage(0, 'Better lighting');
+      await result.current.regenerateImage(0, 'Better lighting', ['prod1', 'prod2']);
     });
 
     expect(fakeListingRepository.generateSingleImage).toHaveBeenCalledWith(expect.objectContaining({
       type: 'lifestyle',
-      customContext: 'Better lighting'
+      customContext: 'Better lighting',
+      productImages: ['prod1', 'prod2']
     }));
     expect(result.current.images[0].url).toBe('new_image.png');
     expect(fakeListingRepository.deleteImage).toHaveBeenCalledWith('old_image.png');

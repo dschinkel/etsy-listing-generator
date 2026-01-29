@@ -9,7 +9,7 @@ export const createListingRepository = (dataLayer: any) => {
     macroCount?: number,
     contextualCount?: number,
     themedEnvironmentCount?: number,
-    productImage?: string,
+    productImages?: string[],
     lifestyleBackground?: string,
     heroBackground?: string,
     closeUpsBackground?: string,
@@ -110,7 +110,7 @@ export const createListingRepository = (dataLayer: any) => {
     macroCount?: number,
     contextualCount?: number,
     themedEnvironmentCount?: number,
-    productImage?: string,
+    productImages?: string[],
     lifestyleBackground?: string,
     heroBackground?: string,
     closeUpsBackground?: string,
@@ -136,7 +136,7 @@ export const createListingRepository = (dataLayer: any) => {
       contextual: params.contextualCount,
       themedEnvironment: params.themedEnvironmentCount,
       model: params.model,
-      hasProductImage: !!params.productImage
+      hasProductImage: !!(params.productImages && params.productImages.length > 0)
     });
     const images: { url: string; type: string }[] = [];
     const preview = getPromptPreview(params);
@@ -160,13 +160,13 @@ export const createListingRepository = (dataLayer: any) => {
       }
     };
 
-    await generateShotTypeImages('lifestyle', params.lifestyleCount, params.productImage, params.lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext);
-    await generateShotTypeImages('hero', params.heroCount, params.productImage, params.heroBackground, images, collectPrompt, params.model, params.heroCustomContext);
-    await generateShotTypeImages('close-up', params.closeUpsCount, params.productImage, params.closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext);
-    await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImage, params.flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
-    await generateShotTypeImages('macro', params.macroCount, params.productImage, params.macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
-    await generateShotTypeImages('contextual', params.contextualCount, params.productImage, params.contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
-    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, params.productImage, params.themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext);
+    await generateShotTypeImages('lifestyle', params.lifestyleCount, params.productImages, params.lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext);
+    await generateShotTypeImages('hero', params.heroCount, params.productImages, params.heroBackground, images, collectPrompt, params.model, params.heroCustomContext);
+    await generateShotTypeImages('close-up', params.closeUpsCount, params.productImages, params.closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext);
+    await generateShotTypeImages('flat-lay', params.flatLayCount, params.productImages, params.flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
+    await generateShotTypeImages('macro', params.macroCount, params.productImages, params.macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
+    await generateShotTypeImages('contextual', params.contextualCount, params.productImages, params.contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
+    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, params.productImages, params.themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext);
 
     return { images, systemPrompt, model: params.model };
   };
@@ -174,7 +174,7 @@ export const createListingRepository = (dataLayer: any) => {
   const generateShotTypeImages = async (
     type: string, 
     count: number = 0, 
-    productImage?: string, 
+    productImages?: string[], 
     background?: string, 
     images: { url: string; type: string }[] = [], 
     onResult?: (res: any) => void,
@@ -190,7 +190,7 @@ export const createListingRepository = (dataLayer: any) => {
         try {
           const result = await dataLayer.generateImage({ 
             type,
-            productImage,
+            productImages,
             background,
             count: 1,
             model,
@@ -278,7 +278,7 @@ export const createListingRepository = (dataLayer: any) => {
   const generateSingleImage = async (params: {
     type: string,
     customContext?: string,
-    productImage?: string,
+    productImages?: string[],
     background?: string,
     model?: string
   }) => {
@@ -287,7 +287,7 @@ export const createListingRepository = (dataLayer: any) => {
     await generateShotTypeImages(
       params.type, 
       1, 
-      params.productImage, 
+      params.productImages, 
       params.background, 
       [], // We don't need the images array here, we'll capture it via onResult
       (res) => {

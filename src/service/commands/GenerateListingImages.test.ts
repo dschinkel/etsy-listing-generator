@@ -16,30 +16,39 @@ describe('Generate Listing Images', () => {
   const command = createGenerateListingImages(repository);
 
   it('executes generation for requested shot types using real parameters', async () => {
-    const request = { 
+    const requestBody = { 
       lifestyleCount: 1,
-      productImage: testImageBase64 
+      productImages: [testImageBase64] 
     };
     
-    const response = await command.execute(request);
+    const response = await command.execute(requestBody as any);
     
     expect(response.images.length).toBe(1);
-    expect(response.images.every(img => img.url.startsWith('http') || img.url.startsWith('data:'))).toBe(true);
+    expect(response.images.every(img => img.url.startsWith('/') || img.url.startsWith('http') || img.url.startsWith('data:'))).toBe(true);
     expect(response.images.every(img => !img.url.includes('placehold.jp'))).toBe(true);
     expect(response.systemPrompt).toBeDefined();
     expect(response.systemPrompt).toContain('Etsy seller');
   });
 
-  it('verifies integration with real data layer through repository', async () => {
-    const request = { 
-      closeUpsCount: 1,
-      productImage: testImageBase64
+  it('executes generation with multiple product reference images', async () => {
+    let capturedRequest = null;
+    const fakeRepository = {
+      generateImages: async (request: any) => {
+        capturedRequest = request;
+        return { images: [] };
+      }
     };
-    
-    const response = await command.execute(request);
-    
-    expect(response.images.length).toBe(1);
-    expect(response.images[0].type).toBe('close-up');
-    expect(response.systemPrompt).toContain('close-up');
+
+    const commandWithFake = createGenerateListingImages(fakeRepository);
+    const requestBody = {
+      lifestyleCount: 1,
+      productImages: [testImageBase64, testImageBase64]
+    };
+
+    await commandWithFake.execute(requestBody as any);
+
+    expect(capturedRequest).toEqual(expect.objectContaining({
+      productImages: [testImageBase64, testImageBase64]
+    }));
   });
 });

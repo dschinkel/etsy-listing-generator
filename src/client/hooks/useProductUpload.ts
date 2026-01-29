@@ -6,7 +6,7 @@ export interface ContextTemplate {
 }
 
 export const useProductUpload = (repository?: any) => {
-  const [productImage, setProductImage] = useState<string | null>(null);
+  const [productImages, setProductImages] = useState<string[]>([]);
   const [lifestyleShotsCount, setLifestyleShotsCount] = useState(0);
   const [heroShotsCount, setHeroShotsCount] = useState(0);
   const [closeUpsCount, setCloseUpsCount] = useState(0);
@@ -32,7 +32,7 @@ export const useProductUpload = (repository?: any) => {
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
 
   const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
-  const isReadyToGenerate = totalShots > 0 && productImage !== null;
+  const isReadyToGenerate = totalShots > 0 && productImages.length > 0;
 
   useEffect(() => {
     if (repository) {
@@ -70,10 +70,10 @@ export const useProductUpload = (repository?: any) => {
 
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
+    if (file && productImages.length < 2) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProductImage(reader.result as string);
+        setProductImages(prev => [...prev, reader.result as string]);
       };
       reader.readAsDataURL(file);
     }
@@ -251,13 +251,14 @@ export const useProductUpload = (repository?: any) => {
     setIsPrimaryImage(!isPrimaryImage);
   };
 
-  const handleRemoveProductImage = () => {
-    if (productImage && productImage.startsWith('/src/assets/generated-images/')) {
-      repository?.deleteImage(productImage).catch((err: any) => {
+  const handleRemoveProductImage = (index: number) => {
+    const imageToRemove = productImages[index];
+    if (imageToRemove && imageToRemove.startsWith('/src/assets/generated-images/')) {
+      repository?.deleteImage(imageToRemove).catch((err: any) => {
         console.error('Failed to delete product image from server:', err);
       });
     }
-    setProductImage(null);
+    setProductImages(prev => prev.filter((_, i) => i !== index));
     setIsPrimaryImage(false);
   };
 
@@ -276,7 +277,7 @@ export const useProductUpload = (repository?: any) => {
   };
 
   return {
-    productImage, 
+    productImages, 
     handleUpload, 
     handleRemoveProductImage,
     lifestyleShotsCount, 

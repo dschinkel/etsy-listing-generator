@@ -9,7 +9,7 @@ export const createListingRepository = () => {
     macroCount?: number,
     contextualCount?: number,
     themedEnvironmentCount?: number,
-    productImage?: string | null,
+    productImages?: string[],
     lifestyleBackground?: string | null,
     heroBackground?: string | null,
     closeUpsBackground?: string | null,
@@ -42,7 +42,7 @@ export const createListingRepository = () => {
   const generateSingleImage = async (params: {
     type: string,
     customContext?: string,
-    productImage?: string | null,
+    productImages?: string[],
     background?: string | null,
     model?: string
   }) => {

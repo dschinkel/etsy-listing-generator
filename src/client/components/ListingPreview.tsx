@@ -52,7 +52,12 @@ const ListingPreview = ({
     <>
       <Card className="w-full h-full flex flex-col">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 flex-none">
-          <CardTitle>Listing Preview</CardTitle>
+          <div className="flex items-center gap-4">
+            <CardTitle>Listing Preview</CardTitle>
+            {isGenerating && regeneratingIndex === null && modelUsed && (
+              <ModelStatus model={modelUsed} />
+            )}
+          </div>
           {hasImages && (
             <div className="flex items-center gap-2">
               <Button 

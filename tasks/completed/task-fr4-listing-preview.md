@@ -133,3 +133,10 @@ Acceptance:
 - [x] Enabled concurrent image generation (within shot types) while protecting with retries.
 - [x] Increased integration test timeout to 300s to accommodate multiple generations.
 - [x] Verified fix with `FourLifestyleShots.test.ts` passing successfully in 17.8s with real API calls.
+
+### FR.4.7 — Relocate AI model status message to top left of Listing Preview [COMPLETED]
+Acceptance:
+- [x] AI model status message ("Calling model: ...") is moved from middle pane to top left of Listing Preview pane.
+- [x] Message is only shown during main generation (not during individual image regeneration, which has its own status).
+- [x] Alignment is correct within the Listing Preview card header.
+- [x] Verified by manual layout check.

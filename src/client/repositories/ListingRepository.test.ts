@@ -79,7 +79,27 @@ describe('Listing Repository (Client)', () => {
     }));
   });
 
-  it('requests single image regeneration', async () => {
+  it('requests images with multiple product reference images', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ images: [] }),
+    });
+
+    const repository = createListingRepository();
+    const params = {
+      lifestyleCount: 1,
+      productImages: ['data:image/png;base64,image1', 'data:image/png;base64,image2']
+    };
+
+    await repository.generateImages(params);
+
+    expect(global.fetch).toHaveBeenCalledWith('/listings/generate', expect.objectContaining({
+      method: 'POST',
+      body: JSON.stringify(params)
+    }));
+  });
+
+  it('requests single image regeneration with multiple product images', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ image: { url: 'new.png', type: 'lifestyle' } }),
@@ -89,7 +109,7 @@ describe('Listing Repository (Client)', () => {
     const params = {
       type: 'lifestyle',
       customContext: 'Better lighting',
-      productImage: 'data:image/png;base64,prod'
+      productImages: ['data:image/png;base64,prod1', 'data:image/png;base64,prod2']
     };
 
     const result = await repository.generateSingleImage(params);

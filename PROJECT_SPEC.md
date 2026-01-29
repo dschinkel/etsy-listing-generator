@@ -51,6 +51,11 @@ A user can:
 
 **FR.1.3 - Ensure that generation is disabled if no product image is loaded.**
 
+**FR.1.4 — Multiple Reference Images**
+    - **FR.1.4.1 — Ability to upload up to 2 reference context images (product images).**
+    - **FR.1.4.2 — Both reference images are sent to the AI model as context for generating listing images.**
+    - **FR.1.4.3 — UI allows individual removal and primary selection (if applicable, though primary is usually one).**
+
 **FR.2 — Specify number of type of images to generate**
     **FR.2.1 — Ability to specify how many images generated should be lifestyle shots**
     **FR.2.2 — Ability to specify how many images generated should be hero shots**
@@ -79,6 +84,7 @@ A user can:
     **FR.4.4 — Ability to click a Listing Preview Thumb and see the full res image in a modal**
     **FR.4.5 — Ability to see which shot type generated each image (displayed below thumbnails)**
     **FR.4.6 — Ability to see which AI model was used for the current generation**
+    **FR.4.7 — AI model status message is displayed at the top left of the Listing Preview section during generation.**
 **FR.5 — Redesign certain images that I don't like**
     - **FR.5.1 — Ability to add specific custom context to an existing generated image via a "+" button.**
     - **FR.5.2 — Ability to regenerate a single image using its specific custom context via a "Regenerate" button.**
@@ -147,6 +153,7 @@ A user can:
     - **FR.16.1 — Auto-scroll to Listing Preview after generation**
     - **FR.16.2 — Reduce gaps and whitespace in Shots Selection and Listing Preview**
     - **FR.16.3 — Center-align generation controls with Shots Selection**
+    - **FR.16.4 — Scroll to the top of the page immediately when "Generate Listing Images" is clicked.**
 
 **FR.19 — Three-Pane Layout**
     - **FR.19.1 — Move Listing Preview to a third pane on the right of the Shots Selection section.**

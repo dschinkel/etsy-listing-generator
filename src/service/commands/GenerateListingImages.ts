@@ -7,7 +7,7 @@ export const createGenerateListingImages = (listingRepository: any) => {
     macroCount?: number,
     contextualCount?: number,
     themedEnvironmentCount?: number,
-    productImage?: string,
+    productImages?: string[],
     lifestyleBackground?: string,
     heroBackground?: string,
     closeUpsBackground?: string,

@@ -2,7 +2,7 @@ export const createGenerateSingleImage = (listingRepository: any) => {
   const execute = async (request: {
     type: string,
     customContext?: string,
-    productImage?: string,
+    productImages?: string[],
     background?: string,
     model?: string
   }) => {

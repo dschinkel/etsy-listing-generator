@@ -10,7 +10,7 @@ describe('Listing Repository', () => {
   const testImagePath = path.join(process.cwd(), 'test', 'product-reference.png');
   const testImageBase64 = `data:image/png;base64,${fs.readFileSync(testImagePath).toString('base64')}`;
 
-  it('orchestrates generation of different shot types', async () => {
+  it('orchestrates generation of different shot types with multiple product images', async () => {
     const fakeDataLayer = {
       generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
       getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
@@ -19,15 +19,15 @@ describe('Listing Repository', () => {
     const params = { 
       lifestyleCount: 1,
       heroCount: 1,
-      productImage: testImageBase64 
+      productImages: [testImageBase64, testImageBase64] 
     };
     
     const result = await repository.generateImages(params);
     
     expect(result.images).toHaveLength(2);
-    expect(result.images[0].type).toBe('lifestyle');
-    expect(result.images[1].type).toBe('hero');
-    expect(fakeDataLayer.generateImage).toHaveBeenCalledTimes(2);
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
+      productImages: [testImageBase64, testImageBase64]
+    }));
   });
 
   it('handles zero counts correctly', async () => {

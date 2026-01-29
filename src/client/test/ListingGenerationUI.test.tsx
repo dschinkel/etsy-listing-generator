@@ -32,7 +32,7 @@ describe('Listing Generation UI', () => {
     });
 
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: null,
+      productImages: [],
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 0,
@@ -81,7 +81,7 @@ describe('Listing Generation UI', () => {
       handleThemedEnvironmentCustomContextChange: jest.fn(),
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
+      removeContextTemplate: jest.fn(),
       clearPrimaryImage: jest.fn(),
       totalShots: 0,
       isReadyToGenerate: false
@@ -106,7 +106,7 @@ describe('Listing Generation UI', () => {
     });
 
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: 'some-image',
+      productImages: ['some-image'],
       lifestyleShotsCount: 1,
       totalShots: 1,
       isReadyToGenerate: true,
@@ -155,7 +155,9 @@ describe('Listing Generation UI', () => {
     });
 
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: 'some-image',
+      productImages: ['some-image'],
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 1,
       totalShots: 1,
       isReadyToGenerate: true,
@@ -194,7 +196,9 @@ describe('Listing Generation UI', () => {
     });
 
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: 'some-image',
+      productImages: ['some-image'],
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 0,
       totalShots: 0,
       isReadyToGenerate: false,
@@ -217,7 +221,7 @@ describe('Listing Generation UI', () => {
 
   it('is enabled when at least one shot is selected and product image is uploaded', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: 'some-image',
+      productImages: ['some-image'],
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 1, // At least one shot
@@ -272,7 +276,7 @@ describe('Listing Generation UI', () => {
 
   it('displays "Upload a product image to start" when no product image is uploaded', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: null,
+      productImages: [],
       lifestyleShotsCount: 1,
       totalShots: 1,
       isReadyToGenerate: false,
@@ -284,7 +288,8 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
+      removeContextTemplate: jest.fn(),
+      clearPrimaryImage: jest.fn(),
     });
     render(<App />);
     const message = screen.getByText('Upload a product image to start');
@@ -297,7 +302,7 @@ describe('Listing Generation UI', () => {
 
   it('displays "Specify a Shots Selection" in green when product image is uploaded but no shots selected', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: 'some-image',
+      productImages: ['some-image'],
       lifestyleShotsCount: 0, // No shots
       totalShots: 0,
       isReadyToGenerate: false,
@@ -309,7 +314,8 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
+      removeContextTemplate: jest.fn(),
+      clearPrimaryImage: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
@@ -355,7 +361,7 @@ describe('Listing Generation UI', () => {
 
   it('hides "Specify a Shots Selection" when both product image and at least one shot are present', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
-      productImage: 'some-image',
+      productImages: ['some-image'],
       lifestyleShotsCount: 1, // At least one shot
       totalShots: 1,
       isReadyToGenerate: true,
@@ -367,7 +373,8 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
+      removeContextTemplate: jest.fn(),
+      clearPrimaryImage: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
