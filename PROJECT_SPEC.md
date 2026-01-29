@@ -153,7 +153,7 @@ A user can:
     - **FR.19.2 — Ensure the Listing Preview section fills the page vertically.**
     - **FR.19.3 — Implement internal scrolling for the Listing Preview pane so the main page remains fixed.**
     - **FR.19.4 — Adjust layout to bring the Listing Preview closer to the Shots Selection and increase its width.**
-    - **FR.19.5 — Further widen the Listing Preview by reducing Left and Middle pane widths to 15% and 20% respectively.**
+    - **FR.19.5 — Expand Listing Preview width to the full right edge of the viewport.**
 
 **FR.20 — Archive Listing Images**
     - **FR.20.1 — Ability to archive (save) the current list of listing images to `./src/assets/archived-images`.**

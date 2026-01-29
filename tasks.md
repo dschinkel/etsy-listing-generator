@@ -85,8 +85,7 @@ Acceptance:
 
 ## Feature: FR.19 — Three-Pane Layout [COMPLETED]
 (See [tasks/completed/task-fr19-three-pane-layout.md](tasks/completed/task-fr19-three-pane-layout.md))
-### FR.19.4 — Adjust layout to bring the Listing Preview closer to the Shots Selection and increase its width [COMPLETED]
-### FR.19.5 — Further widen the Listing Preview by reducing Left and Middle pane widths [COMPLETED]
+### FR.19.5 — Expand Listing Preview width to the full right edge of the viewport [COMPLETED]
 
 ## Feature: FR.20 — Archive Listing Images [COMPLETED]
 (See [tasks/completed/task-fr20-archive-images.md](tasks/completed/task-fr20-archive-images.md))

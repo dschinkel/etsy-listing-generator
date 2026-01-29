@@ -171,9 +171,9 @@ const App = () => {
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
         <main className="flex-1 p-8 overflow-hidden">
-          <div className="flex gap-4 items-start h-[calc(100vh-12rem)] max-w-[1800px] mx-auto">
+          <div className="flex gap-4 items-start h-[calc(100vh-12rem)] max-w-full mx-auto px-4">
             {/* Left Pane */}
-            <div className="flex flex-col items-center gap-8 w-[15%] h-full overflow-y-auto pr-2">
+            <div className="flex flex-col items-center gap-8 w-1/5 h-full overflow-y-auto pr-2">
               <UploadImage onUpload={handleUpload} />
               <UploadedImage 
                 src={productImage} 
@@ -188,7 +188,7 @@ const App = () => {
             </div>
 
             {/* Middle Pane */}
-            <div className="flex flex-col gap-8 w-[20%] h-full overflow-y-auto items-start pr-2">
+            <div className="flex flex-col gap-8 w-1/4 h-full overflow-y-auto items-start pr-2">
               <div className="flex flex-col items-center gap-4 w-full">
                 <div className="flex-initial">
                   <ShotsSelection 
