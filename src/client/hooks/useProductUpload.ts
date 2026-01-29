@@ -256,11 +256,15 @@ export const useProductUpload = (repository?: any) => {
     setIsPrimaryImage(false);
   };
 
+  const clearPrimaryImage = () => {
+    setIsPrimaryImage(false);
+  };
+
   return {
-    productImage,
-    handleUpload,
+    productImage, 
+    handleUpload, 
     handleRemoveProductImage,
-    lifestyleShotsCount,
+    lifestyleShotsCount, 
     handleLifestyleShotsChange,
     heroShotsCount,
     handleHeroShotsChange,
@@ -276,6 +280,7 @@ export const useProductUpload = (repository?: any) => {
     handleThemedEnvironmentShotsChange,
     isPrimaryImage,
     handlePrimarySelection,
+    clearPrimaryImage,
     lifestyleBackground,
     handleLifestyleBackgroundUpload,
     heroBackground,

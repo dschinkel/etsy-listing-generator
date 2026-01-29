@@ -119,10 +119,29 @@ describe('useProductUpload', () => {
     
     act(() => {
       result.current.handleThemedEnvironmentShotsChange({ target: { value: '2' } } as any);
-      result.current.handleThemedEnvironmentCustomContextChange('Realistic thematic setting');
     });
 
     expect(result.current.themedEnvironmentShotsCount).toBe(2);
+
+    act(() => {
+      result.current.handleThemedEnvironmentCustomContextChange('Realistic thematic setting');
+    });
+
     expect(result.current.themedEnvironmentCustomContext).toBe('Realistic thematic setting');
+    expect(result.current.themedEnvironmentShotsCount).toBe(2); // Should remain 2, not 1
+  });
+
+  it('unsets product primary image', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    act(() => {
+      result.current.handlePrimarySelection();
+    });
+    expect(result.current.isPrimaryImage).toBe(true);
+
+    act(() => {
+      result.current.clearPrimaryImage();
+    });
+    expect(result.current.isPrimaryImage).toBe(false);
   });
 });

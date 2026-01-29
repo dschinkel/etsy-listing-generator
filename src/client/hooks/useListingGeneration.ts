@@ -165,6 +165,13 @@ export const useListingGeneration = (listingRepository: any) => {
     })));
   };
 
+  const clearPrimaryImage = () => {
+    setImages(prev => prev.map(img => ({
+      ...img,
+      isPrimary: false
+    })));
+  };
+
   return {
     images,
     systemPrompt,
@@ -175,6 +182,7 @@ export const useListingGeneration = (listingRepository: any) => {
     removeImage, 
     clearImages,
     setPrimaryImage,
+    clearPrimaryImage,
     downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview: useCallback(async (params: any) => {

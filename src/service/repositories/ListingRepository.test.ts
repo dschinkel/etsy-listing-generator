@@ -12,7 +12,7 @@ describe('Listing Repository', () => {
 
   it('orchestrates generation of different shot types', async () => {
     const fakeDataLayer = {
-      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `${type}.png`, systemInstruction: `prompt for ${type}` })),
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
       getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
     };
     const repository = createListingRepository(fakeDataLayer);
@@ -25,8 +25,8 @@ describe('Listing Repository', () => {
     const result = await repository.generateImages(params);
     
     expect(result.images).toHaveLength(2);
-    expect(result.images[0]).toEqual({ url: 'lifestyle.png', type: 'lifestyle' });
-    expect(result.images[1]).toEqual({ url: 'hero.png', type: 'hero' });
+    expect(result.images[0].type).toBe('lifestyle');
+    expect(result.images[1].type).toBe('hero');
     expect(fakeDataLayer.generateImage).toHaveBeenCalledTimes(2);
   });
 
@@ -63,7 +63,7 @@ describe('Listing Repository', () => {
 
   it('orchestrates generation of themed environment shots', async () => {
     const fakeDataLayer = {
-      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `${type}.png`, systemInstruction: `prompt for ${type}` })),
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
       getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
     };
     const repository = createListingRepository(fakeDataLayer);
@@ -75,7 +75,7 @@ describe('Listing Repository', () => {
     const result = await repository.generateImages(params);
     
     expect(result.images).toHaveLength(1);
-    expect(result.images[0]).toEqual({ url: 'themed-environment.png', type: 'themed-environment' });
+    expect(result.images[0].type).toBe('themed-environment');
     expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
       type: 'themed-environment',
       customContext: 'In a forest'

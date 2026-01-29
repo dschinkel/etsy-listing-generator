@@ -23,7 +23,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
-      setPrimaryImage: jest.fn(),
+      setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -79,7 +79,8 @@ describe('Listing Generation UI', () => {
       handleThemedEnvironmentCustomContextChange: jest.fn(),
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
+      clearPrimaryImage: jest.fn(),
       totalShots: 0,
       isReadyToGenerate: false
     });
@@ -94,7 +95,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
-      setPrimaryImage: jest.fn(),
+      setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()
@@ -116,7 +117,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
     });
 
     render(<App />);
@@ -159,7 +160,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
     });
 
     render(<App />);
@@ -198,7 +199,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
     });
 
     render(<App />);
@@ -276,7 +277,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
     });
     render(<App />);
     const message = screen.getByText('Upload a product image to start');
@@ -301,7 +302,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
@@ -359,7 +360,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentShotsCount: 0,
       templates: [],
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
@@ -458,7 +459,7 @@ describe('Listing Generation UI', () => {
       themedEnvironmentCustomContext: '',
       handleThemedEnvironmentCustomContextChange: jest.fn(),
       saveContextTemplate: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
@@ -596,7 +597,7 @@ describe('Listing Generation UI', () => {
       handleContextualCustomContextChange: jest.fn(),
       themedEnvironmentCustomContext: '',
       handleThemedEnvironmentCustomContextChange: jest.fn(),
-      removeContextTemplate: jest.fn(),
+      removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
@@ -667,7 +668,7 @@ describe('Listing Generation UI', () => {
       isGenerating: false,
       generateListing: jest.fn(),
       removeImage: jest.fn(), clearImages: jest.fn(), deleteImage: jest.fn(),
-      setPrimaryImage: jest.fn(),
+      setPrimaryImage: jest.fn(), clearPrimaryImage: jest.fn(),
       downloadImage: jest.fn(),
       downloadAllImagesAsZip: jest.fn(),
       fetchSystemPromptPreview: jest.fn()

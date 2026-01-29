@@ -74,15 +74,7 @@ Acceptance:
 ### FR.11.1 — Technical Notes [NOT STARTED]
 
 ## Feature: FR.12 — Custom Context for Shot Types [COMPLETED]
-Acceptance:
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
-- [COMPLETED] Ability to add specific instructions for each shot type via a "+" icon.
-- [COMPLETED] Instructions are appended to the system prompt.
-- [COMPLETED] Custom context textbox should be multiline, longer horizontally by default and draggable horizontally.
-- [COMPLETED] FR.12.3: Ensure count is at least 1 when custom context is added/selected, and reset to 0 when cleared.
-- [COMPLETED] FR.12.4: Clear Custom Context button next to save button (before it).
-- [COMPLETED] FR.12.5: Reset custom context dropdown to default when context is cleared.
-- [COMPLETED] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+(See [tasks/completed/task-fr12-custom-context.md](tasks/completed/task-fr12-custom-context.md))
 
 ## Feature: FR.13 — System Prompt Preview Pane [COMPLETED]
 (See [tasks/completed/task-fr13-system-prompt-preview.md](tasks/completed/task-fr13-system-prompt-preview.md))

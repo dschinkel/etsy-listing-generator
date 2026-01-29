@@ -437,4 +437,31 @@ describe('Listing Generation', () => {
     expect(result.current.images[0].url).toBe('image2.png');
     expect(result.current.images[0].isPrimary).toBeFalsy();
   });
+
+  it('unsets generated primary images', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn().mockResolvedValue({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle' }
+        ] 
+      })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+
+    act(() => {
+      result.current.setPrimaryImage(0);
+    });
+    expect(result.current.images[0].isPrimary).toBe(true);
+
+    act(() => {
+      result.current.clearPrimaryImage();
+    });
+
+    expect(result.current.images[0].isPrimary).toBe(false);
+  });
 });

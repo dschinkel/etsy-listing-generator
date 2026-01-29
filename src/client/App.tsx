@@ -42,6 +42,7 @@ const App = () => {
     handleContextualShotsChange,
     isPrimaryImage,
     handlePrimarySelection,
+    clearPrimaryImage: clearProductPrimaryImage,
     lifestyleBackground,
     handleLifestyleBackgroundUpload,
     heroBackground,
@@ -88,7 +89,8 @@ const App = () => {
     generateListing, 
     removeImage, 
     clearImages,
-    setPrimaryImage,
+    setPrimaryImage: setGeneratedPrimaryImage,
+    clearPrimaryImage: clearGeneratedPrimaryImages,
     downloadImage,
     downloadAllImagesAsZip,
     fetchSystemPromptPreview
@@ -140,6 +142,18 @@ const App = () => {
     fetchSystemPromptPreview
   ]);
 
+  const handleSelectProductPrimary = () => {
+    handlePrimarySelection();
+    if (!isPrimaryImage) {
+      clearGeneratedPrimaryImages();
+    }
+  };
+
+  const handleSetGeneratedPrimary = (index: number) => {
+    setGeneratedPrimaryImage(index);
+    clearProductPrimaryImage();
+  };
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
@@ -153,7 +167,7 @@ const App = () => {
                 <UploadedImage 
                   src={productImage} 
                   isPrimary={isPrimaryImage}
-                  onSelectPrimary={handlePrimarySelection}
+                  onSelectPrimary={handleSelectProductPrimary}
                   onRemove={handleRemoveProductImage}
                 />
                 {/* System Prompt (moved here) */}
@@ -287,7 +301,7 @@ const App = () => {
                 onClearAll={clearImages}
                 onDownload={downloadImage} 
                 onDownloadAll={downloadAllImagesAsZip}
-                onSetPrimary={setPrimaryImage}
+                onSetPrimary={handleSetGeneratedPrimary}
               />
             </div>
           </div>
