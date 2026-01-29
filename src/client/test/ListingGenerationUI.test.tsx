@@ -84,7 +84,9 @@ describe('Listing Generation UI', () => {
       removeContextTemplate: jest.fn(),
       clearPrimaryImage: jest.fn(),
       totalShots: 0,
-      isReadyToGenerate: false
+      isReadyToGenerate: false,
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn()
     });
   });
 
@@ -170,6 +172,8 @@ describe('Listing Generation UI', () => {
       templates: [],
       saveContextTemplate: jest.fn(),
       removeContextTemplate: jest.fn(), clearPrimaryImage: jest.fn(),
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn()
     });
 
     render(<App />);
@@ -277,6 +281,8 @@ describe('Listing Generation UI', () => {
   it('displays "Upload a product image to start" when no product image is uploaded', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
       productImages: [],
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 1,
       totalShots: 1,
       isReadyToGenerate: false,
@@ -290,6 +296,15 @@ describe('Listing Generation UI', () => {
       saveContextTemplate: jest.fn(),
       removeContextTemplate: jest.fn(),
       clearPrimaryImage: jest.fn(),
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn(),
+      handleLifestyleShotsChange: jest.fn(),
+      handleHeroShotsChange: jest.fn(),
+      handleCloseUpsChange: jest.fn(),
+      handleFlatLayShotsChange: jest.fn(),
+      handleMacroShotsChange: jest.fn(),
+      handleContextualShotsChange: jest.fn(),
+      handleThemedEnvironmentShotsChange: jest.fn()
     });
     render(<App />);
     const message = screen.getByText('Upload a product image to start');
@@ -303,6 +318,8 @@ describe('Listing Generation UI', () => {
   it('displays "Specify a Shots Selection" in green when product image is uploaded but no shots selected', () => {
     (useProductUpload as jest.Mock).mockReturnValue({
       productImages: ['some-image'],
+      handleUpload: jest.fn(),
+      handleRemoveProductImage: jest.fn(),
       lifestyleShotsCount: 0, // No shots
       totalShots: 0,
       isReadyToGenerate: false,
@@ -316,9 +333,16 @@ describe('Listing Generation UI', () => {
       saveContextTemplate: jest.fn(),
       removeContextTemplate: jest.fn(),
       clearPrimaryImage: jest.fn(),
-      handleUpload: jest.fn(),
-      handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn(),
+      handleLifestyleShotsChange: jest.fn(),
+      handleHeroShotsChange: jest.fn(),
+      handleCloseUpsChange: jest.fn(),
+      handleFlatLayShotsChange: jest.fn(),
+      handleMacroShotsChange: jest.fn(),
+      handleContextualShotsChange: jest.fn(),
+      handleThemedEnvironmentShotsChange: jest.fn(),
       lifestyleBackground: null,
       handleLifestyleBackgroundUpload: jest.fn(),
       heroBackground: null,
@@ -378,6 +402,15 @@ describe('Listing Generation UI', () => {
       handleUpload: jest.fn(),
       handleRemoveProductImage: jest.fn(),
       handlePrimarySelection: jest.fn(),
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn(),
+      handleLifestyleShotsChange: jest.fn(),
+      handleHeroShotsChange: jest.fn(),
+      handleCloseUpsChange: jest.fn(),
+      handleFlatLayShotsChange: jest.fn(),
+      handleMacroShotsChange: jest.fn(),
+      handleContextualShotsChange: jest.fn(),
+      handleThemedEnvironmentShotsChange: jest.fn(),
       lifestyleBackground: null,
       handleLifestyleBackgroundUpload: jest.fn(),
       heroBackground: null,
@@ -466,6 +499,8 @@ describe('Listing Generation UI', () => {
       macroShotsCount: 0,
       contextualShotsCount: 0,
       themedEnvironmentShotsCount: 0,
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn(),
       handleThemedEnvironmentShotsChange: jest.fn(),
       handleLifestyleShotsChange: jest.fn(),
       handleCloseUpsChange: jest.fn(),
@@ -535,6 +570,8 @@ describe('Listing Generation UI', () => {
       macroShotsCount: 0,
       contextualShotsCount: 0,
       themedEnvironmentShotsCount: 0,
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn(),
       handleThemedEnvironmentShotsChange: jest.fn(),
       handleLifestyleShotsChange: jest.fn(),
       handleCloseUpsChange: jest.fn(),
@@ -607,6 +644,8 @@ describe('Listing Generation UI', () => {
       macroShotsCount: 0,
       contextualShotsCount: 0,
       themedEnvironmentShotsCount: 0,
+      archivedUploads: [],
+      toggleArchivedUpload: jest.fn(),
       handleThemedEnvironmentShotsChange: jest.fn(),
       handleLifestyleShotsChange: jest.fn(),
       handleCloseUpsChange: jest.fn(),
