@@ -13,6 +13,7 @@ interface ListingImage {
   url: string;
   type: string;
   isPrimary?: boolean;
+  isArchived?: boolean;
 }
 
 interface ListingPreviewProps {

@@ -95,6 +95,7 @@ const App = () => {
     totalShots,
     isReadyToGenerate,
     resetCounts,
+    selectAllShots,
     archivedUploads,
     toggleArchivedUpload,
     isProductImageArchived,
@@ -279,6 +280,7 @@ const App = () => {
                     onContextualBackgroundUpload={handleContextualBackgroundUpload}
                     themedEnvironmentBackground={themedEnvironmentBackground}
                     onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
+                    onSelectAll={selectAllShots}
                   />
                 </div>
 
@@ -746,7 +748,8 @@ const ShotsSelection = ({
   contextualBackground,
   onContextualBackgroundUpload,
   themedEnvironmentBackground,
-  onThemedEnvironmentBackgroundUpload
+  onThemedEnvironmentBackgroundUpload,
+  onSelectAll
 }: {
   lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -792,7 +795,8 @@ const ShotsSelection = ({
   contextualBackground: string | null,
   onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   themedEnvironmentBackground: string | null,
-  onThemedEnvironmentBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onThemedEnvironmentBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onSelectAll: () => void
 }) => {
   const createShotType = (
     id: string,
@@ -898,8 +902,17 @@ const ShotsSelection = ({
 
   return (
     <Card className="w-full overflow-hidden">
-      <CardHeader className="bg-muted/30 border-b border-border/50 h-10 flex flex-row items-center py-0 px-3 space-y-0">
+      <CardHeader className="bg-muted/30 border-b border-border/50 h-10 flex flex-row items-center justify-between py-0 px-3 space-y-0">
         <CardTitle>Shots Selection</CardTitle>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={onSelectAll}
+          className="h-7 text-[10px] px-2 font-semibold hover:bg-orange-500/20 hover:text-orange-500"
+          data-testid="select-all-shots"
+        >
+          Select All
+        </Button>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 pt-[10px] px-3">
         {shotTypes.map((shot) => (

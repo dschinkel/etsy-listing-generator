@@ -311,6 +311,16 @@ export const useProductUpload = (repository?: any) => {
     setThemedEnvironmentShotsCount(0);
   };
 
+  const selectAllShots = () => {
+    setLifestyleShotsCount(prev => prev + 1);
+    setHeroShotsCount(prev => prev + 1);
+    setCloseUpsCount(prev => prev + 1);
+    setFlatLayShotsCount(prev => prev + 1);
+    setMacroShotsCount(prev => prev + 1);
+    setContextualShotsCount(prev => prev + 1);
+    setThemedEnvironmentShotsCount(prev => prev + 1);
+  };
+
   return {
     productImages, 
     handleUpload, 
@@ -370,5 +380,6 @@ export const useProductUpload = (repository?: any) => {
     archivedUploads,
     toggleArchivedUpload,
     isProductImageArchived,
+    selectAllShots,
   };
 };

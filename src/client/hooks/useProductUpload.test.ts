@@ -99,7 +99,7 @@ describe('useProductUpload', () => {
     // Should still be 2 images
     expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
 
-    (global.FileReader as jest.Mock).mockRestore();
+    (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
   it('loads templates on initialization', async () => {
@@ -190,7 +190,7 @@ describe('useProductUpload', () => {
     expect(result.current.productImages[0]).toBe(fakeImage);
     expect(result.current.isReadyToGenerate).toBe(true);
 
-    (global.FileReader as jest.Mock).mockRestore();
+    (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
   it('persists themed environment shot selection', () => {
@@ -242,7 +242,7 @@ describe('useProductUpload', () => {
 
     expect(result.current.productImages).toEqual([fakeImage2]);
 
-    (global.FileReader as jest.Mock).mockRestore();
+    (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
   it('resets shot counts', () => {
@@ -312,7 +312,7 @@ describe('useProductUpload', () => {
       jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
       const file = new File([''], 'test.png', { type: 'image/png' });
       result.current.handleUpload({ target: { files: [file] } } as any);
-      (global.FileReader as jest.Mock).mockRestore();
+      (global.FileReader as unknown as jest.Mock).mockRestore();
     });
 
     await act(async () => {
@@ -339,7 +339,7 @@ describe('useProductUpload', () => {
       jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
       const file = new File([''], 'test.png', { type: 'image/png' });
       result.current.handleUpload({ target: { files: [file] } } as any);
-      (global.FileReader as jest.Mock).mockRestore();
+      (global.FileReader as unknown as jest.Mock).mockRestore();
     });
 
     expect(result.current.isProductImageArchived(0)).toBe(false);
