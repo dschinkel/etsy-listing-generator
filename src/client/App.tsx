@@ -197,10 +197,10 @@ const App = () => {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
-        <main className="flex-1 p-4 overflow-hidden">
-          <div className="flex gap-4 items-start h-[calc(100vh-10rem)] max-w-full mx-auto px-2">
+        <main className="flex-1 p-2 overflow-hidden">
+          <div className="flex gap-2 items-start h-[calc(100vh-10rem)] max-w-full mx-auto px-1">
             {/* Left Pane */}
-            <div ref={leftPaneRef} className="flex flex-col items-center gap-4 w-1/5 h-full overflow-y-auto pr-2">
+            <div ref={leftPaneRef} className="flex flex-col items-center gap-4 w-1/5 h-full overflow-y-auto pr-1">
               <div className="w-full flex flex-col gap-4">
                 <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
                 <ArchivedUploads 
@@ -230,9 +230,9 @@ const App = () => {
             </div>
 
             {/* Middle Pane */}
-            <div ref={middlePaneRef} className="flex flex-col gap-8 w-1/4 h-full overflow-y-auto items-start pr-2">
+            <div ref={middlePaneRef} className="flex flex-col gap-4 w-1/4 h-full overflow-y-auto items-start pr-1">
               <div className="flex flex-col items-center gap-4 w-full">
-                <div className="flex-initial">
+                <div className="w-full">
                   <ShotsSelection 
                     lifestyleShotsCount={lifestyleShotsCount}
                     onLifestyleShotsChange={handleLifestyleShotsChange}
@@ -341,7 +341,7 @@ const App = () => {
             </div>
 
             {/* Right Pane */}
-            <div ref={previewRef} className="flex-1 h-full overflow-y-auto pr-2">
+            <div ref={previewRef} className="flex-1 h-full overflow-y-auto pr-1">
               <ListingPreview 
                 images={images} 
                 isGenerating={isGenerating}
@@ -441,11 +441,11 @@ const ArchivedUploads = ({
 const UploadImage = ({ onUpload, disabled }: { onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void, disabled?: boolean }) => {
   return (
     <Card className={`w-full border-dashed ${disabled ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
-      <CardContent className="pt-6">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <Label htmlFor="product-image-upload" className="cursor-pointer text-center">
-            <div className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary transition-colors">
-              {disabled ? 'Max 2 images uploaded' : 'Click to upload product image'}
+      <CardContent className="p-3">
+        <div className="flex flex-col items-center justify-center">
+          <Label htmlFor="product-image-upload" className="cursor-pointer text-center w-full">
+            <div className="p-2 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary transition-colors text-xs">
+              {disabled ? 'Max 2 images' : 'Upload product image'}
             </div>
           </Label>
           <Input
@@ -514,8 +514,8 @@ const ShotTypeItem = ({
   };
 
   return (
-    <div className="flex flex-col gap-1 border-b border-slate-800 pb-2 last:border-0">
-      <div className="flex items-center justify-between gap-2 w-full">
+    <div className="flex flex-col gap-1 border-b border-slate-800 pb-2 last:border-0 px-1">
+      <div className="flex items-center gap-2 w-full">
         <div className="flex flex-col min-w-0 flex-1">
           <Label htmlFor={id} className="text-sm font-semibold text-yellow-200 truncate">{label}</Label>
           <span className="text-xs text-muted-foreground line-clamp-2 leading-tight">{description}</span>
@@ -567,7 +567,7 @@ const ShotTypeItem = ({
           value={count}
           onChange={onChange}
           data-testid={`${id}-count`}
-          className="w-12 h-8 text-sm"
+          className="w-14 h-8 text-sm"
         />
       </div>
       {showCustom && (
@@ -898,10 +898,10 @@ const ShotsSelection = ({
 
   return (
     <Card className="w-full overflow-hidden">
-      <CardHeader className="bg-muted/30 border-b border-border/50 pb-2">
+      <CardHeader className="bg-muted/30 border-b border-border/50 pb-2 px-3">
         <CardTitle>Shots Selection</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2 pt-[10px]">
+      <CardContent className="flex flex-col gap-2 pt-[10px] px-3">
         {shotTypes.map((shot) => (
           <ShotTypeItem 
             key={shot.id}
@@ -935,13 +935,13 @@ const UploadedImage = ({
 
   return (
     <Card className="w-full">
-      <CardContent className="pt-6 flex flex-col items-center gap-4">
+      <CardContent className="pt-4 flex flex-col items-center gap-2 px-2">
         <div className="relative group">
           <img
             src={src}
             alt="Product"
             data-testid="uploaded-product-image"
-            className="max-w-xs rounded shadow-lg"
+            className="max-w-full h-auto rounded shadow-lg"
           />
           <Button
             variant="secondary"
@@ -989,11 +989,11 @@ const SystemPromptPane = ({
   prompt: string
 }) => {
   return (
-    <Card className="w-full mt-4 overflow-hidden flex flex-col">
-      <CardHeader>
+    <Card className="w-full mt-2 overflow-hidden flex flex-col">
+      <CardHeader className="p-3">
         <CardTitle className="text-sm">System Prompt</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 overflow-auto max-h-[400px]">
+      <CardContent className="flex-1 overflow-auto max-h-[300px] p-2">
         <pre className="text-[10px] whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg">
           {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
         </pre>
