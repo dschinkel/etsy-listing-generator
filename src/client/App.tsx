@@ -230,7 +230,7 @@ const App = () => {
             </div>
 
             {/* Middle Pane */}
-            <div ref={middlePaneRef} className="flex flex-col gap-4 w-1/4 h-full overflow-y-auto items-start pr-1">
+            <div ref={middlePaneRef} className="flex flex-col gap-4 w-1/5 h-full overflow-y-auto items-start pr-1">
               <div className="flex flex-col items-center gap-4 w-full">
                 <div className="w-full">
                   <ShotsSelection 
