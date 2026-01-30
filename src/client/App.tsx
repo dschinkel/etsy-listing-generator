@@ -898,7 +898,7 @@ const ShotsSelection = ({
 
   return (
     <Card className="w-full overflow-hidden">
-      <CardHeader className="bg-muted/30 border-b border-border/50 pb-2 px-3">
+      <CardHeader className="bg-muted/30 border-b border-border/50 h-10 flex items-center py-0 px-3">
         <CardTitle>Shots Selection</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 pt-[10px] px-3">
