@@ -282,6 +282,7 @@ const App = () => {
                     themedEnvironmentBackground={themedEnvironmentBackground}
                     onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
                     onSelectAll={selectAllShots}
+                    onClearAllShots={resetCounts}
                     onClearShotCount={clearShotCount}
                   />
                 </div>
@@ -766,6 +767,7 @@ const ShotsSelection = ({
   themedEnvironmentBackground,
   onThemedEnvironmentBackgroundUpload,
   onSelectAll,
+  onClearAllShots,
   onClearShotCount
 }: {
   lifestyleShotsCount: number,
@@ -814,6 +816,7 @@ const ShotsSelection = ({
   themedEnvironmentBackground: string | null,
   onThemedEnvironmentBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   onSelectAll: () => void,
+  onClearAllShots: () => void,
   onClearShotCount: (id: string) => void
 }) => {
   const createShotType = (
@@ -931,15 +934,26 @@ const ShotsSelection = ({
     <Card className="w-full overflow-hidden">
       <CardHeader className="bg-muted/30 border-b border-border/50 h-10 flex flex-row items-center justify-between py-0 px-3 space-y-0">
         <CardTitle>Shots Selection</CardTitle>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={onSelectAll}
-          className="h-7 text-[10px] px-2 font-semibold hover:bg-orange-500/20 hover:text-orange-500"
-          data-testid="select-all-shots"
-        >
-          Select All
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onClearAllShots}
+            className="h-7 text-[10px] px-2 font-semibold hover:bg-red-500/20 hover:text-red-500"
+            data-testid="clear-all-shots"
+          >
+            Clear All
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onSelectAll}
+            className="h-7 text-[10px] px-2 font-semibold hover:bg-orange-500/20 hover:text-orange-500"
+            data-testid="select-all-shots"
+          >
+            Select All
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 pt-[10px] px-3">
         {shotTypes.map((shot) => (

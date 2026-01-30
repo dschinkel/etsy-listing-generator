@@ -67,6 +67,7 @@ A user can:
     **FR.2.8 — Clear all shot counts automatically once the generation request has been made.**
     **FR.2.9 — Select All Shots Action: Ability to click a "Select All" button to increment every shot type count by one.**
     **FR.2.10 — Clear Individual Shot Count: Ability to click a trash can icon to the left of each count input to reset that specific count to 0.**
+    **FR.2.11 — Clear All Shots Selection Counts: Ability to click a "Clear All" button in the Shots Selection header to reset all shot counts to 0.**
 
 **FR.3 — Specify which image will be used as the Primary Etsy image**
     - **FR.3.1 — Ability to mark an uploaded product image as primary**
