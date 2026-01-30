@@ -96,6 +96,7 @@ const App = () => {
     isReadyToGenerate,
     resetCounts,
     selectAllShots,
+    clearShotCount,
     archivedUploads,
     toggleArchivedUpload,
     isProductImageArchived,
@@ -281,6 +282,7 @@ const App = () => {
                     themedEnvironmentBackground={themedEnvironmentBackground}
                     onThemedEnvironmentBackgroundUpload={handleThemedEnvironmentBackgroundUpload}
                     onSelectAll={selectAllShots}
+                    onClearShotCount={clearShotCount}
                   />
                 </div>
 
@@ -471,6 +473,7 @@ const ShotTypeItem = ({
   description, 
   count, 
   onChange, 
+  onClear,
   customContext, 
   onCustomContextChange,
   templates,
@@ -484,6 +487,7 @@ const ShotTypeItem = ({
   description: string, 
   count: number, 
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onClear: () => void,
   customContext: string, 
   onCustomContextChange: (value: string) => void,
   templates: { name: string, text: string }[],
@@ -562,15 +566,27 @@ const ShotTypeItem = ({
             </div>
           </div>
         </div>
-        <Input
-          id={id}
-          type="number"
-          min="0"
-          value={count}
-          onChange={onChange}
-          data-testid={`${id}-count`}
-          className="w-14 h-8 text-sm"
-        />
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 text-muted-foreground hover:text-red-500"
+            title="Clear count"
+            onClick={onClear}
+            data-testid={`${id}-clear-count`}
+          >
+            <Trash className="h-3.5 w-3.5" />
+          </Button>
+          <Input
+            id={id}
+            type="number"
+            min="0"
+            value={count}
+            onChange={onChange}
+            data-testid={`${id}-count`}
+            className="w-14 h-8 text-sm"
+          />
+        </div>
       </div>
       {showCustom && (
         <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-md flex flex-col gap-2">
@@ -749,7 +765,8 @@ const ShotsSelection = ({
   onContextualBackgroundUpload,
   themedEnvironmentBackground,
   onThemedEnvironmentBackgroundUpload,
-  onSelectAll
+  onSelectAll,
+  onClearShotCount
 }: {
   lifestyleShotsCount: number,
   onLifestyleShotsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -796,7 +813,8 @@ const ShotsSelection = ({
   onContextualBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
   themedEnvironmentBackground: string | null,
   onThemedEnvironmentBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  onSelectAll: () => void
+  onSelectAll: () => void,
+  onClearShotCount: (id: string) => void
 }) => {
   const createShotType = (
     id: string,
@@ -804,6 +822,7 @@ const ShotsSelection = ({
     description: string,
     count: number,
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    onClear: () => void,
     customContext: string,
     onCustomContextChange: (value: string) => void,
     background: string | null,
@@ -814,6 +833,7 @@ const ShotsSelection = ({
     description,
     count,
     onChange,
+    onClear,
     customContext,
     onCustomContextChange,
     background,
@@ -827,6 +847,7 @@ const ShotsSelection = ({
       "Eye-level, centered, slightly blurred background (Product focus).",
       heroShotsCount,
       onHeroShotsChange,
+      () => onClearShotCount("hero-shots"),
       heroCustomContext,
       onHeroCustomContextChange,
       heroBackground,
@@ -838,6 +859,7 @@ const ShotsSelection = ({
       "Top-down view on a textured surface with ingredients scattered around.",
       flatLayShotsCount,
       onFlatLayShotsChange,
+      () => onClearShotCount("flat-lay-shots"),
       flatLayCustomContext,
       onFlatLayCustomContextChange,
       flatLayBackground,
@@ -849,6 +871,7 @@ const ShotsSelection = ({
       "The product being held by a hand or sitting in a lunchbox/gym bag.",
       lifestyleShotsCount,
       onLifestyleShotsChange,
+      () => onClearShotCount("lifestyle-shots"),
       lifestyleCustomContext,
       onLifestyleCustomContextChange,
       lifestyleBackground,
@@ -860,6 +883,7 @@ const ShotsSelection = ({
       "Close-up on the pouch opening showing the texture of the banana chips.",
       macroShotsCount,
       onMacroShotsChange,
+      () => onClearShotCount("macro-shots"),
       macroCustomContext,
       onMacroCustomContextChange,
       macroBackground,
@@ -871,6 +895,7 @@ const ShotsSelection = ({
       "The product on a pantry shelf or a kitchen counter to show scale.",
       contextualShotsCount,
       onContextualShotsChange,
+      () => onClearShotCount("contextual-shots"),
       contextualCustomContext,
       onContextualCustomContextChange,
       contextualBackground,
@@ -882,6 +907,7 @@ const ShotsSelection = ({
       "The product is placed in a realistic, thematic setting.",
       themedEnvironmentShotsCount,
       onThemedEnvironmentShotsChange,
+      () => onClearShotCount("themed-environment"),
       themedEnvironmentCustomContext,
       onThemedEnvironmentCustomContextChange,
       themedEnvironmentBackground,
@@ -893,6 +919,7 @@ const ShotsSelection = ({
       "Detailed shots of specific parts of the product.",
       closeUpsCount,
       onCloseUpsChange,
+      () => onClearShotCount("close-ups"),
       closeUpsCustomContext,
       onCloseUpsCustomContextChange,
       closeUpsBackground,

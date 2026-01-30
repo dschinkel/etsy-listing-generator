@@ -321,6 +321,18 @@ export const useProductUpload = (repository?: any) => {
     setThemedEnvironmentShotsCount(prev => prev + 1);
   };
 
+  const clearShotCount = (id: string) => {
+    switch (id) {
+      case 'lifestyle-shots': setLifestyleShotsCount(0); break;
+      case 'hero-shots': setHeroShotsCount(0); break;
+      case 'close-ups': setCloseUpsCount(0); break;
+      case 'flat-lay-shots': setFlatLayShotsCount(0); break;
+      case 'macro-shots': setMacroShotsCount(0); break;
+      case 'contextual-shots': setContextualShotsCount(0); break;
+      case 'themed-environment': setThemedEnvironmentShotsCount(0); break;
+    }
+  };
+
   return {
     productImages, 
     handleUpload, 
@@ -381,5 +393,6 @@ export const useProductUpload = (repository?: any) => {
     toggleArchivedUpload,
     isProductImageArchived,
     selectAllShots,
+    clearShotCount,
   };
 };

@@ -66,6 +66,7 @@ A user can:
     **FR.2.7 — Ability to specify how many images generated should be themed environment shots (The product is placed in a realistic, thematic setting)**
     **FR.2.8 — Clear all shot counts automatically once the generation request has been made.**
     **FR.2.9 — Select All Shots Action: Ability to click a "Select All" button to increment every shot type count by one.**
+    **FR.2.10 — Clear Individual Shot Count: Ability to click a trash can icon to the left of each count input to reset that specific count to 0.**
 
 **FR.3 — Specify which image will be used as the Primary Etsy image**
     - **FR.3.1 — Ability to mark an uploaded product image as primary**
