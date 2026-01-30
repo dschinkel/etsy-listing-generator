@@ -128,6 +128,13 @@ A user can:
 **FR.11 — Push the new listing to my etsy store**
     - **FR.11.1 Technical Notes**
         - use Etsy Open API v3 to fully automate the creation of listings, including uploading images, setting titles, and writing descriptions
+    - **FR.11.2 Shop ID**
+        - The app must allow specifying or discovering the Shop ID to push to a specific store.
+    - **FR.11.3 UI Placement**
+        - The Etsy listing fields (from FR.8) will be displayed in a new section below the Listing Preview.
+        - The Listing Preview section height will be reduced (approximately half) to accommodate this new section.
+    - **FR.11.4 Default Shop ID**
+        - The Shop ID field should default to the value of `ETSY_SHOP_ID` from the environment if available.
 
 **FR.12 — Custom Context for Shot Types**
     - Ability to add specific instructions for each shot type via a "+" icon (e.g., "In a high-end kitchen").

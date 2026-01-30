@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { fetchWithTimeout } from '../lib/utils';
@@ -16,8 +16,30 @@ export const useListingGeneration = (listingRepository: any) => {
   const [modelUsed, setModelUsed] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
+  const [publishUrl, setPublishUrl] = useState<string | null>(null);
+  const [etsyFormData, setEtsyFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+    quantity: '1',
+    shop_id: '',
+    who_made: 'i_did',
+    when_made: 'made_to_order',
+    is_supply: false
+  });
   const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (listingRepository?.getShopId) {
+      listingRepository.getShopId().then((response: { shop_id: string }) => {
+        if (response.shop_id) {
+          setEtsyFormData(prev => ({ ...prev, shop_id: response.shop_id }));
+        }
+      });
+    }
+  }, [listingRepository]);
 
   const setTimedError = (message: string) => {
     if (timeoutRef.current) {
@@ -201,6 +223,34 @@ export const useListingGeneration = (listingRepository: any) => {
     }
   };
 
+  const updateEtsyFormData = (field: string, value: any) => {
+    setEtsyFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const publishToEtsy = async (selectedImageUrls?: string[]) => {
+    setIsPublishing(true);
+    setError(null);
+    setPublishUrl(null);
+    
+    // Default to all current images if none specified
+    const imageList = selectedImageUrls || images.map(img => img.url);
+    
+    try {
+      const response = await listingRepository.publishListing({
+        ...etsyFormData,
+        images: imageList
+      });
+      if (response.url) {
+        setPublishUrl(response.url);
+      }
+    } catch (err: any) {
+      console.error('Publishing failed:', err);
+      setError(`Publishing failed: ${err.message}`);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
   const regenerateImage = async (index: number, customContext: string, productImages?: string[]) => {
     const imageToReplace = images[index];
     if (!imageToReplace) return;
@@ -270,6 +320,11 @@ export const useListingGeneration = (listingRepository: any) => {
     downloadAllImagesAsZip,
     archiveAllImages,
     archiveImage,
+    etsyFormData,
+    isPublishing,
+    publishUrl,
+    updateEtsyFormData,
+    publishToEtsy,
     fetchSystemPromptPreview: useCallback(async (params: any) => {
       try {
         const response = await listingRepository.getSystemPromptPreview(params);

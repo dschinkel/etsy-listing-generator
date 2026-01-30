@@ -82,6 +82,14 @@ router.get('/archived-uploads', async (ctx) => {
   await listingController.getArchivedUploads(ctx);
 });
 
+router.get('/shop-id', async (ctx) => {
+  await listingController.getShopId(ctx);
+});
+
+router.post('/push-to-etsy', async (ctx) => {
+  await listingController.publish(ctx);
+});
+
 // Add a GET handler just in case, returning a helpful message or redirecting
 router.get('/system-prompt', async (ctx) => {
   ctx.status = 405;

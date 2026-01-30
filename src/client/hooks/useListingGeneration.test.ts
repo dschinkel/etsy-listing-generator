@@ -439,6 +439,47 @@ describe('Listing Generation', () => {
     expect(result.current.images[0].isPrimary).toBeFalsy();
   });
 
+  it('publish listing', async () => {
+    const fakeListingRepository = {
+      publishListing: jest.fn().mockResolvedValue({ success: true, url: 'https://etsy.com/listing/123' }),
+      getShopId: jest.fn().mockResolvedValue({ shop_id: '12345' })
+    };
+
+    const listingData = {
+      title: 'Test Listing',
+      description: 'Test Description',
+      price: '19.99',
+      quantity: '10',
+      shop_id: '12345',
+      taxonomy_id: '1',
+      who_made: 'i_did',
+      when_made: 'made_to_order',
+      is_supply: false
+    };
+
+    const selectedImages = ['image1.png', 'image2.png'];
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    await act(async () => {
+      // Set the form data first
+      result.current.updateEtsyFormData('title', listingData.title);
+      result.current.updateEtsyFormData('description', listingData.description);
+      result.current.updateEtsyFormData('price', listingData.price);
+      result.current.updateEtsyFormData('quantity', listingData.quantity);
+      result.current.updateEtsyFormData('shop_id', listingData.shop_id);
+    });
+
+    await act(async () => {
+      await result.current.publishToEtsy(selectedImages);
+    });
+
+    expect(fakeListingRepository.publishListing).toHaveBeenCalledWith(expect.objectContaining({
+      title: listingData.title,
+      images: selectedImages
+    }));
+  });
+
   it('regenerates a single image', async () => {
     const fakeListingRepository = {
       generateImages: async () => ({ 

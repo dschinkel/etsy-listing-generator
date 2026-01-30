@@ -198,6 +198,33 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
+  const getShopId = async () => {
+    const response = await fetchWithTimeout('/listings/shop-id', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      return { shop_id: '' };
+    }
+
+    return await response.json();
+  };
+
+  const publishListing = async (params: any) => {
+    const response = await fetchWithTimeout('/listings/push-to-etsy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+
+    if (!response.ok) {
+      await handleErrorResponse(response);
+    }
+
+    return await response.json();
+  };
+
   return { 
     generateImages, 
     generateSingleImage,
@@ -207,6 +234,8 @@ export const createListingRepository = () => {
     removeTemplate, 
     deleteImage,
     archiveImages,
-    getArchivedUploads
+    getArchivedUploads,
+    getShopId,
+    publishListing
   };
 };

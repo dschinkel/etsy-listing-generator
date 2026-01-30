@@ -106,9 +106,9 @@ T1.17 Repeated code in tests, such as `render(<App />);`, MUST be DRY'd up by mo
 ## N1. Test Naming (non-negotiable; applies when tests are being written)
 
 N1.1 Tests and test suites (describes) must describe business behavior in clear prose.
-N1.2 Do not include function names (e.g., `removeImage`, `callback`), endpoints, browser/view terms, or technical sources (e.g., `from server`) in test or describe names. This keeps them decoupled from the actual implementation. Test names do not need to specify their parent names or unnecessary technical words (e.g., use "removes a font" instead of "removes a font use case" or "RemoveFontCommand removes a font").
+N1.2 Do not include function names (e.g., `removeImage`, `callback`), technical patterns (e.g., `command`, `repository`), status codes (e.g., `201`), endpoints, browser/view terms, or technical sources (e.g., `from server`) in test or describe names. This keeps them decoupled from the actual implementation. Test names do not need to specify their parent names or unnecessary technical words (e.g., use "removes a font" instead of "removes a font use case" or "RemoveFontCommand removes a font").
 N1.2.1 Example: instead of `deletes image from server when removeImage is called`, use `deletes image`.
-N1.3 Avoid “should” and avoid overly-specific phrasing. Prefer short domain behavior labels. 
+N1.3 Avoid “should”, "succeeds", or any technical jargon. Prefer short domain behavior labels. 
 N1.3.1 Test names (`it`, `test`) must be written in all lowercase.
 N1.3.2 Describe names (`describe`) should be written in normal case (sentence case or title case) with spaces.
 N1.4 Canonical examples live in Appendix D.
@@ -126,9 +126,9 @@ N1.9 UI tests must use `data-testid` instead of finding elements by text (e.g., 
 Data test IDs must represent domain concepts.
 Example: For a font selector, use `data-testid="font-selection"`.
 
-N1.10 Test names must be delivery mechanism and framework agnostic.
+N1.10 Test names must be delivery mechanism and framework agnostic. Do not use words like "add" to represent POST, "fetch" to represent GET, or any other technical action verbs.
 Good: `adds a font`, `creates environment shots`
-Bad: `posts a new font`, `adds a font by fetching from adobe`, `calls the api to add a font`, `includes themed environment shots in generation request`.
+Bad: `posts a new font`, `fetches a font`, `adds a font by fetching from adobe`, `calls the api to add a font`, `includes themed environment shots in generation request`.
 
 N1.12 Avoid creating "useless" tests that merely verify mocked data (i.e., testing the mock). Tests MUST verify business logic, data transformations, or specific orchestrations. A test that simply asserts that a function returns exactly what its mock was told to return, without any intervening logic, is forbidden.
 

@@ -53,4 +53,31 @@ describe('Listing Controller', () => {
     const templates = listResponse.body.templates;
     expect(templates.find((t: any) => t.name === 'ToRemove')).toBeUndefined();
   });
+
+  it('create listing', async () => {
+    const listingData = {
+      title: 'Test Etsy Listing',
+      description: 'Test Description',
+      price: '19.99',
+      quantity: 1,
+      shop_id: '12345',
+      images: ['/src/assets/generated-images/test.png']
+    };
+
+    const response = await supertest(app.callback())
+      .post('/listings/push-to-etsy')
+      .send(listingData);
+
+    expect(response.status).toBe(201);
+    expect(response.body.url).toBeDefined();
+  });
+
+  it('gets shop id', async () => {
+    process.env.ETSY_SHOP_ID = '56358327';
+    const response = await supertest(app.callback())
+      .get('/listings/shop-id');
+
+    expect(response.status).toBe(200);
+    expect(response.body.shop_id).toBe('56358327');
+  });
 });

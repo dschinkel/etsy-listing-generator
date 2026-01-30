@@ -120,4 +120,40 @@ describe('Listing Repository (Client)', () => {
       body: JSON.stringify(params)
     }));
   });
+
+  it('publish listing', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ success: true, url: 'https://etsy.com/listing/123' }),
+    });
+
+    const repository = createListingRepository();
+    const listingData = {
+      title: 'Test Listing',
+      images: ['image1.png']
+    };
+
+    const result = await repository.publishListing(listingData);
+
+    expect(result.success).toBe(true);
+    expect(global.fetch).toHaveBeenCalledWith('/listings/push-to-etsy', expect.objectContaining({
+      method: 'POST',
+      body: JSON.stringify(listingData)
+    }));
+  });
+
+  it('fetches shop id', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ shop_id: '56358327' }),
+    });
+
+    const repository = createListingRepository();
+    const result = await repository.getShopId();
+
+    expect(result).toEqual({ shop_id: '56358327' });
+    expect(global.fetch).toHaveBeenCalledWith('/listings/shop-id', expect.objectContaining({
+      method: 'GET'
+    }));
+  });
 });

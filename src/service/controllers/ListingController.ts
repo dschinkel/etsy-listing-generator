@@ -5,8 +5,10 @@ import { createGetSystemPromptPreview } from '../commands/GetSystemPromptPreview
 import { createGetContextTemplates } from '../commands/GetContextTemplates';
 import { createSaveContextTemplate } from '../commands/SaveContextTemplate';
 import { createRemoveContextTemplate } from '../commands/RemoveContextTemplate';
+import { createPushToEtsy } from '../commands/PushToEtsy';
 import { createListingRepository } from '../repositories/ListingRepository';
 import { createContextTemplateRepository } from '../repositories/ContextTemplateRepository';
+import { createEtsyRepository } from '../repositories/EtsyRepository';
 import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
 import { deleteImageFromAssets } from '../lib/assetManager';
 import * as path from 'path';
@@ -14,6 +16,13 @@ import * as path from 'path';
 export const createListingController = () => {
   const dataLayer = createGeminiImageGenerator();
   const repository = createListingRepository(dataLayer);
+  
+  // Mock Etsy data layer for now
+  const etsyDataLayer = {
+    createListing: async (data: any) => ({ listing_id: 'fake-id-' + Date.now() }),
+    uploadImage: async (shopId: string, listingId: string, imageUrl: string) => ({ success: true })
+  };
+  const etsyRepository = createEtsyRepository(etsyDataLayer);
   
   const templateDbPath = process.env.TEMPLATE_DB_PATH || path.join(process.cwd(), 'src', 'db', 'context-templates.json');
   const templateRepository = createContextTemplateRepository(templateDbPath);
@@ -25,6 +34,7 @@ export const createListingController = () => {
   const removeContextTemplate = createRemoveContextTemplate(templateRepository);
   const generateSingleImage = createGenerateSingleImage(repository);
   const archiveListingImages = createArchiveListingImages(repository);
+  const pushToEtsy = createPushToEtsy(etsyRepository);
 
   const generate = async (ctx: any) => {
     try {
@@ -154,5 +164,29 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage, archive, getArchivedUploads };
+  const getShopId = async (ctx: any) => {
+    try {
+      ctx.body = { shop_id: process.env.ETSY_SHOP_ID || '' };
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in getShopId:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  const publish = async (ctx: any) => {
+    try {
+      const listingData = ctx.request.body;
+      const result = await pushToEtsy.execute(listingData);
+      ctx.status = 201;
+      ctx.body = result;
+    } catch (error: any) {
+      console.error('Error in publish:', error);
+      ctx.status = error.status || 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage, archive, getArchivedUploads, getShopId, publish };
 };

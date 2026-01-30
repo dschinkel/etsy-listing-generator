@@ -40,3 +40,10 @@ An AI-powered tool for Etsy sellers to generate consistent product listing image
 - **Prerequisites**: `GEMINI_API_KEY` in `.env`.
 - **Run**: `yarn dev` (Starts both client and server).
 - **Test**: `yarn test`.
+
+## Etsy API
+How to get  your shop id
+```
+curl -X GET "https://openapi.etsy.com/v3/application/shops/GameBin" \
+  -H "x-api-key: YOUR_ETSY_API_KEY"
+```

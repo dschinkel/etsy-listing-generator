@@ -29,6 +29,7 @@ import {
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
+import EtsyListingForm from './components/EtsyListingForm';
 import ModelStatus from './components/ModelStatus';
 import { ThemeProvider } from './components/theme-provider';
 import { 
@@ -119,7 +120,12 @@ const App = () => {
     downloadImage,
     downloadAllImagesAsZip,
     regenerateImage,
-    fetchSystemPromptPreview
+    fetchSystemPromptPreview,
+    etsyFormData,
+    isPublishing,
+    publishUrl,
+    updateEtsyFormData,
+    publishToEtsy
   } = useListingGeneration(repository);
 
   const [promptWidth, setPromptWidth] = React.useState(500);
@@ -346,21 +352,32 @@ const App = () => {
             </div>
 
             {/* Right Pane */}
-            <div ref={previewRef} className="flex-1 h-full overflow-y-auto pr-1">
-              <ListingPreview 
-                images={images} 
-                isGenerating={isGenerating}
-                regeneratingIndex={regeneratingIndex}
-                modelUsed={modelUsed}
-                onRemove={removeImage} 
-                onClearAll={clearImages}
-                onArchiveAll={archiveAllImages}
-                onArchiveImage={archiveImage}
-                onDownload={downloadImage} 
-                onDownloadAll={downloadAllImagesAsZip}
-                onSetPrimary={handleSetGeneratedPrimary}
-                onRegenerate={handleRegenerateImage}
-              />
+            <div ref={previewRef} className="flex-1 h-full flex flex-col gap-2 overflow-hidden pr-1">
+              <div className="h-1/2 overflow-y-auto pr-1">
+                <ListingPreview 
+                  images={images} 
+                  isGenerating={isGenerating}
+                  regeneratingIndex={regeneratingIndex}
+                  modelUsed={modelUsed}
+                  onRemove={removeImage} 
+                  onClearAll={clearImages}
+                  onArchiveAll={archiveAllImages}
+                  onArchiveImage={archiveImage}
+                  onDownload={downloadImage} 
+                  onDownloadAll={downloadAllImagesAsZip}
+                  onSetPrimary={handleSetGeneratedPrimary}
+                  onRegenerate={handleRegenerateImage}
+                />
+              </div>
+              <div className="h-1/2 overflow-y-auto pr-1">
+                <EtsyListingForm 
+                  formData={etsyFormData}
+                  onChange={updateEtsyFormData}
+                  onPublish={publishToEtsy}
+                  isPublishing={isPublishing}
+                  publishUrl={publishUrl}
+                />
+              </div>
             </div>
           </div>
         </main>
