@@ -516,7 +516,7 @@ const ShotTypeItem = ({
   return (
     <div className="flex flex-col gap-1 border-b border-slate-800 pb-2 last:border-0">
       <div className="flex items-center gap-1 w-full">
-        <div className="flex flex-col min-w-0 flex-1">
+        <div className="flex flex-col min-w-0">
           <Label htmlFor={id} className="text-sm font-semibold text-yellow-200 truncate">{label}</Label>
           <span className="text-xs text-muted-foreground line-clamp-2 leading-tight">{description}</span>
           <div className="flex items-center gap-1 mt-1">
