@@ -56,6 +56,8 @@ export const createGeminiImageGenerator = () => {
     model?: string; 
     customContext?: string;
     systemPrompt?: string;
+    seed?: number;
+    temperature?: number;
   }): Promise<{ imageUrl: string; systemInstruction: string }> => {
     const count = params.count || 1;
     const countText = count === 1 ? '1 image' : `${count} images`;
@@ -68,6 +70,10 @@ export const createGeminiImageGenerator = () => {
         role: "system",
         parts: [{ text: systemInstruction }]
       },
+      generationConfig: {
+        seed: params.seed,
+        temperature: params.temperature
+      } as any,
       safetySettings: [
         { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
         { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },

@@ -102,4 +102,60 @@ describe('Listing Repository', () => {
       customContext: 'Better lighting'
     }));
   });
+
+  it('generates a single image with temperature', async () => {
+    const fakeDataLayer = {
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
+      getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
+    };
+    const repository = createListingRepository(fakeDataLayer);
+    const params = { 
+      type: 'lifestyle',
+      temperature: 0.9
+    };
+    
+    await repository.generateSingleImage(params);
+    
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'lifestyle',
+      temperature: 0.9
+    }));
+  });
+
+  it('passes a seed when createSimilar is enabled', async () => {
+    const fakeDataLayer = {
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
+      getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
+    };
+    const repository = createListingRepository(fakeDataLayer);
+    const params = { 
+      lifestyleCount: 1,
+      lifestyleCreateSimilar: true
+    };
+    
+    await repository.generateImages(params);
+    
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'lifestyle',
+      seed: expect.any(Number)
+    }));
+  });
+
+  it('passes temperature to the data layer', async () => {
+    const fakeDataLayer = {
+      generateImage: jest.fn().mockImplementation(({ type }) => Promise.resolve({ imageUrl: `data:image/png;base64,${type}`, systemInstruction: `prompt for ${type}` })),
+      getSystemPrompt: jest.fn().mockReturnValue('mock prompt')
+    };
+    const repository = createListingRepository(fakeDataLayer);
+    const params = { 
+      lifestyleCount: 1,
+      temperature: 0.7
+    };
+    
+    await repository.generateImages(params);
+    
+    expect(fakeDataLayer.generateImage).toHaveBeenCalledWith(expect.objectContaining({
+      temperature: 0.7
+    }));
+  });
 });

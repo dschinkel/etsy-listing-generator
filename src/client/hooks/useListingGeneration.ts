@@ -23,11 +23,20 @@ export const useListingGeneration = (listingRepository: any) => {
     description: '',
     price: '',
     quantity: '1',
+    sku: '',
     shop_id: '',
     who_made: 'i_did',
     when_made: 'made_to_order',
-    is_supply: false
+    is_supply: false,
+    personalization: '',
+    category: '',
+    tags: '',
+    shipping_profile: '',
+    product_type: 'physical',
+    readiness: 'draft',
+    taxonomy_id: ''
   });
+  const [temperature, setTemperature] = useState<number>(1.0);
   const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -74,7 +83,14 @@ export const useListingGeneration = (listingRepository: any) => {
     flatLayCustomContext?: string,
     macroCustomContext?: string,
     contextualCustomContext?: string,
-    themedEnvironmentCustomContext?: string
+    themedEnvironmentCustomContext?: string,
+    lifestyleCreateSimilar?: boolean,
+    heroCreateSimilar?: boolean,
+    closeUpsCreateSimilar?: boolean,
+    flatLayCreateSimilar?: boolean,
+    macroCreateSimilar?: boolean,
+    contextualCreateSimilar?: boolean,
+    themedEnvironmentCreateSimilar?: boolean
   }) => {
     setIsGenerating(true);
     if (timeoutRef.current) {
@@ -91,6 +107,7 @@ export const useListingGeneration = (listingRepository: any) => {
       try {
         const response = await listingRepository.generateImages({
           ...params,
+          temperature,
           model: currentModel,
           noFallback: true
         });
@@ -268,7 +285,8 @@ export const useListingGeneration = (listingRepository: any) => {
         customContext,
         productImages,
         model: 'gemini-2.5-flash-image',
-        systemPrompt: updatedSystemPrompt
+        systemPrompt: updatedSystemPrompt,
+        temperature
       });
 
       if (response.image) {
@@ -323,6 +341,8 @@ export const useListingGeneration = (listingRepository: any) => {
     etsyFormData,
     isPublishing,
     publishUrl,
+    temperature,
+    setTemperature,
     updateEtsyFormData,
     publishToEtsy,
     fetchSystemPromptPreview: useCallback(async (params: any) => {

@@ -24,6 +24,14 @@ export const createListingRepository = () => {
     macroCustomContext?: string,
     contextualCustomContext?: string,
     themedEnvironmentCustomContext?: string,
+    lifestyleCreateSimilar?: boolean,
+    heroCreateSimilar?: boolean,
+    closeUpsCreateSimilar?: boolean,
+    flatLayCreateSimilar?: boolean,
+    macroCreateSimilar?: boolean,
+    contextualCreateSimilar?: boolean,
+    themedEnvironmentCreateSimilar?: boolean,
+    temperature?: number,
     model?: string
   }) => {
     const response = await fetchWithTimeout('/listings/generate', {
@@ -45,7 +53,8 @@ export const createListingRepository = () => {
     productImages?: string[],
     background?: string | null,
     model?: string,
-    systemPrompt?: string
+    systemPrompt?: string,
+    temperature?: number
   }) => {
     const response = await fetchWithTimeout('/listings/generate/single', {
       method: 'POST',

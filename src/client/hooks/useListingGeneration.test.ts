@@ -48,7 +48,8 @@ describe('Listing Generation', () => {
       lifestyleCount: 1, 
       productImages: base64Images,
       model: 'gemini-2.5-flash-image',
-      noFallback: true
+      noFallback: true,
+      temperature: 1
     });
   });
 
@@ -70,7 +71,8 @@ describe('Listing Generation', () => {
     expect(capturedParams).toEqual({ 
       heroCount: 2,
       model: 'gemini-2.5-flash-image',
-      noFallback: true
+      noFallback: true,
+      temperature: 1
     });
     expect(result.current.images).toEqual([{ url: 'hero_1.png', type: 'hero' }, { url: 'hero_2.png', type: 'hero' }]);
   });
@@ -93,7 +95,8 @@ describe('Listing Generation', () => {
     expect(capturedParams).toEqual({ 
       closeUpsCount: 1,
       model: 'gemini-2.5-flash-image',
-      noFallback: true
+      noFallback: true,
+      temperature: 1
     });
     expect(result.current.images).toEqual([{ url: 'closeup_1.png', type: 'close-up' }]);
   });
@@ -450,11 +453,18 @@ describe('Listing Generation', () => {
       description: 'Test Description',
       price: '19.99',
       quantity: '10',
+      sku: 'SKU123',
       shop_id: '12345',
-      taxonomy_id: '1',
       who_made: 'i_did',
-      when_made: 'made_to_order',
-      is_supply: false
+      when_made: 'recently',
+      is_supply: true,
+      personalization: 'engraving',
+      category: 'Jewelry',
+      tags: 'handmade,silver',
+      shipping_profile: 'Standard',
+      product_type: 'physical',
+      readiness: 'active',
+      taxonomy_id: '1234'
     };
 
     const selectedImages = ['image1.png', 'image2.png'];
@@ -462,12 +472,10 @@ describe('Listing Generation', () => {
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
 
     await act(async () => {
-      // Set the form data first
-      result.current.updateEtsyFormData('title', listingData.title);
-      result.current.updateEtsyFormData('description', listingData.description);
-      result.current.updateEtsyFormData('price', listingData.price);
-      result.current.updateEtsyFormData('quantity', listingData.quantity);
-      result.current.updateEtsyFormData('shop_id', listingData.shop_id);
+      // Set all the form data
+      Object.entries(listingData).forEach(([field, value]) => {
+        result.current.updateEtsyFormData(field, value);
+      });
     });
 
     await act(async () => {
@@ -475,7 +483,7 @@ describe('Listing Generation', () => {
     });
 
     expect(fakeListingRepository.publishListing).toHaveBeenCalledWith(expect.objectContaining({
-      title: listingData.title,
+      ...listingData,
       images: selectedImages
     }));
   });
@@ -702,5 +710,33 @@ describe('Listing Generation', () => {
 
     expect(result.current.images[0].isArchived).toBe(true);
     expect(result.current.images[1].isArchived).toBe(true);
+  });
+
+  it('manages temperature state and passes it to generateListing', async () => {
+    let capturedParams = null;
+    const fakeListingRepository = {
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return { images: [{ url: 'image.png', type: 'lifestyle' }] };
+      }
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    expect(result.current.temperature).toBe(1.0); // Default value
+
+    act(() => {
+      result.current.setTemperature(0.5);
+    });
+    
+    expect(result.current.temperature).toBe(0.5);
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+    
+    expect(capturedParams).toEqual(expect.objectContaining({ 
+      temperature: 0.5
+    }));
   });
 });

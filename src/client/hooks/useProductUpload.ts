@@ -29,11 +29,18 @@ export const useProductUpload = (repository?: any) => {
   const [macroCustomContext, setMacroCustomContext] = useState('');
   const [contextualCustomContext, setContextualCustomContext] = useState('');
   const [themedEnvironmentCustomContext, setThemedEnvironmentCustomContext] = useState('');
+  const [lifestyleCreateSimilar, setLifestyleCreateSimilar] = useState(false);
+  const [heroCreateSimilar, setHeroCreateSimilar] = useState(false);
+  const [closeUpsCreateSimilar, setCloseUpsCreateSimilar] = useState(false);
+  const [flatLayCreateSimilar, setFlatLayCreateSimilar] = useState(false);
+  const [macroCreateSimilar, setMacroCreateSimilar] = useState(false);
+  const [contextualCreateSimilar, setContextualCreateSimilar] = useState(false);
+  const [themedEnvironmentCreateSimilar, setThemedEnvironmentCreateSimilar] = useState(false);
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
   const [archivedUploads, setArchivedUploads] = useState<string[]>([]);
   const [archivedInSession, setArchivedInSession] = useState<Set<string>>(new Set());
 
-  const totalShots = lifestyleShotsCount + heroShotsCount + closeUpsCount + flatLayShotsCount + macroShotsCount + contextualShotsCount + themedEnvironmentShotsCount;
+  const totalShots = (lifestyleShotsCount || 0) + (heroShotsCount || 0) + (closeUpsCount || 0) + (flatLayShotsCount || 0) + (macroShotsCount || 0) + (contextualShotsCount || 0) + (themedEnvironmentShotsCount || 0);
   const isReadyToGenerate = totalShots > 0 && productImages.length > 0;
 
   useEffect(() => {
@@ -301,6 +308,14 @@ export const useProductUpload = (repository?: any) => {
     return url ? archivedInSession.has(url) : false;
   };
 
+  const handleLifestyleCreateSimilarChange = (value: boolean) => setLifestyleCreateSimilar(value);
+  const handleHeroCreateSimilarChange = (value: boolean) => setHeroCreateSimilar(value);
+  const handleCloseUpsCreateSimilarChange = (value: boolean) => setCloseUpsCreateSimilar(value);
+  const handleFlatLayCreateSimilarChange = (value: boolean) => setFlatLayCreateSimilar(value);
+  const handleMacroCreateSimilarChange = (value: boolean) => setMacroCreateSimilar(value);
+  const handleContextualCreateSimilarChange = (value: boolean) => setContextualCreateSimilar(value);
+  const handleThemedEnvironmentCreateSimilarChange = (value: boolean) => setThemedEnvironmentCreateSimilar(value);
+
   const resetCounts = () => {
     setLifestyleShotsCount(0);
     setHeroShotsCount(0);
@@ -309,6 +324,13 @@ export const useProductUpload = (repository?: any) => {
     setMacroShotsCount(0);
     setContextualShotsCount(0);
     setThemedEnvironmentShotsCount(0);
+    setLifestyleCreateSimilar(false);
+    setHeroCreateSimilar(false);
+    setCloseUpsCreateSimilar(false);
+    setFlatLayCreateSimilar(false);
+    setMacroCreateSimilar(false);
+    setContextualCreateSimilar(false);
+    setThemedEnvironmentCreateSimilar(false);
   };
 
   const selectAllShots = () => {
@@ -389,6 +411,20 @@ export const useProductUpload = (repository?: any) => {
     removeContextTemplate,
     totalShots,
     isReadyToGenerate,
+    lifestyleCreateSimilar,
+    handleLifestyleCreateSimilarChange,
+    heroCreateSimilar,
+    handleHeroCreateSimilarChange,
+    closeUpsCreateSimilar,
+    handleCloseUpsCreateSimilarChange,
+    flatLayCreateSimilar,
+    handleFlatLayCreateSimilarChange,
+    macroCreateSimilar,
+    handleMacroCreateSimilarChange,
+    contextualCreateSimilar,
+    handleContextualCreateSimilarChange,
+    themedEnvironmentCreateSimilar,
+    handleThemedEnvironmentCreateSimilarChange,
     archivedUploads,
     toggleArchivedUpload,
     isProductImageArchived,

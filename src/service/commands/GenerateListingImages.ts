@@ -22,6 +22,14 @@ export const createGenerateListingImages = (listingRepository: any) => {
     macroCustomContext?: string,
     contextualCustomContext?: string,
     themedEnvironmentCustomContext?: string,
+    lifestyleCreateSimilar?: boolean,
+    heroCreateSimilar?: boolean,
+    closeUpsCreateSimilar?: boolean,
+    flatLayCreateSimilar?: boolean,
+    macroCreateSimilar?: boolean,
+    contextualCreateSimilar?: boolean,
+    themedEnvironmentCreateSimilar?: boolean,
+    temperature?: number,
     model?: string
   }) => {
     return await listingRepository.generateImages(request);

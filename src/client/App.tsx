@@ -101,6 +101,20 @@ const App = () => {
     archivedUploads,
     toggleArchivedUpload,
     isProductImageArchived,
+    lifestyleCreateSimilar,
+    handleLifestyleCreateSimilarChange,
+    heroCreateSimilar,
+    handleHeroCreateSimilarChange,
+    closeUpsCreateSimilar,
+    handleCloseUpsCreateSimilarChange,
+    flatLayCreateSimilar,
+    handleFlatLayCreateSimilarChange,
+    macroCreateSimilar,
+    handleMacroCreateSimilarChange,
+    contextualCreateSimilar,
+    handleContextualCreateSimilarChange,
+    themedEnvironmentCreateSimilar,
+    handleThemedEnvironmentCreateSimilarChange,
   } = useProductUpload(repository);
 
   const { 
@@ -124,6 +138,8 @@ const App = () => {
     etsyFormData,
     isPublishing,
     publishUrl,
+    temperature,
+    setTemperature,
     updateEtsyFormData,
     publishToEtsy
   } = useListingGeneration(repository);
@@ -133,6 +149,7 @@ const App = () => {
   const middlePaneRef = React.useRef<HTMLDivElement>(null);
   const previewRef = React.useRef<HTMLDivElement>(null);
   const wasGeneratingRef = React.useRef(false);
+  const [isEtsyFormOpen, setIsEtsyFormOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (wasGeneratingRef.current && !isGenerating && images.length > 0) {
@@ -205,10 +222,10 @@ const App = () => {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
-        <main className="flex-1 p-2 overflow-hidden">
-          <div className="flex gap-2 items-start h-[calc(100vh-10rem)] max-w-full mx-auto px-1">
+        <main className="flex-1 p-2">
+          <div className="flex gap-2 items-start max-w-full mx-auto px-1">
             {/* Left Pane */}
-            <div ref={leftPaneRef} className="flex flex-col items-center gap-4 w-1/5 h-full overflow-y-auto pr-1">
+            <div ref={leftPaneRef} className="flex flex-col items-center gap-4 w-1/5 h-[calc(100vh-10rem)] sticky top-[5.5rem] overflow-y-auto pr-1">
               <div className="w-full flex flex-col gap-4">
                 <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
                 <ArchivedUploads 
@@ -234,11 +251,13 @@ const App = () => {
               {/* System Prompt (moved here) */}
               <SystemPromptPane 
                 prompt={systemPrompt} 
+                temperature={temperature}
+                onTemperatureChange={setTemperature}
               />
             </div>
 
             {/* Middle Pane */}
-            <div ref={middlePaneRef} className="flex flex-col gap-4 w-1/5 h-full overflow-y-auto items-start pr-1">
+            <div ref={middlePaneRef} className="flex flex-col gap-4 w-1/5 h-[calc(100vh-10rem)] sticky top-[5.5rem] overflow-y-auto items-start pr-1">
               <div className="flex flex-col items-center gap-4 w-full">
                 <div className="w-full">
                   <ShotsSelection 
@@ -270,6 +289,20 @@ const App = () => {
                     onContextualCustomContextChange={handleContextualCustomContextChange}
                     themedEnvironmentCustomContext={themedEnvironmentCustomContext}
                     onThemedEnvironmentCustomContextChange={handleThemedEnvironmentCustomContextChange}
+                    lifestyleCreateSimilar={lifestyleCreateSimilar}
+                    onLifestyleCreateSimilarChange={handleLifestyleCreateSimilarChange}
+                    heroCreateSimilar={heroCreateSimilar}
+                    onHeroCreateSimilarChange={handleHeroCreateSimilarChange}
+                    closeUpsCreateSimilar={closeUpsCreateSimilar}
+                    onCloseUpsCreateSimilarChange={handleCloseUpsCreateSimilarChange}
+                    flatLayCreateSimilar={flatLayCreateSimilar}
+                    onFlatLayCreateSimilarChange={handleFlatLayCreateSimilarChange}
+                    macroCreateSimilar={macroCreateSimilar}
+                    onMacroCreateSimilarChange={handleMacroCreateSimilarChange}
+                    contextualCreateSimilar={contextualCreateSimilar}
+                    onContextualCreateSimilarChange={handleContextualCreateSimilarChange}
+                    themedEnvironmentCreateSimilar={themedEnvironmentCreateSimilar}
+                    onThemedEnvironmentCreateSimilarChange={handleThemedEnvironmentCreateSimilarChange}
                     templates={templates}
                     onSaveTemplate={saveContextTemplate}
                     onRemoveTemplate={removeContextTemplate}
@@ -331,7 +364,14 @@ const App = () => {
                         flatLayCustomContext,
                         macroCustomContext,
                         contextualCustomContext,
-                        themedEnvironmentCustomContext
+                        themedEnvironmentCustomContext,
+                        lifestyleCreateSimilar,
+                        heroCreateSimilar,
+                        closeUpsCreateSimilar,
+                        flatLayCreateSimilar,
+                        macroCreateSimilar,
+                        contextualCreateSimilar,
+                        themedEnvironmentCreateSimilar
                       });
                       resetCounts();
                     }}
@@ -352,8 +392,8 @@ const App = () => {
             </div>
 
             {/* Right Pane */}
-            <div ref={previewRef} className="flex-1 h-full flex flex-col gap-2 overflow-hidden pr-1">
-              <div className="h-1/2 overflow-y-auto pr-1">
+            <div ref={previewRef} className="flex-1 flex flex-col gap-2 pr-1">
+              <div className="h-[calc(50vh-5rem)] min-h-[300px] overflow-y-auto pr-1">
                 <ListingPreview 
                   images={images} 
                   isGenerating={isGenerating}
@@ -369,14 +409,34 @@ const App = () => {
                   onRegenerate={handleRegenerateImage}
                 />
               </div>
-              <div className="h-1/2 overflow-y-auto pr-1">
-                <EtsyListingForm 
-                  formData={etsyFormData}
-                  onChange={updateEtsyFormData}
-                  onPublish={publishToEtsy}
-                  isPublishing={isPublishing}
-                  publishUrl={publishUrl}
-                />
+              <div className="pr-1">
+                <Collapsible
+                  open={isEtsyFormOpen}
+                  onOpenChange={setIsEtsyFormOpen}
+                  className="w-full"
+                >
+                  <div className="flex items-center justify-between px-3 py-2 border rounded-t-lg bg-muted/30 border-b-0 h-10">
+                    <h4 className="text-sm font-semibold">
+                      Etsy Listing
+                    </h4>
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost" size="sm" className="w-9 p-0">
+                        {isEtsyFormOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                        <span className="sr-only">Toggle Etsy Listing</span>
+                      </Button>
+                    </CollapsibleTrigger>
+                  </div>
+                  <CollapsibleContent>
+                    <EtsyListingForm 
+                      formData={etsyFormData}
+                      onChange={updateEtsyFormData}
+                      onPublish={publishToEtsy}
+                      isPublishing={isPublishing}
+                      publishUrl={publishUrl}
+                      hideHeader={true}
+                    />
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
             </div>
           </div>
@@ -498,7 +558,9 @@ const ShotTypeItem = ({
   onSaveTemplate,
   onRemoveTemplate,
   background,
-  onBackgroundUpload
+  onBackgroundUpload,
+  createSimilar,
+  onCreateSimilarChange
 }: { 
   id: string, 
   label: string, 
@@ -512,7 +574,9 @@ const ShotTypeItem = ({
   onSaveTemplate: (name: string, text: string) => void,
   onRemoveTemplate: (name: string) => void,
   background: string | null,
-  onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  createSimilar: boolean,
+  onCreateSimilarChange: (value: boolean) => void
 }) => {
   const [showCustom, setShowCustom] = React.useState(false);
   const [selectedTemplate, setSelectedTemplate] = React.useState<string>("");
@@ -581,6 +645,17 @@ const ShotTypeItem = ({
                   />
                 </div>
               )}
+            </div>
+            <div className="flex items-center gap-1 ml-2">
+              <Checkbox 
+                id={`${id}-create-similar`}
+                checked={createSimilar}
+                onCheckedChange={(checked) => onCreateSimilarChange(!!checked)}
+                className="h-3 w-3"
+              />
+              <Label htmlFor={`${id}-create-similar`} className="text-[10px] text-muted-foreground whitespace-nowrap cursor-pointer">
+                create similar
+              </Label>
             </div>
           </div>
         </div>
@@ -766,6 +841,20 @@ const ShotsSelection = ({
   onContextualCustomContextChange,
   themedEnvironmentCustomContext,
   onThemedEnvironmentCustomContextChange,
+  lifestyleCreateSimilar,
+  onLifestyleCreateSimilarChange,
+  heroCreateSimilar,
+  onHeroCreateSimilarChange,
+  closeUpsCreateSimilar,
+  onCloseUpsCreateSimilarChange,
+  flatLayCreateSimilar,
+  onFlatLayCreateSimilarChange,
+  macroCreateSimilar,
+  onMacroCreateSimilarChange,
+  contextualCreateSimilar,
+  onContextualCreateSimilarChange,
+  themedEnvironmentCreateSimilar,
+  onThemedEnvironmentCreateSimilarChange,
   templates,
   onSaveTemplate,
   onRemoveTemplate,
@@ -815,6 +904,20 @@ const ShotsSelection = ({
   onContextualCustomContextChange: (value: string) => void,
   themedEnvironmentCustomContext: string,
   onThemedEnvironmentCustomContextChange: (value: string) => void,
+  lifestyleCreateSimilar: boolean,
+  onLifestyleCreateSimilarChange: (value: boolean) => void,
+  heroCreateSimilar: boolean,
+  onHeroCreateSimilarChange: (value: boolean) => void,
+  closeUpsCreateSimilar: boolean,
+  onCloseUpsCreateSimilarChange: (value: boolean) => void,
+  flatLayCreateSimilar: boolean,
+  onFlatLayCreateSimilarChange: (value: boolean) => void,
+  macroCreateSimilar: boolean,
+  onMacroCreateSimilarChange: (value: boolean) => void,
+  contextualCreateSimilar: boolean,
+  onContextualCreateSimilarChange: (value: boolean) => void,
+  themedEnvironmentCreateSimilar: boolean,
+  onThemedEnvironmentCreateSimilarChange: (value: boolean) => void,
   templates: { name: string, text: string }[],
   onSaveTemplate: (name: string, text: string) => void,
   onRemoveTemplate: (name: string) => void,
@@ -846,7 +949,9 @@ const ShotsSelection = ({
     customContext: string,
     onCustomContextChange: (value: string) => void,
     background: string | null,
-    onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    createSimilar: boolean,
+    onCreateSimilarChange: (value: boolean) => void
   ) => ({
     id,
     label,
@@ -858,6 +963,8 @@ const ShotsSelection = ({
     onCustomContextChange,
     background,
     onBackgroundUpload,
+    createSimilar,
+    onCreateSimilarChange
   });
 
   const shotTypes = [
@@ -871,7 +978,9 @@ const ShotsSelection = ({
       heroCustomContext,
       onHeroCustomContextChange,
       heroBackground,
-      onHeroBackgroundUpload
+      onHeroBackgroundUpload,
+      heroCreateSimilar,
+      onHeroCreateSimilarChange
     ),
     createShotType(
       "flat-lay-shots",
@@ -883,7 +992,9 @@ const ShotsSelection = ({
       flatLayCustomContext,
       onFlatLayCustomContextChange,
       flatLayBackground,
-      onFlatLayBackgroundUpload
+      onFlatLayBackgroundUpload,
+      flatLayCreateSimilar,
+      onFlatLayCreateSimilarChange
     ),
     createShotType(
       "lifestyle-shots",
@@ -895,7 +1006,9 @@ const ShotsSelection = ({
       lifestyleCustomContext,
       onLifestyleCustomContextChange,
       lifestyleBackground,
-      onLifestyleBackgroundUpload
+      onLifestyleBackgroundUpload,
+      lifestyleCreateSimilar,
+      onLifestyleCreateSimilarChange
     ),
     createShotType(
       "macro-shots",
@@ -907,7 +1020,9 @@ const ShotsSelection = ({
       macroCustomContext,
       onMacroCustomContextChange,
       macroBackground,
-      onMacroBackgroundUpload
+      onMacroBackgroundUpload,
+      macroCreateSimilar,
+      onMacroCreateSimilarChange
     ),
     createShotType(
       "contextual-shots",
@@ -919,7 +1034,9 @@ const ShotsSelection = ({
       contextualCustomContext,
       onContextualCustomContextChange,
       contextualBackground,
-      onContextualBackgroundUpload
+      onContextualBackgroundUpload,
+      contextualCreateSimilar,
+      onContextualCreateSimilarChange
     ),
     createShotType(
       "themed-environment",
@@ -931,7 +1048,9 @@ const ShotsSelection = ({
       themedEnvironmentCustomContext,
       onThemedEnvironmentCustomContextChange,
       themedEnvironmentBackground,
-      onThemedEnvironmentBackgroundUpload
+      onThemedEnvironmentBackgroundUpload,
+      themedEnvironmentCreateSimilar,
+      onThemedEnvironmentCreateSimilarChange
     ),
     createShotType(
       "close-ups",
@@ -943,7 +1062,9 @@ const ShotsSelection = ({
       closeUpsCustomContext,
       onCloseUpsCustomContextChange,
       closeUpsBackground,
-      onCloseUpsBackgroundUpload
+      onCloseUpsBackgroundUpload,
+      closeUpsCreateSimilar,
+      onCloseUpsCreateSimilarChange
     ),
   ];
 
@@ -1055,14 +1176,36 @@ const UploadedImage = ({
 };
 
 const SystemPromptPane = ({ 
-  prompt
+  prompt,
+  temperature,
+  onTemperatureChange
 }: { 
-  prompt: string
+  prompt: string,
+  temperature: number,
+  onTemperatureChange: (value: number) => void
 }) => {
   return (
     <Card className="w-full mt-2 overflow-hidden flex flex-col">
       <CardHeader className="p-3">
-        <CardTitle className="text-sm">System Prompt</CardTitle>
+        <div className="flex flex-col gap-2">
+          <CardTitle className="text-sm">System Prompt</CardTitle>
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between items-center">
+              <Label htmlFor="temperature-slider" className="text-[10px] text-muted-foreground uppercase font-bold">Temperature (randomness)</Label>
+              <span className="text-[10px] font-mono bg-muted px-1 rounded">{temperature.toFixed(1)}</span>
+            </div>
+            <input 
+              id="temperature-slider"
+              type="range"
+              min="0"
+              max="5"
+              step="0.5"
+              value={temperature}
+              onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
+              className="w-full h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+            />
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto max-h-[300px] p-2">
         <pre className="text-[10px] whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg">

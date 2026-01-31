@@ -24,6 +24,14 @@ export const createListingRepository = (dataLayer: any) => {
     macroCustomContext?: string,
     contextualCustomContext?: string,
     themedEnvironmentCustomContext?: string,
+    lifestyleCreateSimilar?: boolean,
+    heroCreateSimilar?: boolean,
+    closeUpsCreateSimilar?: boolean,
+    flatLayCreateSimilar?: boolean,
+    macroCreateSimilar?: boolean,
+    contextualCreateSimilar?: boolean,
+    themedEnvironmentCreateSimilar?: boolean,
+    temperature?: number,
     model?: string
   }) => {
     const fallbackModels = [
@@ -125,6 +133,14 @@ export const createListingRepository = (dataLayer: any) => {
     macroCustomContext?: string,
     contextualCustomContext?: string,
     themedEnvironmentCustomContext?: string,
+    lifestyleCreateSimilar?: boolean,
+    heroCreateSimilar?: boolean,
+    closeUpsCreateSimilar?: boolean,
+    flatLayCreateSimilar?: boolean,
+    macroCreateSimilar?: boolean,
+    contextualCreateSimilar?: boolean,
+    themedEnvironmentCreateSimilar?: boolean,
+    temperature?: number,
     model?: string
   }) => {
     console.log('Generating images with params:', {
@@ -135,6 +151,14 @@ export const createListingRepository = (dataLayer: any) => {
       macro: params.macroCount,
       contextual: params.contextualCount,
       themedEnvironment: params.themedEnvironmentCount,
+      lifestyleCreateSimilar: params.lifestyleCreateSimilar,
+      heroCreateSimilar: params.heroCreateSimilar,
+      closeUpsCreateSimilar: params.closeUpsCreateSimilar,
+      flatLayCreateSimilar: params.flatLayCreateSimilar,
+      macroCreateSimilar: params.macroCreateSimilar,
+      contextualCreateSimilar: params.contextualCreateSimilar,
+      themedEnvironmentCreateSimilar: params.themedEnvironmentCreateSimilar,
+      temperature: params.temperature,
       model: params.model,
       hasProductImage: !!(params.productImages && params.productImages.length > 0)
     });
@@ -184,13 +208,13 @@ export const createListingRepository = (dataLayer: any) => {
       }
     };
 
-    await generateShotTypeImages('lifestyle', params.lifestyleCount, resolvedProductImages, lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext);
-    await generateShotTypeImages('hero', params.heroCount, resolvedProductImages, heroBackground, images, collectPrompt, params.model, params.heroCustomContext);
-    await generateShotTypeImages('close-up', params.closeUpsCount, resolvedProductImages, closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext);
-    await generateShotTypeImages('flat-lay', params.flatLayCount, resolvedProductImages, flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext);
-    await generateShotTypeImages('macro', params.macroCount, resolvedProductImages, macroBackground, images, collectPrompt, params.model, params.macroCustomContext);
-    await generateShotTypeImages('contextual', params.contextualCount, resolvedProductImages, contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext);
-    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, resolvedProductImages, themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext);
+    await generateShotTypeImages('lifestyle', params.lifestyleCount, resolvedProductImages, lifestyleBackground, images, collectPrompt, params.model, params.lifestyleCustomContext, undefined, params.lifestyleCreateSimilar, params.temperature);
+    await generateShotTypeImages('hero', params.heroCount, resolvedProductImages, heroBackground, images, collectPrompt, params.model, params.heroCustomContext, undefined, params.heroCreateSimilar, params.temperature);
+    await generateShotTypeImages('close-up', params.closeUpsCount, resolvedProductImages, closeUpsBackground, images, collectPrompt, params.model, params.closeUpsCustomContext, undefined, params.closeUpsCreateSimilar, params.temperature);
+    await generateShotTypeImages('flat-lay', params.flatLayCount, resolvedProductImages, flatLayBackground, images, collectPrompt, params.model, params.flatLayCustomContext, undefined, params.flatLayCreateSimilar, params.temperature);
+    await generateShotTypeImages('macro', params.macroCount, resolvedProductImages, macroBackground, images, collectPrompt, params.model, params.macroCustomContext, undefined, params.macroCreateSimilar, params.temperature);
+    await generateShotTypeImages('contextual', params.contextualCount, resolvedProductImages, contextualBackground, images, collectPrompt, params.model, params.contextualCustomContext, undefined, params.contextualCreateSimilar, params.temperature);
+    await generateShotTypeImages('themed-environment', params.themedEnvironmentCount, resolvedProductImages, themedEnvironmentBackground, images, collectPrompt, params.model, params.themedEnvironmentCustomContext, undefined, params.themedEnvironmentCreateSimilar, params.temperature);
 
     return { images, systemPrompt, model: params.model };
   };
@@ -204,7 +228,9 @@ export const createListingRepository = (dataLayer: any) => {
     onResult?: (res: any) => void,
     model?: string,
     customContext?: string,
-    systemPrompt?: string
+    systemPrompt?: string,
+    createSimilar?: boolean,
+    temperature?: number
   ) => {
     const runGeneration = async () => {
       let retries = 0;
@@ -213,6 +239,7 @@ export const createListingRepository = (dataLayer: any) => {
       
       while (!success && retries <= maxRetries) {
         try {
+          const seed = createSimilar ? Math.floor(Math.random() * 2147483647) : undefined;
           const result = await dataLayer.generateImage({ 
             type,
             productImages,
@@ -220,7 +247,9 @@ export const createListingRepository = (dataLayer: any) => {
             count: 1,
             model,
             customContext,
-            systemPrompt
+            systemPrompt,
+            seed,
+            temperature
           });
           const imageUrl = await saveImageToAssets(result.imageUrl, type);
           onResult?.({ ...result, imageUrl });
@@ -307,7 +336,8 @@ export const createListingRepository = (dataLayer: any) => {
     productImages?: string[],
     background?: string,
     model?: string,
-    systemPrompt?: string
+    systemPrompt?: string,
+    temperature?: number
   }) => {
     let image: { url: string; type: string } | null = null;
     let systemPromptUsed = '';
@@ -330,7 +360,9 @@ export const createListingRepository = (dataLayer: any) => {
       },
       params.model,
       params.customContext,
-      params.systemPrompt
+      params.systemPrompt,
+      undefined,
+      params.temperature
     );
 
     if (!image) {

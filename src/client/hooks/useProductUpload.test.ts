@@ -350,4 +350,72 @@ describe('useProductUpload', () => {
 
     expect(result.current.isProductImageArchived(0)).toBe(true);
   });
+  it('isReadyToGenerate is false when no shots are selected', async () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    // Upload an image
+    const fakeImage = 'data:image/png;base64,image1';
+    const mockReader = {
+      readAsDataURL: jest.fn(function(this: any) { this.onloadend(); }),
+      get result() { return fakeImage; }
+    };
+    jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+    
+    await act(async () => {
+      result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
+    });
+
+    expect(result.current.productImages.length).toBe(1);
+    expect(result.current.totalShots).toBe(0);
+    expect(result.current.isReadyToGenerate).toBe(false);
+
+    (global.FileReader as unknown as jest.Mock).mockRestore();
+  });
+
+  it('isReadyToGenerate is false when shots are selected but no images uploaded', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    act(() => {
+      result.current.handleLifestyleShotsChange({ target: { value: '1' } } as any);
+    });
+
+    expect(result.current.totalShots).toBe(1);
+    expect(result.current.productImages.length).toBe(0);
+    expect(result.current.isReadyToGenerate).toBe(false);
+  });
+
+  it('isReadyToGenerate is true when shots are selected and images uploaded', async () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    // Upload an image
+    const fakeImage = 'data:image/png;base64,image1';
+    const mockReader = {
+      readAsDataURL: jest.fn(function(this: any) { this.onloadend(); }),
+      get result() { return fakeImage; }
+    };
+    jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+    
+    await act(async () => {
+      result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
+      result.current.handleLifestyleShotsChange({ target: { value: '1' } } as any);
+    });
+
+    expect(result.current.totalShots).toBe(1);
+    expect(result.current.productImages.length).toBe(1);
+    expect(result.current.isReadyToGenerate).toBe(true);
+
+    (global.FileReader as unknown as jest.Mock).mockRestore();
+  });
+
+  it('should handle lifestyleCreateSimilar change', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    expect(result.current.lifestyleCreateSimilar).toBe(false);
+    
+    act(() => {
+      result.current.handleLifestyleCreateSimilarChange(true);
+    });
+    
+    expect(result.current.lifestyleCreateSimilar).toBe(true);
+  });
 });

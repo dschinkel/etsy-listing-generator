@@ -14,7 +14,18 @@ describe('Push To Etsy', () => {
       description: 'Test Description',
       price: '19.99',
       quantity: 1,
+      sku: 'SKU123',
       shop_id: '12345',
+      who_made: 'i_did',
+      when_made: 'recently',
+      is_supply: true,
+      personalization: 'engraving',
+      category: 'Jewelry',
+      tags: 'handmade,silver',
+      shipping_profile: 'Standard',
+      product_type: 'physical',
+      readiness: 'active',
+      taxonomy_id: '1234',
       images: ['/src/assets/generated-images/test.png']
     };
 
@@ -22,7 +33,10 @@ describe('Push To Etsy', () => {
 
     expect(fakeEtsyRepository.createListing).toHaveBeenCalledWith(expect.objectContaining({
       title: 'Test Etsy Listing',
-      shop_id: '12345'
+      shop_id: '12345',
+      sku: 'SKU123',
+      personalization: 'engraving',
+      taxonomy_id: '1234'
     }));
     expect(fakeEtsyRepository.uploadImage).toHaveBeenCalledWith('12345', '123', '/src/assets/generated-images/test.png');
     expect(result.url).toBe('https://www.etsy.com/listing/123');
