@@ -1,0 +1,14 @@
+{
+  "versions": [
+    {
+      "version": "edit image prompt v1",
+      "template": "EDIT MODE — TEXT REPLACEMENT ONLY\n\nYou are editing an existing image. This is NOT a redraw and NOT a re-illustration.\n\nThe provided image is the final, approved product design.\nYou must preserve the image pixel-for-pixel except where text is explicitly replaced.\n\nOUTPUT REQUIREMENTS:\n- Generate {{IMAGE_COUNT}} image(s).\n\nALLOWED CHANGES (ONLY):\n{{ALLOWED_CHANGES}}\n\nABSOLUTE LOCKS (DO NOT CHANGE):\n• Do NOT change background color\n• Do NOT change materials, textures, lighting, shadows, or outlines\n• Do NOT change camera angle, framing, or perspective\n• Do NOT change icon artwork, shapes, or proportions\n• Do NOT change borders, stroke thickness, bevels, or 3D depth\n• Do NOT simplify, cartoonize, or re-style the image\n• Do NOT convert to illustration, vector, or flat art\n• Do NOT regenerate the product or scene\n\nTEXT MATCHING RULES:\n• New name must match the original font style exactly\n• New name must match original letter thickness, spacing, outline, and embossing\n• New number must match original number style exactly\n• Preserve all original colors except for the letterforms being replaced\n\nOUTPUT:\nReturn the same image with ONLY the name and number text changed.\nIf any other change is required to complete the edit, do NOT make it.",
+      "lineTemplate": "• Replace the {{FIELD}} text with: {{VALUE}}"
+    },
+    {
+      "version": "edit image prompt v2",
+      "template": "EDIT MODE — LITERAL TEXT REPLACEMENT ONLY\n\nYou are editing an existing image. This is NOT a redraw, redesign, or regeneration.\n\nThe provided image is final and approved.\nPreserve all pixels exactly except where text glyphs are replaced.\n\nOUTPUT REQUIREMENTS:\n- Generate {{IMAGE_COUNT}} image(s).\n\nALLOWED CHANGES (ONLY):\n{{ALLOWED_CHANGES}}\n\nTEXT CONSTRAINTS (CRITICAL):\n• Treat the replacement text as literal characters, not names or concepts\n• Render characters exactly as provided, character-for-character\n• Do NOT substitute similar names, alternate spellings, or different numbers\n• Do NOT auto-correct, stylize, balance, or “improve” the text\n• Do NOT choose different characters for visual or semantic reasons\n\nSTYLE LOCK:\n• Match the original font shape, letter thickness, spacing, outline, and embossing exactly\n• Copy the original glyph style and placement precisely\n\nABSOLUTE LOCKS:\n• Do NOT change background, materials, textures, lighting, shadows, or outlines\n• Do NOT change camera angle, framing, perspective, or scale\n• Do NOT change icons, shapes, borders, strokes, bevels, or depth\n• Do NOT regenerate any part of the image\n\nOUTPUT:\nReturn the same image with ONLY the specified characters replaced.\nIf exact character replacement cannot be performed, return the original image unchanged.",
+      "lineTemplate": "• Replace the {{FIELD}} text with the literal string: \"{{VALUE}}\""
+    }
+  ]
+}

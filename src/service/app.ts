@@ -58,6 +58,22 @@ router.post('/system-prompt', async (ctx) => {
   await listingController.getPromptPreview(ctx);
 });
 
+router.get('/prompt-versions', async (ctx) => {
+  await listingController.getPromptVersions(ctx);
+});
+
+router.get('/edit-prompt-versions', async (ctx) => {
+  await listingController.getEditPromptVersions(ctx);
+});
+
+router.post('/edit-prompt-versions', async (ctx) => {
+  await listingController.saveEditPromptVersion(ctx);
+});
+
+router.delete('/edit-prompt-versions/:name', async (ctx) => {
+  await listingController.removeEditPromptVersion(ctx);
+});
+
 router.get('/templates', async (ctx) => {
   await listingController.getTemplates(ctx);
 });
@@ -76,6 +92,10 @@ router.delete('/images', async (ctx) => {
 
 router.post('/archive', async (ctx) => {
   await listingController.archive(ctx);
+});
+
+router.post('/save-image', async (ctx) => {
+  await listingController.saveGeneratedImage(ctx);
 });
 
 router.get('/archived-uploads', async (ctx) => {

@@ -1,38 +1,41 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import Captions from "yet-another-react-lightbox/plugins/captions";
+import "yet-another-react-lightbox/plugins/captions.css";
+import Counter from "yet-another-react-lightbox/plugins/counter";
+import "yet-another-react-lightbox/plugins/counter.css";
+import Download from "yet-another-react-lightbox/plugins/download";
 
 interface ImageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  imageUrl: string | null;
-  imageType: string | null;
+  images: { url: string; type: string }[];
+  initialIndex: number;
 }
 
-const ImageModal = ({ isOpen, onClose, imageUrl, imageType }: ImageModalProps) => {
-  if (!imageUrl) return null;
+const ImageModal = ({ isOpen, onClose, images, initialIndex }: ImageModalProps) => {
+  if (!images || images.length === 0) return null;
+
+  const slides = images.map(img => ({
+    src: img.url,
+    title: `${img.type} Shot`,
+    description: `Shot Type: ${img.type}`
+  }));
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl w-[90vw] p-0 overflow-hidden bg-black/95 border-slate-800">
-        <DialogHeader className="p-4 bg-slate-900/50 absolute top-0 left-0 right-0 z-10 backdrop-blur-sm border-b border-white/10">
-          <DialogTitle className="text-white capitalize flex items-center gap-2">
-            {imageType} Shot
-          </DialogTitle>
-        </DialogHeader>
-        <div className="relative aspect-square w-full flex items-center justify-center p-4 pt-16">
-          <img
-            src={imageUrl}
-            alt={`${imageType} preview`}
-            className="max-w-full max-h-[80vh] object-contain shadow-2xl rounded"
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
+    <Lightbox
+      open={isOpen}
+      close={onClose}
+      index={initialIndex}
+      slides={slides}
+      plugins={[Zoom, Thumbnails, Captions, Counter, Download]}
+      captions={{ showToggle: true, descriptionMaxLines: 3 }}
+      thumbnails={{ position: "bottom", width: 120, height: 80, border: 1, borderRadius: 4, padding: 4, gap: 16 }}
+    />
   );
 };
 

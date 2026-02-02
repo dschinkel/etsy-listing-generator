@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Button } from './ui/button';
-import { X, Archive, Copy, Download, Plus, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { X, Archive, Copy, Download, Plus, RefreshCw, Save, Image as ImageIcon } from 'lucide-react';
 import ImageModal from './ImageModal';
 import { useListingPreview } from './useListingPreview';
 import { Checkbox } from './ui/checkbox';
@@ -14,6 +14,7 @@ interface ListingImage {
   type: string;
   isPrimary?: boolean;
   isArchived?: boolean;
+  isSaved?: boolean;
 }
 
 interface ListingPreviewProps {
@@ -25,10 +26,12 @@ interface ListingPreviewProps {
   onClearAll: () => void;
   onArchiveAll: () => void;
   onArchiveImage: (index: number) => void;
+  onSaveImage: (index: number) => void;
   onDownload: (src: string, index: number) => void;
   onDownloadAll: () => void;
   onSetPrimary: (index: number) => void;
   onRegenerate: (index: number, customContext: string) => void;
+  onUploadManual: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ListingPreview = ({ 
@@ -40,16 +43,19 @@ const ListingPreview = ({
   onClearAll, 
   onArchiveAll,
   onArchiveImage,
+  onSaveImage,
   onDownload, 
   onDownloadAll, 
   onSetPrimary,
-  onRegenerate 
+  onRegenerate,
+  onUploadManual
 }: ListingPreviewProps) => {
-  const { selectedImage, isModalOpen, openImage, closeImage } = useListingPreview();
+  const { selectedIndex, isModalOpen, openImage, closeImage } = useListingPreview();
   const [regenContexts, setRegenContexts] = React.useState<Record<number, string>>({});
   const [showRegenInputs, setShowRegenInputs] = React.useState<Record<number, boolean>>({});
 
   const hasImages = images.length > 0;
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <>
@@ -60,6 +66,26 @@ const ListingPreview = ({
             {isGenerating && regeneratingIndex === null && modelUsed && (
               <ModelStatus model={modelUsed} />
             )}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+                onClick={() => fileInputRef.current?.click()}
+                data-testid="upload-manual-preview"
+              >
+                <Plus className="w-4 h-4" />
+                Upload Images
+              </Button>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={onUploadManual}
+              />
+            </div>
           </div>
           {hasImages && (
             <div className="flex items-center gap-2">
@@ -112,7 +138,7 @@ const ListingPreview = ({
                       alt={`Listing ${index + 1}`}
                       className="w-full h-full object-cover rounded shadow-md group-hover:scale-105 transition-transform cursor-pointer"
                       data-testid={`listing-image-${index}`}
-                      onClick={() => openImage(image)}
+                      onClick={() => openImage(index)}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         console.error(`Failed to load image at ${target.src}. Attempting fallback.`);
@@ -123,6 +149,21 @@ const ListingPreview = ({
                       }}
                     />
                     <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {!image.isSaved && (
+                        <Button
+                          variant="secondary"
+                          size="icon"
+                          className="w-8 h-8 bg-green-600 hover:bg-green-700 text-white border-none"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSaveImage(index);
+                          }}
+                          data-testid={`save-listing-image-${index}`}
+                          title="Save image"
+                        >
+                          <Save className="w-4 h-4" />
+                        </Button>
+                      )}
                       <Button
                         variant="secondary"
                         size="icon"
@@ -235,8 +276,8 @@ const ListingPreview = ({
       <ImageModal 
         isOpen={isModalOpen}
         onClose={closeImage}
-        imageUrl={selectedImage?.url || null}
-        imageType={selectedImage?.type || null}
+        images={images}
+        initialIndex={selectedIndex || 0}
       />
     </>
   );

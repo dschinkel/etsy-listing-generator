@@ -22,8 +22,8 @@ describe('Gemini Image Generator', () => {
     expect(result.imageUrl).toMatch(/^(http|data:)/);
     expect(result.imageUrl).not.toContain('placehold.jp');
     expect(result.systemInstruction).toContain('lifestyle');
-    expect(result.systemInstruction).toContain('1');
-  });
+    expect(result.systemInstruction).toContain('1 image(s)');
+  }, 60000);
 
   it('populates system instruction with correct shot type and count', async () => {
     const generator = createGeminiImageGenerator();
@@ -32,7 +32,7 @@ describe('Gemini Image Generator', () => {
     for (const type of shotTypes) {
       const result = await generator.generateImage({ type });
       expect(result.systemInstruction).toContain(type);
-      expect(result.systemInstruction).toContain('1'); // Default count is 1
+      expect(result.systemInstruction).toContain('1 image(s)'); // Default count is 1
     }
   });
 

@@ -245,23 +245,28 @@ describe('useProductUpload', () => {
     (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
-  it('resets shot counts', () => {
+  it('resets shot counts but preserves editSpecifications', () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
     act(() => {
       result.current.handleLifestyleShotsChange({ target: { value: '3' } } as any);
       result.current.handleHeroShotsChange({ target: { value: '2' } } as any);
+      result.current.addEditSpecification();
+      result.current.handleEditSpecificationChange(0, 'Name', 'Test Name');
     });
 
     expect(result.current.lifestyleShotsCount).toBe(3);
     expect(result.current.heroShotsCount).toBe(2);
+    expect(result.current.editSpecifications).toEqual([{ field: 'Name', value: 'Test Name' }]);
 
     act(() => {
-      (result.current as any).resetCounts();
+      result.current.resetCounts();
     });
 
     expect(result.current.lifestyleShotsCount).toBe(0);
     expect(result.current.heroShotsCount).toBe(0);
+    // Should be preserved according to new requirement
+    expect(result.current.editSpecifications).toEqual([{ field: 'Name', value: 'Test Name' }]);
   });
 
   it('deletes product image from server when removed', async () => {
@@ -417,5 +422,78 @@ describe('useProductUpload', () => {
     });
     
     expect(result.current.lifestyleCreateSimilar).toBe(true);
+  });
+
+  it('handles editSpecifications change', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    expect(result.current.editSpecifications).toEqual([]);
+    
+    act(() => {
+      result.current.addEditSpecification();
+    });
+    
+    expect(result.current.editSpecifications).toEqual([{ field: 'Name', value: '' }]);
+    
+    act(() => {
+      result.current.handleEditSpecificationChange(0, 'Number', '123');
+    });
+    
+    expect(result.current.editSpecifications).toEqual([{ field: 'Number', value: '123' }]);
+    
+    act(() => {
+      result.current.clearEditSpecifications();
+    });
+    
+    expect(result.current.editSpecifications).toEqual([]);
+    
+    act(() => {
+      result.current.addEditSpecification();
+      result.current.removeEditSpecification(0);
+    });
+    
+    expect(result.current.editSpecifications).toEqual([]);
+  });
+
+  it('handles editCount change', () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    expect(result.current.editCount).toBe(1);
+    
+    act(() => {
+      result.current.handleEditCountChange(5);
+    });
+    
+    expect(result.current.editCount).toBe(5);
+    
+    act(() => {
+      result.current.handleEditCountChange(0);
+    });
+    
+    expect(result.current.editCount).toBe(1); // Min value 1
+  });
+
+  it('is ready to generate when only editSpecifications and product images are present', async () => {
+    const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    // Upload an image
+    const fakeImage = 'data:image/png;base64,image1';
+    const mockReader = {
+      readAsDataURL: jest.fn(function(this: any) { this.onloadend(); }),
+      get result() { return fakeImage; }
+    };
+    jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
+    
+    await act(async () => {
+      result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
+      result.current.addEditSpecification();
+      result.current.handleEditSpecificationChange(0, 'Name', 'New Name');
+    });
+
+    expect(result.current.productImages.length).toBe(1);
+    expect(result.current.totalShots).toBe(0); 
+    expect(result.current.isReadyToGenerate).toBe(true);
+
+    (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 });

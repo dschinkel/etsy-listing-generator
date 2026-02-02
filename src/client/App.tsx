@@ -17,6 +17,7 @@ import {
   DialogClose
 } from './components/ui/dialog';
 import { 
+  Check,
   Plus, 
   Image as ImageIcon, 
   Save, 
@@ -24,19 +25,21 @@ import {
   Eraser, 
   Archive,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Copy,
+  Pencil,
 } from 'lucide-react';
+import { 
+  Collapsible, 
+  CollapsibleContent, 
+  CollapsibleTrigger 
+} from './components/ui/collapsible';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
 import EtsyListingForm from './components/EtsyListingForm';
 import ModelStatus from './components/ModelStatus';
 import { ThemeProvider } from './components/theme-provider';
-import { 
-  Collapsible, 
-  CollapsibleContent, 
-  CollapsibleTrigger 
-} from './components/ui/collapsible';
 
 const App = () => {
   const repository = React.useMemo(() => createListingRepository(), []);
@@ -72,6 +75,18 @@ const App = () => {
     handleMacroBackgroundUpload,
     contextualBackground,
     handleContextualBackgroundUpload,
+    lifestyleNoImage,
+    handleLifestyleNoImageChange,
+    heroNoImage,
+    handleHeroNoImageChange,
+    closeUpsNoImage,
+    handleCloseUpsNoImageChange,
+    flatLayNoImage,
+    handleFlatLayNoImageChange,
+    macroNoImage,
+    handleMacroNoImageChange,
+    contextualNoImage,
+    handleContextualNoImageChange,
     lifestyleCustomContext,
     handleLifestyleCustomContextChange,
     heroCustomContext,
@@ -88,6 +103,8 @@ const App = () => {
     handleThemedEnvironmentShotsChange,
     themedEnvironmentBackground,
     handleThemedEnvironmentBackgroundUpload,
+    themedEnvironmentNoImage,
+    handleThemedEnvironmentNoImageChange,
     themedEnvironmentCustomContext,
     handleThemedEnvironmentCustomContextChange,
     templates,
@@ -115,6 +132,13 @@ const App = () => {
     handleContextualCreateSimilarChange,
     themedEnvironmentCreateSimilar,
     handleThemedEnvironmentCreateSimilarChange,
+    editSpecifications,
+    addEditSpecification,
+    removeEditSpecification,
+    handleEditSpecificationChange,
+    clearEditSpecifications,
+    editCount,
+    handleEditCountChange,
   } = useProductUpload(repository);
 
   const { 
@@ -134,14 +158,25 @@ const App = () => {
     downloadImage,
     downloadAllImagesAsZip,
     regenerateImage,
+    saveImage,
     fetchSystemPromptPreview,
     etsyFormData,
     isPublishing,
     publishUrl,
     temperature,
     setTemperature,
+    promptVersions,
+    selectedPromptVersion,
+    setSelectedPromptVersion,
+    editPromptVersions,
+    selectedEditPromptVersion,
+    setSelectedEditPromptVersion,
+    saveEditPromptVersion,
+    removeEditPromptVersion,
     updateEtsyFormData,
-    publishToEtsy
+    publishToEtsy,
+    currentSeeds,
+    addManualImages
   } = useListingGeneration(repository);
 
   const [promptWidth, setPromptWidth] = React.useState(500);
@@ -150,6 +185,35 @@ const App = () => {
   const previewRef = React.useRef<HTMLDivElement>(null);
   const wasGeneratingRef = React.useRef(false);
   const [isEtsyFormOpen, setIsEtsyFormOpen] = React.useState(false);
+  const [isEditPromptDialogOpen, setIsEditPromptDialogOpen] = React.useState(false);
+  const [newEditPromptVersion, setNewEditPromptVersion] = React.useState("");
+  const [newEditPromptTemplate, setNewEditPromptTemplate] = React.useState("");
+  const [newEditPromptLineTemplate, setNewEditPromptLineTemplate] = React.useState("");
+  const [isEditPromptRemoveDialogOpen, setIsEditPromptRemoveDialogOpen] = React.useState(false);
+
+  const handleSaveEditPromptVersion = () => {
+    if (newEditPromptVersion && newEditPromptTemplate && newEditPromptLineTemplate) {
+      saveEditPromptVersion({
+        version: newEditPromptVersion,
+        template: newEditPromptTemplate,
+        lineTemplate: newEditPromptLineTemplate
+      });
+      setIsEditPromptDialogOpen(false);
+      setNewEditPromptVersion("");
+      setNewEditPromptTemplate("");
+      setNewEditPromptLineTemplate("");
+    }
+  };
+
+  const handleEditEditPromptVersion = () => {
+    const current = editPromptVersions.find(v => v.version === selectedEditPromptVersion);
+    if (current) {
+      setNewEditPromptVersion(current.version);
+      setNewEditPromptTemplate(current.template);
+      setNewEditPromptLineTemplate(current.lineTemplate);
+      setIsEditPromptDialogOpen(true);
+    }
+  };
 
   React.useEffect(() => {
     if (wasGeneratingRef.current && !isGenerating && images.length > 0) {
@@ -179,7 +243,9 @@ const App = () => {
       flatLayCustomContext,
       macroCustomContext,
       contextualCustomContext,
-      themedEnvironmentCustomContext
+      themedEnvironmentCustomContext,
+      editSpecifications,
+      editCount
     });
   }, [
     lifestyleShotsCount,
@@ -196,6 +262,8 @@ const App = () => {
     macroCustomContext,
     contextualCustomContext,
     themedEnvironmentCustomContext,
+    editSpecifications,
+    editCount,
     fetchSystemPromptPreview
   ]);
 
@@ -211,6 +279,23 @@ const App = () => {
     setGeneratedPrimaryImage(index);
     if (!wasAlreadyPrimary) {
       clearProductPrimaryImage();
+    }
+  };
+
+  const handleUploadManualPreview = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const readers = Array.from(files).map(file => {
+        return new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(file);
+        });
+      });
+      
+      Promise.all(readers).then(results => {
+        addManualImages(results);
+      });
     }
   };
 
@@ -248,11 +333,148 @@ const App = () => {
                   />
                 ))}
               </div>
+              <div className="w-full flex flex-col gap-2 mt-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-1">
+                      <label className="text-[11px] font-bold text-yellow-500 uppercase tracking-wider">
+                        Edit Picture
+                      </label>
+                      <Input 
+                        type="number"
+                        min="1"
+                        max="10"
+                        className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
+                        value={editCount}
+                        onChange={(e) => handleEditCountChange(parseInt(e.target.value) || 1)}
+                        title="Number of images to generate"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1 mt-1">
+                      {editPromptVersions.length > 0 && (
+                        <select 
+                          className="text-[16px] bg-background border rounded px-1 py-0 focus:outline-none focus:ring-1 focus:ring-primary w-fit"
+                          value={selectedEditPromptVersion}
+                          onChange={(e) => setSelectedEditPromptVersion(e.target.value)}
+                        >
+                          {editPromptVersions.map(v => (
+                            <option key={v.version} value={v.version}>{v.version}</option>
+                          ))}
+                        </select>
+                      )}
+                      {selectedEditPromptVersion && (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-muted-foreground hover:text-foreground"
+                            onClick={handleEditEditPromptVersion}
+                            title="Edit current edit prompt version"
+                          >
+                            <Pencil className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-muted-foreground hover:text-foreground"
+                            onClick={() => {
+                              setNewEditPromptVersion("");
+                              setNewEditPromptTemplate("");
+                              setNewEditPromptLineTemplate("");
+                              setIsEditPromptDialogOpen(true);
+                            }}
+                            title="Add new edit prompt version"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-5 w-5 text-muted-foreground hover:text-destructive"
+                            onClick={() => setIsEditPromptRemoveDialogOpen(true)}
+                            title="Remove current edit prompt version"
+                          >
+                            <Trash className="h-3 w-3" />
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground" 
+                      onClick={clearEditSpecifications}
+                      disabled={editSpecifications.length === 0}
+                      title="Clear all edit specifications"
+                    >
+                      <Eraser className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-6 w-6 p-0" 
+                      onClick={addEditSpecification}
+                      title="Add edit specification"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {editSpecifications.map((spec, index) => (
+                    <div key={index} className="flex flex-col gap-1 p-2 border rounded-md bg-muted/20 relative">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+                        <span>Change</span>
+                        <select 
+                          className="bg-background border rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-primary"
+                          value={spec.field}
+                          onChange={(e) => handleEditSpecificationChange(index, e.target.value, spec.value)}
+                        >
+                          <option value="Name">Name</option>
+                          <option value="Number">Number</option>
+                          <option value="Background">Background</option>
+                        </select>
+                        <span>to</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-5 w-5 p-0 ml-auto text-muted-foreground hover:text-destructive transition-colors" 
+                          onClick={() => removeEditSpecification(index)}
+                          title="Remove this specification"
+                        >
+                          <Trash className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <input 
+                        className="w-full p-1.5 text-sm bg-background border rounded focus:outline-none focus:ring-1 focus:ring-primary"
+                        placeholder={`Value for ${spec.field}`}
+                        value={spec.value}
+                        onChange={(e) => handleEditSpecificationChange(index, spec.field, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                  {editSpecifications.length === 0 && (
+                    <div 
+                      className="text-sm text-muted-foreground italic text-center p-2 border border-dashed rounded-md cursor-pointer hover:bg-muted/10"
+                      onClick={addEditSpecification}
+                    >
+                      Click + to add text/color edits
+                    </div>
+                  )}
+                </div>
+              </div>
               {/* System Prompt (moved here) */}
               <SystemPromptPane 
                 prompt={systemPrompt} 
                 temperature={temperature}
                 onTemperatureChange={setTemperature}
+                promptVersions={promptVersions}
+                selectedPromptVersion={selectedPromptVersion}
+                onPromptVersionChange={setSelectedPromptVersion}
+                images={images}
+                currentSeeds={currentSeeds}
               />
             </div>
 
@@ -332,11 +554,6 @@ const App = () => {
                       Upload a product image to start
                     </div>
                   )}
-                  {productImages.length > 0 && totalShots < 1 && (
-                    <div className="text-sm text-green-500 font-medium" data-testid="shots-selection-message">
-                      Specify a Shots Selection
-                    </div>
-                  )}
                   <Button 
                     size="lg" 
                     className="w-full max-w-xs"
@@ -358,6 +575,13 @@ const App = () => {
                         macroBackground: macroBackground,
                         contextualBackground: contextualBackground,
                         themedEnvironmentBackground: themedEnvironmentBackground,
+                        lifestyleNoImage,
+                        heroNoImage,
+                        closeUpsNoImage,
+                        flatLayNoImage,
+                        macroNoImage,
+                        contextualNoImage,
+                        themedEnvironmentNoImage,
                         lifestyleCustomContext,
                         heroCustomContext,
                         closeUpsCustomContext,
@@ -371,7 +595,9 @@ const App = () => {
                         flatLayCreateSimilar,
                         macroCreateSimilar,
                         contextualCreateSimilar,
-                        themedEnvironmentCreateSimilar
+                        themedEnvironmentCreateSimilar,
+                        editSpecifications,
+                        editCount
                       });
                       resetCounts();
                     }}
@@ -394,20 +620,22 @@ const App = () => {
             {/* Right Pane */}
             <div ref={previewRef} className="flex-1 flex flex-col gap-2 pr-1">
               <div className="h-[calc(50vh-5rem)] min-h-[300px] overflow-y-auto pr-1">
-                <ListingPreview 
-                  images={images} 
-                  isGenerating={isGenerating}
-                  regeneratingIndex={regeneratingIndex}
-                  modelUsed={modelUsed}
-                  onRemove={removeImage} 
-                  onClearAll={clearImages}
-                  onArchiveAll={archiveAllImages}
-                  onArchiveImage={archiveImage}
-                  onDownload={downloadImage} 
-                  onDownloadAll={downloadAllImagesAsZip}
-                  onSetPrimary={handleSetGeneratedPrimary}
-                  onRegenerate={handleRegenerateImage}
-                />
+                  <ListingPreview 
+                    images={images} 
+                    isGenerating={isGenerating}
+                    regeneratingIndex={regeneratingIndex}
+                    modelUsed={modelUsed}
+                    onRemove={removeImage} 
+                    onClearAll={clearImages}
+                    onArchiveAll={archiveAllImages}
+                    onArchiveImage={archiveImage}
+                    onSaveImage={saveImage}
+                    onDownload={downloadImage} 
+                    onDownloadAll={downloadAllImagesAsZip}
+                    onSetPrimary={handleSetGeneratedPrimary}
+                    onRegenerate={handleRegenerateImage}
+                    onUploadManual={handleUploadManualPreview}
+                  />
               </div>
               <div className="pr-1">
                 <Collapsible
@@ -443,6 +671,67 @@ const App = () => {
         </main>
         <Footer />
       </div>
+
+      <Dialog open={isEditPromptRemoveDialogOpen} onOpenChange={setIsEditPromptRemoveDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Remove Edit Prompt Version</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            Are you sure you want to remove the edit prompt version "{selectedEditPromptVersion}"?
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsEditPromptRemoveDialogOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={() => {
+              removeEditPromptVersion(selectedEditPromptVersion);
+              setIsEditPromptRemoveDialogOpen(false);
+            }}>Remove Version</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Prompt Dialog */}
+      <Dialog open={isEditPromptDialogOpen} onOpenChange={setIsEditPromptDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{newEditPromptVersion ? 'Edit' : 'Add'} Edit Prompt Version</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="edit-prompt-version">Version Name</Label>
+              <Input 
+                id="edit-prompt-version"
+                value={newEditPromptVersion} 
+                onChange={(e) => setNewEditPromptVersion(e.target.value)} 
+                placeholder="e.g. edit image prompt v3"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="edit-prompt-line-template">Line Template</Label>
+              <Input 
+                id="edit-prompt-line-template"
+                value={newEditPromptLineTemplate} 
+                onChange={(e) => setNewEditPromptLineTemplate(e.target.value)} 
+                placeholder="e.g. • Replace the {{FIELD}} text with: {{VALUE}}"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="edit-prompt-template">System Prompt Template</Label>
+              <Textarea 
+                id="edit-prompt-template"
+                value={newEditPromptTemplate} 
+                onChange={(e) => setNewEditPromptTemplate(e.target.value)} 
+                placeholder="Enter the full system prompt template..."
+                className="min-h-[300px] text-xs font-mono"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsEditPromptDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveEditPromptVersion}>Save Version</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   );
 };
@@ -559,6 +848,8 @@ const ShotTypeItem = ({
   onRemoveTemplate,
   background,
   onBackgroundUpload,
+  noImage,
+  onNoImageChange,
   createSimilar,
   onCreateSimilarChange
 }: { 
@@ -566,7 +857,7 @@ const ShotTypeItem = ({
   label: string, 
   description: string, 
   count: number, 
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void, 
   onClear: () => void,
   customContext: string, 
   onCustomContextChange: (value: string) => void,
@@ -575,6 +866,8 @@ const ShotTypeItem = ({
   onRemoveTemplate: (name: string) => void,
   background: string | null,
   onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  noImage: boolean,
+  onNoImageChange: (value: boolean) => void,
   createSimilar: boolean,
   onCreateSimilarChange: (value: boolean) => void
 }) => {
@@ -602,68 +895,21 @@ const ShotTypeItem = ({
   };
 
   return (
-    <div className="flex flex-col gap-1 border-b border-slate-800 pb-2 last:border-0">
-      <div className="grid grid-cols-[1fr_auto] gap-1 items-center w-full">
+    <Card className="overflow-hidden border-slate-800 shadow-sm transition-all hover:shadow-md">
+      <div className="bg-slate-900/80 px-3 py-1.5 flex items-center justify-between border-b border-slate-800">
         <div className="flex flex-col min-w-0">
-          <Label htmlFor={id} className="text-sm font-semibold text-yellow-200 truncate">{label}</Label>
-          <span className="text-xs text-muted-foreground line-clamp-2 leading-tight">{description}</span>
-          <div className="flex items-center gap-1 mt-1">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-5 w-5" 
-              onClick={() => setShowCustom(!showCustom)}
-              title="Add custom context"
-            >
-              <Plus className="h-3 w-3" />
-            </Button>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5"
-                onClick={() => fileInputRef.current?.click()}
-                title="Upload background"
-              >
-                <ImageIcon className="h-3 w-3" />
-              </Button>
-              <Input
-                type="file"
-                accept="image/png, image/jpeg"
-                className="hidden"
-                ref={fileInputRef}
-                onChange={onBackgroundUpload}
-                data-testid={`${id}-background-upload`}
-              />
-              {background && (
-                <div className="relative group">
-                  <img 
-                    src={background} 
-                    alt="Background" 
-                    className="w-6 h-6 object-cover rounded border border-slate-700"
-                    data-testid={`uploaded-${id}-background`}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-1 ml-2">
-              <Checkbox 
-                id={`${id}-create-similar`}
-                checked={createSimilar}
-                onCheckedChange={(checked) => onCreateSimilarChange(!!checked)}
-                className="h-3 w-3"
-              />
-              <Label htmlFor={`${id}-create-similar`} className="text-[10px] text-muted-foreground whitespace-nowrap cursor-pointer">
-                create similar
-              </Label>
-            </div>
-          </div>
+          <Label htmlFor={id} className="text-[11px] font-bold text-yellow-500 uppercase tracking-wider truncate leading-tight">
+            {label}
+          </Label>
+          <span className="text-[9px] text-muted-foreground line-clamp-1 leading-tight italic">
+            {description}
+          </span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5 shrink-0 ml-2">
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 text-muted-foreground hover:text-red-500"
+            className="h-6 w-6 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors"
             title="Clear count"
             onClick={onClear}
             data-testid={`${id}-clear-count`}
@@ -674,141 +920,176 @@ const ShotTypeItem = ({
             id={id}
             type="number"
             min="0"
+            max="10"
             value={count}
             onChange={onChange}
             data-testid={`${id}-count`}
-            className="w-14 h-8 text-sm"
+            className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
+            placeholder="0"
           />
         </div>
       </div>
-      {showCustom && (
-        <div className="mt-2 pl-4 border-l-2 border-slate-700 w-full max-w-md flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2 flex-1">
-              <Label htmlFor={`${id}-custom`} className="text-xs">Custom Context</Label>
-              {templates.length > 0 && (
-                <div className="flex items-center gap-1">
-                  <select 
-                    className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring"
-                    onChange={(e) => {
-                      const templateName = e.target.value;
-                      setSelectedTemplate(templateName);
-                      const template = templates.find(t => t.name === templateName);
-                      if (template) {
-                        const trimmedCurrent = customContext.trim();
-                        const templateText = template.text;
-                        
-                        if (!trimmedCurrent) {
-                          onCustomContextChange(templateText);
-                        } else if (!trimmedCurrent.includes(templateText)) {
-                          onCustomContextChange(`${trimmedCurrent}\n${templateText}`);
-                        }
-                      }
-                    }}
-                    value={selectedTemplate}
-                    data-testid={`${id}-template-select`}
-                  >
-                    <option value="" disabled>Select a template...</option>
-                    {templates.map(t => (
-                      <option key={t.name} value={t.name}>{t.name}</option>
-                    ))}
-                  </select>
-                  {selectedTemplate && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 text-red-400 hover:text-red-500 hover:bg-red-500/10"
-                      title="Remove template"
-                      onClick={() => setIsRemoveDialogOpen(true)}
-                      data-testid={`${id}-remove-template`}
-                    >
-                      <Trash className="h-3 w-3" />
-                    </Button>
+      <CardContent className="p-2 pt-1.5">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className={`h-7 px-2 text-[10px] flex items-center gap-1.5 transition-all ${showCustom ? 'bg-primary/10 border-primary/50 text-primary' : 'bg-slate-900/50'}`}
+                onClick={() => setShowCustom(!showCustom)}
+                title="Add custom context"
+              >
+                <Plus className={`h-3 w-3 ${showCustom ? 'rotate-45' : ''} transition-transform`} />
+                <span>Context</span>
+              </Button>
+              
+              <div className="flex items-center gap-1 bg-slate-900/50 rounded-md p-0.5 border border-slate-800">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                  title="Upload background"
+                >
+                  <ImageIcon className="h-3.5 w-3.5" />
+                </Button>
+                <Input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  className="hidden"
+                  ref={fileInputRef}
+                  onChange={onBackgroundUpload}
+                  data-testid={`${id}-background-upload`}
+                />
+                {background && (
+                  <div className="relative group pr-1">
+                    <img 
+                      src={background} 
+                      alt="Background" 
+                      className="w-5 h-5 object-cover rounded border border-slate-700 shadow-sm"
+                      data-testid={`uploaded-${id}-background`}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-md border border-slate-800">
+              <Checkbox 
+                id={`${id}-no-image`}
+                checked={noImage}
+                onCheckedChange={(checked) => onNoImageChange(!!checked)}
+                className="h-3.5 w-3.5 border-slate-600"
+              />
+              <Label htmlFor={`${id}-no-image`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
+                no-img
+              </Label>
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-md border border-slate-800">
+              <Checkbox 
+                id={`${id}-create-similar`}
+                checked={createSimilar}
+                onCheckedChange={(checked) => onCreateSimilarChange(!!checked)}
+                className="h-3.5 w-3.5 border-slate-600"
+              />
+              <Label htmlFor={`${id}-create-similar`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
+                similar
+              </Label>
+            </div>
+          </div>
+          {showCustom && (
+            <div className="mt-2 pl-2 border-l-2 border-slate-700 w-full flex flex-col gap-2 bg-slate-900/30 p-2 rounded-r-md">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <Label htmlFor={`${id}-custom`} className="text-[10px] uppercase font-bold text-muted-foreground shrink-0">Custom Context</Label>
+                  {templates.length > 0 && (
+                    <div className="flex items-center gap-1 min-w-0">
+                      <select 
+                        className="text-[9px] bg-background border border-slate-700 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring w-full max-w-[120px]"
+                        onChange={(e) => {
+                          const templateName = e.target.value;
+                          setSelectedTemplate(templateName);
+                          const template = templates.find(t => t.name === templateName);
+                          if (template) {
+                            const trimmedCurrent = customContext.trim();
+                            const templateText = template.text;
+                            
+                            if (!trimmedCurrent) {
+                              onCustomContextChange(templateText);
+                            } else if (!trimmedCurrent.includes(templateText)) {
+                              onCustomContextChange(`${trimmedCurrent}\n${templateText}`);
+                            }
+                          }
+                        }}
+                        value={selectedTemplate}
+                        data-testid={`${id}-template-select`}
+                      >
+                        <option value="" disabled>Templates...</option>
+                        {templates.map(t => (
+                          <option key={t.name} value={t.name}>{t.name}</option>
+                        ))}
+                      </select>
+                      {selectedTemplate && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-5 w-5 text-red-400 hover:text-red-500 hover:bg-red-500/10 shrink-0"
+                          title="Remove template"
+                          onClick={() => setIsRemoveDialogOpen(true)}
+                          data-testid={`${id}-remove-template`}
+                        >
+                          <Trash className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6 text-muted-foreground hover:text-foreground"
-                title="Clear custom context"
-                onClick={() => {
-                  onCustomContextChange("");
-                  setSelectedTemplate("");
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                    title="Clear custom context"
+                    onClick={() => {
+                      onCustomContextChange("");
+                      setSelectedTemplate("");
+                    }}
+                    data-testid={`${id}-clear-context`}
+                  >
+                    <Eraser className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    title="Save as template"
+                    disabled={!customContext.trim()}
+                    onClick={() => setIsSaveDialogOpen(true)}
+                  >
+                    <Save className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+              <Textarea 
+                id={`${id}-custom`}
+                placeholder="e.g. In a high-end kitchen with marble countertops"
+                value={customContext}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  onCustomContextChange(newValue);
+                  if (!newValue.trim()) {
+                    setSelectedTemplate("");
+                  }
                 }}
-                data-testid={`${id}-clear-context`}
-              >
-                <Eraser className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                title="Save as template"
-                disabled={!customContext.trim()}
-                onClick={() => setIsSaveDialogOpen(true)}
-              >
-                <Save className="h-3 w-3" />
-              </Button>
+                className="text-[10px] min-h-[60px] resize-y bg-slate-950/50 border-slate-800"
+              />
             </div>
-          </div>
-          <Textarea 
-            id={`${id}-custom`}
-            placeholder="e.g. In a high-end kitchen with marble countertops"
-            value={customContext}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              onCustomContextChange(newValue);
-              if (!newValue.trim()) {
-                setSelectedTemplate("");
-              }
-            }}
-            className="text-xs min-h-[80px] resize-x"
-          />
+          )}
         </div>
-      )}
-
-      {/* Save Template Dialog */}
-      <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Save as Template</DialogTitle>
-          </DialogHeader>
-          <div className="py-4 flex flex-col gap-2">
-            <Label htmlFor={`${id}-new-template-name`}>Template Name</Label>
-            <Input 
-              id={`${id}-new-template-name`}
-              value={newTemplateName} 
-              onChange={(e) => setNewTemplateName(e.target.value)} 
-              placeholder="e.g. Modern Kitchen"
-              autoFocus
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setIsSaveDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleSaveTemplate} disabled={!newTemplateName.trim()}>Save Template</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Remove Template Dialog */}
-      <Dialog open={isRemoveDialogOpen} onOpenChange={setIsRemoveDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Remove Template</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            Are you sure you want to remove the template "{selectedTemplate}"?
-          </div>
-          <DialogFooter>
-            <Button variant="ghost" onClick={() => setIsRemoveDialogOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleRemoveTemplate}>Remove Template</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -872,6 +1153,20 @@ const ShotsSelection = ({
   onContextualBackgroundUpload,
   themedEnvironmentBackground,
   onThemedEnvironmentBackgroundUpload,
+  lifestyleNoImage,
+  onLifestyleNoImageChange,
+  heroNoImage,
+  onHeroNoImageChange,
+  closeUpsNoImage,
+  onCloseUpsNoImageChange,
+  flatLayNoImage,
+  onFlatLayNoImageChange,
+  macroNoImage,
+  onMacroNoImageChange,
+  contextualNoImage,
+  onContextualNoImageChange,
+  themedEnvironmentNoImage,
+  onThemedEnvironmentNoImageChange,
   onSelectAll,
   onClearAllShots,
   onClearShotCount
@@ -904,6 +1199,20 @@ const ShotsSelection = ({
   onContextualCustomContextChange: (value: string) => void,
   themedEnvironmentCustomContext: string,
   onThemedEnvironmentCustomContextChange: (value: string) => void,
+  lifestyleNoImage: boolean,
+  onLifestyleNoImageChange: (value: boolean) => void,
+  heroNoImage: boolean,
+  onHeroNoImageChange: (value: boolean) => void,
+  closeUpsNoImage: boolean,
+  onCloseUpsNoImageChange: (value: boolean) => void,
+  flatLayNoImage: boolean,
+  onFlatLayNoImageChange: (value: boolean) => void,
+  macroNoImage: boolean,
+  onMacroNoImageChange: (value: boolean) => void,
+  contextualNoImage: boolean,
+  onContextualNoImageChange: (value: boolean) => void,
+  themedEnvironmentNoImage: boolean,
+  onThemedEnvironmentNoImageChange: (value: boolean) => void,
   lifestyleCreateSimilar: boolean,
   onLifestyleCreateSimilarChange: (value: boolean) => void,
   heroCreateSimilar: boolean,
@@ -951,7 +1260,9 @@ const ShotsSelection = ({
     background: string | null,
     onBackgroundUpload: (event: React.ChangeEvent<HTMLInputElement>) => void,
     createSimilar: boolean,
-    onCreateSimilarChange: (value: boolean) => void
+    onCreateSimilarChange: (value: boolean) => void,
+    noImage: boolean,
+    onNoImageChange: (value: boolean) => void
   ) => ({
     id,
     label,
@@ -964,7 +1275,9 @@ const ShotsSelection = ({
     background,
     onBackgroundUpload,
     createSimilar,
-    onCreateSimilarChange
+    onCreateSimilarChange,
+    noImage,
+    onNoImageChange
   });
 
   const shotTypes = [
@@ -980,7 +1293,9 @@ const ShotsSelection = ({
       heroBackground,
       onHeroBackgroundUpload,
       heroCreateSimilar,
-      onHeroCreateSimilarChange
+      onHeroCreateSimilarChange,
+      heroNoImage,
+      onHeroNoImageChange
     ),
     createShotType(
       "flat-lay-shots",
@@ -994,7 +1309,9 @@ const ShotsSelection = ({
       flatLayBackground,
       onFlatLayBackgroundUpload,
       flatLayCreateSimilar,
-      onFlatLayCreateSimilarChange
+      onFlatLayCreateSimilarChange,
+      flatLayNoImage,
+      onFlatLayNoImageChange
     ),
     createShotType(
       "lifestyle-shots",
@@ -1008,7 +1325,9 @@ const ShotsSelection = ({
       lifestyleBackground,
       onLifestyleBackgroundUpload,
       lifestyleCreateSimilar,
-      onLifestyleCreateSimilarChange
+      onLifestyleCreateSimilarChange,
+      lifestyleNoImage,
+      onLifestyleNoImageChange
     ),
     createShotType(
       "macro-shots",
@@ -1022,7 +1341,9 @@ const ShotsSelection = ({
       macroBackground,
       onMacroBackgroundUpload,
       macroCreateSimilar,
-      onMacroCreateSimilarChange
+      onMacroCreateSimilarChange,
+      macroNoImage,
+      onMacroNoImageChange
     ),
     createShotType(
       "contextual-shots",
@@ -1036,7 +1357,9 @@ const ShotsSelection = ({
       contextualBackground,
       onContextualBackgroundUpload,
       contextualCreateSimilar,
-      onContextualCreateSimilarChange
+      onContextualCreateSimilarChange,
+      contextualNoImage,
+      onContextualNoImageChange
     ),
     createShotType(
       "themed-environment",
@@ -1050,7 +1373,9 @@ const ShotsSelection = ({
       themedEnvironmentBackground,
       onThemedEnvironmentBackgroundUpload,
       themedEnvironmentCreateSimilar,
-      onThemedEnvironmentCreateSimilarChange
+      onThemedEnvironmentCreateSimilarChange,
+      themedEnvironmentNoImage,
+      onThemedEnvironmentNoImageChange
     ),
     createShotType(
       "close-ups",
@@ -1064,36 +1389,38 @@ const ShotsSelection = ({
       closeUpsBackground,
       onCloseUpsBackgroundUpload,
       closeUpsCreateSimilar,
-      onCloseUpsCreateSimilarChange
+      onCloseUpsCreateSimilarChange,
+      closeUpsNoImage,
+      onCloseUpsNoImageChange
     ),
   ];
 
   return (
-    <Card className="w-full overflow-hidden">
-      <CardHeader className="bg-muted/30 border-b border-border/50 h-10 flex flex-row items-center justify-between py-0 px-3 space-y-0">
-        <CardTitle>Shots Selection</CardTitle>
-        <div className="flex items-center gap-1">
+    <Card className="w-full overflow-hidden border-slate-800">
+      <CardHeader className="bg-slate-900 border-b border-slate-800 h-11 flex flex-row items-center justify-between py-0 px-4 space-y-0">
+        <CardTitle className="text-sm font-bold uppercase tracking-widest text-slate-400">Shots Selection</CardTitle>
+        <div className="flex items-center gap-2">
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={onClearAllShots}
-            className="h-7 text-[10px] px-2 font-semibold hover:bg-red-500/20 hover:text-red-500"
+            className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight hover:bg-red-500/20 hover:text-red-500 transition-colors"
             data-testid="clear-all-shots"
           >
             Clear All
           </Button>
           <Button 
-            variant="ghost" 
+            variant="secondary" 
             size="sm" 
             onClick={onSelectAll}
-            className="h-7 text-[10px] px-2 font-semibold hover:bg-orange-500/20 hover:text-orange-500"
+            className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight transition-colors"
             data-testid="select-all-shots"
           >
             Select All
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2 pt-[10px] px-3">
+      <CardContent className="flex flex-col gap-3 p-3 bg-slate-950/20">
         {shotTypes.map((shot) => (
           <ShotTypeItem 
             key={shot.id}
@@ -1175,20 +1502,102 @@ const UploadedImage = ({
   );
 };
 
-const SystemPromptPane = ({ 
+const Seed = ({ seeds }: { seeds: number[] }) => {
+  if (seeds.length === 0) return null;
+
+  return (
+    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5" data-testid="seeds-display">
+      <span className="text-[10px] font-bold text-muted-foreground uppercase shrink-0">seed:</span>
+      <div className="flex flex-wrap gap-1">
+        {seeds.map((seed, idx) => (
+          <span 
+            key={`${seed}-${idx}`} 
+            className="text-[10px] font-mono text-green-500 whitespace-nowrap bg-green-500/10 px-1.5 py-0.5 rounded border border-green-500/30 shadow-sm" 
+            data-testid={`seed-item-${idx}`}
+          >
+            {seed}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const SystemPromptPane = React.memo(({ 
   prompt,
   temperature,
-  onTemperatureChange
+  onTemperatureChange,
+  promptVersions,
+  selectedPromptVersion,
+  onPromptVersionChange,
+  images,
+  currentSeeds
 }: { 
   prompt: string,
   temperature: number,
-  onTemperatureChange: (value: number) => void
+  onTemperatureChange: (value: number) => void,
+  promptVersions: { version: string, date: string, template: string }[],
+  selectedPromptVersion: string,
+  onPromptVersionChange: (version: string) => void,
+  images: any[],
+  currentSeeds: number[]
 }) => {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = () => {
+    if (prompt) {
+      navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const seedsToDisplay = currentSeeds.length > 0 
+    ? currentSeeds 
+    : images.filter(img => img.seed !== undefined && img.seed !== null).map(img => img.seed);
+
+  const hasSeeds = seedsToDisplay.length > 0;
+
   return (
-    <Card className="w-full mt-2 overflow-hidden flex flex-col">
+    <Card className="w-full mt-2 overflow-hidden flex flex-col" data-testid="system-prompt-pane">
       <CardHeader className="p-3">
         <div className="flex flex-col gap-2">
-          <CardTitle className="text-sm">System Prompt</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm">System Prompt</CardTitle>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-5 w-5" 
+                onClick={handleCopy}
+                disabled={!prompt}
+                title="Copy system prompt"
+              >
+                {copied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+              </Button>
+            </div>
+            {promptVersions.length > 0 && (
+              <div className="flex items-center gap-2" data-testid="prompt-version-container">
+                <select 
+                  className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-5"
+                  value={selectedPromptVersion}
+                  onChange={(e) => onPromptVersionChange(e.target.value)}
+                  data-testid="prompt-version-select"
+                >
+                  {promptVersions.map(v => (
+                    <option key={v.version} value={v.version}>v{v.version}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          {hasSeeds && (
+            <div className="bg-slate-900/50 p-1.5 rounded-md border border-slate-800">
+              <Seed seeds={seedsToDisplay} />
+            </div>
+          )}
+
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <Label htmlFor="temperature-slider" className="text-[10px] text-muted-foreground uppercase font-bold">Temperature (randomness)</Label>
@@ -1198,7 +1607,7 @@ const SystemPromptPane = ({
               id="temperature-slider"
               type="range"
               min="0"
-              max="5"
+              max="2"
               step="0.5"
               value={temperature}
               onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
@@ -1207,13 +1616,13 @@ const SystemPromptPane = ({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-auto max-h-[300px] p-2">
-        <pre className="text-[10px] whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg">
+      <CardContent className="flex-1 overflow-auto max-h-[600px] p-2 space-y-2">
+        <pre className="text-[10px] whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg min-h-[400px]">
           {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
         </pre>
       </CardContent>
     </Card>
   );
-};
+});
 
 export default App;

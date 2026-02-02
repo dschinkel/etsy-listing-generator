@@ -6,19 +6,19 @@ export interface ListingImage {
 }
 
 export const useListingPreview = () => {
-  const [selectedImage, setSelectedImage] = useState<ListingImage | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const openImage = (image: ListingImage) => {
-    setSelectedImage(image);
+  const openImage = (index: number) => {
+    setSelectedIndex(index);
   };
 
   const closeImage = () => {
-    setSelectedImage(null);
+    setSelectedIndex(null);
   };
 
   return {
-    selectedImage,
-    isModalOpen: !!selectedImage,
+    selectedIndex,
+    isModalOpen: selectedIndex !== null,
     openImage,
     closeImage,
   };

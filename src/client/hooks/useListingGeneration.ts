@@ -8,6 +8,20 @@ export interface ListingImage {
   type: string;
   isPrimary?: boolean;
   isArchived?: boolean;
+  isSaved?: boolean;
+  seed?: number;
+}
+
+export interface SystemPromptVersion {
+  version: string;
+  date: string;
+  template: string;
+}
+
+export interface EditPromptVersion {
+  version: string;
+  template: string;
+  lineTemplate: string;
 }
 
 export const useListingGeneration = (listingRepository: any) => {
@@ -21,24 +35,30 @@ export const useListingGeneration = (listingRepository: any) => {
   const [etsyFormData, setEtsyFormData] = useState({
     title: '',
     description: '',
-    price: '',
-    quantity: '1',
+    price: '11.99',
+    quantity: '10',
     sku: '',
     shop_id: '',
     who_made: 'i_did',
     when_made: 'made_to_order',
     is_supply: false,
     personalization: '',
-    category: '',
+    category: 'Accessories > Keychains & Lanyards > Keychains',
     tags: '',
     shipping_profile: '',
     product_type: 'physical',
     readiness: 'draft',
-    taxonomy_id: ''
+    taxonomy_id: '69154'
   });
   const [temperature, setTemperature] = useState<number>(1.0);
+  const [promptVersions, setPromptVersions] = useState<SystemPromptVersion[]>([]);
+  const [selectedPromptVersion, setSelectedPromptVersion] = useState<string>(() => localStorage.getItem('lastPromptVersion') || '');
+  const [editPromptVersions, setEditPromptVersions] = useState<EditPromptVersion[]>([]);
+  const [selectedEditPromptVersion, setSelectedEditPromptVersion] = useState<string>(() => localStorage.getItem('lastEditPromptVersion') || '');
+  const [currentSeeds, setCurrentSeeds] = useState<number[]>([]);
   const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastPromptParamsRef = useRef<string>('');
 
   useEffect(() => {
     if (listingRepository?.getShopId) {
@@ -48,7 +68,43 @@ export const useListingGeneration = (listingRepository: any) => {
         }
       });
     }
+    if (listingRepository?.getPromptVersions) {
+      listingRepository.getPromptVersions().then((response: { versions: SystemPromptVersion[] }) => {
+        if (response.versions && response.versions.length > 0) {
+          setPromptVersions(response.versions);
+          if (!selectedPromptVersion || !response.versions.some(v => v.version === selectedPromptVersion)) {
+            setSelectedPromptVersion(response.versions[response.versions.length - 1].version);
+          }
+        }
+      });
+    }
+    if (listingRepository?.getEditPromptVersions) {
+      listingRepository.getEditPromptVersions().then((response: { versions: EditPromptVersion[] }) => {
+        if (response.versions && response.versions.length > 0) {
+          setEditPromptVersions(response.versions);
+          if (!selectedEditPromptVersion || !response.versions.some(v => v.version === selectedEditPromptVersion)) {
+            setSelectedEditPromptVersion(response.versions[0].version); 
+          }
+        }
+      });
+    }
   }, [listingRepository]);
+
+  useEffect(() => {
+    if (selectedPromptVersion) {
+      localStorage.setItem('lastPromptVersion', selectedPromptVersion);
+    }
+  }, [selectedPromptVersion]);
+
+  useEffect(() => {
+    if (selectedEditPromptVersion) {
+      localStorage.setItem('lastEditPromptVersion', selectedEditPromptVersion);
+    }
+  }, [selectedEditPromptVersion]);
+
+  const currentTemplate = promptVersions.find(v => v.version === selectedPromptVersion)?.template;
+  const currentEditTemplate = editPromptVersions.find(v => v.version === selectedEditPromptVersion)?.template;
+  const currentEditLineTemplate = editPromptVersions.find(v => v.version === selectedEditPromptVersion)?.lineTemplate;
 
   const setTimedError = (message: string) => {
     if (timeoutRef.current) {
@@ -77,6 +133,13 @@ export const useListingGeneration = (listingRepository: any) => {
     macroBackground?: string | null,
     contextualBackground?: string | null,
     themedEnvironmentBackground?: string | null,
+    lifestyleNoImage?: boolean,
+    heroNoImage?: boolean,
+    closeUpsNoImage?: boolean,
+    flatLayNoImage?: boolean,
+    macroNoImage?: boolean,
+    contextualNoImage?: boolean,
+    themedEnvironmentNoImage?: boolean,
     lifestyleCustomContext?: string,
     heroCustomContext?: string,
     closeUpsCustomContext?: string,
@@ -90,7 +153,9 @@ export const useListingGeneration = (listingRepository: any) => {
     flatLayCreateSimilar?: boolean,
     macroCreateSimilar?: boolean,
     contextualCreateSimilar?: boolean,
-    themedEnvironmentCreateSimilar?: boolean
+    themedEnvironmentCreateSimilar?: boolean,
+    editSpecifications?: {field: string, value: string}[],
+    editCount?: number
   }) => {
     setIsGenerating(true);
     if (timeoutRef.current) {
@@ -98,6 +163,29 @@ export const useListingGeneration = (listingRepository: any) => {
       timeoutRef.current = null;
     }
     setError(null);
+
+    // Pre-generate seeds for immediate display
+    const seeds: number[] = [];
+    const addSeedsForType = (count?: number) => {
+      if (count && count > 0) {
+        for (let i = 0; i < count; i++) {
+          seeds.push(Math.floor(Math.random() * 2147483647));
+        }
+      }
+    };
+
+    addSeedsForType(params.lifestyleCount);
+    addSeedsForType(params.heroCount);
+    addSeedsForType(params.closeUpsCount);
+    addSeedsForType(params.flatLayCount);
+    addSeedsForType(params.macroCount);
+    addSeedsForType(params.contextualCount);
+    addSeedsForType(params.themedEnvironmentCount);
+    if (params.editSpecifications && params.editSpecifications.length > 0) {
+      addSeedsForType(params.editCount || 1);
+    }
+
+    setCurrentSeeds(seeds);
     
     let currentModel = 'gemini-2.5-flash-image';
     let success = false;
@@ -109,10 +197,18 @@ export const useListingGeneration = (listingRepository: any) => {
           ...params,
           temperature,
           model: currentModel,
+          systemPromptTemplate: currentTemplate,
+          editPromptTemplate: currentEditTemplate,
+          editPromptLineTemplate: currentEditLineTemplate,
+          seeds: seeds.length > 0 ? seeds : undefined,
           noFallback: true
         });
         setImages(prev => [...prev, ...response.images]);
         setSystemPrompt(response.systemPrompt || '');
+        
+        // Mark these parameters as the last used for the current prompt
+        lastPromptParamsRef.current = JSON.stringify({ ...params, template: currentTemplate, editTemplate: currentEditTemplate });
+        
         setModelUsed(response.model || currentModel);
         success = true;
       } catch (err: any) {
@@ -137,6 +233,7 @@ export const useListingGeneration = (listingRepository: any) => {
       }
     }
     setIsGenerating(false);
+    setCurrentSeeds([]);
   };
 
   const removeImage = (index: number) => {
@@ -154,7 +251,14 @@ export const useListingGeneration = (listingRepository: any) => {
 
   const downloadImage = async (imageSrc: string, index: number) => {
     try {
-      const response = await fetchWithTimeout(imageSrc);
+      let finalSrc = imageSrc;
+      const currentImage = images[index];
+      
+      // If downloading an unsaved image, it might be a data URL already
+      // or we might want to save it first if it's an external URL?
+      // Actually, browser can download data URLs or external URLs just fine.
+      
+      const response = await fetchWithTimeout(finalSrc);
       const blob = await response.blob();
       const extension = blob.type.split('/')[1]?.split(';')[0] || 'png';
       saveAs(blob, `listing-image-${index + 1}.${extension}`);
@@ -176,7 +280,6 @@ export const useListingGeneration = (listingRepository: any) => {
         
         if (!blob.type.startsWith('image/')) {
           console.error(`Downloaded content for image ${index + 1} is not an image: ${blob.type}`);
-          // If we got HTML or something else, skip it or use a placeholder
           return;
         }
 
@@ -184,7 +287,6 @@ export const useListingGeneration = (listingRepository: any) => {
         zip.file(`listing-image-${index + 1}.${extension}`, blob);
       } catch (err) {
         console.error(`Failed to include image ${index + 1} in ZIP:`, err);
-        // We skip failed images to ensure the ZIP is still generated with what we have
       }
     });
 
@@ -218,9 +320,22 @@ export const useListingGeneration = (listingRepository: any) => {
 
   const archiveAllImages = async () => {
     try {
-      const imageUrls = images.map(img => img.url);
-      await listingRepository.archiveImages(imageUrls);
-      setImages(prev => prev.map(img => ({ ...img, isArchived: true })));
+      // Ensure all images are saved first
+      const imagesToArchive = await Promise.all(images.map(async (img, idx) => {
+        if (!img.isSaved) {
+          const response = await listingRepository.saveImage(img.url, img.type);
+          return response.url;
+        }
+        return img.url;
+      }));
+
+      await listingRepository.archiveImages(imagesToArchive);
+      setImages(prev => prev.map((img, idx) => ({ 
+        ...img, 
+        url: imagesToArchive[idx],
+        isSaved: true,
+        isArchived: true 
+      })));
     } catch (err: any) {
       console.error('Failed to archive images:', err);
       setTimedError(`Archiving failed: ${err.message}`);
@@ -232,8 +347,18 @@ export const useListingGeneration = (listingRepository: any) => {
     if (!imageToArchive) return;
 
     try {
-      await listingRepository.archiveImages([imageToArchive.url]);
-      setImages(prev => prev.map((img, i) => i === index ? { ...img, isArchived: true } : img));
+      let urlToArchive = imageToArchive.url;
+      let wasSaved = imageToArchive.isSaved;
+
+      if (!wasSaved) {
+        const response = await listingRepository.saveImage(imageToArchive.url, imageToArchive.type);
+        urlToArchive = response.url;
+      }
+
+      await listingRepository.archiveImages([urlToArchive]);
+      setImages(prev => prev.map((img, i) => 
+        i === index ? { ...img, url: urlToArchive, isSaved: true, isArchived: true } : img
+      ));
     } catch (err: any) {
       console.error('Failed to archive individual image:', err);
       setTimedError(`Archiving failed: ${err.message}`);
@@ -249,10 +374,28 @@ export const useListingGeneration = (listingRepository: any) => {
     setError(null);
     setPublishUrl(null);
     
-    // Default to all current images if none specified
-    const imageList = selectedImageUrls || images.map(img => img.url);
-    
     try {
+      // Ensure all images that are being published are saved first
+      // If selectedImageUrls is provided, we need to map it back to our images to check isSaved
+      // But usually it's easier to just ensure all current images are saved if we're publishing them
+      
+      const savedImages = await Promise.all(images.map(async (img, idx) => {
+        if (!img.isSaved) {
+          const response = await listingRepository.saveImage(img.url, img.type);
+          return { ...img, url: response.url, isSaved: true };
+        }
+        return img;
+      }));
+      
+      setImages(savedImages);
+      
+      const imageList = selectedImageUrls 
+        ? selectedImageUrls.map(url => {
+            const found = savedImages.find(img => img.url === url || (img as any).oldUrl === url);
+            return found ? found.url : url;
+          })
+        : savedImages.map(img => img.url);
+    
       const response = await listingRepository.publishListing({
         ...etsyFormData,
         images: imageList
@@ -286,6 +429,7 @@ export const useListingGeneration = (listingRepository: any) => {
         productImages,
         model: 'gemini-2.5-flash-image',
         systemPrompt: updatedSystemPrompt,
+        systemPromptTemplate: currentTemplate,
         temperature
       });
 
@@ -308,6 +452,10 @@ export const useListingGeneration = (listingRepository: any) => {
           setSystemPrompt(updatedSystemPrompt);
         }
 
+        // We don't update lastPromptParamsRef here because regenerateImage is specific to one image
+        // and uses a combined customContext that isn't part of the main batch params.
+        // This ensures that if batch params change later, we still get a fresh batch preview.
+
         if (response.model) {
           setModelUsed(response.model);
         }
@@ -318,6 +466,108 @@ export const useListingGeneration = (listingRepository: any) => {
     } finally {
       setIsGenerating(false);
       setRegeneratingIndex(null);
+    }
+  };
+
+  const saveImage = async (index: number) => {
+    const imageToSave = images[index];
+    if (!imageToSave || imageToSave.isSaved) return;
+
+    try {
+      const response = await listingRepository.saveImage(imageToSave.url, imageToSave.type);
+      if (response.url) {
+        setImages(prev => prev.map((img, i) => 
+          i === index ? { ...img, url: response.url, isSaved: true } : img
+        ));
+      }
+    } catch (err: any) {
+      console.error('Failed to save image:', err);
+      setTimedError(`Saving failed: ${err.message}`);
+    }
+  };
+
+  const fetchSystemPromptPreview = useCallback(async (params: {
+    lifestyleCount?: number, 
+    heroCount?: number,
+    closeUpsCount?: number,
+    flatLayCount?: number,
+    macroCount?: number,
+    contextualCount?: number,
+    themedEnvironmentCount?: number,
+    lifestyleCustomContext?: string,
+    heroCustomContext?: string,
+    closeUpsCustomContext?: string,
+    flatLayCustomContext?: string,
+    macroCustomContext?: string,
+    contextualCustomContext?: string,
+    themedEnvironmentCustomContext?: string,
+    editSpecifications?: {field: string, value: string}[],
+    editCount?: number
+  }) => {
+    if (isGenerating || regeneratingIndex !== null) return;
+    
+    // Check if parameters have changed
+    const paramsKey = JSON.stringify({ ...params, template: currentTemplate, editTemplate: currentEditTemplate });
+    if (paramsKey === lastPromptParamsRef.current) return;
+    
+    try {
+      const response = await listingRepository.getSystemPromptPreview({
+        ...params,
+        systemPromptTemplate: currentTemplate,
+        editPromptTemplate: currentEditTemplate,
+        editPromptLineTemplate: currentEditLineTemplate
+      });
+      setSystemPrompt(response.systemPrompt || '');
+      lastPromptParamsRef.current = paramsKey;
+    } catch (err) {
+      console.error('Failed to fetch prompt preview:', err);
+    }
+  }, [listingRepository, currentTemplate, currentEditTemplate, currentEditLineTemplate, isGenerating, regeneratingIndex]);
+
+  const saveEditPromptVersion = async (version: EditPromptVersion) => {
+    if (listingRepository) {
+      try {
+        const response = await listingRepository.saveEditPromptVersion(version);
+        if (response.version) {
+          setEditPromptVersions(prev => {
+            const index = prev.findIndex(v => v.version === response.version.version);
+            if (index !== -1) {
+              const newVersions = [...prev];
+              newVersions[index] = response.version;
+              return newVersions;
+            }
+            return [...prev, response.version];
+          });
+          setSelectedEditPromptVersion(response.version.version);
+        }
+      } catch (err: any) {
+        console.error('Failed to save edit prompt version:', err);
+        setTimedError(`Failed to save edit prompt version: ${err.message}`);
+      }
+    }
+  };
+
+  const addManualImages = (imageUrls: string[]) => {
+    const manualImages = imageUrls.map(url => ({
+      url,
+      type: 'manual',
+      isSaved: false
+    }));
+    setImages(prev => [...prev, ...manualImages]);
+  };
+
+  const removeEditPromptVersion = async (name: string) => {
+    if (listingRepository) {
+      try {
+        await listingRepository.removeEditPromptVersion(name);
+        setEditPromptVersions(prev => prev.filter(v => v.version !== name));
+        if (selectedEditPromptVersion === name) {
+          setSelectedEditPromptVersion(editPromptVersions[0]?.version || '');
+        }
+      } catch (err: any) {
+        console.error('Failed to remove edit prompt version:', err);
+        setTimedError(`Failed to remove edit prompt version: ${err.message}`);
+      }
     }
   };
 
@@ -334,6 +584,7 @@ export const useListingGeneration = (listingRepository: any) => {
     setPrimaryImage,
     clearPrimaryImage,
     regenerateImage,
+    saveImage,
     downloadImage,
     downloadAllImagesAsZip,
     archiveAllImages,
@@ -343,15 +594,18 @@ export const useListingGeneration = (listingRepository: any) => {
     publishUrl,
     temperature,
     setTemperature,
+    promptVersions,
+    selectedPromptVersion,
+    setSelectedPromptVersion,
+    editPromptVersions,
+    selectedEditPromptVersion,
+    setSelectedEditPromptVersion,
+    saveEditPromptVersion,
+    addManualImages,
+    removeEditPromptVersion,
     updateEtsyFormData,
     publishToEtsy,
-    fetchSystemPromptPreview: useCallback(async (params: any) => {
-      try {
-        const response = await listingRepository.getSystemPromptPreview(params);
-        setSystemPrompt(response.systemPrompt || '');
-      } catch (err) {
-        console.error('Failed to fetch prompt preview:', err);
-      }
-    }, [listingRepository])
+    currentSeeds,
+    fetchSystemPromptPreview
   };
 };

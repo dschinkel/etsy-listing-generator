@@ -1,576 +1,335 @@
-
-> react-app-boilerplate@0.0.0 test
-> jest
- PASS   service  src/service/test/integration/GenerateListingImagesError.test.ts
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Incoming request: POST /listings/generate
-      at src/service/app.ts:19:11
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 0,
-        hero: 0,
-        closeUps: undefined,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        themedEnvironment: undefined,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: false
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
-    console.log
-      POST /listings/generate - 200 - 22ms
-      at src/service/app.ts:22:11
- PASS   service  src/service/test/ListingController.test.ts
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Incoming request: GET /listings/templates
-      at src/service/app.ts:19:11
-    console.log
-      GET /listings/templates - 200 - 8ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: POST /listings/templates
-      at src/service/app.ts:19:11
-    console.log
-      POST /listings/templates - 201 - 12ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: POST /listings/templates
-      at src/service/app.ts:19:11
-    console.log
-      POST /listings/templates - 201 - 1ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: DELETE /listings/templates/ToRemove
-      at src/service/app.ts:19:11
-    console.log
-      DELETE /listings/templates/ToRemove - 200 - 3ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: GET /listings/templates
-      at src/service/app.ts:19:11
-    console.log
-      GET /listings/templates - 200 - 2ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: POST /listings/push-to-etsy
-      at src/service/app.ts:19:11
-    console.log
-      POST /listings/push-to-etsy - 201 - 1ms
-      at src/service/app.ts:22:11
- PASS   service  src/service/test/integration/PromptPreview.test.ts
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Incoming request: POST /listings/system-prompt
-      at src/service/app.ts:19:11
-    console.log
-      POST /listings/system-prompt - 200 - 12ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: POST /listings/system-prompt
-      at src/service/app.ts:19:11
-    console.log
-      POST /listings/system-prompt - 200 - 1ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: POST /listings/system-prompt
-      at src/service/app.ts:19:11
-    console.log
-      POST /listings/system-prompt - 200 - 0ms
-      at src/service/app.ts:22:11
-    console.log
-      Incoming request: GET /listings/system-prompt
-      at src/service/app.ts:19:11
-    console.log
-      GET /listings/system-prompt - 405 - 4ms
-      at src/service/app.ts:22:11
- PASS   service  src/service/repositories/EtsyRepository.test.ts
- PASS   service  src/service/commands/PushToEtsy.test.ts
- PASS   service  src/service/repositories/ListingRepository.test.ts
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 1,
-        hero: 1,
-        closeUps: undefined,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        themedEnvironment: undefined,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: true
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 0,
-        hero: 0,
-        closeUps: undefined,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        themedEnvironment: undefined,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: false
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: undefined,
-        hero: undefined,
-        closeUps: undefined,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        themedEnvironment: 1,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: false
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
- PASS   service  src/service/data/GeminiImageGeneratorExtraction.test.ts
- PASS   service  src/service/test/ContextTemplateRepository.test.ts
- PASS   service  src/service/commands/GenerateSingleImage.test.ts
- PASS   client  src/client/repositories/ListingRepository.test.ts
- PASS   client  src/client/hooks/useProductUpload.test.ts
-  ● Console
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      40 |     if (repository) {
-      41 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 42 |         setTemplates(response.templates || []);
-         |         ^
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-      45 |         setArchivedUploads(response.images || []);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:42:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-    > 45 |         setArchivedUploads(response.images || []);
-         |         ^
-      46 |       });
-      47 |     }
-      48 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:45:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      40 |     if (repository) {
-      41 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 42 |         setTemplates(response.templates || []);
-         |         ^
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-      45 |         setArchivedUploads(response.images || []);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:42:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-    > 45 |         setArchivedUploads(response.images || []);
-         |         ^
-      46 |       });
-      47 |     }
-      48 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:45:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      40 |     if (repository) {
-      41 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 42 |         setTemplates(response.templates || []);
-         |         ^
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-      45 |         setArchivedUploads(response.images || []);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:42:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-    > 45 |         setArchivedUploads(response.images || []);
-         |         ^
-      46 |       });
-      47 |     }
-      48 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:45:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      40 |     if (repository) {
-      41 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 42 |         setTemplates(response.templates || []);
-         |         ^
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-      45 |         setArchivedUploads(response.images || []);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:42:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-    > 45 |         setArchivedUploads(response.images || []);
-         |         ^
-      46 |       });
-      47 |     }
-      48 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:45:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      40 |     if (repository) {
-      41 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 42 |         setTemplates(response.templates || []);
-         |         ^
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-      45 |         setArchivedUploads(response.images || []);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:42:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-    > 45 |         setArchivedUploads(response.images || []);
-         |         ^
-      46 |       });
-      47 |     }
-      48 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:45:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      40 |     if (repository) {
-      41 |       repository.getTemplates().then((response: { templates: ContextTemplate[] }) => {
-    > 42 |         setTemplates(response.templates || []);
-         |         ^
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-      45 |         setArchivedUploads(response.images || []);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:42:9
-    console.error
-      An update to TestComponent inside a test was not wrapped in act(...).
-
-      When testing, code that causes React state updates should be wrapped into act(...):
-
-      act(() => {
-        /* fire events that update state */
-      });
-      /* assert on the output */
-
-      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
-      43 |       });
-      44 |       repository.getArchivedUploads().then((response: { images: string[] }) => {
-    > 45 |         setArchivedUploads(response.images || []);
-         |         ^
-      46 |       });
-      47 |     }
-      48 |   }, [repository]);
-      at node_modules/react-dom/cjs/react-dom-client.development.js:18758:19
-      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
-      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-dom/cjs/react-dom-client.development.js:18757:9)
-      at scheduleUpdateOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:16409:11)
-      at dispatchSetStateInternal (node_modules/react-dom/cjs/react-dom-client.development.js:9170:13)
-      at dispatchSetState (node_modules/react-dom/cjs/react-dom-client.development.js:9127:7)
-      at src/client/hooks/useProductUpload.ts:45:9
- FAIL   client  src/client/hooks/useListingGeneration.test.ts
-  ● Console
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Server Error (503): Service Unavailable
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:92:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Something went wrong
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:92:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Something went wrong
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:92:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image 503 Service Unavailable
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:92:17)
-    console.log
-      Generation failed for model: gemini-2.5-flash-image Internal Server Error
-      at Object.generateListing (src/client/hooks/useListingGeneration.ts:92:17)
-  ● Listing Generation › publish listing
-    expect(jest.fn()).toHaveBeenCalledWith(...expected)
-    Expected: ObjectContaining {"images": ["image1.png", "image2.png"], "title": "Test Listing"}
-    Received: {"description": "", "images": ["image1.png", "image2.png"], "is_supply": false, "price": "", "quantity": "1", "shop_id": "", "title": "", "when_made": "made_to_order", "who_made": "i_did"}
-    Number of calls: 1
-      472 |     });
-      473 |
-    > 474 |     expect(fakeListingRepository.publishListing).toHaveBeenCalledWith(expect.objectContaining({
-          |                                                  ^
-      475 |       title: listingData.title,
-      476 |       images: selectedImages
-      477 |     }));
-      at Object.<anonymous> (src/client/hooks/useListingGeneration.test.ts:474:50)
- PASS   service  src/service/commands/GenerateListingImages.test.ts (17.854 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 1,
-        hero: undefined,
-        closeUps: undefined,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        themedEnvironment: undefined,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: true
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
- PASS   service  src/service/test/integration/GeminiImageGenerator.test.ts (21.157 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Incoming request: POST /listings/generate
-      at src/service/app.ts:19:11
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 1,
-        hero: 0,
-        closeUps: 0,
-        flatLay: undefined,
-        macro: undefined,
-        contextual: undefined,
-        themedEnvironment: undefined,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: true
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
-    console.log
-      POST /listings/generate - 200 - 20388ms
-      at src/service/app.ts:22:11
- PASS   service  src/service/test/integration/FourLifestyleShots.test.ts (22.06 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-    console.log
-      Incoming request: POST /listings/generate
-      at src/service/app.ts:19:11
-    console.log
-      Attempting generation with model: gemini-2.5-flash-image
-      at Object.generateImages (src/service/repositories/ListingRepository.ts:48:17)
-    console.log
-      Generating images with params: {
-        lifestyle: 4,
-        hero: 0,
-        closeUps: 0,
-        flatLay: 0,
-        macro: 0,
-        contextual: 0,
-        themedEnvironment: undefined,
-        model: 'gemini-2.5-flash-image',
-        hasProductImage: true
-      }
-      at internalGenerateImages (src/service/repositories/ListingRepository.ts:130:13)
-    console.log
-      POST /listings/generate - 200 - 21275ms
-      at src/service/app.ts:22:11
- PASS   service  src/service/data/GeminiImageGenerator.test.ts (52.502 s)
-  ● Console
-    console.log
-      [dotenv@17.2.3] injecting env (1) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
-      at _log (node_modules/dotenv/lib/main.js:142:11)
-Test Suites: 1 failed, 15 passed, 16 total
-Tests:       1 failed, 84 passed, 85 total
-Snapshots:   0 total
-Time:        53.087 s
-Ran all test suites in 2 projects.
+On branch main
+Your branch is up to date with 'origin/main'.
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   .output.txt
+        modified:   package-lock.json
+        modified:   package.json
+        deleted:    src/assets/generated-images/contextual-1769662276042-799.png
+        deleted:    src/assets/generated-images/contextual-1769662276056-245.png
+        deleted:    src/assets/generated-images/contextual-1769662276137-548.png
+        deleted:    src/assets/generated-images/contextual-1769662276443-73.png
+        deleted:    src/assets/generated-images/contextual-1769663134882-448.png
+        deleted:    src/assets/generated-images/contextual-1769663200982-293.png
+        deleted:    src/assets/generated-images/contextual-1769663201558-651.png
+        deleted:    src/assets/generated-images/contextual-1769663203496-707.png
+        deleted:    src/assets/generated-images/contextual-1769663243918-940.png
+        deleted:    src/assets/generated-images/contextual-1769663692639-783.png
+        deleted:    src/assets/generated-images/contextual-1769663692762-589.png
+        deleted:    src/assets/generated-images/contextual-1769663693193-417.png
+        deleted:    src/assets/generated-images/contextual-1769663693984-734.png
+        deleted:    src/assets/generated-images/contextual-1769665241276-356.png
+        deleted:    src/assets/generated-images/contextual-1769665241290-704.png
+        deleted:    src/assets/generated-images/contextual-1769665241301-989.png
+        deleted:    src/assets/generated-images/contextual-1769665241311-593.png
+        deleted:    src/assets/generated-images/contextual-1769665241345-302.png
+        deleted:    src/assets/generated-images/contextual-1769665241816-885.png
+        deleted:    src/assets/generated-images/contextual-1769665243465-634.png
+        deleted:    src/assets/generated-images/contextual-1769665243472-459.png
+        deleted:    src/assets/generated-images/contextual-1769665243478-688.png
+        deleted:    src/assets/generated-images/contextual-1769665260235-715.png
+        deleted:    src/assets/generated-images/contextual-1769667371389-72.png
+        deleted:    src/assets/generated-images/contextual-1769667372613-584.png
+        deleted:    src/assets/generated-images/contextual-1769667374206-475.png
+        deleted:    src/assets/generated-images/contextual-1769731910370-196.png
+        deleted:    src/assets/generated-images/contextual-1769731950689-572.png
+        deleted:    src/assets/generated-images/hero-1769660883984-743.png
+        deleted:    src/assets/generated-images/hero-1769661130672-962.png
+        deleted:    src/assets/generated-images/hero-1769661175248-704.png
+        deleted:    src/assets/generated-images/hero-1769661349644-814.png
+        deleted:    src/assets/generated-images/hero-1769661609074-77.png
+        deleted:    src/assets/generated-images/hero-1769662637659-466.png
+        deleted:    src/assets/generated-images/hero-1769662706692-569.png
+        deleted:    src/assets/generated-images/hero-1769662819566-966.png
+        deleted:    src/assets/generated-images/hero-1769662900602-751.png
+        deleted:    src/assets/generated-images/hero-1769662960758-186.png
+        deleted:    src/assets/generated-images/hero-1769663019099-626.png
+        deleted:    src/assets/generated-images/hero-1769663073389-718.png
+        deleted:    src/assets/generated-images/hero-1769663393122-635.png
+        deleted:    src/assets/generated-images/hero-1769663834509-338.png
+        deleted:    src/assets/generated-images/hero-1769663926476-361.png
+        deleted:    src/assets/generated-images/hero-1769664010368-218.png
+        deleted:    src/assets/generated-images/hero-1769664076617-510.png
+        deleted:    src/assets/generated-images/hero-1769664766479-29.png
+        deleted:    src/assets/generated-images/hero-1769664841971-593.png
+        deleted:    src/assets/generated-images/hero-1769664925809-540.png
+        deleted:    src/assets/generated-images/hero-1769664996508-102.png
+        deleted:    src/assets/generated-images/hero-1769665492073-42.png
+        deleted:    src/assets/generated-images/hero-1769665588802-720.png
+        deleted:    src/assets/generated-images/hero-1769665658904-233.png
+        deleted:    src/assets/generated-images/hero-1769665792133-270.png
+        deleted:    src/assets/generated-images/hero-1769665868416-649.png
+        deleted:    src/assets/generated-images/hero-1769665957694-40.png
+        deleted:    src/assets/generated-images/hero-1769666257705-577.png
+        deleted:    src/assets/generated-images/hero-1769666687108-958.png
+        deleted:    src/assets/generated-images/hero-1769667003058-916.png
+        deleted:    src/assets/generated-images/hero-1769667113226-620.png
+        deleted:    src/assets/generated-images/hero-1769667155322-950.png
+        deleted:    src/assets/generated-images/hero-1769667409470-842.png
+        deleted:    src/assets/generated-images/hero-1769667676573-631.png
+        deleted:    src/assets/generated-images/hero-1769667760987-165.png
+        deleted:    src/assets/generated-images/hero-1769668212318-941.png
+        deleted:    src/assets/generated-images/hero-1769735540080-394.png
+        deleted:    src/assets/generated-images/lifestyle-1769660883983-820.png
+        deleted:    src/assets/generated-images/lifestyle-1769660883988-126.png
+        deleted:    src/assets/generated-images/lifestyle-1769661130672-543.png
+        deleted:    src/assets/generated-images/lifestyle-1769661130725-676.png
+        deleted:    src/assets/generated-images/lifestyle-1769661175248-463.png
+        deleted:    src/assets/generated-images/lifestyle-1769661175255-877.png
+        deleted:    src/assets/generated-images/lifestyle-1769661349644-836.png
+        deleted:    src/assets/generated-images/lifestyle-1769661349656-454.png
+        deleted:    src/assets/generated-images/lifestyle-1769661609074-575.png
+        deleted:    src/assets/generated-images/lifestyle-1769661609087-237.png
+        deleted:    src/assets/generated-images/lifestyle-1769662637658-572.png
+        deleted:    src/assets/generated-images/lifestyle-1769662637699-300.png
+        deleted:    src/assets/generated-images/lifestyle-1769662706688-34.png
+        deleted:    src/assets/generated-images/lifestyle-1769662706710-404.png
+        deleted:    src/assets/generated-images/lifestyle-1769662819565-135.png
+        deleted:    src/assets/generated-images/lifestyle-1769662819580-383.png
+        deleted:    src/assets/generated-images/lifestyle-1769662900602-491.png
+        deleted:    src/assets/generated-images/lifestyle-1769662900611-4.png
+        deleted:    src/assets/generated-images/lifestyle-1769662960757-205.png
+        deleted:    src/assets/generated-images/lifestyle-1769662960764-46.png
+        deleted:    src/assets/generated-images/lifestyle-1769663019098-47.png
+        deleted:    src/assets/generated-images/lifestyle-1769663019128-397.png
+        deleted:    src/assets/generated-images/lifestyle-1769663073389-113.png
+        deleted:    src/assets/generated-images/lifestyle-1769663073397-934.png
+        deleted:    src/assets/generated-images/lifestyle-1769663333949-510.png
+        deleted:    src/assets/generated-images/lifestyle-1769663362436-217.png
+        deleted:    src/assets/generated-images/lifestyle-1769663393121-453.png
+        deleted:    src/assets/generated-images/lifestyle-1769663393134-315.png
+        deleted:    src/assets/generated-images/lifestyle-1769663834506-181.png
+        deleted:    src/assets/generated-images/lifestyle-1769663834522-439.png
+        deleted:    src/assets/generated-images/lifestyle-1769663926476-686.png
+        deleted:    src/assets/generated-images/lifestyle-1769663926484-405.png
+        deleted:    src/assets/generated-images/lifestyle-1769664010368-876.png
+        deleted:    src/assets/generated-images/lifestyle-1769664010374-718.png
+        deleted:    src/assets/generated-images/lifestyle-1769664027001-452.png
+        deleted:    src/assets/generated-images/lifestyle-1769664027984-109.png
+        deleted:    src/assets/generated-images/lifestyle-1769664029202-503.png
+        deleted:    src/assets/generated-images/lifestyle-1769664029309-573.png
+        deleted:    src/assets/generated-images/lifestyle-1769664031114-835.png
+        deleted:    src/assets/generated-images/lifestyle-1769664076617-214.png
+        deleted:    src/assets/generated-images/lifestyle-1769664076623-370.png
+        deleted:    src/assets/generated-images/lifestyle-1769664094243-986.png
+        deleted:    src/assets/generated-images/lifestyle-1769664094559-735.png
+        deleted:    src/assets/generated-images/lifestyle-1769664094582-56.png
+        deleted:    src/assets/generated-images/lifestyle-1769664095704-743.png
+        deleted:    src/assets/generated-images/lifestyle-1769664097582-119.png
+        deleted:    src/assets/generated-images/lifestyle-1769664766479-331.png
+        deleted:    src/assets/generated-images/lifestyle-1769664766483-221.png
+        deleted:    src/assets/generated-images/lifestyle-1769664782446-512.png
+        deleted:    src/assets/generated-images/lifestyle-1769664783819-576.png
+        deleted:    src/assets/generated-images/lifestyle-1769664783893-577.png
+        deleted:    src/assets/generated-images/lifestyle-1769664785896-840.png
+        deleted:    src/assets/generated-images/lifestyle-1769664787693-566.png
+        deleted:    src/assets/generated-images/lifestyle-1769664841970-721.png
+        deleted:    src/assets/generated-images/lifestyle-1769664841975-580.png
+        deleted:    src/assets/generated-images/lifestyle-1769664858883-671.png
+        deleted:    src/assets/generated-images/lifestyle-1769664859204-810.png
+        deleted:    src/assets/generated-images/lifestyle-1769664859225-252.png
+        deleted:    src/assets/generated-images/lifestyle-1769664859363-575.png
+        deleted:    src/assets/generated-images/lifestyle-1769664862924-453.png
+        deleted:    src/assets/generated-images/lifestyle-1769664925808-274.png
+        deleted:    src/assets/generated-images/lifestyle-1769664925813-455.png
+        deleted:    src/assets/generated-images/lifestyle-1769664942633-925.png
+        deleted:    src/assets/generated-images/lifestyle-1769664942716-173.png
+        deleted:    src/assets/generated-images/lifestyle-1769664943592-72.png
+        deleted:    src/assets/generated-images/lifestyle-1769664943925-415.png
+        deleted:    src/assets/generated-images/lifestyle-1769664947605-459.png
+        deleted:    src/assets/generated-images/lifestyle-1769664996504-271.png
+        deleted:    src/assets/generated-images/lifestyle-1769664996515-700.png
+        deleted:    src/assets/generated-images/lifestyle-1769665013621-870.png
+        deleted:    src/assets/generated-images/lifestyle-1769665013730-388.png
+        deleted:    src/assets/generated-images/lifestyle-1769665014033-247.png
+        deleted:    src/assets/generated-images/lifestyle-1769665014126-313.png
+        deleted:    src/assets/generated-images/lifestyle-1769665016046-85.png
+        deleted:    src/assets/generated-images/lifestyle-1769665492068-77.png
+        deleted:    src/assets/generated-images/lifestyle-1769665492091-294.png
+        deleted:    src/assets/generated-images/lifestyle-1769665508979-545.png
+        deleted:    src/assets/generated-images/lifestyle-1769665509580-110.png
+        deleted:    src/assets/generated-images/lifestyle-1769665511115-503.png
+        deleted:    src/assets/generated-images/lifestyle-1769665512824-501.png
+        deleted:    src/assets/generated-images/lifestyle-1769665513575-103.png
+        deleted:    src/assets/generated-images/lifestyle-1769665588802-82.png
+        deleted:    src/assets/generated-images/lifestyle-1769665588807-232.png
+        deleted:    src/assets/generated-images/lifestyle-1769665605608-112.png
+        deleted:    src/assets/generated-images/lifestyle-1769665606071-621.png
+        deleted:    src/assets/generated-images/lifestyle-1769665606256-924.png
+        deleted:    src/assets/generated-images/lifestyle-1769665606731-923.png
+        deleted:    src/assets/generated-images/lifestyle-1769665610057-279.png
+        deleted:    src/assets/generated-images/lifestyle-1769665658903-374.png
+        deleted:    src/assets/generated-images/lifestyle-1769665658949-626.png
+        deleted:    src/assets/generated-images/lifestyle-1769665676060-244.png
+        deleted:    src/assets/generated-images/lifestyle-1769665676290-777.png
+        deleted:    src/assets/generated-images/lifestyle-1769665676318-273.png
+        deleted:    src/assets/generated-images/lifestyle-1769665676635-540.png
+        deleted:    src/assets/generated-images/lifestyle-1769665679966-775.png
+        deleted:    src/assets/generated-images/lifestyle-1769665792132-396.png
+        deleted:    src/assets/generated-images/lifestyle-1769665792193-961.png
+        deleted:    src/assets/generated-images/lifestyle-1769665809232-499.png
+        deleted:    src/assets/generated-images/lifestyle-1769665809528-167.png
+        deleted:    src/assets/generated-images/lifestyle-1769665809665-674.png
+        deleted:    src/assets/generated-images/lifestyle-1769665811682-866.png
+        deleted:    src/assets/generated-images/lifestyle-1769665811919-418.png
+        deleted:    src/assets/generated-images/lifestyle-1769665868416-479.png
+        deleted:    src/assets/generated-images/lifestyle-1769665868439-912.png
+        deleted:    src/assets/generated-images/lifestyle-1769665885307-348.png
+        deleted:    src/assets/generated-images/lifestyle-1769665885627-21.png
+        deleted:    src/assets/generated-images/lifestyle-1769665885881-429.png
+        deleted:    src/assets/generated-images/lifestyle-1769665886157-791.png
+        deleted:    src/assets/generated-images/lifestyle-1769665889746-117.png
+        deleted:    src/assets/generated-images/lifestyle-1769665957688-129.png
+        deleted:    src/assets/generated-images/lifestyle-1769665957698-766.png
+        deleted:    src/assets/generated-images/lifestyle-1769665974429-719.png
+        deleted:    src/assets/generated-images/lifestyle-1769665974972-518.png
+        deleted:    src/assets/generated-images/lifestyle-1769665975081-121.png
+        deleted:    src/assets/generated-images/lifestyle-1769665975251-869.png
+        deleted:    src/assets/generated-images/lifestyle-1769665978545-946.png
+        deleted:    src/assets/generated-images/lifestyle-1769666257703-688.png
+        deleted:    src/assets/generated-images/lifestyle-1769666257710-846.png
+        deleted:    src/assets/generated-images/lifestyle-1769666687106-393.png
+        deleted:    src/assets/generated-images/lifestyle-1769666687114-950.png
+        deleted:    src/assets/generated-images/lifestyle-1769666703311-492.png
+        deleted:    src/assets/generated-images/lifestyle-1769666704369-733.png
+        deleted:    src/assets/generated-images/lifestyle-1769666705955-269.png
+        deleted:    src/assets/generated-images/lifestyle-1769666706612-777.png
+        deleted:    src/assets/generated-images/lifestyle-1769666706771-391.png
+        deleted:    src/assets/generated-images/lifestyle-1769666708585-122.png
+        deleted:    src/assets/generated-images/lifestyle-1769667003058-47.png
+        deleted:    src/assets/generated-images/lifestyle-1769667003089-869.png
+        deleted:    src/assets/generated-images/lifestyle-1769667022208-808.png
+        deleted:    src/assets/generated-images/lifestyle-1769667022314-50.png
+        deleted:    src/assets/generated-images/lifestyle-1769667022775-714.png
+        deleted:    src/assets/generated-images/lifestyle-1769667022784-737.png
+        deleted:    src/assets/generated-images/lifestyle-1769667023466-439.png
+        deleted:    src/assets/generated-images/lifestyle-1769667024655-678.png
+        deleted:    src/assets/generated-images/lifestyle-1769667113224-850.png
+        deleted:    src/assets/generated-images/lifestyle-1769667113300-304.png
+        deleted:    src/assets/generated-images/lifestyle-1769667128079-364.png
+        deleted:    src/assets/generated-images/lifestyle-1769667130116-531.png
+        deleted:    src/assets/generated-images/lifestyle-1769667131745-464.png
+        deleted:    src/assets/generated-images/lifestyle-1769667131760-399.png
+        deleted:    src/assets/generated-images/lifestyle-1769667131991-409.png
+        deleted:    src/assets/generated-images/lifestyle-1769667134304-650.png
+        deleted:    src/assets/generated-images/lifestyle-1769667155319-409.png
+        deleted:    src/assets/generated-images/lifestyle-1769667155336-880.png
+        deleted:    src/assets/generated-images/lifestyle-1769667182878-944.png
+        deleted:    src/assets/generated-images/lifestyle-1769667182952-871.png
+        deleted:    src/assets/generated-images/lifestyle-1769667182968-113.png
+        deleted:    src/assets/generated-images/lifestyle-1769667183609-877.png
+        deleted:    src/assets/generated-images/lifestyle-1769667241210-154.png
+        deleted:    src/assets/generated-images/lifestyle-1769667241719-724.png
+        deleted:    src/assets/generated-images/lifestyle-1769667241767-542.png
+        deleted:    src/assets/generated-images/lifestyle-1769667241958-572.png
+        deleted:    src/assets/generated-images/lifestyle-1769667409470-786.png
+        deleted:    src/assets/generated-images/lifestyle-1769667409474-244.png
+        deleted:    src/assets/generated-images/lifestyle-1769667425219-809.png
+        deleted:    src/assets/generated-images/lifestyle-1769667425334-640.png
+        deleted:    src/assets/generated-images/lifestyle-1769667425529-292.png
+        deleted:    src/assets/generated-images/lifestyle-1769667425597-282.png
+        deleted:    src/assets/generated-images/lifestyle-1769667567648-839.png
+        deleted:    src/assets/generated-images/lifestyle-1769667632490-363.png
+        deleted:    src/assets/generated-images/lifestyle-1769667654070-386.png
+        deleted:    src/assets/generated-images/lifestyle-1769667676573-483.png
+        deleted:    src/assets/generated-images/lifestyle-1769667676585-188.png
+        deleted:    src/assets/generated-images/lifestyle-1769667693473-789.png
+        deleted:    src/assets/generated-images/lifestyle-1769667694576-735.png
+        deleted:    src/assets/generated-images/lifestyle-1769667694907-203.png
+        deleted:    src/assets/generated-images/lifestyle-1769667695333-69.png
+        deleted:    src/assets/generated-images/lifestyle-1769667695675-659.png
+        deleted:    src/assets/generated-images/lifestyle-1769667760985-602.png
+        deleted:    src/assets/generated-images/lifestyle-1769667760999-368.png
+        deleted:    src/assets/generated-images/lifestyle-1769667777460-91.png
+        deleted:    src/assets/generated-images/lifestyle-1769667778186-441.png
+        deleted:    src/assets/generated-images/lifestyle-1769667778196-309.png
+        deleted:    src/assets/generated-images/lifestyle-1769667779412-943.png
+        deleted:    src/assets/generated-images/lifestyle-1769667782063-579.png
+        deleted:    src/assets/generated-images/lifestyle-1769668212318-984.png
+        deleted:    src/assets/generated-images/lifestyle-1769668212326-773.png
+        deleted:    src/assets/generated-images/lifestyle-1769735540080-686.png
+        deleted:    src/assets/generated-images/lifestyle-1769735540090-141.png
+        deleted:    src/assets/generated-images/lifestyle-1769735557027-376.png
+        deleted:    src/assets/generated-images/lifestyle-1769735557990-865.png
+        deleted:    src/assets/generated-images/lifestyle-1769735558481-426.png
+        deleted:    src/assets/generated-images/lifestyle-1769735558509-9.png
+        deleted:    src/assets/generated-images/lifestyle-1769735560341-637.png
+        deleted:    src/assets/generated-images/lifestyle-1769735561237-842.png
+        deleted:    src/assets/generated-images/themed-environment-1769660883987-733.png
+        deleted:    src/assets/generated-images/themed-environment-1769661130719-125.png
+        deleted:    src/assets/generated-images/themed-environment-1769661175253-916.png
+        deleted:    src/assets/generated-images/themed-environment-1769661349654-943.png
+        deleted:    src/assets/generated-images/themed-environment-1769661609084-348.png
+        deleted:    src/assets/generated-images/themed-environment-1769662637697-622.png
+        deleted:    src/assets/generated-images/themed-environment-1769662706709-803.png
+        deleted:    src/assets/generated-images/themed-environment-1769662819579-809.png
+        deleted:    src/assets/generated-images/themed-environment-1769662900607-388.png
+        deleted:    src/assets/generated-images/themed-environment-1769662960763-778.png
+        deleted:    src/assets/generated-images/themed-environment-1769663019121-611.png
+        deleted:    src/assets/generated-images/themed-environment-1769663073396-331.png
+        deleted:    src/assets/generated-images/themed-environment-1769663393132-356.png
+        deleted:    src/assets/generated-images/themed-environment-1769663834518-891.png
+        deleted:    src/assets/generated-images/themed-environment-1769663926483-816.png
+        deleted:    src/assets/generated-images/themed-environment-1769664010374-26.png
+        deleted:    src/assets/generated-images/themed-environment-1769664076621-148.png
+        deleted:    src/assets/generated-images/themed-environment-1769664766482-880.png
+        deleted:    src/assets/generated-images/themed-environment-1769664841975-12.png
+        deleted:    src/assets/generated-images/themed-environment-1769664925812-91.png
+        deleted:    src/assets/generated-images/themed-environment-1769664996514-799.png
+        deleted:    src/assets/generated-images/themed-environment-1769665492084-219.png
+        deleted:    src/assets/generated-images/themed-environment-1769665588806-989.png
+        deleted:    src/assets/generated-images/themed-environment-1769665658936-420.png
+        deleted:    src/assets/generated-images/themed-environment-1769665792192-580.png
+        deleted:    src/assets/generated-images/themed-environment-1769665868434-605.png
+        deleted:    src/assets/generated-images/themed-environment-1769665957698-551.png
+        deleted:    src/assets/generated-images/themed-environment-1769666257709-275.png
+        deleted:    src/assets/generated-images/themed-environment-1769666687113-558.png
+        deleted:    src/assets/generated-images/themed-environment-1769667003075-604.png
+        deleted:    src/assets/generated-images/themed-environment-1769667113269-582.png
+        deleted:    src/assets/generated-images/themed-environment-1769667155335-221.png
+        deleted:    src/assets/generated-images/themed-environment-1769667409474-372.png
+        deleted:    src/assets/generated-images/themed-environment-1769667676579-305.png
+        deleted:    src/assets/generated-images/themed-environment-1769667760994-396.png
+        deleted:    src/assets/generated-images/themed-environment-1769667858207-781.png
+        deleted:    src/assets/generated-images/themed-environment-1769667858587-235.png
+        deleted:    src/assets/generated-images/themed-environment-1769667911930-159.png
+        deleted:    src/assets/generated-images/themed-environment-1769668212323-584.png
+        deleted:    src/assets/generated-images/themed-environment-1769735540090-150.png
+        modified:   src/client/App.tsx
+        modified:   src/client/components/EtsyListingForm.tsx
+        modified:   src/client/components/ImageModal.tsx
+        modified:   src/client/components/ListingPreview.tsx
+        modified:   src/client/components/ModelStatus.tsx
+        modified:   src/client/components/useListingPreview.ts
+        modified:   src/client/hooks/useListingGeneration.test.ts
+        modified:   src/client/hooks/useListingGeneration.ts
+        modified:   src/client/hooks/useProductUpload.test.ts
+        modified:   src/client/hooks/useProductUpload.ts
+        modified:   src/client/repositories/ListingRepository.ts
+        modified:   src/db/context-templates.json
+        modified:   src/service/app.ts
+        modified:   src/service/commands/GenerateListingImages.ts
+        modified:   src/service/commands/GetSystemPromptPreview.ts
+        modified:   src/service/controllers/ListingController.ts
+        modified:   src/service/data/GeminiImageGenerator.test.ts
+        modified:   src/service/data/GeminiImageGenerator.ts
+        modified:   src/service/repositories/ListingRepository.test.ts
+        modified:   src/service/repositories/ListingRepository.ts
+        modified:   src/service/test/ListingController.test.ts
+        modified:   src/service/test/integration/GeminiImageGenerator.test.ts
+        modified:   src/service/test/integration/PromptPreview.test.ts
+        modified:   yarn.lock
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/assets/generated-images/close-up-1769838916239-200.png
+        src/db/edit-prompt-versions.json
+        src/db/system-prompt-versions.json
+        src/service/commands/GetEditPromptVersions.ts
+        src/service/commands/GetSystemPromptVersions.ts
+        src/service/commands/RemoveEditPromptVersion.ts
+        src/service/commands/SaveEditPromptVersion.ts
+        src/service/commands/SaveListingImage.ts
+        src/service/repositories/EditPromptRepository.ts
+        src/service/repositories/SystemPromptRepository.ts
+no changes added to commit (use "git add" and/or "git commit -a")

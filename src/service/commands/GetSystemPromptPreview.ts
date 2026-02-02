@@ -13,7 +13,12 @@ export const createGetSystemPromptPreview = (listingRepository: any) => {
     flatLayCustomContext?: string,
     macroCustomContext?: string,
     contextualCustomContext?: string,
-    themedEnvironmentCustomContext?: string
+    themedEnvironmentCustomContext?: string,
+    editSpecifications?: {field: string, value: string}[],
+    editCount?: number,
+    systemPromptTemplate?: string,
+    editPromptTemplate?: string,
+    editPromptLineTemplate?: string
   }) => {
     return listingRepository.getPromptPreview(request);
   };

@@ -91,4 +91,13 @@ describe('Listing Controller', () => {
     expect(response.status).toBe(200);
     expect(response.body.shop_id).toBe('56358327');
   });
+
+  it('gets prompt versions', async () => {
+    const response = await supertest(app.callback())
+      .get('/listings/prompt-versions');
+
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body.versions)).toBe(true);
+    expect(response.body.versions.length).toBeGreaterThan(0);
+  });
 });

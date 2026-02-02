@@ -86,7 +86,7 @@ const EtsyListingForm = ({
               value={formData.description || ''} 
               onChange={(e) => onChange('description', e.target.value)}
               placeholder="Item Description"
-              className="min-h-[60px] text-xs"
+              className="min-h-[150px] text-xs"
             />
           </div>
         </div>
@@ -240,11 +240,15 @@ const EtsyListingForm = ({
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="etsy-shop-id" className="text-xs">Shop ID</Label>
+              <Label htmlFor="etsy-shop-id" className="text-xs">Shop</Label>
               <Input 
                 id="etsy-shop-id" 
-                value={formData.shop_id || ''} 
-                onChange={(e) => onChange('shop_id', e.target.value)}
+                value={formData.shop_id === '56358327' ? 'GameBin' : (formData.shop_id || '')} 
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const id = val === 'GameBin' ? '56358327' : val;
+                  onChange('shop_id', id);
+                }}
                 placeholder="Enter Shop ID"
                 className="h-8 text-xs"
               />

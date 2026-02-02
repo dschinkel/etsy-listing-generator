@@ -31,6 +31,7 @@ export const createListingRepository = () => {
     macroCreateSimilar?: boolean,
     contextualCreateSimilar?: boolean,
     themedEnvironmentCreateSimilar?: boolean,
+    seeds?: number[],
     temperature?: number,
     model?: string
   }) => {
@@ -194,6 +195,21 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
+  const saveImage = async (imageUrl: string, type: string) => {
+    const response = await fetchWithTimeout('/listings/save-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageUrl, type }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to save image: ${text}`);
+    }
+
+    return await response.json();
+  };
+
   const getArchivedUploads = async () => {
     const response = await fetchWithTimeout('/listings/archived-uploads', {
       method: 'GET',
@@ -234,16 +250,75 @@ export const createListingRepository = () => {
     return await response.json();
   };
 
+  const getPromptVersions = async () => {
+    const response = await fetchWithTimeout('/listings/prompt-versions', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      return { versions: [] };
+    }
+
+    return await response.json();
+  };
+
+  const getEditPromptVersions = async () => {
+    const response = await fetchWithTimeout('/listings/edit-prompt-versions', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      return { versions: [] };
+    }
+
+    return await response.json();
+  };
+
+  const saveEditPromptVersion = async (version: any) => {
+    const response = await fetchWithTimeout('/listings/edit-prompt-versions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(version),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to save edit prompt version: ${text}`);
+    }
+
+    return await response.json();
+  };
+
+  const removeEditPromptVersion = async (name: string) => {
+    const response = await fetchWithTimeout(`/listings/edit-prompt-versions/${encodeURIComponent(name)}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to remove edit prompt version: ${text}`);
+    }
+
+    return await response.json();
+  };
+
   return { 
     generateImages, 
     generateSingleImage,
-    getSystemPromptPreview, 
-    getTemplates, 
-    saveTemplate, 
-    removeTemplate, 
+    getSystemPromptPreview,
+    getTemplates,
+    saveTemplate,
+    removeTemplate,
     deleteImage,
     archiveImages,
     getArchivedUploads,
+    getPromptVersions,
+    getEditPromptVersions,
+    saveEditPromptVersion,
+    removeEditPromptVersion,
     getShopId,
     publishListing
   };

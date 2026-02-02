@@ -2,12 +2,19 @@ import { createGenerateListingImages } from '../commands/GenerateListingImages';
 import { createGenerateSingleImage } from '../commands/GenerateSingleImage';
 import { createArchiveListingImages } from '../commands/ArchiveListingImages';
 import { createGetSystemPromptPreview } from '../commands/GetSystemPromptPreview';
+import { createGetSystemPromptVersions } from '../commands/GetSystemPromptVersions';
+import { createGetEditPromptVersions } from '../commands/GetEditPromptVersions';
+import { createSaveEditPromptVersion } from '../commands/SaveEditPromptVersion';
+import { createRemoveEditPromptVersion } from '../commands/RemoveEditPromptVersion';
 import { createGetContextTemplates } from '../commands/GetContextTemplates';
 import { createSaveContextTemplate } from '../commands/SaveContextTemplate';
 import { createRemoveContextTemplate } from '../commands/RemoveContextTemplate';
 import { createPushToEtsy } from '../commands/PushToEtsy';
+import { createSaveListingImage } from '../commands/SaveListingImage';
 import { createListingRepository } from '../repositories/ListingRepository';
 import { createContextTemplateRepository } from '../repositories/ContextTemplateRepository';
+import { createSystemPromptRepository } from '../repositories/SystemPromptRepository';
+import { createEditPromptRepository } from '../repositories/EditPromptRepository';
 import { createEtsyRepository } from '../repositories/EtsyRepository';
 import { createGeminiImageGenerator } from '../data/GeminiImageGenerator';
 import { deleteImageFromAssets } from '../lib/assetManager';
@@ -27,13 +34,24 @@ export const createListingController = () => {
   const templateDbPath = process.env.TEMPLATE_DB_PATH || path.join(process.cwd(), 'src', 'db', 'context-templates.json');
   const templateRepository = createContextTemplateRepository(templateDbPath);
 
+  const promptVersionsDbPath = process.env.PROMPT_VERSIONS_DB_PATH || path.join(process.cwd(), 'src', 'db', 'system-prompt-versions.json');
+  const systemPromptRepository = createSystemPromptRepository(promptVersionsDbPath);
+
+  const editPromptVersionsDbPath = process.env.EDIT_PROMPT_VERSIONS_DB_PATH || path.join(process.cwd(), 'src', 'db', 'edit-prompt-versions.json');
+  const editPromptRepository = createEditPromptRepository(editPromptVersionsDbPath);
+
   const generateListingImages = createGenerateListingImages(repository);
   const getSystemPromptPreview = createGetSystemPromptPreview(repository);
+  const getSystemPromptVersions = createGetSystemPromptVersions(systemPromptRepository);
+  const getEditPromptVersions = createGetEditPromptVersions(editPromptRepository);
+  const saveEditPromptVersion = createSaveEditPromptVersion(editPromptRepository);
+  const removeEditPromptVersion = createRemoveEditPromptVersion(editPromptRepository);
   const getContextTemplates = createGetContextTemplates(templateRepository);
   const saveContextTemplate = createSaveContextTemplate(templateRepository);
   const removeContextTemplate = createRemoveContextTemplate(templateRepository);
   const generateSingleImage = createGenerateSingleImage(repository);
   const archiveListingImages = createArchiveListingImages(repository);
+  const saveListingImage = createSaveListingImage(repository);
   const pushToEtsy = createPushToEtsy(etsyRepository);
 
   const generate = async (ctx: any) => {
@@ -78,6 +96,56 @@ export const createListingController = () => {
       ctx.status = 200;
     } catch (error: any) {
       console.error('Error in getPromptPreview:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  const getPromptVersions = async (ctx: any) => {
+    try {
+      const versions = await getSystemPromptVersions.execute();
+      ctx.body = { versions };
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in getPromptVersions:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  const getEditPromptVersionsHandler = async (ctx: any) => {
+    try {
+      const versions = await getEditPromptVersions.execute();
+      ctx.body = { versions };
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in getEditPromptVersions:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  const saveEditPromptVersionHandler = async (ctx: any) => {
+    try {
+      const version = ctx.request.body;
+      await saveEditPromptVersion.execute(version);
+      ctx.body = { version };
+      ctx.status = 201;
+    } catch (error: any) {
+      console.error('Error in saveEditPromptVersion:', error);
+      ctx.status = 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
+  const removeEditPromptVersionHandler = async (ctx: any) => {
+    try {
+      const { name } = ctx.params;
+      await removeEditPromptVersion.execute(name);
+      ctx.status = 200;
+      ctx.body = { success: true };
+    } catch (error: any) {
+      console.error('Error in removeEditPromptVersion:', error);
       ctx.status = 500;
       ctx.body = { error: error.message || 'Internal Server Error' };
     }
@@ -152,6 +220,19 @@ export const createListingController = () => {
     }
   };
 
+  const saveGeneratedImage = async (ctx: any) => {
+    try {
+      const request = ctx.request.body;
+      const result = await saveListingImage.execute(request);
+      ctx.body = result;
+      ctx.status = 200;
+    } catch (error: any) {
+      console.error('Error in saveGeneratedImage:', error);
+      ctx.status = error.status || 500;
+      ctx.body = { error: error.message || 'Internal Server Error' };
+    }
+  };
+
   const getArchivedUploads = async (ctx: any) => {
     try {
       const images = await repository.getArchivedUploads();
@@ -188,5 +269,5 @@ export const createListingController = () => {
     }
   };
 
-  return { generate, generateSingle, getPromptPreview, getTemplates, saveTemplate, removeTemplate, deleteImage, archive, getArchivedUploads, getShopId, publish };
+  return { generate, generateSingle, getPromptPreview, getPromptVersions, getEditPromptVersions: getEditPromptVersionsHandler, saveEditPromptVersion: saveEditPromptVersionHandler, removeEditPromptVersion: removeEditPromptVersionHandler, getTemplates, saveTemplate, removeTemplate, deleteImage, archive, saveGeneratedImage, getArchivedUploads, getShopId, publish };
 };

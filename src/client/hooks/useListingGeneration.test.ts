@@ -2,6 +2,14 @@ import { renderHook, act } from '@testing-library/react';
 import { useListingGeneration } from './useListingGeneration';
 
 describe('Listing Generation', () => {
+  it('initializes with default values', () => {
+    const { result } = renderHook(() => useListingGeneration({}));
+    expect(result.current.etsyFormData.taxonomy_id).toBe('69154');
+    expect(result.current.etsyFormData.category).toBe('Accessories > Keychains & Lanyards > Keychains');
+    expect(result.current.etsyFormData.price).toBe('11.99');
+    expect(result.current.etsyFormData.quantity).toBe('10');
+  });
+
   it('generates multiple lifestyle shots', async () => {
     const fakeListingRepository = {
       generateImages: async () => ({ 
@@ -44,7 +52,7 @@ describe('Listing Generation', () => {
       });
     });
     
-    expect(capturedParams).toEqual({ 
+    expect(capturedParams).toMatchObject({ 
       lifestyleCount: 1, 
       productImages: base64Images,
       model: 'gemini-2.5-flash-image',
@@ -68,7 +76,7 @@ describe('Listing Generation', () => {
       await result.current.generateListing({ heroCount: 2 });
     });
     
-    expect(capturedParams).toEqual({ 
+    expect(capturedParams).toMatchObject({ 
       heroCount: 2,
       model: 'gemini-2.5-flash-image',
       noFallback: true,
@@ -92,13 +100,35 @@ describe('Listing Generation', () => {
       await result.current.generateListing({ closeUpsCount: 1 });
     });
     
-    expect(capturedParams).toEqual({ 
+    expect(capturedParams).toMatchObject({ 
       closeUpsCount: 1,
       model: 'gemini-2.5-flash-image',
       noFallback: true,
       temperature: 1
     });
     expect(result.current.images).toEqual([{ url: 'closeup_1.png', type: 'close-up' }]);
+  });
+
+  it('sends editSpecifications when generating', async () => {
+    let capturedParams = null;
+    const fakeListingRepository = {
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return { images: [{ url: 'custom_1.png', type: 'custom' }] };
+      }
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      await result.current.generateListing({ 
+        editSpecifications: [{ field: 'Name', value: 'New Name' }]
+      });
+    });
+    
+    expect(capturedParams).toMatchObject({ 
+      editSpecifications: [{ field: 'Name', value: 'New Name' }]
+    });
   });
 
   it('removes a generated image', async () => {
@@ -171,7 +201,7 @@ describe('Listing Generation', () => {
     expect(result.current.error).toBe('Generation failed: Something went wrong');
   });
 
-  it('fetches system prompt preview', async () => {
+  it('fetches system prompt preview only when parameters change', async () => {
     const fakeListingRepository = {
       getSystemPromptPreview: jest.fn().mockResolvedValue({ systemPrompt: 'preview prompt' })
     };
@@ -183,7 +213,58 @@ describe('Listing Generation', () => {
     });
 
     expect(result.current.systemPrompt).toBe('preview prompt');
-    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledWith({ lifestyleCount: 1 });
+    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledTimes(1);
+
+    // Call again with same params
+    await act(async () => {
+      await result.current.fetchSystemPromptPreview({ lifestyleCount: 1 });
+    });
+
+    // Should not have called repository again
+    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledTimes(1);
+
+    // Call with different params
+    await act(async () => {
+      await result.current.fetchSystemPromptPreview({ lifestyleCount: 2 });
+    });
+
+    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not overwrite sent prompt with preview right after generation', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn().mockResolvedValue({ 
+        images: [{ url: 'img.png', type: 'lifestyle' }], 
+        systemPrompt: 'ACTUAL SENT PROMPT' 
+      }),
+      getSystemPromptPreview: jest.fn().mockResolvedValue({ systemPrompt: 'PREVIEW PROMPT' })
+    };
+
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+
+    const params = { lifestyleCount: 1 };
+
+    // 1. Get initial preview
+    await act(async () => {
+      await result.current.fetchSystemPromptPreview(params);
+    });
+    expect(result.current.systemPrompt).toBe('PREVIEW PROMPT');
+    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledTimes(1);
+
+    // 2. Generate images
+    await act(async () => {
+      await result.current.generateListing(params);
+    });
+    expect(result.current.systemPrompt).toBe('ACTUAL SENT PROMPT');
+
+    // 3. Try to fetch preview with same params (this mimics what App.tsx useEffect might do)
+    await act(async () => {
+      await result.current.fetchSystemPromptPreview(params);
+    });
+
+    // 4. Prompt should STILL be the ACTUAL SENT PROMPT, not the PREVIEW PROMPT
+    expect(result.current.systemPrompt).toBe('ACTUAL SENT PROMPT');
+    expect(fakeListingRepository.getSystemPromptPreview).toHaveBeenCalledTimes(1); // No new call
   });
 
   it('updates system prompt from error object if present', async () => {
@@ -624,7 +705,8 @@ describe('Listing Generation', () => {
           { url: 'image2.png', type: 'hero' }
         ] 
       }),
-      archiveImages: jest.fn().mockResolvedValue({ success: true })
+      archiveImages: jest.fn().mockResolvedValue({ success: true }),
+      saveImage: jest.fn().mockImplementation((url) => Promise.resolve({ url }))
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -648,7 +730,8 @@ describe('Listing Generation', () => {
           { url: 'image2.png', type: 'hero' }
         ] 
       }),
-      archiveImages: jest.fn().mockResolvedValue({ success: true })
+      archiveImages: jest.fn().mockResolvedValue({ success: true }),
+      saveImage: jest.fn().mockImplementation((url) => Promise.resolve({ url }))
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -669,7 +752,8 @@ describe('Listing Generation', () => {
       generateImages: async () => ({ 
         images: [{ url: 'image1.png', type: 'lifestyle' }] 
       }),
-      archiveImages: jest.fn().mockResolvedValue({ success: true })
+      archiveImages: jest.fn().mockResolvedValue({ success: true }),
+      saveImage: jest.fn().mockImplementation((url) => Promise.resolve({ url }))
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -695,7 +779,8 @@ describe('Listing Generation', () => {
           { url: 'image2.png', type: 'hero' }
         ] 
       }),
-      archiveImages: jest.fn().mockResolvedValue({ success: true })
+      archiveImages: jest.fn().mockResolvedValue({ success: true }),
+      saveImage: jest.fn().mockImplementation((url) => Promise.resolve({ url }))
     };
 
     const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
@@ -738,5 +823,195 @@ describe('Listing Generation', () => {
     expect(capturedParams).toEqual(expect.objectContaining({ 
       temperature: 0.5
     }));
+  });
+
+  it('saves a generated image and updates the url and isSaved state', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [{ url: 'temp_image.png', type: 'lifestyle' }] 
+      }),
+      saveImage: jest.fn().mockResolvedValue({ url: 'saved_image.png' })
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+    
+    expect(result.current.images[0].url).toBe('temp_image.png');
+    expect(result.current.images[0].isSaved).toBeFalsy();
+    
+    await act(async () => {
+      await result.current.saveImage(0);
+    });
+    
+    expect(fakeListingRepository.saveImage).toHaveBeenCalledWith('temp_image.png', 'lifestyle');
+    expect(result.current.images[0].url).toBe('saved_image.png');
+    expect(result.current.images[0].isSaved).toBe(true);
+  });
+
+  it('preserves seeds in images state after generation', async () => {
+    const fakeListingRepository = {
+      generateImages: async () => ({ 
+        images: [
+          { url: 'image1.png', type: 'lifestyle', seed: 12345 },
+          { url: 'image2.png', type: 'hero', seed: 67890 }
+        ] 
+      })
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1, heroCount: 1 });
+    });
+    
+    expect(result.current.images[0].seed).toBe(12345);
+    expect(result.current.images[1].seed).toBe(67890);
+  });
+
+  it('exposes currentSeeds immediately when generation starts', async () => {
+    const fakeListingRepository = {
+      generateImages: jest.fn().mockImplementation(() => new Promise(resolve => {
+        // Delay resolution to check state during generation
+        setTimeout(() => resolve({ images: [] }), 100);
+      }))
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    let generationPromise: Promise<void>;
+    act(() => {
+      generationPromise = result.current.generateListing({ 
+        lifestyleCount: 2, 
+        lifestyleCreateSimilar: true 
+      });
+    });
+    
+    expect(result.current.currentSeeds).toHaveLength(2);
+    expect(typeof result.current.currentSeeds[0]).toBe('number');
+    
+    await act(async () => {
+      await generationPromise!;
+    });
+    
+    expect(result.current.currentSeeds).toHaveLength(0);
+  });
+
+  it('allows adding manual images to the listing', async () => {
+    const { result } = renderHook(() => useListingGeneration({}));
+    
+    act(() => {
+      result.current.addManualImages(['data:image/png;base64,manual1', 'data:image/png;base64,manual2']);
+    });
+    
+    expect(result.current.images).toHaveLength(2);
+    expect(result.current.images[0]).toMatchObject({
+      url: 'data:image/png;base64,manual1',
+      type: 'manual',
+      isSaved: false
+    });
+    expect(result.current.images[1]).toMatchObject({
+      url: 'data:image/png;base64,manual2',
+      type: 'manual',
+      isSaved: false
+    });
+  });
+
+  it('manages edit prompt versions and persists selection to localStorage', async () => {
+    let capturedParams = null;
+    const versions = [
+      { version: 'v1', template: 't1', lineTemplate: 'l1' },
+      { version: 'v2', template: 't2', lineTemplate: 'l2' }
+    ];
+    const fakeListingRepository = {
+      getEditPromptVersions: jest.fn().mockResolvedValue({ versions }),
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return { images: [] };
+      }
+    };
+    
+    // Pre-set localStorage
+    localStorage.setItem('lastEditPromptVersion', 'v2');
+    
+    const { result, rerender } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    // Wait for useEffect
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    expect(result.current.editPromptVersions).toEqual(versions);
+    expect(result.current.selectedEditPromptVersion).toBe('v2'); // Loaded from localStorage
+
+    act(() => {
+      result.current.setSelectedEditPromptVersion('v1');
+    });
+
+    expect(localStorage.getItem('lastEditPromptVersion')).toBe('v1');
+
+    await act(async () => {
+      await result.current.generateListing({ editSpecifications: [{ field: 'Name', value: 'Test' }] });
+    });
+
+    expect(capturedParams).toMatchObject({
+      editPromptTemplate: 't1',
+      editPromptLineTemplate: 'l1'
+    });
+  });
+
+  it('saves a new edit prompt version', async () => {
+    const versions = [{ version: 'v1', template: 't1', lineTemplate: 'l1' }];
+    const newVersion = { version: 'v2', template: 't2', lineTemplate: 'l2' };
+    const fakeListingRepository = {
+      getEditPromptVersions: jest.fn().mockResolvedValue({ versions }),
+      saveEditPromptVersion: jest.fn().mockResolvedValue({ version: newVersion })
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    await act(async () => {
+      await result.current.saveEditPromptVersion(newVersion);
+    });
+
+    expect(fakeListingRepository.saveEditPromptVersion).toHaveBeenCalledWith(newVersion);
+    expect(result.current.editPromptVersions).toContainEqual(newVersion);
+    expect(result.current.selectedEditPromptVersion).toBe('v2');
+  });
+
+  it('removes an edit prompt version', async () => {
+    const versions = [
+      { version: 'v1', template: 't1', lineTemplate: 'l1' },
+      { version: 'v2', template: 't2', lineTemplate: 'l2' }
+    ];
+    const fakeListingRepository = {
+      getEditPromptVersions: jest.fn().mockResolvedValue({ versions }),
+      removeEditPromptVersion: jest.fn().mockResolvedValue({ success: true })
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+
+    act(() => {
+      result.current.setSelectedEditPromptVersion('v2');
+    });
+
+    await act(async () => {
+      await result.current.removeEditPromptVersion('v2');
+    });
+
+    expect(fakeListingRepository.removeEditPromptVersion).toHaveBeenCalledWith('v2');
+    expect(result.current.editPromptVersions).toHaveLength(1);
+    expect(result.current.editPromptVersions[0].version).toBe('v1');
+    expect(result.current.selectedEditPromptVersion).toBe('v1');
   });
 });

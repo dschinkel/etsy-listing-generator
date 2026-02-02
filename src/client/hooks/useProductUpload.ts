@@ -36,12 +36,22 @@ export const useProductUpload = (repository?: any) => {
   const [macroCreateSimilar, setMacroCreateSimilar] = useState(false);
   const [contextualCreateSimilar, setContextualCreateSimilar] = useState(false);
   const [themedEnvironmentCreateSimilar, setThemedEnvironmentCreateSimilar] = useState(false);
+  const [lifestyleNoImage, setLifestyleNoImage] = useState(false);
+  const [heroNoImage, setHeroNoImage] = useState(false);
+  const [closeUpsNoImage, setCloseUpsNoImage] = useState(false);
+  const [flatLayNoImage, setFlatLayNoImage] = useState(false);
+  const [macroNoImage, setMacroNoImage] = useState(false);
+  const [contextualNoImage, setContextualNoImage] = useState(false);
+  const [themedEnvironmentNoImage, setThemedEnvironmentNoImage] = useState(false);
   const [templates, setTemplates] = useState<ContextTemplate[]>([]);
   const [archivedUploads, setArchivedUploads] = useState<string[]>([]);
   const [archivedInSession, setArchivedInSession] = useState<Set<string>>(new Set());
+  const [editSpecifications, setEditSpecifications] = useState<{field: string, value: string}[]>([]);
+  const [editCount, setEditCount] = useState(1);
 
   const totalShots = (lifestyleShotsCount || 0) + (heroShotsCount || 0) + (closeUpsCount || 0) + (flatLayShotsCount || 0) + (macroShotsCount || 0) + (contextualShotsCount || 0) + (themedEnvironmentShotsCount || 0);
-  const isReadyToGenerate = totalShots > 0 && productImages.length > 0;
+  const hasFilledSpecification = editSpecifications.some(spec => spec.value.trim().length > 0);
+  const isReadyToGenerate = (totalShots > 0 || hasFilledSpecification) && productImages.length > 0;
 
   useEffect(() => {
     if (repository) {
@@ -316,6 +326,36 @@ export const useProductUpload = (repository?: any) => {
   const handleContextualCreateSimilarChange = (value: boolean) => setContextualCreateSimilar(value);
   const handleThemedEnvironmentCreateSimilarChange = (value: boolean) => setThemedEnvironmentCreateSimilar(value);
 
+  const handleLifestyleNoImageChange = (value: boolean) => setLifestyleNoImage(value);
+  const handleHeroNoImageChange = (value: boolean) => setHeroNoImage(value);
+  const handleCloseUpsNoImageChange = (value: boolean) => setCloseUpsNoImage(value);
+  const handleFlatLayNoImageChange = (value: boolean) => setFlatLayNoImage(value);
+  const handleMacroNoImageChange = (value: boolean) => setMacroNoImage(value);
+  const handleContextualNoImageChange = (value: boolean) => setContextualNoImage(value);
+  const handleThemedEnvironmentNoImageChange = (value: boolean) => setThemedEnvironmentNoImage(value);
+
+  const addEditSpecification = () => {
+    setEditSpecifications(prev => [...prev, { field: 'Name', value: '' }]);
+  };
+
+  const removeEditSpecification = (index: number) => {
+    setEditSpecifications(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleEditSpecificationChange = (index: number, field: string, value: string) => {
+    setEditSpecifications(prev => prev.map((spec, i) => 
+      i === index ? { field, value } : spec
+    ));
+  };
+
+  const handleEditCountChange = (value: number) => {
+    setEditCount(Math.max(1, value));
+  };
+
+  const clearEditSpecifications = () => {
+    setEditSpecifications([]);
+  };
+
   const resetCounts = () => {
     setLifestyleShotsCount(0);
     setHeroShotsCount(0);
@@ -331,6 +371,13 @@ export const useProductUpload = (repository?: any) => {
     setMacroCreateSimilar(false);
     setContextualCreateSimilar(false);
     setThemedEnvironmentCreateSimilar(false);
+    setLifestyleNoImage(false);
+    setHeroNoImage(false);
+    setCloseUpsNoImage(false);
+    setFlatLayNoImage(false);
+    setMacroNoImage(false);
+    setContextualNoImage(false);
+    setThemedEnvironmentNoImage(false);
   };
 
   const selectAllShots = () => {
@@ -392,6 +439,20 @@ export const useProductUpload = (repository?: any) => {
     handleContextualBackgroundUpload,
     themedEnvironmentBackground,
     handleThemedEnvironmentBackgroundUpload,
+    lifestyleNoImage,
+    handleLifestyleNoImageChange,
+    heroNoImage,
+    handleHeroNoImageChange,
+    closeUpsNoImage,
+    handleCloseUpsNoImageChange,
+    flatLayNoImage,
+    handleFlatLayNoImageChange,
+    macroNoImage,
+    handleMacroNoImageChange,
+    contextualNoImage,
+    handleContextualNoImageChange,
+    themedEnvironmentNoImage,
+    handleThemedEnvironmentNoImageChange,
     lifestyleCustomContext,
     handleLifestyleCustomContextChange,
     heroCustomContext,
@@ -409,6 +470,13 @@ export const useProductUpload = (repository?: any) => {
     templates,
     saveContextTemplate,
     removeContextTemplate,
+    editSpecifications,
+    addEditSpecification,
+    removeEditSpecification,
+    handleEditSpecificationChange,
+    clearEditSpecifications,
+    editCount,
+    handleEditCountChange,
     totalShots,
     isReadyToGenerate,
     lifestyleCreateSimilar,

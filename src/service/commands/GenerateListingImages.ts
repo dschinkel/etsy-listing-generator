@@ -29,8 +29,13 @@ export const createGenerateListingImages = (listingRepository: any) => {
     macroCreateSimilar?: boolean,
     contextualCreateSimilar?: boolean,
     themedEnvironmentCreateSimilar?: boolean,
+    editSpecifications?: {field: string, value: string}[],
+    editCount?: number,
     temperature?: number,
-    model?: string
+    model?: string,
+    systemPromptTemplate?: string,
+    editPromptTemplate?: string,
+    editPromptLineTemplate?: string
   }) => {
     return await listingRepository.generateImages(request);
   };
