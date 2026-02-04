@@ -67,7 +67,7 @@ jobs:
     # Deploy to Cloud Run
     - name: Deploy to Cloud Run
       run: |-
-        gcloud run deploy ${{ env.IMAGE_NAME }} \
+        gcloud run deploy ${{ secrets.GCR_IMAGE_NAME }} \
           --image "${{ secrets.GCR_REGION }}-docker.pkg.dev/${{ secrets.GCR_PROJECT_ID }}/${{ secrets.GCR_REPOSITORY }}/${{ secrets.GCR_IMAGE_NAME }}:${{ steps.vars.outputs.sha_short }}" \
           --region ${{ secrets.GCR_REGION }} \
           --platform managed \
