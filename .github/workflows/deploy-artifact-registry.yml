@@ -49,6 +49,7 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
+    #  confirm what identity the runner is actually using
     - name: Who am I (gcloud)
       run: |
         gcloud auth list
