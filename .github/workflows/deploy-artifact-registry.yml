@@ -49,6 +49,13 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
+    - name: Who am I (gcloud)
+      run: |
+        gcloud auth list
+        gcloud config list
+        gcloud config get-value account
+        gcloud config get-value project
+
     # Configure Docker to use gcloud as a credential helper for Artifact Registry
     - name: Configure Docker
       run: |-
