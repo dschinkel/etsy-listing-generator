@@ -51,6 +51,11 @@ app.use(async (ctx, next) => {
 
 app.use(bodyParser({ jsonLimit: '50mb' }));
 
+// Serve frontend static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(serve(path.join(process.cwd(), 'dist')));
+}
+
 app.use(serve(path.join(process.cwd(), 'src', 'assets')));
 app.use(serve(path.join(process.cwd(), 'assets')));
 
