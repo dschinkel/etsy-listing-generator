@@ -132,11 +132,11 @@ const ListingPreview = ({
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" data-testid="listing-preview">
               {images.map((image, index) => (
                 <div key={index} className="flex flex-col gap-1">
-                  <div className="relative group aspect-square">
+                  <div className="relative group aspect-square bg-slate-50 dark:bg-slate-900/50 rounded">
                     <img
                       src={image.url}
                       alt={`Listing ${index + 1}`}
-                      className="w-full h-full object-cover rounded shadow-md group-hover:scale-105 transition-transform cursor-pointer"
+                      className="w-full h-full object-contain rounded shadow-md group-hover:scale-105 transition-transform cursor-pointer"
                       data-testid={`listing-image-${index}`}
                       onClick={() => openImage(index)}
                       onError={(e) => {
@@ -227,7 +227,7 @@ const ListingPreview = ({
                     <div className="flex flex-col gap-1 px-1 mt-1">
                       <Textarea
                         placeholder="Custom context for this image..."
-                        className="text-[10px] min-h-[40px] p-1"
+                        className="text-[10px] min-h-[40px] p-1 text-yellow-600 dark:text-orange-500 bg-white dark:bg-slate-950/50"
                         value={regenContexts[index] || ""}
                         onChange={(e) => setRegenContexts(prev => ({ ...prev, [index]: e.target.value }))}
                         data-testid={`regen-context-input-${index}`}

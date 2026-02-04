@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProductUpload } from './hooks/useProductUpload';
+import { resizeImage } from './lib/imageUtils';
 import { useListingGeneration } from './hooks/useListingGeneration';
 import { createListingRepository } from './repositories/ListingRepository';
 import { Button } from './components/ui/button';
@@ -39,6 +40,8 @@ import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
 import EtsyListingForm from './components/EtsyListingForm';
 import ModelStatus from './components/ModelStatus';
+import ImageModal from './components/ImageModal';
+import { useListingPreview } from './components/useListingPreview';
 import { ThemeProvider } from './components/theme-provider';
 
 const App = () => {
@@ -173,11 +176,25 @@ const App = () => {
     setSelectedEditPromptVersion,
     saveEditPromptVersion,
     removeEditPromptVersion,
+    selectedModel,
+    setSelectedModel,
     updateEtsyFormData,
     publishToEtsy,
     currentSeeds,
     addManualImages
   } = useListingGeneration(repository);
+
+  const { 
+    selectedIndex: uploadedSelectedIndex, 
+    isModalOpen: isUploadedModalOpen, 
+    openImage: openUploadedImage, 
+    closeImage: closeUploadedImage 
+  } = useListingPreview();
+
+  const uploadedImageSlides = React.useMemo(() => 
+    productImages.map(url => ({ url, type: 'Product' })), 
+    [productImages]
+  );
 
   const [promptWidth, setPromptWidth] = React.useState(500);
   const leftPaneRef = React.useRef<HTMLDivElement>(null);
@@ -282,20 +299,22 @@ const App = () => {
     }
   };
 
-  const handleUploadManualPreview = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadManualPreview = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const readers = Array.from(files).map(file => {
-        return new Promise<string>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.readAsDataURL(file);
+      const resizePromises = Array.from(files).map(file => {
+        return resizeImage(file).catch(err => {
+          console.error('Failed to resize manual preview image:', err);
+          return new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(file);
+          });
         });
       });
       
-      Promise.all(readers).then(results => {
-        addManualImages(results);
-      });
+      const results = await Promise.all(resizePromises);
+      addManualImages(results);
     }
   };
 
@@ -307,11 +326,11 @@ const App = () => {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
-        <main className="flex-1 p-2">
-          <div className="flex gap-2 items-start max-w-full mx-auto px-1">
+        <main className="flex-1 p-2 bg-slate-50 dark:bg-background">
+          <div className="flex gap-4 items-start max-w-full mx-auto px-1">
             {/* Left Pane */}
             <div ref={leftPaneRef} className="flex flex-col items-center gap-4 w-1/5 h-[calc(100vh-10rem)] sticky top-[5.5rem] overflow-y-auto pr-1">
-              <div className="w-full flex flex-col gap-4">
+              <div className="w-full flex flex-col gap-2">
                 <UploadImage onUpload={handleUpload} disabled={productImages.length >= 2} />
                 <ArchivedUploads 
                   images={archivedUploads} 
@@ -320,7 +339,7 @@ const App = () => {
                   disabled={productImages.length >= 2}
                 />
               </div>
-              <div className="flex flex-col gap-4 w-full">
+              <div className="grid grid-cols-2 gap-2 w-full">
                 {productImages.map((src, index) => (
                   <UploadedImage 
                     key={index}
@@ -330,14 +349,15 @@ const App = () => {
                     onSelectPrimary={index === 0 ? handleSelectProductPrimary : undefined}
                     onRemove={() => handleRemoveProductImage(index)}
                     onArchive={() => archiveProductImage(index)}
+                    onClick={() => openUploadedImage(index)}
                   />
                 ))}
               </div>
-              <div className="w-full flex flex-col gap-2 mt-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col gap-1">
+              <div className="w-full flex flex-col mt-2 flex-1 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm bg-white dark:bg-card">
+                <div className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex items-center justify-between px-4">
+                  <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
-                      <label className="text-[11px] font-bold text-yellow-500 uppercase tracking-wider">
+                      <label className="text-[15px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-tight">
                         Edit Picture
                       </label>
                       <Input 
@@ -350,33 +370,58 @@ const App = () => {
                         title="Number of images to generate"
                       />
                     </div>
-                    <div className="flex items-center gap-1 mt-1">
-                      {editPromptVersions.length > 0 && (
-                        <select 
-                          className="text-[16px] bg-background border rounded px-1 py-0 focus:outline-none focus:ring-1 focus:ring-primary w-fit"
-                          value={selectedEditPromptVersion}
-                          onChange={(e) => setSelectedEditPromptVersion(e.target.value)}
+                  </div>
+                      <div className="flex items-center gap-1 shrink-0 ml-2">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight text-slate-900 dark:text-slate-100 hover:bg-red-500/20 hover:text-red-600 transition-colors" 
+                          onClick={clearEditSpecifications}
+                          disabled={editSpecifications.length === 0}
+                          title="Clear all edit specifications"
                         >
-                          {editPromptVersions.map(v => (
-                            <option key={v.version} value={v.version}>{v.version}</option>
-                          ))}
-                        </select>
-                      )}
+                          <Eraser className="h-3 w-3 mr-1" />
+                          Clear
+                        </Button>
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight bg-slate-900 dark:bg-slate-100 text-slate-100 dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors border-none" 
+                          onClick={addEditSpecification}
+                          title="Add edit specification"
+                        >
+                          <Plus className="h-4 w-4 mr-1" />
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                <div className="p-2 pt-1.5 flex flex-col gap-2">
+                  {editPromptVersions.length > 0 && (
+                    <div className="flex items-center gap-1 mb-1 px-1 justify-end">
+                      <select 
+                        className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
+                        value={selectedEditPromptVersion}
+                        onChange={(e) => setSelectedEditPromptVersion(e.target.value)}
+                      >
+                        {editPromptVersions.map((v, idx) => (
+                          <option key={v.version} value={v.version}>v{idx + 1}</option>
+                        ))}
+                      </select>
                       {selectedEditPromptVersion && (
                         <>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-5 w-5 text-muted-foreground hover:text-foreground"
+                            className="h-7 w-7 text-muted-foreground hover:bg-muted transition-colors"
                             onClick={handleEditEditPromptVersion}
                             title="Edit current edit prompt version"
                           >
-                            <Pencil className="h-3 w-3" />
+                            <Pencil className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-5 w-5 text-muted-foreground hover:text-foreground"
+                            className="h-7 w-7 text-muted-foreground hover:bg-muted transition-colors"
                             onClick={() => {
                               setNewEditPromptVersion("");
                               setNewEditPromptTemplate("");
@@ -385,50 +430,27 @@ const App = () => {
                             }}
                             title="Add new edit prompt version"
                           >
-                            <Plus className="h-3 w-3" />
+                            <Plus className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-5 w-5 text-muted-foreground hover:text-destructive"
+                            className="h-7 w-7 text-muted-foreground hover:bg-muted transition-colors hover:text-red-600"
                             onClick={() => setIsEditPromptRemoveDialogOpen(true)}
                             title="Remove current edit prompt version"
                           >
-                            <Trash className="h-3 w-3" />
+                            <Trash className="h-4 w-4" />
                           </Button>
                         </>
                       )}
                     </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground" 
-                      onClick={clearEditSpecifications}
-                      disabled={editSpecifications.length === 0}
-                      title="Clear all edit specifications"
-                    >
-                      <Eraser className="h-3 w-3" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="h-6 w-6 p-0" 
-                      onClick={addEditSpecification}
-                      title="Add edit specification"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2">
+                  )}
                   {editSpecifications.map((spec, index) => (
-                    <div key={index} className="flex flex-col gap-1 p-2 border rounded-md bg-muted/20 relative">
+                    <div key={index} className="flex flex-col gap-1 p-2 border rounded-md bg-slate-50 dark:bg-muted/20 relative">
                       <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
                         <span>Change</span>
                         <select 
-                          className="bg-background border rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-primary"
+                          className="bg-white dark:bg-background border border-slate-200 dark:border-slate-800 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-primary"
                           value={spec.field}
                           onChange={(e) => handleEditSpecificationChange(index, e.target.value, spec.value)}
                         >
@@ -457,7 +479,7 @@ const App = () => {
                   ))}
                   {editSpecifications.length === 0 && (
                     <div 
-                      className="text-sm text-muted-foreground italic text-center p-2 border border-dashed rounded-md cursor-pointer hover:bg-muted/10"
+                      className="text-base text-muted-foreground italic text-center p-2 border border-dashed rounded-md cursor-pointer hover:bg-muted/10"
                       onClick={addEditSpecification}
                     >
                       Click + to add text/color edits
@@ -473,6 +495,8 @@ const App = () => {
                 promptVersions={promptVersions}
                 selectedPromptVersion={selectedPromptVersion}
                 onPromptVersionChange={setSelectedPromptVersion}
+                selectedModel={selectedModel}
+                onModelChange={setSelectedModel}
                 images={images}
                 currentSeeds={currentSeeds}
               />
@@ -548,9 +572,9 @@ const App = () => {
                   />
                 </div>
 
-                <div className="flex flex-col items-center gap-4 w-full">
+                <div className="flex flex-col items-center gap-6 w-full">
                   {productImages.length === 0 && (
-                    <div className="text-sm text-yellow-500 font-medium" data-testid="upload-message">
+                    <div className="text-base text-slate-600 dark:text-slate-100 font-medium" data-testid="upload-message">
                       Upload a product image to start
                     </div>
                   )}
@@ -618,8 +642,8 @@ const App = () => {
             </div>
 
             {/* Right Pane */}
-            <div ref={previewRef} className="flex-1 flex flex-col gap-2 pr-1">
-              <div className="h-[calc(50vh-5rem)] min-h-[300px] overflow-y-auto pr-1">
+            <div className="flex-1 flex flex-col gap-4 pr-1">
+              <div className="h-[calc(50vh-5rem)] min-h-[300px] overflow-y-auto pr-1 bg-slate-50/50 dark:bg-transparent rounded-lg">
                   <ListingPreview 
                     images={images} 
                     isGenerating={isGenerating}
@@ -643,7 +667,7 @@ const App = () => {
                   onOpenChange={setIsEtsyFormOpen}
                   className="w-full"
                 >
-                  <div className="flex items-center justify-between px-3 py-2 border rounded-t-lg bg-muted/30 border-b-0 h-10">
+                  <div className="flex items-center justify-between px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-t-lg bg-slate-50 dark:bg-muted/30 border-b-0 h-10">
                     <h4 className="text-sm font-semibold">
                       Etsy Listing
                     </h4>
@@ -654,7 +678,7 @@ const App = () => {
                       </Button>
                     </CollapsibleTrigger>
                   </div>
-                  <CollapsibleContent>
+                  <CollapsibleContent className="border border-slate-200 dark:border-slate-800 border-t-0 rounded-b-lg overflow-hidden bg-white dark:bg-card">
                     <EtsyListingForm 
                       formData={etsyFormData}
                       onChange={updateEtsyFormData}
@@ -732,6 +756,12 @@ const App = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <ImageModal 
+        isOpen={isUploadedModalOpen}
+        onClose={closeUploadedImage}
+        images={uploadedImageSlides}
+        initialIndex={uploadedSelectedIndex || 0}
+      />
     </ThemeProvider>
   );
 };
@@ -755,8 +785,8 @@ const ArchivedUploads = ({
       onOpenChange={setIsOpen}
       className="w-full space-y-2"
     >
-      <div className="flex items-center justify-between space-x-4 px-4 py-2 border rounded-lg bg-card">
-        <h4 className="text-sm font-semibold">
+      <div className="flex items-center justify-between px-3 py-1 border rounded-lg bg-card h-9">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           Archived Uploads
         </h4>
         <CollapsibleTrigger asChild>
@@ -780,7 +810,7 @@ const ArchivedUploads = ({
                   return (
                     <div 
                       key={index} 
-                      className={`relative flex-none w-16 h-16 rounded cursor-pointer border-2 transition-all ${
+                      className={`relative flex-none w-12 h-12 rounded cursor-pointer border-2 transition-all bg-slate-50 dark:bg-slate-900/50 ${
                         isSelected ? 'border-primary scale-95' : 'border-transparent hover:border-slate-500'
                       } ${disabled && !isSelected ? 'opacity-50 grayscale pointer-events-none' : ''}`}
                       onClick={() => onToggle(url)}
@@ -788,7 +818,7 @@ const ArchivedUploads = ({
                       <img 
                         src={url} 
                         alt={`Archived ${index}`} 
-                        className="w-full h-full object-cover rounded"
+                        className="w-full h-full object-contain rounded"
                       />
                       {isSelected && (
                         <div className="absolute inset-0 bg-primary/20 flex items-center justify-center rounded">
@@ -811,26 +841,22 @@ const ArchivedUploads = ({
 
 const UploadImage = ({ onUpload, disabled }: { onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void, disabled?: boolean }) => {
   return (
-    <Card className={`w-full border-dashed ${disabled ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
-      <CardContent className="p-3">
-        <div className="flex flex-col items-center justify-center">
-          <Label htmlFor="product-image-upload" className="cursor-pointer text-center w-full">
-            <div className="p-2 border-2 border-dashed border-slate-300 rounded-lg hover:border-primary transition-colors text-xs">
-              {disabled ? 'Max 2 images' : 'Upload product image'}
-            </div>
-          </Label>
-          <Input
-            id="product-image-upload"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={onUpload}
-            data-testid="product-image-upload"
-            className="hidden"
-            disabled={disabled}
-          />
+    <div className={`w-full ${disabled ? 'opacity-50 grayscale pointer-events-none' : ''}`}>
+      <Label htmlFor="product-image-upload" className="cursor-pointer text-center w-full">
+        <div className="py-2 px-4 border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-lg hover:border-primary transition-colors text-[11px] font-bold uppercase tracking-wider text-muted-foreground bg-white dark:bg-card">
+          {disabled ? 'Max 2 images' : 'Upload product image'}
         </div>
-      </CardContent>
-    </Card>
+      </Label>
+      <Input
+        id="product-image-upload"
+        type="file"
+        accept="image/png, image/jpeg"
+        onChange={onUpload}
+        data-testid="product-image-upload"
+        className="hidden"
+        disabled={disabled}
+      />
+    </div>
   );
 };
 
@@ -895,56 +921,56 @@ const ShotTypeItem = ({
   };
 
   return (
-    <Card className="overflow-hidden border-slate-800 shadow-sm transition-all hover:shadow-md">
-      <div className="bg-slate-900/80 px-3 py-1.5 flex items-center justify-between border-b border-slate-800">
+    <Card className="overflow-hidden border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:shadow-md bg-white dark:bg-card">
+      <div className="bg-slate-50 dark:bg-slate-900/80 px-3 py-1.5 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
         <div className="flex flex-col min-w-0">
-          <Label htmlFor={id} className="text-[11px] font-bold text-yellow-500 uppercase tracking-wider truncate leading-tight">
+          <Label htmlFor={id} className="text-[15px] font-bold text-yellow-600 dark:text-yellow-200 uppercase tracking-wider leading-tight">
             {label}
           </Label>
-          <span className="text-[9px] text-muted-foreground line-clamp-1 leading-tight italic">
+          <span className="text-[15px] text-slate-600 dark:text-muted-foreground leading-tight italic">
             {description}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 shrink-0 ml-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors"
-            title="Clear count"
-            onClick={onClear}
-            data-testid={`${id}-clear-count`}
-          >
-            <Trash className="h-3.5 w-3.5" />
-          </Button>
-          <Input
-            id={id}
-            type="number"
-            min="0"
-            max="10"
-            value={count}
-            onChange={onChange}
-            data-testid={`${id}-count`}
-            className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
-            placeholder="0"
-          />
-        </div>
-      </div>
-      <CardContent className="p-2 pt-1.5">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className={`h-7 px-2 text-[10px] flex items-center gap-1.5 transition-all ${showCustom ? 'bg-primary/10 border-primary/50 text-primary' : 'bg-slate-900/50'}`}
-                onClick={() => setShowCustom(!showCustom)}
-                title="Add custom context"
-              >
+                        <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors dark:bg-slate-900/50"
+                            title="Clear count"
+                            onClick={onClear}
+                            data-testid={`${id}-clear-count`}
+                          >
+                            <Trash className="h-3.5 w-3.5" />
+                          </Button>
+                          <Input
+                            id={id}
+                            type="number"
+                            min="0"
+                            max="10"
+                            value={count}
+                            onChange={onChange}
+                            data-testid={`${id}-count`}
+                            className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
+                            placeholder="0"
+                          />
+                        </div>
+                      </div>
+                      <CardContent className="p-2 pt-1.5">
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className={`h-7 px-2 text-[10px] flex items-center gap-1.5 transition-all ${showCustom ? 'bg-primary/10 border-primary/50 text-primary' : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800'}`}
+                                onClick={() => setShowCustom(!showCustom)}
+                                title="Add custom context"
+                              >
                 <Plus className={`h-3 w-3 ${showCustom ? 'rotate-45' : ''} transition-transform`} />
                 <span>Context</span>
               </Button>
               
-              <div className="flex items-center gap-1 bg-slate-900/50 rounded-md p-0.5 border border-slate-800">
+              <div className="flex items-center gap-1 bg-white dark:bg-slate-900/50 rounded-md p-0.5 border border-slate-200 dark:border-slate-800">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -975,24 +1001,24 @@ const ShotTypeItem = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-md border border-slate-800">
+            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900/50 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">
               <Checkbox 
                 id={`${id}-no-image`}
                 checked={noImage}
                 onCheckedChange={(checked) => onNoImageChange(!!checked)}
-                className="h-3.5 w-3.5 border-slate-600"
+                className="h-3.5 w-3.5 border-slate-300 dark:border-slate-600"
               />
               <Label htmlFor={`${id}-no-image`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
                 no-img
               </Label>
             </div>
 
-            <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-md border border-slate-800">
+            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900/50 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">
               <Checkbox 
                 id={`${id}-create-similar`}
                 checked={createSimilar}
                 onCheckedChange={(checked) => onCreateSimilarChange(!!checked)}
-                className="h-3.5 w-3.5 border-slate-600"
+                className="h-3.5 w-3.5 border-slate-300 dark:border-slate-600"
               />
               <Label htmlFor={`${id}-create-similar`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
                 similar
@@ -1000,7 +1026,7 @@ const ShotTypeItem = ({
             </div>
           </div>
           {showCustom && (
-            <div className="mt-2 pl-2 border-l-2 border-slate-700 w-full flex flex-col gap-2 bg-slate-900/30 p-2 rounded-r-md">
+            <div className="mt-2 pl-2 border-l-2 border-slate-300 dark:border-slate-700 w-full flex flex-col gap-2 bg-slate-50 dark:bg-slate-900/30 p-2 rounded-r-md">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   <Label htmlFor={`${id}-custom`} className="text-[10px] uppercase font-bold text-muted-foreground shrink-0">Custom Context</Label>
@@ -1083,7 +1109,7 @@ const ShotTypeItem = ({
                     setSelectedTemplate("");
                   }
                 }}
-                className="text-[10px] min-h-[60px] resize-y bg-slate-950/50 border-slate-800"
+                className="text-[10px] min-h-[60px] resize-y bg-white dark:bg-slate-950/50 border-slate-200 dark:border-slate-800 text-yellow-600 dark:text-orange-500"
               />
             </div>
           )}
@@ -1396,31 +1422,33 @@ const ShotsSelection = ({
   ];
 
   return (
-    <Card className="w-full overflow-hidden border-slate-800">
-      <CardHeader className="bg-slate-900 border-b border-slate-800 h-11 flex flex-row items-center justify-between py-0 px-4 space-y-0">
-        <CardTitle className="text-sm font-bold uppercase tracking-widest text-slate-400">Shots Selection</CardTitle>
+    <Card className="w-full overflow-hidden border-slate-200 dark:border-slate-800">
+      <CardHeader className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex flex-row items-center justify-between py-0 px-4 space-y-0">
+        <CardTitle className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-slate-100">Shots Selection</CardTitle>
         <div className="flex items-center gap-2">
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={onClearAllShots}
-            className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight hover:bg-red-500/20 hover:text-red-500 transition-colors"
+            className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight text-slate-900 hover:bg-red-500/20 hover:text-red-600 transition-colors"
             data-testid="clear-all-shots"
+            title="Clear all shots"
           >
-            Clear All
+            <Eraser className="h-3 w-3 mr-1" />
+            Clear
           </Button>
           <Button 
             variant="secondary" 
             size="sm" 
             onClick={onSelectAll}
-            className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight transition-colors"
+            className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight bg-slate-900 text-slate-100 hover:bg-slate-800 transition-colors border-none"
             data-testid="select-all-shots"
           >
             Select All
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3 p-3 bg-slate-950/20">
+      <CardContent className="flex flex-col gap-8 p-3 bg-slate-50/50 dark:bg-slate-950/20">
         {shotTypes.map((shot) => (
           <ShotTypeItem 
             key={shot.id}
@@ -1441,64 +1469,75 @@ const UploadedImage = ({
   isArchived,
   onSelectPrimary,
   onRemove,
-  onArchive
+  onArchive,
+  onClick
 }: { 
   src: string | null, 
   isPrimary: boolean, 
   isArchived: boolean,
   onSelectPrimary?: () => void,
   onRemove: () => void,
-  onArchive: () => void
+  onArchive: () => void,
+  onClick: () => void
 }) => {
   if (!src) return null;
 
   return (
-    <Card className="w-full">
-      <CardContent className="pt-4 flex flex-col items-center gap-2 px-2">
-        <div className="relative group">
-          <img
-            src={src}
-            alt="Product"
-            data-testid="uploaded-product-image"
-            className="max-w-full h-auto rounded shadow-lg"
-          />
-          <Button
-            variant="secondary"
-            size="sm"
-            className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
-            onClick={onArchive}
-            disabled={isArchived}
-            data-testid="archive-product-image"
-            title={isArchived ? "Already archived" : "Archive image"}
-          >
-            <Archive className="w-3 h-3" />
-            {isArchived ? 'Archived' : 'Archive'}
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={onRemove}
-            data-testid="remove-product-image"
-          >
-            Remove
-          </Button>
+    <div className="relative group aspect-square bg-slate-50 dark:bg-slate-900/50 rounded">
+      <img
+        src={src}
+        alt="Product"
+        data-testid="uploaded-product-image"
+        className={`w-full h-full object-contain rounded shadow-md cursor-pointer transition-all hover:scale-[1.02] ${isPrimary ? 'ring-2 ring-primary ring-offset-2' : ''}`}
+        onClick={onClick}
+      />
+      {isPrimary && (
+        <div className="absolute -top-1 -left-1 bg-primary text-primary-foreground rounded-full p-0.5 shadow-sm z-10">
+          <Check className="h-3 w-3" />
         </div>
+      )}
+      <div className="absolute top-1 right-1 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+        <Button
+          variant="destructive"
+          size="icon"
+          className="h-6 w-6 bg-red-600 hover:bg-red-700 text-white border-none shadow-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          title="Remove"
+        >
+          <Trash className="h-3.5 w-3.5" />
+        </Button>
+        <Button
+          variant="secondary"
+          size="icon"
+          className="h-6 w-6 bg-slate-800 hover:bg-slate-700 text-white border-none shadow-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            onArchive();
+          }}
+          disabled={isArchived}
+          title={isArchived ? "Archived" : "Archive"}
+        >
+          <Archive className="h-3.5 w-3.5" />
+        </Button>
         {onSelectPrimary && (
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="primary-image"
-              checked={isPrimary}
-              onCheckedChange={onSelectPrimary}
-              data-testid="set-primary-image"
-            />
-            <Label htmlFor="primary-image" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Set as Primary Etsy Image
-            </Label>
-          </div>
+           <Button
+            variant={isPrimary ? "default" : "secondary"}
+            size="icon"
+            className={`h-6 w-6 border-none shadow-lg ${isPrimary ? 'bg-primary text-primary-foreground' : 'bg-slate-800 hover:bg-slate-700 text-white'}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectPrimary();
+            }}
+            title="Set as Primary"
+          >
+            <ImageIcon className="h-3.5 w-3.5" />
+          </Button>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
@@ -1523,13 +1562,15 @@ const Seed = ({ seeds }: { seeds: number[] }) => {
   );
 };
 
-const SystemPromptPane = React.memo(({ 
+  const SystemPromptPane = React.memo(({ 
   prompt,
   temperature,
   onTemperatureChange,
   promptVersions,
   selectedPromptVersion,
   onPromptVersionChange,
+  selectedModel,
+  onModelChange,
   images,
   currentSeeds
 }: { 
@@ -1539,6 +1580,8 @@ const SystemPromptPane = React.memo(({
   promptVersions: { version: string, date: string, template: string }[],
   selectedPromptVersion: string,
   onPromptVersionChange: (version: string) => void,
+  selectedModel: string,
+  onModelChange: (model: string) => void,
   images: any[],
   currentSeeds: number[]
 }) => {
@@ -1559,65 +1602,77 @@ const SystemPromptPane = React.memo(({
   const hasSeeds = seedsToDisplay.length > 0;
 
   return (
-    <Card className="w-full mt-2 overflow-hidden flex flex-col" data-testid="system-prompt-pane">
-      <CardHeader className="p-3">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-sm">System Prompt</CardTitle>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-5 w-5" 
-                onClick={handleCopy}
-                disabled={!prompt}
-                title="Copy system prompt"
+    <Card className="w-full mt-20 overflow-hidden flex flex-col bg-white dark:bg-card border-slate-200 dark:border-slate-800" data-testid="system-prompt-pane">
+      <CardHeader className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex flex-row items-center justify-between py-0 px-4 space-y-0">
+        <div className="flex items-center gap-2">
+          <CardTitle className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-slate-100">System Prompt</CardTitle>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-7 px-2 text-slate-900 dark:text-slate-100 hover:bg-slate-900/10 transition-colors flex items-center gap-1.5" 
+            onClick={handleCopy}
+            disabled={!prompt}
+            title="Copy system prompt"
+          >
+            {copied ? <Check className="h-3.5 w-3.5 text-green-700" /> : <Copy className="h-3.5 w-3.5" />}
+            <span className="text-[10px] font-bold uppercase tracking-tight">Copy</span>
+          </Button>
+        </div>
+        <div className="flex items-center gap-2">
+          {promptVersions.length > 0 && (
+            <div className="flex items-center gap-2" data-testid="prompt-version-container">
+              <select 
+                className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
+                value={selectedPromptVersion}
+                onChange={(e) => onPromptVersionChange(e.target.value)}
+                data-testid="prompt-version-select"
               >
-                {copied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
-              </Button>
-            </div>
-            {promptVersions.length > 0 && (
-              <div className="flex items-center gap-2" data-testid="prompt-version-container">
-                <select 
-                  className="text-[10px] bg-background border border-slate-700 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-5"
-                  value={selectedPromptVersion}
-                  onChange={(e) => onPromptVersionChange(e.target.value)}
-                  data-testid="prompt-version-select"
-                >
-                  {promptVersions.map(v => (
-                    <option key={v.version} value={v.version}>v{v.version}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-          </div>
-
-          {hasSeeds && (
-            <div className="bg-slate-900/50 p-1.5 rounded-md border border-slate-800">
-              <Seed seeds={seedsToDisplay} />
+                {promptVersions.map((v, idx) => (
+                  <option key={v.version} value={v.version}>v{idx + 1}</option>
+                ))}
+              </select>
             </div>
           )}
-
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between items-center">
-              <Label htmlFor="temperature-slider" className="text-[10px] text-muted-foreground uppercase font-bold">Temperature (randomness)</Label>
-              <span className="text-[10px] font-mono bg-muted px-1 rounded">{temperature.toFixed(1)}</span>
-            </div>
-            <input 
-              id="temperature-slider"
-              type="range"
-              min="0"
-              max="2"
-              step="0.5"
-              value={temperature}
-              onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
-              className="w-full h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-            />
+          <div className="flex items-center gap-2" data-testid="model-selection-container">
+            <select 
+              className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
+              value={selectedModel}
+              onChange={(e) => onModelChange(e.target.value)}
+              data-testid="model-selection-select"
+            >
+              <option value="gemini-3-pro-image-preview">Nano Banana Pro</option>
+              <option value="gemini-2.5-flash-image">Nano Banana</option>
+            </select>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-auto max-h-[600px] p-2 space-y-2">
-        <pre className="text-[10px] whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg min-h-[400px]">
+      <CardContent className="flex-1 overflow-auto p-2 space-y-2">
+        {hasSeeds && (
+          <div className="bg-white dark:bg-slate-900/50 p-1.5 rounded-md border border-slate-200 dark:border-slate-800">
+            <Seed seeds={seedsToDisplay} />
+          </div>
+        )}
+
+              <div className="flex flex-col gap-1 mt-2">
+                <div className="flex justify-between items-center">
+                  <Label htmlFor="temperature-slider" className="text-[10px] text-muted-foreground uppercase font-bold"><span className="text-slate-900 dark:text-orange-500">Temperature</span> <span className="font-normal">(randomness)</span></Label>
+                  <span className="text-sm font-mono bg-muted px-1 rounded">{temperature.toFixed(1)}</span>
+                </div>
+                <input 
+                  id="temperature-slider"
+                  type="range"
+                  min="0"
+                  max="2"
+                  step="0.5"
+                  value={temperature}
+                  onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
+                  className="w-full h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-slate-900 dark:accent-white dark:[&::-webkit-slider-runnable-track]:bg-gradient-to-r dark:[&::-webkit-slider-runnable-track]:from-orange-950 dark:[&::-webkit-slider-runnable-track]:to-orange-500 dark:[&::-moz-range-track]:bg-gradient-to-r dark:[&::-moz-range-track]:from-orange-950 dark:[&::-moz-range-track]:to-orange-500 [&::-webkit-slider-runnable-track]:bg-slate-200 [&::-moz-range-track]:bg-slate-200"
+                />
+              </div>
+
+        <div className="h-4" />
+
+        <pre className="text-sm whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg min-h-[400px]">
           {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
         </pre>
       </CardContent>

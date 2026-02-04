@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { resizeImage } from '../lib/imageUtils';
 
 export interface ContextTemplate {
   name: string;
@@ -90,91 +91,140 @@ export const useProductUpload = (repository?: any) => {
     }
   };
 
-  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && productImages.length < 2) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProductImages(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setProductImages(prev => [...prev, resized]);
+      } catch (err) {
+        console.error('Failed to resize product image:', err);
+        // Fallback to original behavior if resizing fails
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProductImages(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleLifestyleBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLifestyleBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLifestyleBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setLifestyleBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize lifestyle background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setLifestyleBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleHeroBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHeroBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setHeroBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setHeroBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize hero background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setHeroBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleCloseUpsBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCloseUpsBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCloseUpsBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setCloseUpsBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize close-ups background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setCloseUpsBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleFlatLayBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFlatLayBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFlatLayBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setFlatLayBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize flat-lay background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFlatLayBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleMacroBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMacroBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setMacroBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setMacroBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize macro background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setMacroBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleContextualBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleContextualBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setContextualBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setContextualBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize contextual background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setContextualBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleThemedEnvironmentBackgroundUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThemedEnvironmentBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setThemedEnvironmentBackground(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const resized = await resizeImage(file);
+        setThemedEnvironmentBackground(resized);
+      } catch (err) {
+        console.error('Failed to resize themed environment background:', err);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setThemedEnvironmentBackground(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 

@@ -13,6 +13,19 @@ const router = new Router({ prefix: '/listings' });
 
 const listingController = createListingController();
 
+// Basic root route
+app.use(async (ctx, next) => {
+  if (ctx.path === '/') {
+    ctx.body = {
+      message: 'Etsy Listing Generator API',
+      health: '/listings/health',
+      docs: 'https://github.com/your-repo/readme' // Placeholder or actual link if known
+    };
+    return;
+  }
+  await next();
+});
+
 // Logger middleware
 app.use(async (ctx, next) => {
   const start = Date.now();

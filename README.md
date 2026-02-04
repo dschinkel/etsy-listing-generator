@@ -5,8 +5,8 @@ An AI-powered tool for Etsy sellers to generate consistent product listing image
 ## Recent Technical Improvements (Solution Summary)
 
 ### Resilient Image Generation
-- **Model Selection**: Uses `gemini-3-pro-image-preview` as the primary engine for high-fidelity product imagery.
-- **Automatic Fallback**: If the primary model is overloaded (HTTP 503), the system automatically retries with `imagen-4.0-generate-001`, and then with `gpt-image-1.5` if needed.
+- **Model Selection**: Allows the user to choose between `gemini-2.5-flash-image` (default), `imagen-4.0-generate-001` (Imagen 4), and `gemini-2.0-flash` directly from the UI.
+- **Automatic Fallback**: If the primary model is overloaded (HTTP 503), the system automatically retries with the next model in the sequence.
 - **Model Tracking**: The system now tracks and reports which model successfully generated the listing images.
 - **Request Optimization**: Generates images one at a time with `count: 1` to ensure model focus and reliability.
 - **Identity Lock**: System prompts are strictly aligned with an "IDENTITY LOCK" rule to preserve product geometry, materials, and colors.

@@ -2,6 +2,10 @@ import { renderHook, act } from '@testing-library/react';
 import { useListingGeneration } from './useListingGeneration';
 
 describe('Listing Generation', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('initializes with default values', () => {
     const { result } = renderHook(() => useListingGeneration({}));
     expect(result.current.etsyFormData.taxonomy_id).toBe('69154');
@@ -55,9 +59,33 @@ describe('Listing Generation', () => {
     expect(capturedParams).toMatchObject({ 
       lifestyleCount: 1, 
       productImages: base64Images,
-      model: 'gemini-2.5-flash-image',
+      model: 'gemini-3-pro-image-preview',
       noFallback: true,
       temperature: 1
+    });
+  });
+
+  it('uses selected model for generation', async () => {
+    let capturedParams = null;
+    const fakeListingRepository = {
+      generateImages: async (params: any) => {
+        capturedParams = params;
+        return { images: [{ url: 'image.png', type: 'lifestyle' }] };
+      }
+    };
+    
+    const { result } = renderHook(() => useListingGeneration(fakeListingRepository));
+    
+    await act(async () => {
+      result.current.setSelectedModel('gemini-2.5-flash-image');
+    });
+
+    await act(async () => {
+      await result.current.generateListing({ lifestyleCount: 1 });
+    });
+    
+    expect(capturedParams).toMatchObject({ 
+      model: 'gemini-2.5-flash-image',
     });
   });
 
@@ -78,7 +106,7 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toMatchObject({ 
       heroCount: 2,
-      model: 'gemini-2.5-flash-image',
+      model: 'gemini-3-pro-image-preview',
       noFallback: true,
       temperature: 1
     });
@@ -102,7 +130,7 @@ describe('Listing Generation', () => {
     
     expect(capturedParams).toMatchObject({ 
       closeUpsCount: 1,
-      model: 'gemini-2.5-flash-image',
+      model: 'gemini-3-pro-image-preview',
       noFallback: true,
       temperature: 1
     });
@@ -311,8 +339,8 @@ describe('Listing Generation', () => {
     });
 
     // Check it's showing the first model
-    expect(result.current.modelUsed).toBe('gemini-2.5-flash-image');
-    expect(result.current.error).toContain('gemini-2.5-flash-image failed');
+    expect(result.current.modelUsed).toBe('gemini-3-pro-image-preview');
+    expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
 
     // Advance time by 5 seconds
     await act(async () => {
@@ -355,7 +383,7 @@ describe('Listing Generation', () => {
       generationPromise = result.current.generateListing({ lifestyleCount: 1 });
     });
 
-    expect(result.current.error).toContain('gemini-2.5-flash-image failed');
+    expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
 
     await act(async () => {
       jest.advanceTimersByTime(5000);

@@ -55,6 +55,7 @@ export const useListingGeneration = (listingRepository: any) => {
   const [selectedPromptVersion, setSelectedPromptVersion] = useState<string>(() => localStorage.getItem('lastPromptVersion') || '');
   const [editPromptVersions, setEditPromptVersions] = useState<EditPromptVersion[]>([]);
   const [selectedEditPromptVersion, setSelectedEditPromptVersion] = useState<string>(() => localStorage.getItem('lastEditPromptVersion') || '');
+  const [selectedModel, setSelectedModel] = useState<string>(() => localStorage.getItem('lastSelectedModel') || 'gemini-3-pro-image-preview');
   const [currentSeeds, setCurrentSeeds] = useState<number[]>([]);
   const [regeneratingIndex, setRegeneratingIndex] = useState<number | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -101,6 +102,12 @@ export const useListingGeneration = (listingRepository: any) => {
       localStorage.setItem('lastEditPromptVersion', selectedEditPromptVersion);
     }
   }, [selectedEditPromptVersion]);
+
+  useEffect(() => {
+    if (selectedModel) {
+      localStorage.setItem('lastSelectedModel', selectedModel);
+    }
+  }, [selectedModel]);
 
   const currentTemplate = promptVersions.find(v => v.version === selectedPromptVersion)?.template;
   const currentEditTemplate = editPromptVersions.find(v => v.version === selectedEditPromptVersion)?.template;
@@ -187,7 +194,7 @@ export const useListingGeneration = (listingRepository: any) => {
 
     setCurrentSeeds(seeds);
     
-    let currentModel = 'gemini-2.5-flash-image';
+    let currentModel = selectedModel;
     let success = false;
 
     while (!success) {
@@ -417,7 +424,7 @@ export const useListingGeneration = (listingRepository: any) => {
 
     setIsGenerating(true);
     setRegeneratingIndex(index);
-    setModelUsed('gemini-2.5-flash-image');
+    setModelUsed(selectedModel);
     setError(null);
 
     const updatedSystemPrompt = systemPrompt ? `${systemPrompt}\n${customContext}` : customContext;
@@ -427,7 +434,7 @@ export const useListingGeneration = (listingRepository: any) => {
         type: imageToReplace.type,
         customContext,
         productImages,
-        model: 'gemini-2.5-flash-image',
+        model: selectedModel,
         systemPrompt: updatedSystemPrompt,
         systemPromptTemplate: currentTemplate,
         temperature
@@ -603,6 +610,8 @@ export const useListingGeneration = (listingRepository: any) => {
     saveEditPromptVersion,
     addManualImages,
     removeEditPromptVersion,
+    selectedModel,
+    setSelectedModel,
     updateEtsyFormData,
     publishToEtsy,
     currentSeeds,

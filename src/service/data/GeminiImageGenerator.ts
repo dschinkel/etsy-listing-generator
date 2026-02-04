@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 export const SYSTEM_PROMPT_TEMPLATE = `Role: You are an image-generation assistant helping an Etsy seller create consistent listing photos.
 
@@ -30,7 +31,8 @@ COMPOSITION:
 
 SCENE AND ENVIRONMENT:
 (IMPORTANT: Prioritize any provided SCENE OVERRIDE text above all else.)
-CONTEXTUAL SCENE RULES:`;
+CONTEXTUAL SCENE RULES:
+`;
 
 export const EDIT_PROMPT_TEMPLATE = `EDIT MODE — TEXT REPLACEMENT ONLY
 
@@ -68,6 +70,7 @@ If any other change is required to complete the edit, do NOT make it.`;
 export const createGeminiImageGenerator = () => {
   const apiKey = process.env.GEMINI_API_KEY || "";
   const genAI = new GoogleGenerativeAI(apiKey);
+  const newGenAI = new GoogleGenAI({ apiKey });
 
   const getSystemPrompt = (params: { 
     type: string; 
@@ -162,7 +165,11 @@ export const createGeminiImageGenerator = () => {
     });
     const countText = count === 1 ? '1 image' : `${count} images`;
 
-    const modelName = params.model || "gemini-2.5-flash-image";
+    const modelName = params.model || "gemini-3-pro-image-preview";
+
+    const shouldSkipImage = params.skipProductImage || params.customContext?.includes("ISOLATION TEST: NO IMAGE");
+    const hasProductImages = params.productImages && params.productImages.length > 0 && !shouldSkipImage;
+    
     const model = genAI.getGenerativeModel({ 
       model: modelName,
       systemInstruction: {
@@ -191,23 +198,23 @@ export const createGeminiImageGenerator = () => {
 
     const toonPrompt = buildToonPrompt(params.type, finalUserPrompt);
 
-    const parts: any[] = [
-      toonPrompt
-    ];
+    const parts: any[] = [];
 
-    const shouldSkipImage = params.skipProductImage || params.customContext?.includes("ISOLATION TEST: NO IMAGE");
-
-    if (params.background) {
-      parts.push({ text: "BACKGROUND IMAGE TO USE:" });
-      parts.push(toGenerativePart(params.background));
-    }
-
+    // Prioritize reference images by placing them at the beginning of the parts array.
+    // This helps multi-modal models like Gemini 2.0 prioritize the visual context.
     if (params.productImages && params.productImages.length > 0 && !shouldSkipImage) {
-      parts.push({ text: "PRODUCT REFERENCE IMAGE(S):" });
+      parts.push({ text: "PRODUCT REFERENCE IMAGE (The product to be preserved):" });
       params.productImages.forEach(img => {
         parts.push(toGenerativePart(img));
       });
     }
+
+    if (params.background) {
+      parts.push({ text: "BACKGROUND IMAGE TO USE (The environment to place the product into):" });
+      parts.push(toGenerativePart(params.background));
+    }
+
+    parts.push({ text: toonPrompt });
 
     console.log('--- GEMINI REQUEST PAYLOAD ---');
     console.log('Model:', modelName);

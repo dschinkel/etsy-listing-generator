@@ -1,5 +1,17 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useProductUpload } from './useProductUpload';
+import { resizeImage } from '../lib/imageUtils';
+
+jest.mock('../lib/imageUtils', () => ({
+  resizeImage: jest.fn().mockImplementation((fileOrDataUrl) => {
+    if (typeof fileOrDataUrl === 'string') return Promise.resolve(fileOrDataUrl);
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(fileOrDataUrl);
+    });
+  })
+}));
 
 describe('useProductUpload', () => {
   const mockRepository = {
@@ -82,19 +94,19 @@ describe('useProductUpload', () => {
 
     await act(async () => {
       currentImage = fakeImage1;
-      result.current.handleUpload({ target: { files: [file1] } } as any);
+      await result.current.handleUpload({ target: { files: [file1] } } as any);
     });
     expect(result.current.productImages).toEqual([fakeImage1]);
 
     await act(async () => {
       currentImage = fakeImage2;
-      result.current.handleUpload({ target: { files: [file2] } } as any);
+      await result.current.handleUpload({ target: { files: [file2] } } as any);
     });
     expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
 
     await act(async () => {
       currentImage = fakeImage3;
-      result.current.handleUpload({ target: { files: [file3] } } as any);
+      await result.current.handleUpload({ target: { files: [file3] } } as any);
     });
     // Should still be 2 images
     expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
@@ -228,10 +240,9 @@ describe('useProductUpload', () => {
     const file2 = new File([''], 'test2.png', { type: 'image/png' });
 
     await act(async () => {
-      currentImage = fakeImage1;
-      result.current.handleUpload({ target: { files: [file1] } } as any);
+      await result.current.handleUpload({ target: { files: [file1] } } as any);
       currentImage = fakeImage2;
-      result.current.handleUpload({ target: { files: [file2] } } as any);
+      await result.current.handleUpload({ target: { files: [file2] } } as any);
     });
 
     expect(result.current.productImages).toEqual([fakeImage1, fakeImage2]);
@@ -286,7 +297,7 @@ describe('useProductUpload', () => {
       const spy = jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
       
       const file = new File([''], 'test.png', { type: 'image/png' });
-      result.current.handleUpload({ target: { files: [file] } } as any);
+      await result.current.handleUpload({ target: { files: [file] } } as any);
       spy.mockRestore();
     });
 
@@ -316,7 +327,7 @@ describe('useProductUpload', () => {
       };
       jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
       const file = new File([''], 'test.png', { type: 'image/png' });
-      result.current.handleUpload({ target: { files: [file] } } as any);
+      await result.current.handleUpload({ target: { files: [file] } } as any);
       (global.FileReader as unknown as jest.Mock).mockRestore();
     });
 
@@ -343,7 +354,7 @@ describe('useProductUpload', () => {
       };
       jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
       const file = new File([''], 'test.png', { type: 'image/png' });
-      result.current.handleUpload({ target: { files: [file] } } as any);
+      await result.current.handleUpload({ target: { files: [file] } } as any);
       (global.FileReader as unknown as jest.Mock).mockRestore();
     });
 
@@ -367,7 +378,7 @@ describe('useProductUpload', () => {
     jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
     
     await act(async () => {
-      result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
+      await result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
     });
 
     expect(result.current.productImages.length).toBe(1);
@@ -401,7 +412,7 @@ describe('useProductUpload', () => {
     jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
     
     await act(async () => {
-      result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
+      await result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
       result.current.handleLifestyleShotsChange({ target: { value: '1' } } as any);
     });
 
@@ -485,7 +496,7 @@ describe('useProductUpload', () => {
     jest.spyOn(global, 'FileReader').mockImplementation(() => mockReader as any);
     
     await act(async () => {
-      result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
+      await result.current.handleUpload({ target: { files: [new File([''], 'test.png')] } } as any);
       result.current.addEditSpecification();
       result.current.handleEditSpecificationChange(0, 'Name', 'New Name');
     });

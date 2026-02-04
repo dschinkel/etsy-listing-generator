@@ -48,9 +48,8 @@ export const createListingRepository = (dataLayer: any) => {
     editPromptLineTemplate?: string
   }) => {
     const fallbackModels = [
-      'gemini-2.5-flash-image',
-      'imagen-4.0-generate-001',
-      'gemini-1.5-flash-latest'
+      'gemini-3-pro-image-preview',
+      'gemini-2.5-flash-image'
     ];
 
     // If a specific model is requested that's not in our fallback list (unlikely given current UI),
