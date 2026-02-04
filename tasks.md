@@ -113,3 +113,11 @@ Acceptance:
 
 ## Feature: FR.22 — Select Archived Uploads [COMPLETED]
 (See [tasks/completed/task-fr22-select-archived-uploads.md](tasks/completed/task-fr22-select-archived-uploads.md))
+
+## PR.18 Fix [COMPLETED]
+### Docker build failed in GitHub Action deploy
+The Fix:
+- [x] Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] Update Dockerfile to use npm ci for consistency with GitHub Actions workflow
+- [x] Remove yarn.lock to eliminate package manager confusion
+- [x] Verify local installation with npm install

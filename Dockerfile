@@ -3,8 +3,8 @@ FROM node:20-alpine AS frontend-builder
 
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* ./
-RUN if [ -f yarn.lock ]; then yarn install; else npm install; fi
+COPY package.json package-lock.json ./
+RUN npm ci
 
 COPY . .
 RUN npm run build
@@ -14,8 +14,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* ./
-RUN if [ -f yarn.lock ]; then yarn install --production; else npm install --production; fi
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
 COPY --from=frontend-builder /app/dist ./dist
 COPY --from=frontend-builder /app/src/service ./src/service
