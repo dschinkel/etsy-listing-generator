@@ -34,6 +34,8 @@ jobs:
 
     - name: Run tests
       run: npm test
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
     # Setup gcloud CLI
     - id: 'auth'
