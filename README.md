@@ -17,6 +17,7 @@ An AI-powered tool for Etsy sellers to generate consistent product listing image
 - **API Reliability**: All production API calls (Gemini and internal backend calls) are wrapped with a 15-second timeout to ensure the application fails gracefully rather than hanging.
 
 ### UI & Error Handling
+- **Image Regeneration**: Clicking "Regenerate" on a specific image sends both the original product reference images AND the current generated image back to the AI. This allows the model to use the existing composition as context while applying new instructions from the custom context textbox.
 - **Real-time Feedback**: The UI provides immediate status updates (e.g., "Gemini is overloaded, retrying with Imagen...") to keep the user informed during fallbacks.
 - **Enhanced Error Logging**: Backend errors are logged with full stack traces and status codes to simplify troubleshooting.
 - **Request Guarding**: The generation button is disabled during active requests to prevent redundant API calls.

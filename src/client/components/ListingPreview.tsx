@@ -227,7 +227,7 @@ const ListingPreview = ({
                     <div className="flex flex-col gap-1 px-1 mt-1">
                       <Textarea
                         placeholder="Custom context for this image..."
-                        className="text-[10px] min-h-[40px] p-1 text-yellow-600 dark:text-orange-500 bg-white dark:bg-slate-950/50"
+                        className="text-[10px] min-h-[40px] p-1 bg-white dark:bg-slate-950 border-yellow-600 dark:border-yellow-200 text-black dark:text-white placeholder:text-slate-400"
                         value={regenContexts[index] || ""}
                         onChange={(e) => setRegenContexts(prev => ({ ...prev, [index]: e.target.value }))}
                         data-testid={`regen-context-input-${index}`}

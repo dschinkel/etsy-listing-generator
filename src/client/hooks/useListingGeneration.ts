@@ -429,11 +429,13 @@ export const useListingGeneration = (listingRepository: any) => {
 
     const updatedSystemPrompt = systemPrompt ? `${systemPrompt}\n${customContext}` : customContext;
 
+    const combinedProductImages = productImages ? [...productImages, imageToReplace.url] : [imageToReplace.url];
+
     try {
       const response = await listingRepository.generateSingleImage({
         type: imageToReplace.type,
         customContext,
-        productImages,
+        productImages: combinedProductImages,
         model: selectedModel,
         systemPrompt: updatedSystemPrompt,
         systemPromptTemplate: currentTemplate,
