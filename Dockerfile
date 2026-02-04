@@ -1,28 +1,34 @@
 # Stage 1: Build the frontend
 FROM node:20-alpine AS frontend-builder
 
+# Ensure yarn is available in the Alpine image
+RUN apk add --no-cache yarn
+
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 COPY . .
-RUN npm run build
+RUN yarn build
 
 # Stage 2: Build the backend and run the app
 FROM node:20-alpine
 
+# Ensure yarn is available in the Alpine image
+RUN apk add --no-cache yarn
+
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+COPY package.json yarn.lock ./
+RUN yarn install --production --frozen-lockfile
 
 COPY --from=frontend-builder /app/dist ./dist
 COPY --from=frontend-builder /app/src/service ./src/service
 COPY --from=frontend-builder /app/tsconfig.json ./
 
 # Install tsx to run the service
-RUN npm install -g tsx
+RUN yarn global add tsx
 
 # Expose the port
 EXPOSE 8080

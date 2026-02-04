@@ -28,10 +28,10 @@
 #      uses: actions/setup-node@v4
 #      with:
 #        node-version: '20'
-#        cache: 'npm'
+#        cache: 'yarn'
 #
 #    - name: Install dependencies
-#      run: npm ci
+#      run: yarn install --frozen-lockfile
 ## We are using the wedotdd project to host this which doesn't have access to Gemini API so just run tests locally for now
 ##    - name: Run tests
 ##      run: npm test
