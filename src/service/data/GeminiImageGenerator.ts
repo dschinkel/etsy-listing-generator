@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
-import { GoogleGenAI } from "@google/genai";
 
 export const SYSTEM_PROMPT_TEMPLATE = `Role: You are an image-generation assistant helping an Etsy seller create consistent listing photos.
 
@@ -70,7 +69,6 @@ If any other change is required to complete the edit, do NOT make it.`;
 export const createGeminiImageGenerator = () => {
   const apiKey = process.env.GEMINI_API_KEY || "";
   const genAI = new GoogleGenerativeAI(apiKey);
-  const newGenAI = new GoogleGenAI({ apiKey });
 
   const getSystemPrompt = (params: { 
     type: string; 
