@@ -51,16 +51,19 @@ curl -X GET "https://openapi.etsy.com/v3/application/shops/GameBin" \
 
 ## Deployment
 
-This project includes a GitHub Action for deploying to Google Cloud Container Registry (GCR).
+This project includes GitHub Actions for deploying to both Google Cloud Container Registry (GCR) and the newer Google Artifact Registry.
 
 ### Prerequisites
 
 1.  **Google Cloud Project**: Use the project `etsy-listing-generator`.
-2.  **Service Account**: Ensure a Service Account with `Storage Admin` and `Artifact Registry Administrator` (or `Viewer`) roles exists.
+2.  **Service Account**: Ensure a Service Account with `Storage Admin` and `Artifact Registry Administrator` roles exists. `Storage Admin` is required for the older Google Container Registry (GCR), while `Artifact Registry Administrator` is required for the newer Artifact Registry.
 3.  **GitHub Secrets**: Add the following secrets to your GitHub repository settings:
-    *   `GCR_JSON_KEY_FRONTEND`: The content of your Service Account JSON key.
+    *   `GCP_SA_KEY`: The content of your Service Account JSON key.
     *   `GEMINI_API_KEY`: Your Gemini API key.
 
-### GitHub Action
+### GitHub Actions
 
-The workflow `.github/workflows/deploy.yml` will automatically build and push the Docker image to GCR on every push to the `main` branch.
+The following workflows are available:
+
+*   `.github/workflows/deploy-google-container-registry.yml`: Automatically builds and pushes the Docker image to GCR on every push to the `main` branch.
+*   `.github/workflows/deploy-artifact-registry.yml`: Automatically builds and pushes the Docker image to Artifact Registry on every push to the `main` branch.

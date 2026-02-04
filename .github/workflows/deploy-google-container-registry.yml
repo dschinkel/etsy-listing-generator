@@ -1,3 +1,4 @@
+# This workflow uses the older Google Container Registry (GCR) to avoid Artifact Registry API usage and costs.
 name: Build and Deploy to GCR
 
 on:
@@ -46,10 +47,10 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
 
-    # Configure Docker to use gcloud as a credential helper
+    # Configure Docker to use gcloud as a credential helper for GCR
     - name: Configure Docker
       run: |-
-        gcloud auth configure-docker --quiet
+        gcloud auth configure-docker gcr.io --quiet
 
     # Build the Docker image
     - name: Build
