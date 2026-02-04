@@ -55,12 +55,11 @@ This project includes a GitHub Action for deploying to Google Cloud Container Re
 
 ### Prerequisites
 
-1.  **Google Cloud Project**: Create a project in Google Cloud Console.
-2.  **Service Account**: Create a Service Account with `Storage Admin` and `Artifact Registry Administrator` (or `Viewer`) roles. Generate a JSON key.
+1.  **Google Cloud Project**: Use the project `etsy-listing-generator`.
+2.  **Service Account**: Ensure a Service Account with `Storage Admin` and `Artifact Registry Administrator` (or `Viewer`) roles exists.
 3.  **GitHub Secrets**: Add the following secrets to your GitHub repository settings:
-    *   `GCP_PROJECT_ID`: Your Google Cloud Project ID.
-    *   `GCP_SA_KEY`: The content of your Service Account JSON key.
-    *   `GEMINI_API_KEY`: Your Gemini API key (for optional Cloud Run deployment).
+    *   `GCR_JSON_KEY_FRONTEND`: The content of your Service Account JSON key.
+    *   `GEMINI_API_KEY`: Your Gemini API key.
 
 ### GitHub Action
 

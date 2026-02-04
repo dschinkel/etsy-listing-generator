@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  PROJECT_ID: etsy-listing-generator
   GCR_REGION: us.gcr.io # Or your preferred region
   IMAGE_NAME: etsy-listing-generator
 
@@ -35,7 +35,7 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        credentials_json: '${{ secrets.GCR_JSON_KEY_FRONTEND }}'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
@@ -59,12 +59,12 @@ jobs:
         docker push "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA"
         docker push "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:latest"
 
-    # Optional: Deploy to Cloud Run (if they want it active)
-    # - name: Deploy to Cloud Run
-    #   run: |-
-    #     gcloud run deploy $IMAGE_NAME \
-    #       --image "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA" \
-    #       --region us-central1 \
-    #       --platform managed \
-    #       --allow-unauthenticated \
-    #       --set-env-vars="GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
+    # Deploy to Cloud Run
+    - name: Deploy to Cloud Run
+      run: |-
+        gcloud run deploy $IMAGE_NAME \
+          --image "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:$GITHUB_SHA" \
+          --region us-central1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --set-env-vars="GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
