@@ -31,11 +31,11 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
-
-    - name: Run tests
-      run: npm test
-      env:
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+# We are using the wedotdd project to host this which doesn't have access to Gemini API so just run tests locally for now
+#    - name: Run tests
+#      run: npm test
+#      env:
+#        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
     # Setup gcloud CLI
     - id: 'auth'
