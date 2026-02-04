@@ -7,8 +7,7 @@ describe('Generate Listing Images Error Handling', () => {
   it('returns system prompt even when zero images are requested', async () => {
     const requestBody = {
       lifestyleCount: 0,
-      heroCount: 0,
-      returnPromptOnly: true
+      heroCount: 0
     };
 
     const response = await supertest(app.callback())

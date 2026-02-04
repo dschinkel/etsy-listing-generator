@@ -57,6 +57,17 @@ export const createListingController = () => {
   const generate = async (ctx: any) => {
     try {
       const request = ctx.request.body;
+      const isZeroCount = !request.lifestyleCount && !request.heroCount && !request.closeUpsCount && 
+                          !request.flatLayCount && !request.macroCount && !request.contextualCount && 
+                          !request.themedEnvironmentCount && (!request.editSpecifications || request.editSpecifications.length === 0);
+      
+      if (isZeroCount) {
+        const preview = repository.getPromptPreview(request);
+        ctx.body = { images: [], systemPrompt: preview.systemPrompt };
+        ctx.status = 200;
+        return;
+      }
+
       const result = await generateListingImages.execute(request);
       ctx.body = result;
       ctx.status = 200;

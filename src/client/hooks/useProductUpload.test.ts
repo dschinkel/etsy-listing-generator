@@ -20,11 +20,15 @@ describe('useProductUpload', () => {
     getArchivedUploads: jest.fn().mockResolvedValue({ images: [] })
   };
 
-  it('initializes with default values', () => {
+  it('initializes with default values', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
+    
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     expect(result.current.productImages).toEqual([]);
     expect(result.current.lifestyleShotsCount).toBe(0);
-    expect(result.current.templates).toEqual([]);
     expect(result.current.archivedUploads).toEqual([]);
   });
 
@@ -44,6 +48,11 @@ describe('useProductUpload', () => {
 
   it('selects and unselects archived uploads', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
+
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     const archivedUrl = 'archived1.png';
 
     act(() => {
@@ -60,6 +69,10 @@ describe('useProductUpload', () => {
   it('limits archived upload selection to 2', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     act(() => {
       result.current.toggleArchivedUpload('img1.png');
       result.current.toggleArchivedUpload('img2.png');
@@ -75,6 +88,11 @@ describe('useProductUpload', () => {
 
   it('allows uploading up to 2 reference images', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
+
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     const fakeImage1 = 'data:image/png;base64,image1';
     const fakeImage2 = 'data:image/png;base64,image2';
     const fakeImage3 = 'data:image/png;base64,image3';
@@ -165,9 +183,13 @@ describe('useProductUpload', () => {
     expect(result.current.templates).toEqual([]);
   });
 
-  it('is not ready to generate without product images', () => {
+  it('is not ready to generate without product images', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     act(() => {
       result.current.handleLifestyleShotsChange({ target: { value: '1' } } as any);
     });
@@ -180,6 +202,10 @@ describe('useProductUpload', () => {
   it('is ready to generate when product images and shots are present', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     // Use a small data URL to simulate an image
     const fakeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
     
@@ -205,9 +231,13 @@ describe('useProductUpload', () => {
     (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
-  it('persists themed environment shot selection', () => {
+  it('persists themed environment shot selection', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     act(() => {
       result.current.handleThemedEnvironmentShotsChange({ target: { value: '2' } } as any);
     });
@@ -224,6 +254,11 @@ describe('useProductUpload', () => {
 
   it('allows removing an individual product image', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
+
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     const fakeImage1 = 'data:image/png;base64,image1';
     const fakeImage2 = 'data:image/png;base64,image2';
 
@@ -256,9 +291,13 @@ describe('useProductUpload', () => {
     (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
-  it('resets shot counts but preserves editSpecifications', () => {
+  it('resets shot counts but preserves editSpecifications', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     act(() => {
       result.current.handleLifestyleShotsChange({ target: { value: '3' } } as any);
       result.current.handleHeroShotsChange({ target: { value: '2' } } as any);
@@ -369,6 +408,10 @@ describe('useProductUpload', () => {
   it('isReadyToGenerate is false when no shots are selected', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     // Upload an image
     const fakeImage = 'data:image/png;base64,image1';
     const mockReader = {
@@ -388,9 +431,13 @@ describe('useProductUpload', () => {
     (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
-  it('isReadyToGenerate is false when shots are selected but no images uploaded', () => {
+  it('isReadyToGenerate is false when shots are selected but no images uploaded', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     act(() => {
       result.current.handleLifestyleShotsChange({ target: { value: '1' } } as any);
     });
@@ -403,6 +450,10 @@ describe('useProductUpload', () => {
   it('isReadyToGenerate is true when shots are selected and images uploaded', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     // Upload an image
     const fakeImage = 'data:image/png;base64,image1';
     const mockReader = {
@@ -423,9 +474,13 @@ describe('useProductUpload', () => {
     (global.FileReader as unknown as jest.Mock).mockRestore();
   });
 
-  it('should handle lifestyleCreateSimilar change', () => {
+  it('should handle lifestyleCreateSimilar change', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     expect(result.current.lifestyleCreateSimilar).toBe(false);
     
     act(() => {
@@ -435,9 +490,13 @@ describe('useProductUpload', () => {
     expect(result.current.lifestyleCreateSimilar).toBe(true);
   });
 
-  it('handles editSpecifications change', () => {
+  it('handles editSpecifications change', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     expect(result.current.editSpecifications).toEqual([]);
     
     act(() => {
@@ -466,9 +525,13 @@ describe('useProductUpload', () => {
     expect(result.current.editSpecifications).toEqual([]);
   });
 
-  it('handles editCount change', () => {
+  it('handles editCount change', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     expect(result.current.editCount).toBe(1);
     
     act(() => {
@@ -487,6 +550,10 @@ describe('useProductUpload', () => {
   it('is ready to generate when only editSpecifications and product images are present', async () => {
     const { result } = renderHook(() => useProductUpload(mockRepository));
     
+    await waitFor(() => {
+      expect(result.current.templates).toEqual([]);
+    });
+
     // Upload an image
     const fakeImage = 'data:image/png;base64,image1';
     const mockReader = {

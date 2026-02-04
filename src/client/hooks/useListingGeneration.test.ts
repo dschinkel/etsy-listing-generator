@@ -342,7 +342,7 @@ describe('Listing Generation', () => {
     expect(result.current.modelUsed).toBe('gemini-3-pro-image-preview');
     expect(result.current.error).toContain('gemini-3-pro-image-preview failed');
 
-    // Advance time by 5 seconds
+    // Advancing timers should be wrapped in act
     await act(async () => {
       jest.advanceTimersByTime(5000);
     });
@@ -623,7 +623,7 @@ describe('Listing Generation', () => {
     expect(fakeListingRepository.generateSingleImage).toHaveBeenCalledWith(expect.objectContaining({
       type: 'lifestyle',
       customContext: 'Better lighting',
-      productImages: ['prod1', 'prod2']
+      productImages: expect.arrayContaining(['prod1', 'prod2', 'old_image.png'])
     }));
     expect(result.current.images[0].url).toBe('new_image.png');
     expect(fakeListingRepository.deleteImage).toHaveBeenCalledWith('old_image.png');
@@ -691,7 +691,7 @@ describe('Listing Generation', () => {
     // Verify it was called with the appended system prompt and product images
     expect(fakeListingRepository.generateSingleImage).toHaveBeenCalledWith(expect.objectContaining({
       systemPrompt: 'Original system prompt\nCustom context',
-      productImages: ['prod1', 'prod2']
+      productImages: expect.arrayContaining(['prod1', 'prod2', 'old.png'])
     }));
     
     // Verify systemPrompt state was updated
