@@ -54,14 +54,12 @@ jobs:
       run: |-
         docker build \
           --tag "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:${{ steps.vars.outputs.sha_short }}" \
-          --tag "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:latest" \
           .
 
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
         docker push "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:${{ steps.vars.outputs.sha_short }}"
-        docker push "$GCR_REGION/$PROJECT_ID/$IMAGE_NAME:latest"
 
     # Deploy to Cloud Run
     - name: Deploy to Cloud Run
