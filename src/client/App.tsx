@@ -1368,7 +1368,7 @@ const ShotsSelection = ({
     createShotType(
       "hero-shots",
       "Hero Shot",
-      "Eye-level, centered, slightly blurred background (Product focus).",
+      "e.g. Eye-level, centered, slightly blurred background (Product focus).",
       heroShotsCount,
       onHeroShotsChange,
       () => onClearShotCount("hero-shots"),
@@ -1384,7 +1384,7 @@ const ShotsSelection = ({
     createShotType(
       "flat-lay-shots",
       "Flat Lay",
-      "Top-down view on a textured surface with ingredients scattered around.",
+      "e.g. Top-down view on a textured surface with ingredients scattered around.",
       flatLayShotsCount,
       onFlatLayShotsChange,
       () => onClearShotCount("flat-lay-shots"),
@@ -1400,7 +1400,7 @@ const ShotsSelection = ({
     createShotType(
       "lifestyle-shots",
       "Lifestyle",
-      "The product being held by a hand or sitting in a lunchbox/gym bag.",
+      "e.g. The product being held by a hand or sitting in a lunchbox/gym bag.",
       lifestyleShotsCount,
       onLifestyleShotsChange,
       () => onClearShotCount("lifestyle-shots"),
@@ -1416,7 +1416,7 @@ const ShotsSelection = ({
     createShotType(
       "macro-shots",
       "Macro/Detail",
-      "Close-up on the pouch opening showing the texture of the banana chips.",
+      "e.g. Close-up on the pouch opening showing the texture of the banana chips.",
       macroShotsCount,
       onMacroShotsChange,
       () => onClearShotCount("macro-shots"),
@@ -1432,7 +1432,7 @@ const ShotsSelection = ({
     createShotType(
       "contextual-shots",
       "Contextual",
-      "The product on a pantry shelf or a kitchen counter to show scale.",
+      "e.g. The product on a pantry shelf or a kitchen counter to show scale.",
       contextualShotsCount,
       onContextualShotsChange,
       () => onClearShotCount("contextual-shots"),
@@ -1448,7 +1448,7 @@ const ShotsSelection = ({
     createShotType(
       "themed-environment",
       "Themed Environment",
-      "The product is placed in a realistic, thematic setting.",
+      "e.g. The product is placed in a realistic, thematic setting.",
       themedEnvironmentShotsCount,
       onThemedEnvironmentShotsChange,
       () => onClearShotCount("themed-environment"),
@@ -1464,7 +1464,7 @@ const ShotsSelection = ({
     createShotType(
       "close-ups",
       "Close-ups",
-      "Detailed shots of specific parts of the product.",
+      "e.g. Detailed shots of specific parts of the product.",
       closeUpsCount,
       onCloseUpsChange,
       () => onClearShotCount("close-ups"),
