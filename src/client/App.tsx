@@ -362,7 +362,7 @@ const App = () => {
               </div>
               <div className="w-full flex flex-col mt-2 flex-1 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm bg-white dark:bg-card">
                 <div className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex items-center justify-between px-4">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-1">
                       <label className="text-[15px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-tight">
                         Edit Picture
@@ -377,6 +377,9 @@ const App = () => {
                         title="Number of images to generate"
                       />
                     </div>
+                    <span className="text-[15px] text-slate-600 dark:text-muted-foreground leading-tight italic">
+                      Edit text or color in your product photos.
+                    </span>
                   </div>
                       <div className="flex items-center gap-1 shrink-0 ml-2">
                         <Button 
