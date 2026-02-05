@@ -3,6 +3,7 @@ import Router from '@koa/router';
 import bodyParser from 'koa-bodyparser';
 import serve from 'koa-static';
 import * as path from 'path';
+import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 import { createListingController } from './controllers/ListingController';
 
@@ -15,7 +16,7 @@ const listingController = createListingController();
 
 // Basic root route
 app.use(async (ctx, next) => {
-  if (ctx.path === '/') {
+  if (ctx.path === '/' && process.env.NODE_ENV !== 'production') {
     ctx.body = {
       message: 'Etsy Listing Generator API',
       health: '/listings/health',
@@ -137,9 +138,17 @@ router.get('/system-prompt', async (ctx) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-// Catch-all for debugging 404s
+// Catch-all for SPA routing in production
 app.use(async (ctx) => {
   if (ctx.status === 404) {
+    if (process.env.NODE_ENV === 'production' && !ctx.path.startsWith('/listings')) {
+      const indexPath = path.join(process.cwd(), 'dist', 'index.html');
+      if (fs.existsSync(indexPath)) {
+        ctx.type = 'html';
+        ctx.body = fs.readFileSync(indexPath);
+        return;
+      }
+    }
     console.log(`Final 404 Catch-all: ${ctx.method} ${ctx.url}`);
     ctx.body = { error: `Not Found: ${ctx.method} ${ctx.url}` };
   }
