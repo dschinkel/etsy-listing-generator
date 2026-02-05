@@ -361,50 +361,45 @@ const App = () => {
                 ))}
               </div>
               <div className="w-full flex flex-col mt-2 flex-1 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm bg-white dark:bg-card">
-                <div className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex items-center justify-between px-4">
-                      <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
-                        <div className="flex items-center gap-1">
-                          <label className="text-[15px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-tight">
-                            Edit Picture
-                          </label>
-                          <Input 
-                            type="number"
-                            min="1"
-                            max="10"
-                            className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
-                            value={editCount}
-                            onChange={(e) => handleEditCountChange(parseInt(e.target.value) || 1)}
-                            title="Number of images to generate"
-                          />
-                        </div>
-                        <span className="text-[15px] text-slate-600 dark:text-muted-foreground leading-tight italic line-clamp-2 break-words" title="Edit text, number, or background in your uploaded product photos.">
-                          Edit text, number, or background in your uploaded product photos.
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0 ml-2">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight text-slate-900 dark:text-slate-100 hover:bg-red-500/20 hover:text-red-600 transition-colors" 
-                          onClick={clearEditSpecifications}
-                          disabled={editSpecifications.length === 0}
-                          title="Clear all edit specifications"
-                        >
-                          <Eraser className="h-3 w-3 mr-1" />
-                          Clear
-                        </Button>
-                        <Button 
-                          variant="secondary" 
-                          size="sm" 
-                          className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight bg-slate-900 dark:bg-slate-100 text-slate-100 dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-slate-200 transition-colors border-none" 
-                          onClick={addEditSpecification}
-                          title="Add edit specification"
-                        >
-                          <Plus className="h-4 w-4 mr-1" />
-                          Add
-                        </Button>
-                      </div>
+                <div className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 flex items-start justify-between px-4 py-2">
+                  <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
+                    <div className="flex items-center gap-1">
+                      <label className="text-[15px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-tight">
+                        Edit Picture
+                      </label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
+                        value={editCount}
+                        onChange={(e) => handleEditCountChange(parseInt(e.target.value) || 1)}
+                        title="Number of images to generate"
+                      />
                     </div>
+
+                    <span
+                      className="text-[15px] text-slate-600 dark:text-muted-foreground py-1 leading-tight italic line-clamp-2 break-words"
+                      title="Edit text, number, or background in your uploaded product photos."
+                    >
+      Change text, number, background in uploaded photo.
+    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 shrink-0 ml-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 text-[10px] px-2 font-bold uppercase tracking-tight text-slate-900 dark:text-slate-100 hover:bg-red-500/20 hover:text-red-600 transition-colors"
+                      onClick={clearEditSpecifications}
+                      disabled={editSpecifications.length === 0}
+                      title="Clear all edit specifications"
+                    >
+                      <Eraser className="h-3 w-3 mr-1" />
+                      Clear
+                    </Button>
+                  </div>
+                </div>
                 <div className="p-2 pt-1.5 flex flex-col gap-2">
                   {editPromptVersions.length > 0 && (
                     <div className="flex items-center gap-1 mb-1 px-1 justify-end">
@@ -490,14 +485,14 @@ const App = () => {
                       />
                     </div>
                   ))}
-                  {editSpecifications.length === 0 && (
-                    <div 
-                      className="text-base text-muted-foreground italic text-center p-2 border border-dashed rounded-md cursor-pointer hover:bg-muted/10"
-                      onClick={addEditSpecification}
-                    >
-                      Click + to add text/color edits
-                    </div>
-                  )}
+                  <div 
+                    className="flex items-center justify-center gap-2 p-2 border border-dashed rounded-md cursor-pointer hover:bg-muted/10 text-sm text-muted-foreground font-medium transition-colors"
+                    onClick={addEditSpecification}
+                    title="Add new text/color edit"
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span>Add {editSpecifications.length > 0 ? 'another' : 'edit'}</span>
+                  </div>
                 </div>
               </div>
               {/* System Prompt (moved here) */}
