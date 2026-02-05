@@ -70,8 +70,8 @@ jobs:
         gcloud run deploy ${{ secrets.GCR_IMAGE_NAME }} \
           --image "${{ secrets.GCR_REGION }}-docker.pkg.dev/${{ secrets.GCR_PROJECT_ID }}/${{ secrets.GCR_REPOSITORY }}/${{ secrets.GCR_IMAGE_NAME }}:${{ steps.vars.outputs.sha_short }}" \
           --region ${{ secrets.GCR_REGION }} \
-          --set-env-vars="GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
-        --platform managed \
+          --set-env-vars="GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" \
+          --platform managed \
           --allow-unauthenticated \
           --cpu 0.08 \
           --memory 128Mi \
