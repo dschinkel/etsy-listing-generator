@@ -362,25 +362,25 @@ const App = () => {
               </div>
               <div className="w-full flex flex-col mt-2 flex-1 border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm bg-white dark:bg-card">
                 <div className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex items-center justify-between px-4">
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1">
-                      <label className="text-[15px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-tight">
-                        Edit Picture
-                      </label>
-                      <Input 
-                        type="number"
-                        min="1"
-                        max="10"
-                        className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
-                        value={editCount}
-                        onChange={(e) => handleEditCountChange(parseInt(e.target.value) || 1)}
-                        title="Number of images to generate"
-                      />
-                    </div>
-                    <span className="text-[15px] text-slate-600 dark:text-muted-foreground leading-tight italic">
-                      Edit text, number, or background in your uploaded product photos.
-                    </span>
-                  </div>
+                      <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
+                        <div className="flex items-center gap-1">
+                          <label className="text-[15px] font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-tight">
+                            Edit Picture
+                          </label>
+                          <Input 
+                            type="number"
+                            min="1"
+                            max="10"
+                            className="w-12 h-7 text-xs px-1.5 bg-background border-slate-700 text-center font-bold"
+                            value={editCount}
+                            onChange={(e) => handleEditCountChange(parseInt(e.target.value) || 1)}
+                            title="Number of images to generate"
+                          />
+                        </div>
+                        <span className="text-[15px] text-slate-600 dark:text-muted-foreground leading-tight italic line-clamp-2 break-words" title="Edit text, number, or background in your uploaded product photos.">
+                          Edit text, number, or background in your uploaded product photos.
+                        </span>
+                      </div>
                       <div className="flex items-center gap-1 shrink-0 ml-2">
                         <Button 
                           variant="ghost" 
@@ -483,7 +483,10 @@ const App = () => {
                         className="w-full p-1.5 text-sm bg-background border rounded focus:outline-none focus:ring-1 focus:ring-primary"
                         placeholder={`Value for ${spec.field}`}
                         value={spec.value}
-                        onChange={(e) => handleEditSpecificationChange(index, spec.field, e.target.value)}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          handleEditSpecificationChange(index, spec.field, val);
+                        }}
                       />
                     </div>
                   ))}
