@@ -691,7 +691,7 @@ const App = () => {
                 >
                   <div className="flex items-center justify-between px-3 py-2 border border-slate-200 dark:border-slate-800 rounded-t-lg bg-slate-50 dark:bg-muted/30 border-b-0 h-10">
                     <h4 className="text-sm font-semibold">
-                      Create an Etsy Listing
+                      Create an Etsy Listing with the images above
                     </h4>
                     <CollapsibleTrigger asChild>
                       <Button variant="ghost" size="sm" className="w-9 p-0">

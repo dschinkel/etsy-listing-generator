@@ -62,7 +62,7 @@ const ListingPreview = ({
       <Card className="w-full h-full flex flex-col overflow-hidden">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 flex-none bg-muted/30 border-b border-border/50">
           <div className="flex items-center gap-4">
-            <CardTitle>Listing Preview</CardTitle>
+            <CardTitle>Listing Images</CardTitle>
             {isGenerating && regeneratingIndex === null && modelUsed && (
               <ModelStatus model={modelUsed} />
             )}
