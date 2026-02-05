@@ -27,6 +27,9 @@ COPY --from=frontend-builder /app/dist ./dist
 COPY --from=frontend-builder /app/src/service ./src/service
 COPY --from=frontend-builder /app/tsconfig.json ./
 
+# Create necessary directories for assets
+RUN mkdir -p src/assets/generated-images src/assets/archived-images src/assets/uploads
+
 # Install tsx to run the service
 RUN yarn global add tsx
 
