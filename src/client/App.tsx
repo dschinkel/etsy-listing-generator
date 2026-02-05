@@ -35,6 +35,12 @@ import {
   CollapsibleContent, 
   CollapsibleTrigger 
 } from './components/ui/collapsible';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/ui/tooltip";
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ListingPreview from './components/ListingPreview';
@@ -324,7 +330,8 @@ const App = () => {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex flex-col min-h-screen bg-background text-foreground">
+      <TooltipProvider>
+        <div className="flex flex-col min-h-screen bg-background text-foreground">
         <Header />
         <main className="flex-1 p-2 bg-slate-50 dark:bg-background">
           <div className="flex gap-4 items-start max-w-full mx-auto px-1">
@@ -776,6 +783,7 @@ const App = () => {
         images={uploadedImageSlides}
         initialIndex={uploadedSelectedIndex || 0}
       />
+      </TooltipProvider>
     </ThemeProvider>
   );
 };
@@ -946,16 +954,22 @@ const ShotTypeItem = ({
           </span>
         </div>
                         <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors dark:bg-slate-900/50"
-                            title="Clear count"
-                            onClick={onClear}
-                            data-testid={`${id}-clear-count`}
-                          >
-                            <Trash className="h-3.5 w-3.5" />
-                          </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors dark:bg-slate-900/50"
+                                onClick={onClear}
+                                data-testid={`${id}-clear-count`}
+                              >
+                                <Trash className="h-3.5 w-3.5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Reset count to 0</p>
+                            </TooltipContent>
+                          </Tooltip>
                           <Input
                             id={id}
                             type="number"
@@ -973,27 +987,39 @@ const ShotTypeItem = ({
                         <div className="flex flex-col gap-2">
                           <div className="flex items-center justify-between w-full">
                             <div className="flex items-center gap-2">
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className={`h-7 px-2 text-[10px] flex items-center gap-1.5 transition-all ${showCustom ? 'bg-primary/10 border-primary/50 text-primary' : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800'}`}
-                                onClick={() => setShowCustom(!showCustom)}
-                                title="Add custom context"
-                              >
-                <Plus className={`h-3 w-3 ${showCustom ? 'rotate-45' : ''} transition-transform`} />
-                <span>Context</span>
-              </Button>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    className={`h-7 px-2 text-[10px] flex items-center gap-1.5 transition-all ${showCustom ? 'bg-primary/10 border-primary/50 text-primary' : 'bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800'}`}
+                                    onClick={() => setShowCustom(!showCustom)}
+                                  >
+                                    <Plus className={`h-3 w-3 ${showCustom ? 'rotate-45' : ''} transition-transform`} />
+                                    <span>Context</span>
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Add custom instructions for this shot type</p>
+                                </TooltipContent>
+                              </Tooltip>
               
               <div className="flex items-center gap-1 bg-white dark:bg-slate-900/50 rounded-md p-0.5 border border-slate-200 dark:border-slate-800">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors"
-                  onClick={() => fileInputRef.current?.click()}
-                  title="Upload background"
-                >
-                  <ImageIcon className="h-3.5 w-3.5" />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-muted-foreground hover:text-primary transition-colors"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <ImageIcon className="h-3.5 w-3.5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Upload a specific background for this shot type</p>
+                  </TooltipContent>
+                </Tooltip>
                 <Input
                   type="file"
                   accept="image/png, image/jpeg"
@@ -1016,27 +1042,45 @@ const ShotTypeItem = ({
             </div>
 
             <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900/50 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">
-              <Checkbox 
-                id={`${id}-no-image`}
-                checked={noImage}
-                onCheckedChange={(checked) => onNoImageChange(!!checked)}
-                className="h-3.5 w-3.5 border-slate-300 dark:border-slate-600"
-              />
-              <Label htmlFor={`${id}-no-image`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
-                no-img
-              </Label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1.5">
+                    <Checkbox 
+                      id={`${id}-no-image`}
+                      checked={noImage}
+                      onCheckedChange={(checked) => onNoImageChange(!!checked)}
+                      className="h-3.5 w-3.5 border-slate-300 dark:border-slate-600"
+                    />
+                    <Label htmlFor={`${id}-no-image`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
+                      no-img
+                    </Label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Generate images without using product reference images (Text-only mode)</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
 
             <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900/50 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-800">
-              <Checkbox 
-                id={`${id}-create-similar`}
-                checked={createSimilar}
-                onCheckedChange={(checked) => onCreateSimilarChange(!!checked)}
-                className="h-3.5 w-3.5 border-slate-300 dark:border-slate-600"
-              />
-              <Label htmlFor={`${id}-create-similar`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
-                similar
-              </Label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1.5">
+                    <Checkbox 
+                      id={`${id}-create-similar`}
+                      checked={createSimilar}
+                      onCheckedChange={(checked) => onCreateSimilarChange(!!checked)}
+                      className="h-3.5 w-3.5 border-slate-300 dark:border-slate-600"
+                    />
+                    <Label htmlFor={`${id}-create-similar`} className="text-[10px] font-medium text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors">
+                      similar
+                    </Label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Generate images with more variations while maintaining consistency</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
           {showCustom && (
@@ -1511,44 +1555,64 @@ const UploadedImage = ({
         </div>
       )}
       <div className="absolute top-1 right-1 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-        <Button
-          variant="destructive"
-          size="icon"
-          className="h-6 w-6 bg-red-600 hover:bg-red-700 text-white border-none shadow-lg"
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove();
-          }}
-          title="Remove"
-        >
-          <Trash className="h-3.5 w-3.5" />
-        </Button>
-        <Button
-          variant="secondary"
-          size="icon"
-          className="h-6 w-6 bg-slate-800 hover:bg-slate-700 text-white border-none shadow-lg"
-          onClick={(e) => {
-            e.stopPropagation();
-            onArchive();
-          }}
-          disabled={isArchived}
-          title={isArchived ? "Archived" : "Archive"}
-        >
-          <Archive className="h-3.5 w-3.5" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="destructive"
+              size="icon"
+              className="h-6 w-6 bg-red-600 hover:bg-red-700 text-white border-none shadow-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+            >
+              <Trash className="h-3.5 w-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>Remove this reference image</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="secondary"
+              size="icon"
+              className="h-6 w-6 bg-slate-800 hover:bg-slate-700 text-white border-none shadow-lg"
+              onClick={(e) => {
+                e.stopPropagation();
+                onArchive();
+              }}
+              disabled={isArchived}
+            >
+              <Archive className="h-3.5 w-3.5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left">
+            <p>{isArchived ? "Already archived" : "Save to archives for future use"}</p>
+          </TooltipContent>
+        </Tooltip>
+
         {onSelectPrimary && (
-           <Button
-            variant={isPrimary ? "default" : "secondary"}
-            size="icon"
-            className={`h-6 w-6 border-none shadow-lg ${isPrimary ? 'bg-primary text-primary-foreground' : 'bg-slate-800 hover:bg-slate-700 text-white'}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelectPrimary();
-            }}
-            title="Set as Primary"
-          >
-            <ImageIcon className="h-3.5 w-3.5" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={isPrimary ? "default" : "secondary"}
+                size="icon"
+                className={`h-6 w-6 border-none shadow-lg ${isPrimary ? 'bg-primary text-primary-foreground' : 'bg-slate-800 hover:bg-slate-700 text-white'}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelectPrimary();
+                }}
+              >
+                <ImageIcon className="h-3.5 w-3.5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p>Set as the primary reference image</p>
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
     </div>
@@ -1620,69 +1684,103 @@ const Seed = ({ seeds }: { seeds: number[] }) => {
       <CardHeader className="bg-slate-100 dark:bg-slate-900/80 border-b-2 border-slate-400 dark:border-slate-800 h-11 flex flex-row items-center justify-between py-0 px-4 space-y-0">
         <div className="flex items-center gap-2">
           <CardTitle className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-slate-100">System Prompt</CardTitle>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="h-7 px-2 text-slate-900 dark:text-slate-100 hover:bg-slate-900/10 transition-colors flex items-center gap-1.5" 
-            onClick={handleCopy}
-            disabled={!prompt}
-            title="Copy system prompt"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-green-700" /> : <Copy className="h-3.5 w-3.5" />}
-            <span className="text-[10px] font-bold uppercase tracking-tight">Copy</span>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 px-2 text-slate-900 dark:text-slate-100 hover:bg-slate-900/10 transition-colors flex items-center gap-1.5" 
+                onClick={handleCopy}
+                disabled={!prompt}
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-green-700" /> : <Copy className="h-3.5 w-3.5" />}
+                <span className="text-[10px] font-bold uppercase tracking-tight">Copy</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy the full system prompt to clipboard</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="flex items-center gap-2">
           {promptVersions.length > 0 && (
-            <div className="flex items-center gap-2" data-testid="prompt-version-container">
-              <select 
-                className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
-                value={selectedPromptVersion}
-                onChange={(e) => onPromptVersionChange(e.target.value)}
-                data-testid="prompt-version-select"
-              >
-                {promptVersions.map((v, idx) => (
-                  <option key={v.version} value={v.version}>v{idx + 1}</option>
-                ))}
-              </select>
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-2" data-testid="prompt-version-container">
+                  <select 
+                    className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
+                    value={selectedPromptVersion}
+                    onChange={(e) => onPromptVersionChange(e.target.value)}
+                    data-testid="prompt-version-select"
+                  >
+                    {promptVersions.map((v, idx) => (
+                      <option key={v.version} value={v.version}>v{idx + 1}</option>
+                    ))}
+                  </select>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Select a specific version of the system prompt template</p>
+              </TooltipContent>
+            </Tooltip>
           )}
-          <div className="flex items-center gap-2" data-testid="model-selection-container">
-            <select 
-              className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
-              value={selectedModel}
-              onChange={(e) => onModelChange(e.target.value)}
-              data-testid="model-selection-select"
-            >
-              <option value="gemini-3-pro-image-preview">Nano Banana Pro</option>
-              <option value="gemini-2.5-flash-image">Nano Banana</option>
-            </select>
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-2" data-testid="model-selection-container">
+                <select 
+                  className="text-sm bg-slate-900 text-slate-100 border-none rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-ring h-7 font-bold"
+                  value={selectedModel}
+                  onChange={(e) => onModelChange(e.target.value)}
+                  data-testid="model-selection-select"
+                >
+                  <option value="gemini-3-pro-image-preview">Nano Banana Pro</option>
+                  <option value="gemini-2.5-flash-image">Nano Banana</option>
+                </select>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Choose the AI model used for image generation</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto p-2 space-y-2">
         {hasSeeds && (
-          <div className="bg-white dark:bg-slate-900/50 p-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-            <Seed seeds={seedsToDisplay} />
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="bg-white dark:bg-slate-900/50 p-1.5 rounded-md border border-slate-200 dark:border-slate-800">
+                <Seed seeds={seedsToDisplay} />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>The unique identifier used for deterministic image generation</p>
+            </TooltipContent>
+          </Tooltip>
         )}
 
-              <div className="flex flex-col gap-1 mt-2">
-                <div className="flex justify-between items-center">
-                  <Label htmlFor="temperature-slider" className="text-[10px] text-muted-foreground uppercase font-bold"><span className="text-slate-900 dark:text-orange-500">Temperature</span> <span className="font-normal">(randomness)</span></Label>
-                  <span className="text-sm font-mono bg-muted px-1 rounded">{temperature.toFixed(1)}</span>
-                </div>
-                <input 
-                  id="temperature-slider"
-                  type="range"
-                  min="0"
-                  max="2"
-                  step="0.5"
-                  value={temperature}
-                  onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
-                  className="w-full h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-slate-900 dark:accent-white dark:[&::-webkit-slider-runnable-track]:bg-gradient-to-r dark:[&::-webkit-slider-runnable-track]:from-orange-950 dark:[&::-webkit-slider-runnable-track]:to-orange-500 dark:[&::-moz-range-track]:bg-gradient-to-r dark:[&::-moz-range-track]:from-orange-950 dark:[&::-moz-range-track]:to-orange-500 [&::-webkit-slider-runnable-track]:bg-slate-200 [&::-moz-range-track]:bg-slate-200"
-                />
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex flex-col gap-1 mt-2">
+                    <div className="flex justify-between items-center">
+                      <Label htmlFor="temperature-slider" className="text-[10px] text-muted-foreground uppercase font-bold"><span className="text-slate-900 dark:text-orange-500">Temperature</span> <span className="font-normal">(randomness)</span></Label>
+                      <span className="text-sm font-mono bg-muted px-1 rounded">{temperature.toFixed(1)}</span>
+                    </div>
+                    <input 
+                      id="temperature-slider"
+                      type="range"
+                      min="0"
+                      max="2"
+                      step="0.5"
+                      value={temperature}
+                      onChange={(e) => onTemperatureChange(parseFloat(e.target.value))}
+                      className="w-full h-1 bg-muted rounded-lg appearance-none cursor-pointer accent-slate-900 dark:accent-white dark:[&::-webkit-slider-runnable-track]:bg-gradient-to-r dark:[&::-webkit-slider-runnable-track]:from-orange-950 dark:[&::-webkit-slider-runnable-track]:to-orange-500 dark:[&::-moz-range-track]:bg-gradient-to-r dark:[&::-moz-range-track]:from-orange-950 dark:[&::-moz-range-track]:to-orange-500 [&::-webkit-slider-runnable-track]:bg-slate-200 [&::-moz-range-track]:bg-slate-200"
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Adjust how creative or focused the AI should be. Higher values increase randomness.</p>
+                </TooltipContent>
+              </Tooltip>
 
         <div className="h-4" />
 

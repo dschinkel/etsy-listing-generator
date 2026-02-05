@@ -191,6 +191,11 @@ A user can:
     - **FR.22.3 — Selected archived images show a preview just like manually uploaded images.**
     - **FR.22.4 — Use shadcn for the collapsing section.**
 
+**FR.23 — UI Tooltips**
+    - **FR.23.1 — Add tooltips to explain various UI options to the user.**
+    - **FR.23.2 — Targeted elements: Create Similar, Text-only mode, Background upload, Custom Context, Primary Image, Archive, Temperature, and Model selection.**
+    - **FR.23.3 — Use shadcn/ui Tooltip component.**
+
 ---
 
 ## 4. Technical Requirements (TR.*)

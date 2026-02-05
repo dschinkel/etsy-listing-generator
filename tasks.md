@@ -121,3 +121,11 @@ The Fix:
 - [x] Update Dockerfile to use npm ci for consistency with GitHub Actions workflow
 - [x] Remove yarn.lock to eliminate package manager confusion
 - [x] Verify local installation with npm install
+
+## Feature: FR.23 — UI Tooltips [COMPLETED]
+Acceptance:
+- Re-read GUIDELINES.MD AND PROJECT_SPEC.MD
+- [x] FR.23.1 — Install shadcn Tooltip component
+- [x] FR.23.2 — Implement tooltips in ShotItem
+- [x] FR.23.3 — Implement tooltips in UploadedImage
+- [x] FR.23.4 — Implement tooltips in SystemPromptPane
