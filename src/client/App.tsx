@@ -378,7 +378,7 @@ const App = () => {
                       />
                     </div>
                     <span className="text-[15px] text-slate-600 dark:text-muted-foreground leading-tight italic">
-                      Edit text or color in your product photos.
+                      Edit text, number, or background in your uploaded product photos.
                     </span>
                   </div>
                       <div className="flex items-center gap-1 shrink-0 ml-2">
