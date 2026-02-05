@@ -1787,9 +1787,31 @@ const Seed = ({ seeds }: { seeds: number[] }) => {
 
         <div className="h-4" />
 
-        <pre className="text-sm whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg min-h-[400px]">
-          {prompt || 'No system prompt available yet. Generate images to see the prompt sent to Gemini.'}
-        </pre>
+        <div 
+          className="text-sm whitespace-pre-wrap font-mono bg-muted p-2 rounded-lg min-h-[400px] border border-input focus-within:ring-1 focus-within:ring-ring overflow-auto"
+          data-testid="system-prompt-display"
+        >
+          {prompt ? (
+            prompt.split('\n').map((line, i) => (
+              <div key={i} className="min-h-[1.25rem]">
+                {line.split(/(NONCE: NONCE-[a-z0-9]+-\d+|SCENE OVERRIDE: .*|Generate \d+ image\(s\)\.|Shot type: .*|• Replace the .* text with: .*)/g).map((part, j) => {
+                  const isNonce = part.startsWith('NONCE: NONCE-');
+                  const isOverride = part.startsWith('SCENE OVERRIDE:');
+                  const isImageCount = part.startsWith('Generate ') && part.includes(' image(s).');
+                  const isShotType = part.startsWith('Shot type:');
+                  const isEditSpec = part.startsWith('• Replace the ') && part.includes(' text with: ');
+                  
+                  if (isNonce || isOverride || isImageCount || isShotType || isEditSpec) {
+                    return <span key={j} className="text-orange-500 font-bold">{part}</span>;
+                  }
+                  return <span key={j}>{part}</span>;
+                })}
+              </div>
+            ))
+          ) : (
+            <span className="text-muted-foreground">No system prompt available yet. Generate images to see the prompt sent to Gemini.</span>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
